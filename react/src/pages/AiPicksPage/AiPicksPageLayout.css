@@ -1,0 +1,15 @@
+/* src/components/common/SubNavigation/SubNavigation.css */
+.sub-navigation-list {
+  display: flex;
+  justify-content: flex-start; /* 또는 center 등 */
+  list-style: none;
+  margin: 0; 
+  padding: 0 15px; /* 좌우 패딩 약간 줄임 (작은 화면 고려) */
+  max-width: 1200px;
+  flex-wrap: wrap; /* <<--- 중요: 메뉴 항목 줄바꿈 허용 */
+  gap: 5px 0; /* 줄바꿈 시 상하 간격, 좌우 간격은 아이템 마진으로 */
+}
+.sub-navigation-item {
+  margin: 0 8px; /* 아이템 간 간격 약간 줄임 */
+}
+/* ... 나머지 SubNavigation 스타일 ... */

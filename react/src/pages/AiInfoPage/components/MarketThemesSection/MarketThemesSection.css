@@ -1,0 +1,111 @@
+/* src/pages/AiInfoPage/components/MarketThemesSection/MarketThemesSection.css */
+.market-themes-section {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-top: 30px; /* AiInfoHomeContent 내 다른 섹션과의 간격 */
+}
+
+.market-themes-section .section-title { /* 컴포넌트 내부 제목 스타일 (선택적) */
+  font-size: 1.75em;
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 0;
+  margin-bottom: 20px;
+  /* border-bottom: 1px solid #e5e7eb; */
+  /* padding-bottom: 10px; */
+}
+
+.main-tabs-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #007bff; /* 메인 탭 아래 구분선 */
+}
+
+.main-tab-button {
+  padding: 8px 16px;
+  font-size: 15px; /* 메인 탭 폰트 약간 크게 */
+  font-weight: 600; /* 메인 탭 폰트 굵게 */
+  border: none; /* 테두리 제거 */
+  /* border-bottom: 2px solid transparent; /* 비활성 탭 하단 테두리 투명 처리 */
+  border-radius: 6px 6px 0 0; /* 상단 모서리만 둥글게 */
+  background-color: transparent; /* 기본 배경 투명 */
+  color: #4b5563; /* 기본 글자색 */
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+.main-tab-button:hover {
+  color: #0056b3;
+  background-color: #e9ecef;
+}
+.main-tab-button.active {
+  background-color: #007bff; /* 활성 탭 배경색 */
+  color: white;
+  /* border-bottom-color: #007bff; /* 활성 탭 하단 테두리 색상 */
+}
+
+.sub-filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f8f9fa; /* 서브 필터 배경 */
+  border-radius: 4px;
+}
+
+.sub-filter-button {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  border-radius: 16px;
+  background-color: #fff;
+  color: #374151;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.sub-filter-button:hover {
+  background-color: #e0e0e0;
+}
+.sub-filter-button.active {
+  background-color: #495057; /* 활성 서브필터 색상 */
+  color: white;
+  border-color: #495057;
+}
+
+.update-timestamp-mts {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 15px;
+  text-align: right;
+}
+
+/* 테이블 스타일 (이전과 유사, 클래스명에 -mts 추가하여 구분) */
+.stock-list-table-mts { width: 100%; }
+.table-header-mts, .table-row-mts { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+.table-header-mts { font-weight: 600; color: #4b5563; background-color: #f9fafb; padding: 10px 0; }
+.table-row-mts:last-child { border-bottom: none; }
+.table-row-mts:hover { background-color: #f8f9fa70; }
+
+.col-time-mts { flex: 0 0 70px; text-align: center; color: #6b7280; }
+.col-name-mts { flex: 1 1 150px; padding-left: 10px; }
+.col-name-mts a { color: #1f2937; text-decoration: none; font-weight: 500; }
+.col-name-mts a:hover { text-decoration: underline; color: #0056b3;}
+.col-price-mts { flex: 0 0 100px; text-align: right; font-weight: 500;}
+.col-change-rate-mts { flex: 0 0 90px; text-align: right; padding-right: 10px; font-weight: 500;}
+.col-feature-mts { flex: 2 1 300px; padding-left: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #4b5563; }
+
+.col-change-rate-mts.positive { color: #d9534f; }
+.col-change-rate-mts.negative { color: #28a745; }
+.col-change-rate-mts.neutral { color: #777777; }
+
+.no-data-message-mts { padding: 20px; text-align: center; color: #6b7280; }
+.actions-footer-mts { margin-top: 20px; text-align: center; }
+.view-more-button-mts { padding: 8px 16px; font-size: 13px; color: #4b5563; background-color: #f3f4f6; border: 1px solid #d1d5db; border-radius: 6px; cursor: pointer; transition: background-color 0.2s ease; }
+.view-more-button-mts:hover { background-color: #e0e0e0; }

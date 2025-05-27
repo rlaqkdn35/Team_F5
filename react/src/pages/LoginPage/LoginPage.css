@@ -1,0 +1,98 @@
+/* src/pages/SignupPage/SignupPage.css */
+
+/*
+  이 파일은 회원가입 페이지에만 특화된 스타일을 정의합니다.
+  대부분의 공통 스타일은 '../LoginPage/LoginPage.css'에서 상속받습니다.
+  따라서 이곳에서는 공통 스타일을 오버라이드하거나 추가적인 스타일을 정의합니다.
+*/
+
+/* 회원가입 폼 컨테이너의 최대 너비를 로그인 폼보다 살짝 넓게 설정 */
+/* 이 셀렉터는 LoginPage.css의 .login-content-wrapper를 오버라이드합니다. */
+.login-page-container .login-form-section .login-content-wrapper {
+  max-width: 450px; /* 로그인 폼의 400px보다 살짝 넓게 */
+  padding: 25px; /* 내부 여백 조정 */
+}
+
+/* 회원가입 제목의 마진 조정 */
+.login-page-container .login-content-wrapper .login-title {
+  margin-bottom: 15px; /* 제목 아래 간격 */
+}
+
+/* 회원가입 슬로건의 마진 조정 */
+.login-page-container .login-content-wrapper .login-slogan {
+  margin-bottom: 35px; /* 슬로건 아래 간격 */
+}
+
+/* 회원가입 폼 그룹 간격 조정 */
+.login-page-container .login-form .form-group {
+  margin-bottom: 22px; /* 폼 그룹 간격 */
+}
+
+/* 회원가입 버튼 마진 조정 */
+.login-page-container .login-button {
+  margin-top: 25px; /* 버튼 위 간격 */
+}
+
+/* --- 추가: 이메일 입력 필드 스타일 --- */
+/* SignupPage에서 사용되는 email input에 대한 스타일 */
+/* 이는 LoginPage.css의 input 스타일과 동일하게 적용되도록 합니다. */
+.login-form input[type="password"] 
+.login-form input[type="text"] 
+.login-form input[type="email"] {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid var(--border-color); /* LoginPage.css의 변수 사용 */
+  border-radius: 8px;
+  font-size: 1.05em;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* --- 이메일 입력 필드 스타일 끝 --- */
+
+
+/* 회원가입 결과 메시지 스타일 강화 */
+/* .result-message는 LoginPage.css에 정의되어 있으므로,
+   여기에 .success나 .error 같은 특정 상태에 대한 스타일을 추가할 수 있습니다. */
+.result-message {
+  text-align: center;
+  font-weight: 600;
+}
+
+.result-message.success {
+  color: #1a751a; /* 진한 초록색 */
+  background-color: #e6ffe6; /* 연한 초록색 배경 */
+  border-color: #8cd98c;
+  padding: 12px;
+}
+
+.result-message.error {
+  color: #cc0000; /* 진한 빨간색 */
+  background-color: #ffe6e6; /* 연한 빨간색 배경 */
+  border-color: #ff8080;
+  padding: 12px;
+}
+
+.ai-logo{
+  width: 500px;
+  height: 500px;
+}
+
+/* 모바일 반응형 조정 */
+@media (max-width: 768px) {
+  .login-page-container .login-form-section .login-content-wrapper {
+    max-width: 100%; /* 모바일에서는 전체 너비 사용 */
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-page-container .login-content-wrapper {
+    padding: 15px;
+  }
+  .login-page-container .login-title {
+    font-size: 2em;
+  }
+  .login-page-container .login-slogan {
+    font-size: 0.95em;
+  }
+}

@@ -1,0 +1,190 @@
+.main-page-content {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto; /* 중앙 정렬 */
+  color: #333; /* 기본 텍스트 색상 */
+}
+
+.hero-section {
+  text-align: center;
+  margin-bottom: 60px;
+  padding: 40px 20px;
+  background-color: #f8f9fa; /* 밝은 배경 */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.hero-section h1 {
+  font-size: 2.8em;
+  color: #2c3e50; /* 헤더와 유사한 어두운 색 */
+  margin-bottom: 15px;
+}
+
+.hero-section .subtitle {
+  font-size: 1.3em;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.search-form {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 700px; /* 검색창 최대 너비 */
+}
+
+.search-input {
+  flex-grow: 1;
+  padding: 15px 20px;
+  font-size: 1.1em;
+  border: 1px solid #ddd;
+  border-radius: 8px 0 0 8px; /* 왼쪽 모서리 둥글게 */
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+}
+.search-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+
+.search-button {
+  padding: 15px 30px;
+  font-size: 1.1em;
+  background-color: #3498db; /* 파란색 버튼 */
+  color: white;
+  border: none;
+  border-radius: 0 8px 8px 0; /* 오른쪽 모서리 둥글게 */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.search-button:hover {
+  background-color: #2980b9; /* 좀 더 진한 파란색 */
+}
+
+.ai-picks-section {
+  margin-bottom: 40px;
+}
+
+.ai-picks-section h2 {
+  text-align: center;
+  font-size: 2.2em;
+  color: #2c3e50;
+  margin-bottom: 40px;
+}
+
+.picks-card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* 반응형 그리드 */
+  gap: 30px;
+}
+
+.pick-card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.pick-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.pick-card.positive-pick {
+  border-left: 5px solid #e74c3c; /* 빨간색 강조 */
+}
+
+.pick-card.negative-pick {
+  border-left: 5px solid #3498db; /* 파란색 강조 */
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.stock-logo-placeholder { /* 임시 로고 스타일 */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #e9ecef;
+  color: #495057;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+/* 실제 로고 이미지를 사용할 경우 */
+/*
+.stock-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  margin-right: 15px;
+  object-fit: contain;
+}
+*/
+
+.stock-info h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.4em;
+  color: #333;
+}
+
+.stock-info .current-price {
+  margin: 0;
+  font-size: 1em;
+  color: #555;
+}
+
+.prediction-info {
+  margin-bottom: 20px;
+  flex-grow: 1; /* 카드가 같은 높이를 가지도록 내용 영역이 늘어나게 함 */
+}
+
+.prediction-text {
+  font-size: 1.15em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.text-positive {
+  color: #e74c3c; /* 빨간색 */
+}
+
+.text-negative {
+  color: #3498db; /* 파란색 */
+}
+
+.prediction-detail {
+  font-size: 0.95em;
+  color: #666;
+  line-height: 1.6;
+}
+
+.details-link {
+  display: inline-block;
+  margin-top: auto; /* 카드의 맨 아래로 링크를 밀어냄 */
+  padding: 10px 15px;
+  background-color: #f0f0f0;
+  color: #333;
+  text-decoration: none;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.details-link:hover {
+  background-color: #e0e0e0;
+}

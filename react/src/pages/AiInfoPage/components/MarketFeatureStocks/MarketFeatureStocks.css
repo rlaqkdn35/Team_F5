@@ -1,0 +1,122 @@
+/* src/pages/AiInfoPage/components/MarketFeatureStocks/MarketFeatureStocks.css */
+.market-feature-stocks-section {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.mfs-header { /* 필터 탭과 업데이트 시간을 한 줄에 배치 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap; /* 화면 작을 때 줄바꿈 대비 */
+  gap: 10px; /* 탭 그룹과 시간 사이 간격 */
+}
+
+.filter-tabs-mfs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-tab-mfs {
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  border-radius: 20px; /* 좀 더 부드러운 타원형 */
+  background-color: #f9fafb;
+  color: #374151;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.filter-tab-mfs:hover {
+  background-color: #e9ecef; /* 호버 색상 약간 변경 */
+}
+
+.filter-tab-mfs.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+  font-weight: bold;
+}
+
+.update-timestamp-mfs {
+  font-size: 12px;
+  color: #6b7280;
+  white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+/* 테이블 스타일 (이전과 유사, 클래스명에 -mfs 추가하여 구분) */
+.stock-list-table-mfs {
+  width: 100%;
+}
+
+.table-header-mfs, .table-row-mfs {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+}
+.table-header-mfs {
+  font-weight: 600;
+  color: #4b5563;
+  background-color: #f9fafb;
+  padding: 10px 0;
+}
+.table-row-mfs:last-child {
+  border-bottom: none;
+}
+.table-row-mfs:hover {
+  background-color: #f8f9fa70; /* 호버 효과 약간 투명하게 */
+}
+
+/* 컬럼 너비 (클래스명에 -mfs 추가) */
+.col-time-mfs { flex: 0 0 70px; text-align: center; color: #6b7280; }
+.col-name-mfs { flex: 1 1 150px; padding-left: 10px; }
+.col-name-mfs a { color: #1f2937; text-decoration: none; font-weight: 500; }
+.col-name-mfs a:hover { text-decoration: underline; color: #0056b3;}
+.col-price-mfs { flex: 0 0 100px; text-align: right; font-weight: 500;}
+.col-change-rate-mfs { flex: 0 0 90px; text-align: right; padding-right: 10px; font-weight: 500;}
+.col-feature-mfs { 
+  flex: 2 1 300px; 
+  padding-left: 10px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #4b5563;
+}
+
+.col-change-rate-mfs.positive { color: #d9534f; }
+.col-change-rate-mfs.negative { color: #28a745; }
+.col-change-rate-mfs.neutral { color: #777777; }
+
+.no-data-message-mfs {
+  padding: 20px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.actions-footer-mfs {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.view-more-button-mfs {
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #4b5563;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.view-more-button-mfs:hover {
+  background-color: #e0e0e0;
+}
