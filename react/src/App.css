@@ -1,0 +1,46 @@
+/* src/App.css */
+
+#root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.App {
+  display: grid;
+  grid-template-columns: var(--left-sidebar-width, 220px) 1fr var(--right-sidebar-width, 220px);
+  flex-grow: 1;
+}
+
+.app-body-layout-3col {
+  grid-column: 2 / 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main-content-centered {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+@media (max-width: 1200px) {
+  .App {
+    grid-template-columns: var(--left-sidebar-width, 220px) 1fr 0;
+  }
+  .app-right-sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .App {
+    grid-template-columns: 0 1fr 0;
+  }
+  .app-left-sidebar,
+  .app-right-sidebar {
+    display: none;
+  }
+  .app-main-content-centered {
+    padding: 10px;
+  }
+}

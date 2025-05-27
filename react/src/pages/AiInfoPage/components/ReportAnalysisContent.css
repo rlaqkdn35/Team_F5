@@ -1,0 +1,70 @@
+/* src/pages/AiInfoPage/components/ReportAnalysisContent.css */
+.report-analysis-content-page {
+  /* padding: 20px; */ /* 부모 레이아웃에서 패딩을 줄 수 있음 */
+}
+
+.page-main-title-rac { /* "리포트 분석" 페이지 메인 타이틀 */
+  font-size: 1.8em;
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 0;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.loading-message-rac, .no-data-message-rac {
+  text-align: center;
+  color: #6c757d;
+  padding: 30px 0;
+  font-size: 1.1em;
+}
+
+/* 테이블 스타일 (접미사 -rac 사용) */
+.report-list-table-rac { width: 100%; }
+.table-header-rac, .table-row-rac {
+  display: flex;
+  align-items: stretch; 
+  padding: 10px 0; 
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+}
+.table-header-rac { 
+  font-weight: 600; 
+  color: #4b5563; 
+  background-color: #f9fafb; 
+  padding: 12px 0;
+}
+.table-row-rac:last-child { border-bottom: none; }
+.table-row-rac:hover { background-color: #f8f9fa70; }
+
+.table-row-rac span, .table-header-rac span {
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  box-sizing: border-box;
+  word-break: keep-all; 
+}
+
+/* 컬럼 너비 및 정렬 */
+.col-date-rac { flex: 0 0 100px; justify-content: center; }
+.col-stock-name-rac { flex: 1 1 120px; }
+.col-stock-name-rac a { color: #1f2937; text-decoration: none; font-weight: 500; }
+.col-stock-name-rac a:hover { text-decoration: underline; color: #0056b3;}
+.col-current-price-rac { flex: 0 0 90px; justify-content: flex-end; }
+.col-change-rate-rac { flex: 0 0 90px; justify-content: flex-end; font-weight: 500;}
+.col-target-price-rac { flex: 0 0 90px; justify-content: flex-end; font-weight: 500;}
+.col-report-title-rac { 
+  flex: 3 1 300px; /* 제목은 길 수 있으므로 넓게 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.col-report-title-rac a { color: #0056b3; text-decoration: none; }
+.col-report-title-rac a:hover { text-decoration: underline; }
+.col-brokerage-rac { flex: 0 0 100px; justify-content: center; }
+
+/* 등락률 색상 */
+.col-change-rate-rac.positive { color: #d9534f; }
+.col-change-rate-rac.negative { color: #28a745; }
+.col-change-rate-rac.neutral { color: #777777; }

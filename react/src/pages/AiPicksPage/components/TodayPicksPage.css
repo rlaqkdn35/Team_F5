@@ -1,0 +1,109 @@
+/* src/pages/AiPicksPage/components/TodayPicksPage.css */
+.today-picks-page-content {
+  /* padding: 20px; /* 부모 AiPicksPageLayout에서 패딩을 줄 수 있음 */
+}
+
+.page-header-tpp {
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.page-main-title-tpp { /* "AI 추천 종목" 페이지 메인 타이틀 */
+  font-size: 1.8em;
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 0;
+  margin-bottom: 15px; /* 날짜 네비게이터와의 간격 */
+}
+
+.date-navigator-tpp {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 날짜 네비게이터 중앙 정렬 (선택적) */
+  gap: 15px; /* 버튼과 날짜 표시 사이 간격 */
+  margin-bottom: 20px;
+}
+
+.date-nav-button-tpp {
+  background: none;
+  border: 1px solid #d1d5db;
+  padding: 8px 10px;
+  border-radius: 50%; /* 원형 버튼 */
+  cursor: pointer;
+  color: #4b5563;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.date-nav-button-tpp:hover:not(:disabled) {
+  background-color: #e9ecef;
+  color: #0056b3;
+}
+.date-nav-button-tpp:disabled {
+  color: #adb5bd;
+  cursor: not-allowed;
+}
+
+.current-date-display-tpp {
+  font-size: 1.2em;
+  font-weight: 500;
+  color: #343a40;
+  padding: 5px 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.loading-message-tpp, .no-data-message-tpp {
+  text-align: center;
+  color: #6c757d;
+  padding: 30px 0;
+  font-size: 1.1em;
+}
+
+.picks-list-container-tpp {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 반응형 카드 배치 */
+  gap: 20px;
+}
+
+.recommended-stock-item-tpp {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.07);
+  transition: box-shadow 0.2s ease;
+}
+.recommended-stock-item-tpp:hover {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.stock-name-link-tpp {
+  text-decoration: none;
+}
+.recommended-stock-item-tpp h4 { /* 종목명 */
+  font-size: 1.3em;
+  color: #0056b3;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+.stock-code-tpp {
+  font-size: 0.8em;
+  color: #6c757d;
+  margin-left: 5px;
+}
+
+.stock-description-tpp, .recommendation-reason-tpp {
+  font-size: 0.95em;
+  color: #495057;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+.stock-description-tpp strong, .recommendation-reason-tpp strong {
+  color: #343a40;
+  font-weight: 600;
+}

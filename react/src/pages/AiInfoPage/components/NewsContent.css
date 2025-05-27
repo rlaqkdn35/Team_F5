@@ -1,0 +1,187 @@
+/* src/pages/NewsPage/NewsContent.css */
+
+/* General Page Layout */
+.news-content-page {
+    padding: 30px 20px;
+    max-width: 1200px; /* 전체 페이지 너비 제한 */
+    margin: 0 auto; /* 중앙 정렬 */
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+    color: #212121;
+    background-color: #f8f9fa; /* 아주 연한 회색 배경 */
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.page-main-title-nc {
+    font-size: 2.2em;
+    font-weight: 800;
+    color: #2c3e50;
+    margin-bottom: 40px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.page-main-title-nc::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 5px;
+    background-color: #dc3545; /* 파란색 -> 빨간색으로 변경 */
+    border-radius: 2px;
+}
+
+/* Loading and No Data Messages */
+.loading-message-nc,
+.no-data-message-nc {
+    text-align: center;
+    padding: 80px 20px;
+    font-size: 1.3em;
+    color: #666;
+    font-weight: 500;
+}
+
+/* News List Container (Grid Layout) */
+.news-list-container-nc {
+    display: grid;
+    gap: 30px; /* 뉴스 카드 간 간격 */
+}
+
+/* Individual News Card Style */
+.news-item-card-nc {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-decoration: none; /* 링크 밑줄 제거 */
+    color: inherit; /* 텍스트 색상 상속 */
+}
+
+.news-item-card-nc:hover {
+    transform: translateY(-7px); /* 호버 시 살짝 위로 */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 강조 */
+    border-color: #dc3545; /* 파란색 -> 빨간색으로 변경 */
+}
+
+.news-title-nc {
+    font-size: 1.5em; /* 뉴스 제목 크기 */
+    font-weight: 700;
+    color: #2c3e50; /* 어두운 색상 */
+    margin-bottom: 10px;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis; /* ...으로 생략 */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 2줄까지만 표시 */
+    -webkit-box-orient: vertical;
+}
+
+.news-summary-nc {
+    font-size: 0.95em; /* 요약 내용 크기 */
+    color: #6c757d; /* 회색 텍스트 */
+    margin-bottom: 15px;
+    line-height: 1.6;
+    flex-grow: 1; /* 남은 공간 채우기 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 3줄까지만 표시 */
+    -webkit-box-orient: vertical;
+}
+
+.news-meta-nc {
+    font-size: 0.8em; /* 출판사/날짜 글씨 크기 */
+    color: #95a5a6; /* 아주 연한 회색 */
+    text-align: right; /* 오른쪽 정렬 */
+    margin-top: 10px; /* 위쪽 여백 */
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0; /* 윗줄 구분선 */
+}
+
+.news-author-nc {
+    font-weight: 600;
+    margin-right: 10px; /* 출판사-날짜 간격 */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .news-list-container-nc {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+    }
+    .news-item-card-nc {
+        padding: 20px;
+    }
+    .news-title-nc {
+        font-size: 1.3em;
+    }
+    .news-summary-nc {
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 768px) {
+    .news-content-page {
+        padding: 20px 15px;
+    }
+    .page-main-title-nc {
+        font-size: 1.8em;
+        margin-bottom: 30px;
+    }
+    .page-main-title-nc::after {
+        width: 80px;
+        height: 4px;
+    }
+    .news-list-container-nc {
+        grid-template-columns: 1fr; /* 한 줄에 하나씩 */
+        gap: 20px;
+    }
+    .news-item-card-nc {
+        padding: 18px;
+    }
+    .news-title-nc {
+        font-size: 1.2em;
+        -webkit-line-clamp: 3; /* 모바일에서 제목 더 길게 */
+    }
+    .news-summary-nc {
+        font-size: 0.85em;
+        -webkit-line-clamp: 4; /* 모바일에서 요약 더 길게 */
+    }
+    .news-meta-nc {
+        font-size: 0.75em;
+    }
+}
+
+@media (max-width: 480px) {
+    .news-content-page {
+        padding: 15px 10px;
+    }
+    .page-main-title-nc {
+        font-size: 1.6em;
+        margin-bottom: 25px;
+    }
+    .page-main-title-nc::after {
+        width: 60px;
+        height: 3px;
+    }
+    .news-item-card-nc {
+        padding: 15px;
+    }
+    .news-title-nc {
+        font-size: 1.1em;
+    }
+    .news-summary-nc {
+        font-size: 0.8em;
+    }
+    .news-meta-nc {
+        font-size: 0.7em;
+    }
+}

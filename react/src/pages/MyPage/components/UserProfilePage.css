@@ -1,0 +1,118 @@
+/* src/pages/MyPage/MyPage.css */
+.my-page-container {
+  padding: 20px;
+  max-width: 900px; /* MyPage 콘텐츠 최대 너비 (선택적) */
+  margin: 0 auto;   /* 중앙 정렬 (선택적) */
+}
+
+.page-main-title-mypage,
+.section-title-mypage {
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.page-main-title-mypage {
+  font-size: 1.8em;
+  margin-bottom: 30px;
+}
+
+.section-title-mypage {
+  font-size: 1.4em;
+  margin-bottom: 15px;
+  margin-top: 30px; /* 각 섹션 상단 여백 */
+}
+.my-page-container section:first-of-type .section-title-mypage {
+    margin-top: 0; /* 첫번째 섹션 타이틀은 위쪽 마진 없음 */
+}
+
+
+.profile-info-section-mypage .profile-details {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  margin-bottom: 15px;
+  line-height: 1.8;
+}
+.profile-details p {
+  margin: 5px 0;
+  font-size: 1em;
+  color: #343a40;
+}
+.profile-details p strong {
+  color: #495057;
+  margin-right: 8px;
+  display: inline-block;
+  min-width: 80px; /* 레이블 너비 고정 (선택적) */
+}
+
+.profile-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.action-button-mypage {
+  padding: 8px 15px;
+  font-size: 0.9em;
+  border: 1px solid #6c757d;
+  background-color: #fff;
+  color: #495057;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+.action-button-mypage:hover {
+  background-color: #f0f0f0;
+}
+
+.action-button-mypage.logout {
+  border-color: #007bff;
+  color: #007bff;
+}
+.action-button-mypage.logout:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.action-button-mypage.delete-account {
+  border-color: #dc3545;
+  color: #dc3545;
+  margin-left: auto; /* 오른쪽으로 밀기 (선택적) */
+}
+.action-button-mypage.delete-account:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+
+.my-activity-links-section .activity-link-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.my-activity-links-section .activity-link-list li {
+  margin-bottom: 10px;
+}
+.activity-link {
+  display: block;
+  padding: 12px 15px;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #0056b3;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+.activity-link:hover {
+  background-color: #e2e6ea;
+}
+
+.loading-message-mypage {
+  padding: 30px;
+  text-align: center;
+  color: #6c757d;
+}

@@ -1,0 +1,122 @@
+/* src/pages/AiPicksPage/components/RecommendationsPage.css */
+.recommendations-page-content {
+  /* padding: 20px; */ /* 부모 AiPicksPageLayout에서 패딩을 줄 수 있음 */
+}
+
+.page-main-title-rpc {
+  font-size: 1.8em;
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 0;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.recommendation-section-rpc {
+  margin-bottom: 30px;
+}
+
+.section-title-rpc { /* "하루 추천", "일주일 추천" 등 */
+  font-size: 1.5em;
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  border-left: 4px solid #007bff; /* 섹션 제목 왼쪽에 강조선 */
+}
+
+.recommendation-item-card-rpc {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px; /* 카드 간 세로 간격 */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.stock-info-rpc {
+  margin-bottom: 15px;
+}
+
+.stock-name-link-rpc {
+  text-decoration: none;
+}
+.stock-info-rpc h3 { /* 종목명 */
+  font-size: 1.4em;
+  color: #0056b3;
+  margin-top: 0;
+  margin-bottom: 5px;
+  display: inline-block; /* 링크 호버 효과를 위해 */
+}
+.stock-info-rpc h3:hover {
+  text-decoration: underline;
+}
+.stock-code-rpc {
+  font-size: 0.8em;
+  color: #6c757d;
+  margin-left: 5px;
+}
+
+.price-prediction-rpc {
+  display: flex;
+  gap: 15px; /* 현재가와 평균예측 사이 간격 */
+  align-items: baseline;
+  font-size: 1em;
+}
+.current-price-rpc {
+  color: #333;
+}
+.avg-prediction-rpc {
+  font-weight: bold;
+}
+.avg-prediction-rpc.positive { color: #d9534f; }
+.avg-prediction-rpc.negative { color: #28a745; } /* 하락 초록 */
+
+
+.ai-charts-container-rpc {
+  display: flex;
+  flex-direction: row; /* 미니 차트들을 가로로 배치 */
+  gap: 15px; /* 차트 사이 간격 */
+  margin-top: 10px;
+  flex-wrap: wrap; /* 화면 작으면 차트 줄바꿈 */
+}
+
+.mini-chart-wrapper-rpc {
+  flex: 1; /* 공간을 나눠 가짐 */
+  min-width: 200px; /* 각 미니 차트 최소 너비 */
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #f8f9fa;
+}
+.ai-label-rpc {
+  display: block;
+  font-size: 0.8em;
+  color: #6c757d;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.mini-chart-placeholder-rpc { /* StockChart가 로딩 안될 때 (임시) */
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #adb5bd;
+  background-color: #e9ecef;
+  border-radius: 4px;
+}
+
+.loading-message-rpc, .no-data-message-rpc {
+  text-align: center;
+  color: #6c757d;
+  padding: 30px 0;
+  font-size: 1.1em;
+}
+
+/* StockChart.css 에서 .stock-chart-render-area 의 height를 조절하거나,
+   여기서 .mini-chart-wrapper-rpc .stock-chart-render-area 에 대해 height 재정의 가능 */
+.mini-chart-wrapper-rpc .stock-chart-render-area {
+  height: 80px !important; /* Recharts의 경우 !important가 필요할 수 있음, 또는 chartOptions으로 전달 */
+}

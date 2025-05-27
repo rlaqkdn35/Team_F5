@@ -1,0 +1,114 @@
+/* 슬라이더 전체를 감싸는 컨테이너 */
+.slider-container {
+  position: relative; /* 자식 요소 (화살표 버튼)의 위치 기준 */
+  width: 100%; /* 부모 요소의 너비에 맞춰 확장 */
+  max-width: 1200px; /* 너무 커지는 것을 방지 (원하는 값으로 조절) */
+  margin: 0 auto; /* 중앙 정렬 */
+  overflow: hidden; /* 슬라이더 외부로 내용이 삐져나가지 않도록 숨김 */
+  /* padding: 20px; /* 필요시 슬라이더 주변 여백 추가 */
+}
+
+/* 슬라이더의 '보이는 창문' 영역 */
+/* 이 부분은 overflow: hidden; 속성을 통해 슬라이드 트랙의 넘치는 부분을 숨깁니다. */
+.slider-content-wrapper {
+  overflow: hidden; /* 핵심: 이 부분을 벗어나는 슬라이드들은 보이지 않게 처리 */
+  width: 100%; /* 부모인 .slider-container 너비에 꽉 채움 */
+  position: relative; /* 자식 요소 (슬라이드 트랙)가 이 안에서 움직일 수 있도록 */
+}
+
+/* 슬라이드 아이템들이 가로로 길게 늘어서 있는 '레일' (이 부분이 움직임) */
+.slider-track {
+  display: flex; /* 자식 요소 (slider-item)들을 가로로 나란히 정렬 */
+  transition: transform 0.5s ease-in-out; /* 부드러운 슬라이드 전환 효과 */
+  /* width는 JavaScript에서 동적으로 계산됩니다. (예: 500%, 300% 등) */
+  /* transform은 JavaScript에서 currentIndex와 slideWidth에 따라 계산됩니다. */
+}
+
+/* 각 슬라이드 아이템 */
+.slider-item {
+  flex-shrink: 0; /* 내용물이 많아도 줄어들지 않고 고정된 너비를 유지 */
+  /* width는 JavaScript에서 동적으로 계산됩니다. (예: 50%, 33.33% 등) */
+  box-sizing: border-box; /* padding, border가 너비에 포함되도록 */
+  padding: 10px; /* 슬라이드 아이템 내부 여백 (조절 가능) */
+  background-color: #f0f0f0; /* 슬라이드 배경색 */
+  border: 1px solid #ddd; /* 슬라이드 테두리 */
+  display: flex; /* 내용물 중앙 정렬을 위해 flex 사용 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  min-height: 200px; /* 슬라이드 최소 높이 (조절 가능) */
+  font-size: 1.5em;
+  color: #333;
+}
+
+/* 슬라이드 내용물이 없을 때 표시되는 메시지 */
+.slider-empty {
+  text-align: center;
+  padding: 50px;
+  color: #888;
+  font-size: 1.2em;
+}
+
+/* --- 화살표 버튼 스타일 --- */
+.slider-button {
+  position: absolute; /* .slider-container를 기준으로 위치 설정 */
+  top: 50%; /* 컨테이너의 세로 중앙 */
+  transform: translateY(-50%); /* 버튼 자체를 세로 중앙으로 이동 */
+  background-color: rgba(0, 0, 0, 0.5); /* 반투명 검정 배경 */
+  color: white; /* 글자색 흰색 */
+  border: none; /* 테두리 없음 */
+  padding: 10px 15px; /* 패딩 */
+  cursor: pointer; /* 마우스 오버 시 손가락 모양 */
+  font-size: 2em; /* 화살표 크기 */
+  z-index: 10; /* 다른 요소 위에 표시되도록 */
+  border-radius: 50%; /* 원형 버튼 */
+  width: 50px; /* 버튼 너비 */
+  height: 50px; /* 버튼 높이 */
+  display: flex; /* 내용물 중앙 정렬 */
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease; /* 호버 효과 */
+}
+
+.slider-button:hover {
+  background-color: rgba(0, 0, 0, 0.8); /* 호버 시 배경색 진하게 */
+}
+
+.slider-button.prev {
+  left: 10px; /* 왼쪽 버튼 위치 */
+}
+
+.slider-button.next {
+  right: 10px; /* 오른쪽 버튼 위치 */
+}
+
+/* --- 하단 점(dots) 스타일 --- */
+.slider-dots {
+  position: absolute; /* .slider-container를 기준으로 위치 설정 */
+  bottom: 10px; /* 하단에서 10px 위 */
+  left: 50%; /* 가로 중앙 */
+  transform: translateX(-50%); /* 점 컨테이너 자체를 가로 중앙으로 이동 */
+  display: flex; /* 점들을 가로로 정렬 */
+  gap: 8px; /* 점들 사이의 간격 */
+  z-index: 10; /* 다른 요소 위에 표시되도록 */
+}
+
+.dot {
+  width: 12px; /* 점의 너비 */
+  height: 12px; /* 점의 높이 */
+  background-color: rgba(255, 255, 255, 0.6); /* 기본 점 색상 (반투명 흰색) */
+  border-radius: 50%; /* 원형 점 */
+  cursor: pointer; /* 마우스 오버 시 손가락 모양 */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* 호버 및 활성 효과 */
+  border: 1px solid rgba(0, 0, 0, 0.2); /* 점 테두리 */
+}
+
+.dot:hover {
+  background-color: rgba(255, 255, 255, 0.9); /* 호버 시 색상 진하게 */
+}
+
+/* 현재 활성화된 점 */
+.dot.active {
+  background-color: #007bff; /* 활성화된 점 색상 (파란색) */
+  transform: scale(1.2); /* 활성화 시 약간 커지도록 */
+  border-color: #0056b3;
+}

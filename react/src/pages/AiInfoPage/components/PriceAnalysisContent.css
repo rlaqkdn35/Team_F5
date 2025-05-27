@@ -1,0 +1,47 @@
+/* src/pages/AiInfoPage/components/PriceAnalysisContent.css */
+
+.price-analysis-content-page {
+  /* AiInfoPageLayout의 .page-content-area 에서 이미 패딩을 주고 있다면, 
+     여기서 추가적인 패딩은 필요 없을 수 있습니다. 
+     필요하다면 이 페이지 고유의 패딩을 설정합니다. */
+  /* padding: 0 20px; */
+}
+
+.page-main-title-pac { /* "시세 분석" 페이지 메인 타이틀 */
+  font-size: 1.8em;
+  font-weight: 600;
+  color: #1f2937; /* 어두운 계열 텍스트 색상 */
+  margin-top: 0; /* AiInfoPageLayout의 SubNavigation 바로 아래에 올 경우 */
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e5e7eb; /* 부드러운 하단 구분선 */
+}
+
+.index-interactive-charts-section-pac {
+  margin-bottom: 30px; /* 아래 MarketThemesSection과의 간격 */
+}
+
+.section-sub-title-pac { /* "주요 지수 현황" 같은 섹션 부제목 (선택적 사용) */
+  font-size: 1.5em;
+  font-weight: 600;
+  color: #34495e; /* 부제목 색상 */
+  margin-bottom: 20px;
+}
+
+.interactive-charts-container-pac {
+  display: grid; /* Grid를 사용하여 반응형으로 카드 배치 */
+  /* 화면 너비에 따라 자동으로 컬럼 수 조절: 최소 400px, 최대 1fr(균등분할) */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); 
+  gap: 24px; /* 카드(InteractiveIndexDisplay) 사이의 간격 */
+}
+
+.market-themes-wrapper-pac {
+  margin-top: 40px; /* 위 섹션과의 간격 */
+}
+
+/* 반응형: 작은 화면에서 InteractiveIndexDisplay 카드들이 세로로 쌓이도록 */
+@media (max-width: 900px) { /* 예시 브레이크포인트, 두 카드가 한 줄에 있기 어려워지는 시점 */
+  .interactive-charts-container-pac {
+    grid-template-columns: 1fr; /* 작은 화면에서는 무조건 1개 컬럼 */
+  }
+}

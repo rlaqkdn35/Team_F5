@@ -1,0 +1,61 @@
+:root {
+  /* 주요 브랜드/액센트 색상 */
+  --color-primary: #007bff; /* 파란색: 메인 버튼, 링크, 강조 */
+  --color-secondary: #6c757d; /* 회색: 보조 텍스트, 비활성 요소 */
+
+  /* 성공/긍정적 상태 색상 */
+  --color-success: #28a745; /* 초록색: 예측 성공, 긍정적인 지표 */
+
+  /* 위험/부정적 상태 색상 (수익률 상승 시 사용) */
+  --color-danger: #dc3545; /* 빨간색: 수익률 상승, 경고 */
+
+  /* 배경 색상 */
+  --color-bg-body: #ffffff; /* 전체 페이지 배경색 */
+
+
+  /* 텍스트 색상 */
+  --color-text-dark: #000000; /* 기본 어두운 텍스트 */
+  --color-text-medium: #CCCCFF; /* 중간 밝기 텍스트 */
+  --color-text-light: #F2EEFA; /* 밝은 회색 텍스트 (정보성) */
+  --color-text-muted: #6c757d; /* muted 텍스트 (세부 정보) */
+
+  /* 테두리/구분선 색상 */
+  --color-border-light: #F8F6FD; /* 일반 테두리 */
+  --color-border-subtle: #e9ecef; /* 미묘한 테두리 */
+
+  /* 색깔구분 */
+  --color-main:#DED4F3;
+  --color-main-close:#CCCCFF;
+  --color-1:#FCFBFE;
+  --color-2:#F8F6FD;
+  --color-3:#F5F2FB;
+  --color-4:#F2EEFA;
+  --color-5:#EFEAF9;
+  --color-6:#AFAABA;
+  --color-7:#A6A2AE;
+  --color-8:#9C99A3;
+  --color-9:#939197;
+  --color-10:#89888C;
+  --color-11:#6F6A7A;
+  --color-12:#595561;
+  --color-13:#434049;
+  --color-14:#2C2A31;
+  --color-15:#161518;
+  --font-family-pretendard: sans-serif;
+  --font-whole: Pretendard,'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-family-pretendard); /* 전역 폰트 변수 사용 */
+  color: var(--color-text-dark); /* 전역 텍스트 색상 적용 */
+  background-color: var(--color-bg-body); /* 전역 배경색 적용 */
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+

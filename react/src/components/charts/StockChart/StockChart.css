@@ -1,0 +1,15 @@
+.stock-chart-render-area {
+  width: 100%;
+  height: 300px; /* 기본 높이. 이 값은 부모 컴포넌트에서 이 클래스를 타겟으로 재정의 가능 */
+  /* 예: .interactive-index-display-wrapper .stock-chart-render-area { height: 250px; } */
+  position: relative; /* 메시지 중앙 정렬 등을 위해 */
+}
+
+.chart-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #888;
+  font-size: 0.9em;
+}
