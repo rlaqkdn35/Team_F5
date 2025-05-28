@@ -69,7 +69,6 @@
 }
 
 .login-button {
-    width: 100%;
     padding: 0.9rem;
     background-color: #e74c3c; /* 버튼 배경을 빨간색으로 */
     color: white;
@@ -77,8 +76,6 @@
     border-radius: 8px;
     font-size: 1.1rem;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin-top: 1rem;
 }
 
 .login-button:hover {

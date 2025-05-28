@@ -18,9 +18,7 @@ const LoginPage = () => {
       {/* 우측: 시각적 브랜딩 섹션 (AI 로고 또는 차트) */}
       <div className="branding-section">
         <div className="branding-content">
-          {/* 옵션 1: 로고와 슬로건 */}
-          {/* <img src="/path/to/your/ai-logo.png" alt="주식 AI 로고" className="ai-logo" />
-          <p className="branding-slogan">데이터 기반의 정확한 투자 인사이트</p> */}
+
           <img src="Mainlogo.png" className='ai-logo'/>
           {/* 옵션 2: AI 차트 이미지/시각화 
           <img src="/path/to/your/ai-chart-mockup.png" alt="AI 분석 차트" className="ai-chart-mockup" />
@@ -56,9 +54,9 @@ const LoginPage = () => {
           </form>
 
           <div className="login-links">
-            <Link to="/find-user">아이디 비밀번호 찾기</Link>
+            <Link to="/find-user">아이디비밀번호찾기</Link>
             
-            <Link to="/signup">회원가입</Link>
+            <Link to="/signup">    회원가입</Link>
           </div>
 
           {/* 소셜 로그인 추가 영역 (선택 사항) */}

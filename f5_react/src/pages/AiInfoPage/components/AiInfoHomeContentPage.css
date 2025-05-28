@@ -21,10 +21,8 @@
 
 /* 국내 주요 지수 섹션 */
 .market-overview-section {
-    /* flex: 1; */ /* 이 컨테이너는 left-column-container 내부에서 나머지 공간을 채우도록 */
+    max-width: auto;
     box-sizing: border-box;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     padding: 20px;
 }
 
@@ -114,8 +112,8 @@
     flex: 1; /* 가용한 공간을 차지하도록 */
     min-width: 450px; /* 최소 너비 */
     box-sizing: border-box;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-left: 1px dashed #333;
+
     padding: 20px;
     display: flex;
     flex-direction: column;

@@ -141,3 +141,29 @@
     background-color: var(--color-hover-background);
     transform: translateY(-2px);
 }
+.form-group label[for="stockSearch"] {
+  display: block; /* 라벨이 한 줄 전체를 차지하도록 */
+  margin-bottom: 8px; /* 입력 필드와 라벨 사이 간격 */
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group input[type="text"][id="stockSearch"] {
+  width: 100%; /* 너비를 100%로 설정하여 부모 요소에 맞춤 */
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+  box-sizing: border-box; /* 패딩과 보더가 너비에 포함되도록 */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="text"][id="stockSearch"]::placeholder {
+  color: #999;
+}
+
+.form-group input[type="text"][id="stockSearch"]:focus {
+  border-color: #007bff; /* 포커스 시 테두리 색상 변경 */
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* 포커스 시 그림자 효과 */
+  outline: none; /* 기본 아웃라인 제거 */
+}

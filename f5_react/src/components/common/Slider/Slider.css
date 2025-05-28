@@ -29,14 +29,11 @@
   flex-shrink: 0; /* 내용물이 많아도 줄어들지 않고 고정된 너비를 유지 */
   /* width는 JavaScript에서 동적으로 계산됩니다. (예: 50%, 33.33% 등) */
   box-sizing: border-box; /* padding, border가 너비에 포함되도록 */
-  padding: 10px; /* 슬라이드 아이템 내부 여백 (조절 가능) */
-  background-color: #f0f0f0; /* 슬라이드 배경색 */
-  border: 1px solid #ddd; /* 슬라이드 테두리 */
   display: flex; /* 내용물 중앙 정렬을 위해 flex 사용 */
   justify-content: center; /* 가로 중앙 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
-  min-height: 200px; /* 슬라이드 최소 높이 (조절 가능) */
-  font-size: 1.5em;
+  min-height: 30px; /* 슬라이드 최소 높이 (조절 가능) */
+  font-size: 1em;
   color: #333;
 }
 
@@ -45,7 +42,7 @@
   text-align: center;
   padding: 50px;
   color: #888;
-  font-size: 1.2em;
+  font-size: 1em;
 }
 
 /* --- 화살표 버튼 스타일 --- */
@@ -58,7 +55,7 @@
   border: none; /* 테두리 없음 */
   padding: 10px 15px; /* 패딩 */
   cursor: pointer; /* 마우스 오버 시 손가락 모양 */
-  font-size: 2em; /* 화살표 크기 */
+  font-size: 1em; /* 화살표 크기 */
   z-index: 10; /* 다른 요소 위에 표시되도록 */
   border-radius: 50%; /* 원형 버튼 */
   width: 50px; /* 버튼 너비 */

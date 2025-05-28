@@ -1,9 +1,8 @@
-// ForumBoardPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './ForumBoardPage.css';
 
-// writePostPath, postDetailBasePath prop을 제거합니다.
 const ForumBoardPage = ({ boardTitle }) => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -13,39 +12,32 @@ const ForumBoardPage = ({ boardTitle }) => {
 
     const navigate = useNavigate();
 
-    // Mock 데이터 생성 함수는 동일합니다.
-    const generateMockPosts = (count, page, currentBoardTitle) => {
-        const mockData = [];
-        for (let i = 1; i <= count; i++) {
-            const postId = (page - 1) * count + i;
-            mockData.push({
-                id: postId,
-                title: `${currentBoardTitle} 게시글 제목 ${postId}`,
-                author: `사용자${Math.floor(Math.random() * 100) + 1}`,
-                date: new Date(Date.now() - Math.random() * 1000 * 60 * 60 * 24 * 30).toLocaleDateString('ko-KR'),
-                views: Math.floor(Math.random() * 1000),
-                comments: Math.floor(Math.random() * 50)
-            });
-        }
-        return mockData;
-    };
-
     useEffect(() => {
         setLoading(true);
-        setTimeout(() => {
-            const mockPosts = generateMockPosts(10, currentPage, boardTitle);
-            setPosts(mockPosts);
+        axios.get('http://localhost:8084/F5/api/forum/list', {
+            withCredentials: true,
+            headers: {
+                'Content-Type': 'application/json',
+                // 필요하면 헤더 추가 가능
+            }
+        })
+        .then((response) => {
+            setPosts(response.data);
             setLoading(false);
-        }, 500);
+        })
+        .catch((error) => {
+            console.error('Error fetching posts:', error);
+            setLoading(false);
+        });
     }, [currentPage, boardTitle]);
 
+    // 필터링할 때 서버 필드명에 맞춰서 수정
     const filteredPosts = posts.filter(post =>
-        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.author.toLowerCase().includes(searchTerm.toLowerCase())
+        (post.forum_title?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        post.user_id?.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     const handlePostClick = (postId) => {
-        // 게시글 상세 경로도 직접 하드코딩
         navigate(`/forum/post/${postId}`);
     };
 
@@ -57,6 +49,7 @@ const ForumBoardPage = ({ boardTitle }) => {
 
     const handleSearch = (e) => {
         e.preventDefault();
+        // 현재 searchTerm 상태로 필터링만 하고 있음 (필요시 API 호출 등 추가 가능)
     };
 
     if (loading) {
@@ -67,7 +60,6 @@ const ForumBoardPage = ({ boardTitle }) => {
         <div className="forum-board-container">
             <div className="board-header">
                 <h2>토론실</h2>
-                {/* 글쓰기 버튼 클릭 시 경로를 직접 지정 */}
                 <button onClick={() => navigate('/forum/write')} className="write-post-button">
                     글쓰기
                 </button>
@@ -96,18 +88,18 @@ const ForumBoardPage = ({ boardTitle }) => {
                                 <th>작성자</th>
                                 <th>날짜</th>
                                 <th>조회</th>
-                                <th>댓글</th>
+                                <th>추천</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredPosts.map((post) => (
-                                <tr key={post.id} onClick={() => handlePostClick(post.id)} className="post-row">
-                                    <td>{post.id}</td>
-                                    <td>{post.title}</td>
-                                    <td>{post.author}</td>
-                                    <td>{post.date}</td>
-                                    <td>{post.views}</td>
-                                    <td>{post.comments}</td>
+                                <tr key={post.forum_idx} onClick={() => handlePostClick(post.forum_idx)} className="post-row">
+                                    <td>{post.forum_idx}</td>
+                                    <td>{post.forum_title}</td>
+                                    <td>{post.user_id}</td>
+                                    <td>{new Date(post.created_at).toLocaleString()}</td>
+                                    <td>{post.forum_views || 0}</td>
+                                    <td>{post.forum_recos || 0}</td>
                                 </tr>
                             ))}
                         </tbody>

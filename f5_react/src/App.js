@@ -40,27 +40,31 @@ import UserFavorite from './pages/MyPage/components/UserFavorite.jsx';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
+  
   const handleLoginSuccess = (userData) => { setCurrentUser(userData); };
   const handleLogout = () => { setCurrentUser(null); };
-
+  
   const ProtectedElement = ({ children }) => {
-    // const location = useLocation();
+    const location = useLocation();
     // if (!currentUser) {
-    //   // 로그인 페이지로 보내면서, 현재 경로를 state에 담아 전달
-    //   return <Navigate to="/login" state={{ from: location }} replace />;
-    // }
-    return children;
-  };
-  return (
+      //   // 로그인 페이지로 보내면서, 현재 경로를 state에 담아 전달
+      //   return <Navigate to="/login" state={{ from: location }} replace />;
+      // }
+      return children;
+    };
+
+    return (
     <Router>
-      <div className="App">
+
+      <div className='App'>
+
 
         <LeftSidebar /> 
-        <div className="app-body-layout-3col">  {/* <<--- 클래스명 변경 또는 새 클래스 (CSS Grid 적용 대상) */}
+        <div className="app-body-layout-3col">  
           <Header isLoggedIn={!!currentUser} onLogout={handleLogout} />
-          <main className="app-main-content-centered"> {/* <<--- 중앙 메인 콘텐츠 영역 */}
+          <main className="app-main-content-centered"> 
             <Routes>
-              <Route path="/" element={<Navigate to="/ai-info" replace />} />
+              {/* <Route path="/" element={<MainPage />}></Route> */}
               <Route path="/ai-info" element={<AiInfoPageLayout />}>
                 <Route index element={<AiInfoHomeContentPage />} />
                 <Route path="price-analysis" element={<PriceAnalysisContent />} />
@@ -103,7 +107,7 @@ function App() {
 
               </Route>
               <Route path="/stock-detail/:stockCode" element={<StockDetailPage />} />
-              {/* <Route path="/login" element={!currentUser ? <LoginPage onLoginSuccess={handleLoginSuccess} /> : <Navigate to="/LoginPage" />} /> */}
+              <Route path="/login" element={!currentUser ? <LoginPage onLoginSuccess={handleLoginSuccess} /> : <Navigate to="/LoginPage" />} />
               <Route path="/find-user" element={!currentUser ? <FindUserPage /> : <Navigate to="/" replace />} />
               <Route path="/signup" element={!currentUser ? <SignupPage /> : <Navigate to="/" replace />} />
               <Route path="*" element={<NotFoundPage />} />

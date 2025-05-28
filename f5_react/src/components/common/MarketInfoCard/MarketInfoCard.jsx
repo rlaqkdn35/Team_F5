@@ -14,12 +14,12 @@ const MarketInfoCard = ({ marketData, chartNode }) => {
     <div className={`market-info-card-ui ${marketData.name.toLowerCase().replace(/\s+/g, '-')}-section`}>
       <div className="market-info-main"> {/* 정보 텍스트를 위한 컨테이너 */}
         <h3 className="market-name">{marketData.name}</h3>
-        <p className="market-value">{marketData.value}</p>
-        <p className={`market-change ${changeClass}`}>{marketData.change}</p>
-      </div>
       <div className="market-chart-area">
         {/* chartNode prop으로 받은 JSX를 렌더링, 없으면 기본 플레이스홀더 */}
         {chartNode || <div className="chart-placeholder">차트 데이터 없음</div>}
+      </div>
+        <p className="market-value">{marketData.value}</p>
+        <p className={`market-change ${changeClass}`}>{marketData.change}</p>
       </div>
     </div>
   );

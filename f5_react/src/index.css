@@ -24,14 +24,15 @@
   --color-border-subtle: #e9ecef; /* 미묘한 테두리 */
 
   /* 색깔구분 */
+  --backgroundcolor-menubar: #f44336;
   --color-main:#DED4F3;
   --color-main-close:#CCCCFF;
-  --color-1:#FCFBFE;
+  --color-1:#AC1D1B;
   --color-2:#F8F6FD;
-  --color-3:#F5F2FB;
-  --color-4:#F2EEFA;
-  --color-5:#EFEAF9;
-  --color-6:#AFAABA;
+  --color-3:#CC3333;
+  --color-4:#D84C4C;
+  --color-5:#C0392B;
+  --color-6:#CD2504;
   --color-7:#A6A2AE;
   --color-8:#9C99A3;
   --color-9:#939197;

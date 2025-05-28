@@ -116,15 +116,6 @@ const goToPrev = useCallback(() => {
     };
   }, [updateSliderLayout]); // 의존성 추가
 
-  // currentIndex가 변경될 때마다 transform만 업데이트
-  // 이 useEffect는 이제 위 useEffect에 흡수되어 필요 없거나,
-  // 정말 transform만 바뀐다면 남겨둘 수 있습니다.
-  // 여기서는 updateSliderLayout이 transform까지 포함하므로 주석 처리하거나 삭제합니다.
-  /*
-  useEffect(() => {
-    updateSliderLayout();
-  }, [currentIndex, updateSliderLayout]);
-  */
 
   if (totalSlides === 0) {
     return <div className="slider-empty">표시할 슬라이드가 없습니다.</div>;
@@ -139,14 +130,11 @@ const goToPrev = useCallback(() => {
         <div
           className="slider-track"
           ref={sliderRef}
-          // width는 JS에서 동적으로 설정됩니다. 여기서는 초기값 불필요.
         >
           {slides.map((child, index) => (
             <div
               key={index}
               className="slider-item"
-              // width는 JS에서 동적으로 설정됩니다. 여기서는 초기값 불필요.
-              // CSS에서 flex-basis를 사용하는 것이 가장 좋습니다.
             >
               {child}
             </div>
