@@ -7,8 +7,10 @@ import AnimatedOverlay from '../../common/AnimatedOverlay/AnimatedOverlay';
 const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
-  const [currentOverlayTitle, setCurrentOverlayTitle] = useState('전체 메뉴');
+  const [currentOverlayTitle, setCurrentOverlayTitle] = useState(''); // Initialize as empty string
+  const [showOverlay, setShowOverlay] = useState(false); // New state for overlay visibility
   const location = useLocation();
+
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -64,38 +66,44 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
   ];
 
   useEffect(() => {
-    let newTitle = '전체 메뉴'; // 기본값 (일치하는 경로가 없을 경우)
+    let newTitle = ''; // Initialize to empty string
+    let matched = false;
 
-    // 모든 메뉴 아이템을 순회하며 현재 경로와 일치하는지 확인
-    // 가장 구체적인(긴) 경로가 먼저 매칭되도록 역순으로 정렬하거나, 중첩된 루프 사용
-    // 여기서는 간단하게 모든 subItems까지 검사하도록 구현합니다.
     const findMatchingTitle = (items, currentPath) => {
-        for (const item of items) {
-            if (item.path === currentPath) {
-                return item.name;
-            }
-            if (item.subItems) {
-                const subItemTitle = findMatchingTitle(item.subItems, currentPath);
-                if (subItemTitle) {
-                    return subItemTitle;
-                }
-            }
+      for (const item of items) {
+        if (item.path === currentPath) {
+          return item.name;
         }
-        return null; // 일치하는 것을 찾지 못함
+        if (item.subItems) {
+          const subItemTitle = findMatchingTitle(item.subItems, currentPath);
+          if (subItemTitle) {
+            return subItemTitle;
+          }
+        }
+      }
+      return null;
     };
 
-    // 현재 경로를 찾아서 제목 설정
     const matchedTitle = findMatchingTitle(mainMenuItems, location.pathname);
 
     if (matchedTitle) {
-        newTitle = matchedTitle;
+      newTitle = matchedTitle;
+      matched = true;
     } else if (location.pathname === '/') {
-        newTitle = '홈'; // 루트 경로에 대한 특별 처리 (MainPage가 주석 처리되어 있긴 하지만)
+      newTitle = '홈';
+      matched = true;
+    } else if (location.pathname.startsWith('/search')) {
+      newTitle = '검색 결과'; // Example for search page
+      matched = true;
     }
-    // 여기에 다른 특정 경로에 대한 제목을 추가할 수 있습니다.
-    // 예: if (location.pathname.startsWith('/stock-detail')) newTitle = '종목 상세';
+    // Add more specific path checks here if needed
+    // else if (location.pathname.startsWith('/stock-detail')) {
+    //   newTitle = '종목 상세';
+    //   matched = true;
+    // }
 
     setCurrentOverlayTitle(newTitle);
+    setShowOverlay(matched); // Set showOverlay based on whether a match was found
   }, [location.pathname]);
 
   return (
@@ -165,7 +173,7 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
         </form>
       </nav>
 
-      <AnimatedOverlay key={location.pathname} title={currentOverlayTitle} />
+      {showOverlay && <AnimatedOverlay key={location.pathname} title={currentOverlayTitle} />}
     </>
   );
 };

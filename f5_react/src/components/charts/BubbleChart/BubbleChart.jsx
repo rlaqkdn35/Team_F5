@@ -25,6 +25,15 @@ const BubbleChart = ({ data, onBubbleClick, width = 600, height = 400 }) => {
     const sizeScale = d3.scaleSqrt()
       .domain([0, d3.max(data, d => d.value)]) // 데이터의 value 범위에 따라 크기 조절
       .range([10, 200]); // 버블의 최소/최대 반지름
+    const maxValue = d3.max(data, d => d.value);
+
+    const colorScale = d3.scaleLinear()
+      .domain([0, maxValue]) // 데이터의 value 범위 (0에서 최댓값까지)
+      // .range(['#ADD8E6', '#00008B']); // 예시 1: 연한 파랑 -> 진한 파랑
+      .range(['#ffcdd2', '#f44336']); // 예시 2: 빨간색 계열 - 연한 빨강 -> 진한 빨강
+                                    // #ffcdd2는 밝은 빨강, #f44336는 당신의 메인 빨강입니다.
+                                    // 필요에 따라 더 어두운 빨강으로 #b71c1c 등을 쓸 수 있습니다.
+      // .range(['#ffcdd2', '#c62828']); // 더 진한 빨강 범위
 
     // D3 팩(Pack) 레이아웃 설정 (버블 겹치지 않게 배치)
     const pack = d3.pack()
@@ -48,7 +57,7 @@ const BubbleChart = ({ data, onBubbleClick, width = 600, height = 400 }) => {
 
     bubble.append('circle')
       .attr('r', d => d.r) // 반지름 설정
-      .attr('fill', '#007bff') // 기본 색상 (CSS에서 오버라이드 가능)
+      .attr('fill', d => colorScale(d.data.value))
       .attr('opacity', 0.8)
       .attr('stroke', '#fff')
       .attr('stroke-width', 2);

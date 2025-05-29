@@ -87,12 +87,12 @@
 .col-sector-change-abs-tsc.positive,
 .col-sector-change-rate-tsc.positive,
 .positive { /* .positive 클래스 추가 */
-  color: #d9534f; 
+  color: var(--color-stock-positive); 
 }
 .col-sector-change-abs-tsc.negative,
 .col-sector-change-rate-tsc.negative,
 .negative { /* .negative 클래스 추가 */
-  color: #28a745; 
+  color: var(--color-stock-nagative); 
 }
 .col-sector-change-abs-tsc.neutral,
 .col-sector-change-rate-tsc.neutral { 

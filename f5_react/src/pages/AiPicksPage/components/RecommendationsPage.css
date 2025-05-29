@@ -1,122 +1,162 @@
-/* src/pages/AiPicksPage/components/RecommendationsPage.css */
-.recommendations-page-content {
-  /* padding: 20px; */ /* 부모 AiPicksPageLayout에서 패딩을 줄 수 있음 */
+.recommendations-page {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+    border-radius: 10px;
 }
 
-.page-main-title-rpc {
-  font-size: 1.8em;
-  font-weight: 600;
-  color: #1f2937;
-  margin-top: 0;
-  margin-bottom: 25px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #e5e7eb;
+.ai-summary-section h2 {
+    color: var(--text-dark);
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2em;
+    border-bottom: 2px solid var(--text-underline);
+    padding-bottom: 10px;
+    display: inline-block;
+    width: 100%;
 }
 
-.recommendation-section-rpc {
-  margin-bottom: 30px;
+/* --- 섹션 1: AI 모델 요약 및 추천 --- */
+.ai-summary-section {
+    background-color: #ffffff;
+    padding: 25px;
+    margin-bottom: 40px;
 }
 
-.section-title-rpc { /* "하루 추천", "일주일 추천" 등 */
-  font-size: 1.5em;
-  font-weight: 600;
-  color: #34495e;
-  margin-bottom: 20px;
-  padding-left: 10px;
-  border-left: 4px solid #007bff; /* 섹션 제목 왼쪽에 강조선 */
+.ai-score-summary-bar {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+    padding: 15px 0;
 }
 
-.recommendation-item-card-rpc {
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px; /* 카드 간 세로 간격 */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+.model-score-item {
+    text-align: center;
+    padding: 10px 15px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    flex: 1;
+    margin: 0 5px;
 }
 
-.stock-info-rpc {
-  margin-bottom: 15px;
+.model-score-item:hover {
+    transform: translateY(-3px);
 }
 
-.stock-name-link-rpc {
-  text-decoration: none;
-}
-.stock-info-rpc h3 { /* 종목명 */
-  font-size: 1.4em;
-  color: #0056b3;
-  margin-top: 0;
-  margin-bottom: 5px;
-  display: inline-block; /* 링크 호버 효과를 위해 */
-}
-.stock-info-rpc h3:hover {
-  text-decoration: underline;
-}
-.stock-code-rpc {
-  font-size: 0.8em;
-  color: #6c757d;
-  margin-left: 5px;
+.model-name {
+    display: block;
+    font-size: 1.1em;
+    margin-bottom: 5px;
 }
 
-.price-prediction-rpc {
-  display: flex;
-  gap: 15px; /* 현재가와 평균예측 사이 간격 */
-  align-items: baseline;
-  font-size: 1em;
-}
-.current-price-rpc {
-  color: #333;
-}
-.avg-prediction-rpc {
-  font-weight: bold;
-}
-.avg-prediction-rpc.positive { color: #d9534f; }
-.avg-prediction-rpc.negative { color: #28a745; } /* 하락 초록 */
-
-
-.ai-charts-container-rpc {
-  display: flex;
-  flex-direction: row; /* 미니 차트들을 가로로 배치 */
-  gap: 15px; /* 차트 사이 간격 */
-  margin-top: 10px;
-  flex-wrap: wrap; /* 화면 작으면 차트 줄바꿈 */
+.model-score {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: var(--color-text-medium);
 }
 
-.mini-chart-wrapper-rpc {
-  flex: 1; /* 공간을 나눠 가짐 */
-  min-width: 200px; /* 각 미니 차트 최소 너비 */
-  border: 1px solid #f0f0f0;
-  border-radius: 4px;
-  padding: 10px;
-  background-color: #f8f9fa;
-}
-.ai-label-rpc {
-  display: block;
-  font-size: 0.8em;
-  color: #6c757d;
-  margin-bottom: 5px;
-  text-align: center;
+
+.recommendation-box {
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 10px;
+    border-left: 5px solid #3498db;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.mini-chart-placeholder-rpc { /* StockChart가 로딩 안될 때 (임시) */
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #adb5bd;
-  background-color: #e9ecef;
-  border-radius: 4px;
+.combined-recommendation {
+    border-color: #27ae60;
 }
 
-.loading-message-rpc, .no-data-message-rpc {
-  text-align: center;
-  color: #6c757d;
-  padding: 30px 0;
-  font-size: 1.1em;
+.top-ai-recommendation {
+    border-color: #e74c3c;
 }
 
-/* StockChart.css 에서 .stock-chart-render-area 의 height를 조절하거나,
-   여기서 .mini-chart-wrapper-rpc .stock-chart-render-area 에 대해 height 재정의 가능 */
-.mini-chart-wrapper-rpc .stock-chart-render-area {
-  height: 80px !important; /* Recharts의 경우 !important가 필요할 수 있음, 또는 chartOptions으로 전달 */
+.recommendation-box h3 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+}
+
+.recommendation-reason {
+    font-size: 0.95em;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.top-ai-indicator {
+    font-size: 1.2em;
+    margin-right: 8px;
+    color: #f1c40f; /* Star color */
+}
+
+.recommended-stock-name {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+}
+
+.stock-code-tag {
+    background-color: var(--backgroundcolor-menubar);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.ai-comment {
+    font-size: 0.85em;
+    color: #7f8c8d;
+    font-style: italic;
+    border-top: 1px dashed #bdc3c7;
+    padding-top: 10px;
+    margin-top: 15px;
+}
+/* --- 섹션 2: AI별 종목 예측 및 수익률 (표 형식) --- */
+
+
+/* 전체 테이블 컨테이너 */
+.stock-table-container {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: none;
+}
+
+.stock-prediction-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 900px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.stock-prediction-table th,
+.stock-prediction-table td {
+    padding: 12px 8px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #e0e0e0;
+}
+
+.stock-prediction-table thead th {
+    background-color: #f7f9fc;
+    color: #495057;
+    font-weight: 700;
+    font-size: 0.9em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    border-bottom: 2px solid #cccccc; /* 헤더 하단 테두리 강조 (선택 사항) */
 }

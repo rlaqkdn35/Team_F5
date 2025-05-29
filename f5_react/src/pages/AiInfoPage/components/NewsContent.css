@@ -185,3 +185,8 @@
         font-size: 0.7em;
     }
 }
+
+.news-item-card-nc {
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}

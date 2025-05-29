@@ -1,9 +1,6 @@
 .interactive-index-display-wrapper {
   background-color: #fff; /* InteractiveIndexDisplay 전체를 감싸는 카드 느낌 */
   padding: 20px;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
   margin-bottom: 20px;
 }
 

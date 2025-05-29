@@ -18,7 +18,7 @@ const kosdaqData = { name: '코스닥', value: '870.10', change: '-2.80 (-0.32%)
 
 // 버블 차트 데이터 및 관련 함수/컴포넌트 (예시)
 const initialBubbleData = [
-  { text: '삼성전자', value: 120, id: '005930' }, { text: 'SK하이닉스', value: 90, id: '000660' },
+  { text: '삼성전자', value: 150, id: '005930' }, { text: 'SK하이닉스', value: 90, id: '000660' },
   { text: 'AI', value: 85, id: 'theme_ai' }, { text: '배터리', value: 70, id: 'theme_battery' },
   { text: '클라우드', value: 65, id: 'theme_cloud' }, { text: '로봇', value: 60, id: 'theme_robot' },
   { text: '반도체', value: 55, id: 'theme_semiconductor' }, { text: '전기차', value: 50, id: 'theme_ev' },
@@ -154,7 +154,9 @@ const AiInfoHomeContentPage = () => {
   const handleNavigateToIssueNews = () => {
     navigate('/ai-info/issue-analysis'); // 이슈분석 페이지의 뉴스로 이동
   };
-
+  const handleNavigateToAirecommend = () => {
+    navigate('/ai-picks'); // 이슈분석 페이지의 뉴스로 이동
+  };
   //랭킹
   const [popularItems, setPopularItems] = useState(popularSearchesData);
   const [hitRateItems, setHitRateItems] = useState(topHitRatesData);
@@ -212,6 +214,11 @@ return (
             <RecommendedStockCard key={index} stock={stock} />
           ))}
         </Slider>
+        <div className="actions-footer">
+          <button onClick={handleNavigateToAirecommend} className="view-more-button">
+            AI추천 보러가기
+          </button>
+        </div>
         </section>
 
      {/* 섹션 3: AI 이슈분석 */}

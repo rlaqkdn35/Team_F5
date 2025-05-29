@@ -27,7 +27,7 @@ const PriceAnalysisContent = () => {
   return (
     <div className="price-analysis-content-page">
       
-      <h1 className="page-main-title-pac">시세 분석</h1>
+      {/* <h1 className="page-main-title-pac">시세 분석</h1> */}
 
       {/* 섹션 1: 주요 지수 인터랙티브 차트 */}
       <section className="index-interactive-charts-section-pac">
@@ -36,6 +36,7 @@ const PriceAnalysisContent = () => {
         <div className="interactive-charts-container-pac">
           <InteractiveIndexDisplay indexBasicInfo={kospiIndexBasicInfo} />
           <InteractiveIndexDisplay indexBasicInfo={kosdaqIndexBasicInfo} />
+
         </div>
       </section>
 

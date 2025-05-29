@@ -1,21 +1,18 @@
 /* src/pages/AiInfoPage/components/PriceAnalysisContent.css */
 
-.price-analysis-content-page {
-  /* AiInfoPageLayout의 .page-content-area 에서 이미 패딩을 주고 있다면, 
-     여기서 추가적인 패딩은 필요 없을 수 있습니다. 
-     필요하다면 이 페이지 고유의 패딩을 설정합니다. */
-  /* padding: 0 20px; */
-}
+/* .price-analysis-content-page {
 
-.page-main-title-pac { /* "시세 분석" 페이지 메인 타이틀 */
+} */
+
+/* .page-main-title-pac { 
   font-size: 1.8em;
   font-weight: 600;
-  color: #1f2937; /* 어두운 계열 텍스트 색상 */
-  margin-top: 0; /* AiInfoPageLayout의 SubNavigation 바로 아래에 올 경우 */
+  color: #1f2937; 
+  margin-top: 0; 
   margin-bottom: 25px;
   padding-bottom: 15px;
-  border-bottom: 1px solid #e5e7eb; /* 부드러운 하단 구분선 */
-}
+  border-bottom: 1px solid #e5e7eb; 
+} */
 
 .index-interactive-charts-section-pac {
   margin-bottom: 30px; /* 아래 MarketThemesSection과의 간격 */

@@ -1,6 +1,5 @@
 /* src/pages/AiInfoPage/components/IssueAnalysisContent.css */
 
-
 .page-main-title-iac {
     font-size: 1.8em;
     font-weight: 600;
@@ -68,11 +67,24 @@
 }
 
 .ai-picked-issue-card .main-issue-article h3 {
+    color: #333;
     font-size: 1.6em;
     margin-top: 0;
     margin-bottom: 10px;
 }
 
+/* ❗ 여기에 추가: h3 내의 a 태그 스타일 */
+.ai-picked-issue-card .main-issue-article h3 a {
+    text-decoration: none; /* 밑줄 제거 */
+    color: inherit; /* 부모 요소(h3)의 색상을 상속받도록 설정 */
+    /* 또는 특정 색상 지정: color: #333; */
+}
+
+/* ❗ 필요하다면 호버 시 스타일도 조정 */
+.ai-picked-issue-card .main-issue-article h3 a:hover {
+    text-decoration: none; /* 호버 시 다시 밑줄을 보이게 할 수 있음 */
+    color: #f44336; /* 호버 시 빨간색으로 변경 */
+}
 .ai-picked-issue-card .issue-meta {
     font-size: 0.85em;
     margin-bottom: 15px;
@@ -171,7 +183,7 @@
 
 .recent-issues-table .col-time-iac { flex: 0 0 80px; justify-content: center; }
 .recent-issues-table .col-title-iac { flex: 2 1 300px; }
-.recent-issues-table .col-title-iac a { text-decoration: none; font-weight: 500;}
+.recent-issues-table .col-title-iac a { text-decoration: none; color: #333; font-weight: 500;}
 .recent-issues-table .col-title-iac a:hover { text-decoration: underline; }
 .recent-issues-table .col-related-stocks-iac { flex: 1 1 150px; }
 .recent-issues-table .col-summary-iac {
@@ -182,7 +194,11 @@
 }
 
 
-.table-row-iac .col-name-iac a { text-decoration: none; font-weight: 500; }
+.table-row-iac .col-name-iac a { 
+    text-decoration: none; 
+    font-weight: 500; 
+    color: #333;
+}
 .table-row-iac .col-name-iac a:hover { text-decoration: underline; }
 
 

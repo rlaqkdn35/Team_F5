@@ -1,355 +1,614 @@
 /* src/pages/AiPicksPage/components/AiPicksHomeContent.css */
 
-/* General Layout and Sections */
 .ai-picks-home-content {
-    padding: 30px 20px;
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
-    color: #212121;
-    background-color: #f0f2f5; /* Light grey background for the whole content area */
-    border-radius: 15px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    background-color: #f9f9f9;
+    font-family: 'Arial', sans-serif;
+    color: #333;
 }
 
-.section-title-aphc {
-    font-size: 2em;
-    font-weight: 800;
-    color: #2c3e50;
+/* 새로운 컨테이너: 시장 현황과 AI 모델 추천 섹션을 가로로 배치 */
+.top-sections-container {
+    display: flex; /* Flexbox 활성화 */
+    gap: 30px; /* 섹션 간 간격 */
     margin-bottom: 30px;
-    text-align: center;
-    position: relative;
-    padding-bottom: 15px;
+    flex-wrap: wrap; /* 작은 화면에서 줄바꿈 허용 */
 }
 
-/* .section-title-aphc::after 가 제거됨 */
+.top-sections-container > section {
+    flex: 1; /* 가용한 공간을 균등하게 분배 */
+    min-width: 300px; /* 최소 너비 설정 (너무 줄어들지 않도록) */
+}
 
 
-/* Loading Message */
+/* --- 공통 섹션 스타일 --- */
+.section-title-aphc {
+    font-size: 26px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+/* --- 로딩 메시지 --- */
 .loading-message-aphc {
     text-align: center;
-    padding: 80px 20px;
-    font-size: 1.3em;
+    font-size: 18px;
+    color: #555;
+    padding: 50px;
+}
+
+/* --- 4번 코드 - 시장 상태 섹션 (Market Status Section) --- */
+.market-status-section-aphc {
+    background-color: #e3f2fd; /* 밝은 파랑 배경 */
+    border-radius: 10px;
+    padding: 20px;
+    /* margin-bottom: 30px; -> top-sections-container에서 관리 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.market-info-aphc {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.market-status-text {
+    font-size: 18px;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.status-indicator.open {
+    background-color: #28a745; /* 초록색 */
+}
+
+.status-indicator.closed {
+    background-color: #dc3545; /* 빨간색 */
+}
+
+.status-open {
+    color: #28a745;
+}
+
+.status-closed {
+    color: #dc3545;
+}
+
+.last-updated-text {
+    font-size: 14px;
+    color: #777;
+}
+
+.sub-section-title-aphc {
+    font-size: 22px;
+    font-weight: bold;
+    color: #34495e;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.top-stocks-list-aphc {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* 이 섹션 내에서 다시 그리드 */
+    gap: 15px;
+}
+
+.top-stock-item-aphc {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.stock-rank-aphc {
+    font-weight: bold;
+    color: #555;
+    margin-right: 10px;
+    width: 25px; /* 고정 너비로 정렬 */
+    text-align: right;
+}
+
+.stock-name-aphc {
+    flex-grow: 1;
+    font-weight: 600;
+    color: #333;
+}
+
+.stock-change-rate-aphc {
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+/* --- 2번 코드 - AI 모델 요약 및 추천 섹션 (AI Summary Section) --- */
+.ai-summary-section-aphc {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    /* margin-bottom: 30px; -> top-sections-container에서 관리 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ai-model-selection-bar-aphc {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap; /* 작은 화면에서 줄바꿈 */
+}
+
+.model-score-item-aphc {
+    background-color: #f0f0f0;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 18px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px; /* 최소 너비 설정 */
+}
+
+.model-score-item-aphc:hover {
+    background-color: #e8f5e9; /* Light green on hover */
+    border-color: #a5d6a7;
+    transform: translateY(-2px);
+}
+
+.model-score-item-aphc.selected-model-aphc {
+    background-color: #4CAF50; /* Primary green */
+    color: white;
+    border-color: #388e3c;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+}
+
+.model-name-aphc {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.model-score-aphc {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.selected-ai-recommendation-box-aphc {
+    background-color: #e8f5e9; /* 선택된 모델 추천 박스 색상 */
+    border: 1px solid #a5d6a7;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.top-ai-indicator-aphc {
+    font-size: 24px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.recommended-stock-name-aphc {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2e7d32; /* 진한 녹색 */
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.stock-code-tag-aphc {
+    background-color: #4CAF50;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-right: 8px;
+    font-weight: normal;
+}
+
+.recommendation-reason-aphc {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.ai-comment-aphc {
+    font-style: italic;
     color: #666;
-    font-weight: 500;
-}
-
-/* --- Section Container Styles (Unified) --- */
-/* Both today-picks-slider-section and best-profit-section will share these */
-.today-picks-slider-section,
-.best-profit-section {
-    margin-bottom: 50px;
-    background-color: #ffffff; /* White background for the section */
-    border-radius: 12px;
-    padding: 40px 30px; /* More internal padding */
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06); /* Softer shadow */
-}
-/* Ensure the last section doesn't have extra margin at the bottom of the page */
-.ai-picks-home-content section:last-of-type {
-    margin-bottom: 0;
+    font-size: 14px;
+    border-top: 1px dashed #ccc;
+    padding-top: 10px;
+    margin-top: 15px;
 }
 
 
-/* --- Slider Container (for Today's Picks) --- */
+/* --- 1번 코드 - AI 오늘의 종목 Pick (Slider Section) --- */
+.today-picks-slider-section {
+    margin-bottom: 30px;
+}
+
 .slider-container-aphc {
-    overflow-x: auto; /* Crucial for horizontal scrolling */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-    scrollbar-width: none; /* Hide scrollbar for Firefox */
-    -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
-    flex-wrap: wrap;
-    display: flex; /* Makes direct children lay out in a row */
-    justify-content: flex-start; /* Align items to the start */
-    gap: 25px; /* Space between slider items */
-    padding-bottom: 15px; /* Space for potential scrollbar */
+    display: flex;
+    overflow-x: auto; /* 수평 스크롤 */
+    gap: 20px;
+    padding-bottom: 10px; /* 스크롤바 공간 확보 */
+    -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #a0a0a0 #f0f0f0; /* Firefox */
 }
 
+/* 스크롤바 Webkit (Chrome, Safari) */
 .slider-container-aphc::-webkit-scrollbar {
-    display: none; /* Hide scrollbar for Chrome, Safari, Opera */
+    height: 8px;
 }
+
+.slider-container-aphc::-webkit-scrollbar-thumb {
+    background-color: #a0a0a0;
+    border-radius: 10px;
+}
+
+.slider-container-aphc::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+}
+
 
 .slide-item-aphc {
-    flex: 0 0 auto;
-    width: 100%;
-    max-width: 300px;
-    max-width: 30%;
-    box-sizing: border-box;
+    flex: 0 0 auto; /* 아이템이 줄어들지 않도록 설정 */
+    width: 280px; /* 각 슬라이드 아이템의 너비 */
 }
 
-/* --- Grid Container (for Best Profit Rates) --- */
-.best-profit-cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-    justify-content: center;
-}
-
-
-/* --- Unified Card Styles (.stock-card) --- */
 .card-link {
     text-decoration: none;
-    display: block;
-    height: 70%;
+    color: inherit;
+    display: block; /* Link가 전체 카드를 감싸도록 */
 }
 
 .stock-card {
-    background-color: #f8f9fa; /* Light grey background for cards (from best-profit-card) */
-    border: 1px solid #e9ecef; /* Subtle border (from best-profit-card) */
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s;
-    height: 100%;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    height: 100%; /* 부모에 따라 높이 꽉 채우기 */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    overflow: hidden;
-    position: relative;
 }
-
-/* .stock-card::before 가 제거됨 */
-
 
 .stock-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* .stock-card:hover::before 가 제거됨 */
+.stock-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
 
-.stock-name { /* Unified stock name style */
-    font-size: 1.5em;
-    color: #2c3e50;
+.card-prediction-text {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+}
 
-    font-weight: 800;
-    z-index: 1;
+.card-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* 작은 화면에서 줄바꿈 */
+    margin-top: auto; /* 하단에 붙도록 */
+}
+
+.card-target-price {
+    font-size: 15px;
+    font-weight: 600;
+    color: #007bff; /* 파란색 */
+}
+
+.card-reason-badge {
+    background-color: #f0f8ff; /* 연한 파랑 */
+    color: #007bff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+
+/* --- 3번 코드 - AI 매매 신호 섹션 (AI Signal Section) --- */
+.ai-signal-section-aphc {
+    background-color: #fff3e0; /* 연한 주황색 배경 */
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.signal-page-description-aphc {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.login-prompt-aphc {
+    font-weight: bold;
+    color: #d32f2f; /* 빨간색 강조 */
+}
+
+.login-prompt-aphc a {
+    color: #e57373; /* 더 밝은 빨간색 링크 */
+    text-decoration: underline;
+}
+
+.signal-list-aphc {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.signal-card-aphc {
+    background-color: #ffffff;
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     position: relative;
+    overflow: hidden; /* 오버레이를 위해 필요 */
 }
 
-.card-details { /* Unified details container */
+.signal-card-aphc.buy {
+    border-color: #28a745; /* 초록색 */
+}
+.signal-card-aphc.sell {
+    border-color: #dc3545; /* 빨간색 */
+}
+.signal-card-aphc.hold {
+    border-color: #ffc107; /* 주황색 */
+}
+.signal-card-aphc.watch {
+    border-color: #17a2b8; /* 하늘색 */
+}
+
+.signal-header-aphc {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.signal-type-aphc {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+.signal-type-aphc.buy-text {
+    background-color: #28a745;
+}
+.signal-type-aphc.sell-text {
+    background-color: #dc3545;
+}
+.signal-type-aphc.hold-text {
+    background-color: #ffc107;
+}
+.signal-type-aphc.watch-text {
+    background-color: #17a2b8;
+}
+
+.signal-time-aphc {
+    font-size: 14px;
+    color: #777;
+}
+
+.stock-info-aphc {
+    margin-bottom: 10px;
+}
+
+.stock-name-aphc {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-right: 5px;
+}
+
+.stock-code-aphc {
+    font-size: 14px;
+    color: #666;
+}
+
+.price-info-aphc {
+    margin-bottom: 15px;
+}
+
+.current-price-aphc {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+}
+
+.change-aphc {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.positive {
+    color: #28a745; /* 초록색 */
+}
+
+.negative {
+    color: #dc3545; /* 빨간색 */
+}
+
+.premium-overlay-aphc {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    font-size: 1em;
-    color: #6c757d;
-    font-weight: 500;
-    z-index: 1;
-    position: relative;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    backdrop-filter: blur(3px); /* 배경 블러 처리 */
+}
+
+.premium-overlay-aphc button {
+    background-color: #e57373; /* 빨간색 버튼 */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.premium-overlay-aphc button:hover {
+    background-color: #ef5350;
 }
 
 
-/* --- Specific Styles for TodayPickItem content --- */
-/* Note: 'stock-code' class is mentioned in JS but not in mock data. Added for completeness if needed. */
-.stock-card .stock-code {
-    font-size: 0.9em;
-    color: #7f8c8d;
-    margin-bottom: 15px;
-    z-index: 1;
-    position: relative;
+/* --- 1번 코드 - 주간 Best 추천 수익률 (Best Profit Section) --- */
+.best-profit-section {
+    margin-bottom: 30px;
 }
 
-.stock-card .card-prediction-text {
-    font-size: 1.2em;
-    color: #28a745; /* Green for positive prediction */
-    font-weight: 700;
-    margin-bottom: 18px;
-    z-index: 1;
-    position: relative;
+.best-profit-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
 }
 
-.stock-card .card-target-price {
-    font-size: 1.1em;
+/* 기존 stock-card 스타일과 통합 */
+/* .stock-card { ... } (상단에 정의됨) */
+
+.card-change-rate {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-date {
+    font-size: 14px;
+    color: #777;
+}
+
+.card-price-info {
+    font-size: 14px;
     color: #555;
-    margin-bottom: 20px; /* Adjust margin to push badge down */
-    font-weight: 600;
-    z-index: 1;
-    position: relative;
+    margin-left: 10px;
 }
 
-.stock-card .card-reason-badge {
-    display: inline-block;
-    background-color: #e3f2fd;
-    color: #007bff;
-    padding: 8px 15px;
-    border-radius: 25px;
-    font-size: 0.9em;
-    font-weight: 600;
-    margin-top: auto; /* Pushes to bottom in column layout */
-    align-self: flex-start; /* Aligns to start of cross axis (left) */
-    z-index: 1;
-    position: relative;
-}
-
-/* Apply blue border on hover for TodayPickItem, overriding default .stock-card hover border */
-.today-pick-item-link .stock-card:hover {
-    border-color: #007bff;
-}
-
-
-/* --- Specific Styles for BestProfitRateCard content --- */
-.stock-card .card-change-rate {
-    font-size: 1.8em;
-    font-weight: 900;
-    margin-bottom: 18px;
-    z-index: 1;
-    position: relative;
-}
-
-.stock-card .card-change-rate.positive {
-    margin: 1px;
-    color: #dc3545; /* Bold red for positive change */
-}
-
-.stock-card .card-date, .stock-card .card-price-info {
-    display: block;
-}
-
-/* Apply red border on hover for BestProfitRateCard, overriding default .stock-card hover border */
-.best-profit-card-link .stock-card:hover {
-    border-color: #dc3545;
-}
-
-
-/* --- Responsive Adjustments --- */
-
-@media (max-width: 1280px) {
-    .ai-picks-home-content {
-        padding: 25px 15px;
+/* --- 반응형 디자인 --- */
+@media (max-width: 992px) { /* 태블릿 가로 */
+    .top-sections-container {
+        flex-direction: column; /* 태블릿에서는 세로로 전환 */
     }
+}
+
+@media (max-width: 768px) { /* 태블릿 세로 및 모바일 가로 */
     .section-title-aphc {
-        font-size: 1.9em;
+        font-size: 22px;
     }
-}
 
-@media (max-width: 992px) {
-    .section-title-aphc {
-        font-size: 1.7em;
-        margin-bottom: 25px;
+    .market-info-aphc {
+        flex-direction: column;
+        align-items: flex-start;
     }
-    /* .section-title-aphc::after 가 제거됨 */
-    .today-picks-slider-section,
-    .best-profit-section {
-        padding: 30px 20px;
+
+    .market-status-text {
+        margin-bottom: 5px;
     }
-    .slider-container-aphc {
-        gap: 20px;
+
+    .sub-section-title-aphc {
+        font-size: 20px;
     }
-    .slide-item-aphc {
-      flex: 0 0 auto;
-      width: 100%;
-      max-width: 100%;
-      min-width: 250px; /* 선택사항 */
-      box-sizing: border-box;
-    }
-    .stock-card .stock-name {
-        font-size: 1.45em;
-    }
-    .stock-card .card-prediction-text {
-        font-size: 1.1em;
-    }
+
+    .top-stocks-list-aphc,
+    .signal-list-aphc,
     .best-profit-cards-container {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        grid-template-columns: 1fr; /* 모바일에서 한 줄에 하나씩 */
     }
-    .stock-card .card-change-rate {
-        font-size: 1.7em;
-    }
-}
 
-@media (max-width: 768px) {
-    .ai-picks-home-content {
-        padding: 20px 10px;
+    .ai-model-selection-bar-aphc {
+        flex-direction: column;
+        align-items: stretch;
     }
-    .section-title-aphc {
-        font-size: 1.5em;
-        margin-bottom: 20px;
-    }
-    /* .section-title-aphc::after 가 제거됨 */
-    .today-picks-slider-section,
-    .best-profit-section {
-        padding: 25px 15px;
-    }
-    .slider-container-aphc {
-        gap: 15px;
-    }
-    .slide-item-aphc {
-        width: 250px;
-        min-width: 250px;
-        max-width: 250px;
-    }
-    .stock-card {
-        padding: 20px;
-    }
-    .stock-card .stock-name {
-        font-size: 1.3em;
-    }
-    .stock-card .card-prediction-text {
-        font-size: 1.0em;
-        margin-bottom: 15px;
-    }
-    .stock-card .card-target-price {
-        font-size: 1.0em;
-        margin-bottom: 15px;
-    }
-    .stock-card .card-reason-badge {
-        font-size: 0.85em;
-        padding: 6px 12px;
-    }
-    .best-profit-cards-container {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    .stock-card .card-change-rate {
-        font-size: 1.5em;
-    }
-    .card-details {
-        font-size: 0.9em;
-    }
-}
 
-@media (max-width: 480px) {
-    .ai-picks-home-content {
-        padding: 15px 8px;
+    .model-score-item-aphc {
+        min-width: unset;
+        width: 100%;
     }
-    .section-title-aphc {
-        font-size: 1.4em;
-        margin-bottom: 18px;
-    }
-    /* .section-title-aphc::after 가 제거됨 */
-    .today-picks-slider-section,
-    .best-profit-section {
-        padding: 20px 10px;
-    }
-    .slider-container-aphc {
-        padding-bottom: 10px;
-        gap: 10px;
-    }
-    .slide-item-aphc {
-        width: 200px;
-        min-width: 200px;
-        max-width: 200px;
-    }
+
     .stock-card {
         padding: 15px;
     }
-    .stock-card .stock-name {
-        font-size: 1.15em;
+
+    .stock-name {
+        font-size: 18px;
     }
-    .stock-card .card-prediction-text {
-        font-size: 0.95em;
-        margin-bottom: 10px;
+
+    .card-prediction-text {
+        font-size: 15px;
     }
-    .stock-card .card-target-price {
-        font-size: 0.9em;
-        margin-bottom: 10px;
+
+    .card-target-price, .card-reason-badge {
+        font-size: 13px;
     }
-    .stock-card .card-reason-badge {
-        font-size: 0.7em;
-        padding: 5px 10px;
+
+    .signal-card-aphc {
+        padding: 15px;
     }
-    .stock-card .card-change-rate {
-        font-size: 1.3em;
+
+    .stock-name-aphc, .current-price-aphc {
+        font-size: 18px;
     }
-    .card-details {
-        font-size: 0.8em;
+}
+
+@media (max-width: 480px) { /* 모바일 세로 */
+    .ai-picks-home-content {
+        padding: 15px;
+    }
+
+    .section-title-aphc {
+        font-size: 20px;
+    }
+
+    .slider-container-aphc {
+        gap: 15px;
+    }
+
+    .slide-item-aphc {
+        width: 250px;
     }
 }
