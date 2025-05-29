@@ -34,75 +34,10 @@
 
 /* 주요 종목 랭킹 섹션 (StockRankings) */
 .stock-rankings-container {
-    /* flex: none; */ /* 더 이상 유동적인 공간을 차지하지 않고 고정 너비를 가질 수 있도록 */
-
     width: 100%; /* 부모 컨테이너(left-column-container)의 너비를 따르되 max-width 제한 */
     box-sizing: border-box;
     border-radius: 8px;
-
     padding: 20px;
-}
-
-/* StockRankings 내부의 탭 및 리스트 스타일은 그대로 유지 */
-.rankings-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.rankings-header h2 {
-    font-size: 1.5em;
-}
-
-.rankings-tabs {
-    display: flex;
-    border-bottom: 1px solid #eee;
-    margin-bottom: 15px;
-}
-
-.rank-tab {
-    padding: 10px 15px;
-    cursor: pointer;
-    font-weight: bold;
-    color: #777;
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s ease;
-}
-
-.rank-tab.active {
-    color: #007bff;
-    border-bottom-color: #007bff;
-}
-
-.rankings-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.rankings-list li {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px dashed #f0f0f0;
-    font-size: 0.95em;
-}
-
-.rankings-list li:last-child {
-    border-bottom: none;
-}
-
-.rank-item-name {
-    font-weight: bold;
-}
-
-.rank-item-change-positive {
-    color: #e2504c;
-}
-
-.rank-item-change-negative {
-    color: #4c82e2;
 }
 
 /* -------------------------------------------------- */
@@ -116,12 +51,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-}
-
-.ai-recommendation-section .slider-container {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
 }
 
 /* -------------------------------------------------- */
@@ -209,7 +138,7 @@
 }
 
 .details-pane .detail-item strong {
-    color: #333;
+    color: var(--color-text-dark);
 }
 
 .details-pane ul {
@@ -252,7 +181,7 @@
 }
 
 .view-more-button {
-  background-color: #f44336; /* ❗ 변경: 기본 배경색을 메인 빨간색으로 */
+  background-color: var(--color-button); /* ❗ 변경: 기본 배경색을 메인 빨간색으로 */
   color: white;
   padding: 10px 20px;
   border: none;
@@ -269,6 +198,7 @@
 /* -------------------------------------------------- */
 /* 공통 스타일 */
 .section-title {
+    width: 100%;
     font-size: 1.5em;
     margin-bottom: 20px;
     border-bottom: 1px solid #eee;

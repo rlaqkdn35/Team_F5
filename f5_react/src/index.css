@@ -1,63 +1,62 @@
+@font-face {
+    font-family: 'Paperlogy-8ExtraBold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'KCC-Ganpan';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
 :root {
-  /* 주요 브랜드/액센트 색상 */
-  --color-primary: #007bff; /* 파란색: 메인 버튼, 링크, 강조 */
-  --color-secondary: #6c757d; /* 회색: 보조 텍스트, 비활성 요소 */
 
-  /* 성공/긍정적 상태 색상 */
-  --color-success: #28a745; /* 초록색: 예측 성공, 긍정적인 지표 */
-
-  /* 위험/부정적 상태 색상 (수익률 상승 시 사용) */
-  --color-danger: #dc3545; /* 빨간색: 수익률 상승, 경고 */
-
-  /* 배경 색상 */
-  --color-bg-body: #ffffff; /* 전체 페이지 배경색 */
-
-
-  /* 텍스트 색상 */
-  --text-dark: #000000; /* 기본 어두운 텍스트 */
-  --color-text-light: #F2EEFA; /* 밝은 회색 텍스트 (정보성) */
-  --color-text-muted: #6c757d; /* muted 텍스트 (세부 정보) */
-  
-  /* 테두리/구분선 색상 */
-  --color-border-light: #F8F6FD; /* 일반 테두리 */
-  --color-border-subtle: #e9ecef; /* 미묘한 테두리 */
-  
   /* 색깔구분 */
-  --backgroundcolor-menubar: #f44336;
-  --text-underline: #eee;
-  --color-text-medium: #dc3545; /* 중간 밝기 텍스트 */
+  --color-background-menubar: #f44336;
+  --color-background-submenubar: #C8102E;
+  --color-background-body: #ffffff;
+  --color-background-white-red:#fcf1f1;
   --color-stock-positive:#e53935;
   --color-stock-nagative:#007bff;
 
+  --header-height: 60px;  
 
-  --color-main:#DED4F3;
-  --color-main-close:#CCCCFF;
-  --color-1:#AC1D1B;
-  --color-2:#F8F6FD;
-  --color-3:#CC3333;
-  --color-4:#D84C4C;
-  --color-5:#C0392B;
-  --color-6:#CD2504;
-  --color-7:#A6A2AE;
-  --color-8:#9C99A3;
-  --color-9:#939197;
-  --color-10:#89888C;
-  --color-11:#6F6A7A;
-  --color-12:#595561;
-  --color-13:#434049;
-  --color-14:#2C2A31;
-  --color-15:#161518;
-  --font-family-pretendard: sans-serif;
-  --font-whole: Pretendard,'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+  --color-button:#e74c3c;
+
+  /* 왠지모르겠지만 호버는 색이 잘 안입혀짐 */
+  --color-button-hover:#ffffff;
+  --color-white-hover:#f8f9fa;
+  /* 이게 텍스트 active겸 */
+  --color-text-hover:#e74c3c; 
+
+  --color-border:#ffffff;
+  --color-line: #f0f0f0;
+
+  /* border: none; */
+  /* border: 1px solid black; */
+  --color-text-white: #ffffff;
+  --color-text-dark: #333;
+  --color-text-underline: #eee;
+  --color-text-medium: #dc3545; /* 중간 밝기 텍스트 */
+  /* 폰트 */
+  --font-whole: 'Paperlogy-8ExtraBold';
+  --font-table: 'KCC-Ganpan';
+
+  /* --font-whole: Pretendard,'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif; */
 }
 
+button{
+  font-family: var(--font-whole);
+}
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: var(--font-family-pretendard); /* 전역 폰트 변수 사용 */
+  font-family: var(--font-whole); /* 전역 폰트 변수 사용 */
   color: var(--color-text-dark); /* 전역 텍스트 색상 적용 */
-  background-color: var(--color-bg-body); /* 전역 배경색 적용 */
+  background-color: var(--color-background-body); /* 전역 배경색 적용 */
 }
 
 code {

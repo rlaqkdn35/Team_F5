@@ -10,7 +10,7 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
   const [currentOverlayTitle, setCurrentOverlayTitle] = useState(''); // Initialize as empty string
   const [showOverlay, setShowOverlay] = useState(false); // New state for overlay visibility
   const location = useLocation();
-
+  const [activeMenu, setActiveMenu] = useState(null);
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -117,15 +117,15 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
         <div className='right-section'>
           <div className="auth-area">
             {isLoggedIn ? (
-              <button onClick={onLogout} className="auth-button logout-button">
+              <button onClick={onLogout} className="auth-button">
                 로그아웃
               </button>
             ) : (
               <>
-                <Link to="/login" className="auth-button login-button">
+                <Link to="/login" className="auth-button">
                   <FaSignInAlt /> 로그인
                 </Link>
-                <Link to="/signup" className="auth-button signup-button">
+                <Link to="/signup" className="auth-button">
                   <FaUserPlus /> 회원가입
                 </Link>
               </>
@@ -136,18 +136,18 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
       </header>
 
       <nav className="app-main-menu-bar">
-        <div className="menu-icon-container">
-          <button className="menu-toggle-button" aria-label="전체 메뉴 보기">
-            <FaBars /> <span className="menu-toggle-text">전체메뉴보기</span>
-          </button>
-        </div>
 
         <ul className="main-nav-links">
           {mainMenuItems.map((item) => (
-            <li key={item.name} className="main-nav-item">
+            <li 
+              key={item.name} 
+              className="main-nav-item"
+              onMouseEnter={() => setActiveMenu(item.name)} // 마우스 올리면 해당 메뉴 활성화
+              onMouseLeave={() => setActiveMenu(null)}     // 마우스 떼면 비활성화
+            >
               <Link to={item.path} onClick={() => handleMenuItemClick(item.path, item.name)}>{item.name}</Link>
               {item.subItems && item.subItems.length > 0 && (
-                <ul className="dropdown-submenu">
+                <ul className={`dropdown-submenu ${activeMenu === item.name ? 'active' : ''}`}>
                   {item.subItems.map((subItem) => (
                     <li key={subItem.name}>
                       <Link to={subItem.path} onClick={() => handleMenuItemClick(subItem.path, subItem.name)}>{subItem.name}</Link>

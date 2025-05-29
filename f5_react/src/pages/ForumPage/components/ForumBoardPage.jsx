@@ -18,24 +18,26 @@ const ForumBoardPage = ({ boardTitle }) => {
             withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
-                // 필요하면 헤더 추가 가능
             }
         })
         .then((response) => {
+            console.log('[ForumBoardPage] API 응답 데이터:', response.data);
             setPosts(response.data);
             setLoading(false);
         })
         .catch((error) => {
-            console.error('Error fetching posts:', error);
+            console.error('[ForumBoardPage] 게시글 불러오기 오류:', error);
             setLoading(false);
         });
     }, [currentPage, boardTitle]);
 
-    // 필터링할 때 서버 필드명에 맞춰서 수정
-    const filteredPosts = posts.filter(post =>
-        (post.forum_title?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        post.user_id?.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+    // posts가 배열인지 방어적으로 체크
+    const filteredPosts = Array.isArray(posts)
+        ? posts.filter(post =>
+            (post.forum_title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            post.user_id?.toLowerCase().includes(searchTerm.toLowerCase()))
+          )
+        : [];
 
     const handlePostClick = (postId) => {
         navigate(`/forum/post/${postId}`);
@@ -49,7 +51,6 @@ const ForumBoardPage = ({ boardTitle }) => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        // 현재 searchTerm 상태로 필터링만 하고 있음 (필요시 API 호출 등 추가 가능)
     };
 
     if (loading) {

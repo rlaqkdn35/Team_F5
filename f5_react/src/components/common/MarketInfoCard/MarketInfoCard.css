@@ -1,6 +1,6 @@
 .market-info-card-ui {
   flex: 1;
-  background-color: #ffffff;
+  background-color: var(--color-background-body);
   border-radius: 12px;
   padding: 20px; 
   display: flex; /* 정보와 차트를 가로로 배치하기 위한 기본 설정 */
@@ -18,7 +18,7 @@
 .market-name {
   font-size: 1.1em; /* 기본 카드에서의 크기 조정 */
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text-dark);
   margin-top: 0;
   margin-bottom: 8px;
 }
@@ -26,7 +26,7 @@
 .market-value {
   font-size: 1em; /* 기본 카드에서의 크기 조정 */
   font-weight: 700;
-  color: #1f2937;
+  color: var(--color-text-dark);
   margin-bottom: 4px;
   line-height: 1.2;
 }
@@ -35,8 +35,8 @@
   font-size: 0.5em; /* 기본 카드에서의 크기 조정 */
   font-weight: 500;
 }
-.market-change.positive { color: #d9534f; }
-.market-change.negative { color: #28a745; }
+.market-change.positive { color: var(--color-stock-positive); }
+.market-change.negative { color: var(--color-stock-nagative); }
 .market-change.neutral { color: #777777; }
 
 .market-chart-area { /* 차트가 들어갈 영역 */

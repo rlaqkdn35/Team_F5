@@ -13,7 +13,7 @@ const Slider = ({
   showArrows = true,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const sliderRef = useRef(null); // .slider-track
+  const sliderRef = useRef(0); // .slider-track
   const sliderWrapperRef = useRef(null); // .slider-content-wrapper (보이는 영역)
 
   const slides = React.Children.toArray(children);
@@ -26,58 +26,65 @@ const Slider = ({
     }
 
     const containerVisibleWidth = sliderWrapperRef.current.clientWidth;
-    const safeContainerWidth = containerVisibleWidth > 0 ? containerVisibleWidth : 1; 
+    const safeContainerWidth = containerVisibleWidth > 0 ? containerVisibleWidth : 1;
     const slideWidth = safeContainerWidth / slidesToShow;
 
     // requestAnimationFrame으로 DOM 변경을 감싸서 무한 루프 경고 방지
     requestAnimationFrame(() => {
-        // console.log('RAF - Update Layout:', { containerVisibleWidth, slideWidth, currentIndex });
+      // console.log('RAF - Update Layout:', { containerVisibleWidth, slideWidth, currentIndex });
 
-        // 슬라이드 트랙 전체 너비 설정
+      // 슬라이드 트랙 전체 너비 설정
+      // console.log("total", totalSlides)
+      // console.log("width", slideWidth)
+      // console.log(sliderRef.current);
+      if (sliderRef.current != null) {
         sliderRef.current.style.width = `${totalSlides * slideWidth}px`;
-        
-        // 각 슬라이드 아이템의 너비 설정
-        // 이 부분은 CSS에서 처리하는 것이 훨씬 좋지만, JS로 한다면 이렇게.
-        // CSS에서 flex-basis를 쓰는 것이 훨씬 안정적입니다.
         Array.from(sliderRef.current.children).forEach(child => {
-            child.style.width = `${slideWidth}px`;
+          child.style.width = `${slideWidth}px`;
         });
 
         // 현재 슬라이드 위치로 transform 적용
         sliderRef.current.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+      }
+
+
+      // 각 슬라이드 아이템의 너비 설정
+      // 이 부분은 CSS에서 처리하는 것이 훨씬 좋지만, JS로 한다면 이렇게.
+      // CSS에서 flex-basis를 쓰는 것이 훨씬 안정적입니다.
+
     });
 
   }, [currentIndex, slidesToShow, totalSlides]);
 
-const goToNext = useCallback(() => {
+  const goToNext = useCallback(() => {
     setCurrentIndex((prevIndex) => {
-        const maxPageIndex = Math.max(0, totalSlides - slidesToShow);
-        let nextIndex = prevIndex + slidesToScroll;
+      const maxPageIndex = Math.max(0, totalSlides - slidesToShow);
+      let nextIndex = prevIndex + slidesToScroll;
 
-        if (nextIndex > maxPageIndex) { // maxPageIndex를 초과하면
-            if (maxPageIndex === 0) { // 슬라이드가 한 페이지 미만이어서 이동할 필요가 없는 경우
-                return 0;
-            }
-            return 0; // 처음으로 돌아감 (무한 루프)
-            // 또는 nextIndex = maxPageIndex; // 마지막 그룹을 보여주고 멈춤
+      if (nextIndex > maxPageIndex) { // maxPageIndex를 초과하면
+        if (maxPageIndex === 0) { // 슬라이드가 한 페이지 미만이어서 이동할 필요가 없는 경우
+          return 0;
         }
-        return nextIndex;
+        return 0; // 처음으로 돌아감 (무한 루프)
+        // 또는 nextIndex = maxPageIndex; // 마지막 그룹을 보여주고 멈춤
+      }
+      return nextIndex;
     });
-}, [slidesToScroll, totalSlides, slidesToShow]);
+  }, [slidesToScroll, totalSlides, slidesToShow]);
 
-// goToPrev 수정 제안
-const goToPrev = useCallback(() => {
+  // goToPrev 수정 제안
+  const goToPrev = useCallback(() => {
     setCurrentIndex((prevIndex) => {
-        const maxPageIndex = Math.max(0, totalSlides - slidesToShow);
-        let prevIndexCandidate = prevIndex - slidesToScroll;
+      const maxPageIndex = Math.max(0, totalSlides - slidesToShow);
+      let prevIndexCandidate = prevIndex - slidesToScroll;
 
-        if (prevIndexCandidate < 0) {
-            // 음수가 되면 마지막 페이지로 이동
-            return maxPageIndex;
-        }
-        return prevIndexCandidate;
+      if (prevIndexCandidate < 0) {
+        // 음수가 되면 마지막 페이지로 이동
+        return maxPageIndex;
+      }
+      return prevIndexCandidate;
     });
-}, [slidesToScroll, totalSlides, slidesToShow]);
+  }, [slidesToScroll, totalSlides, slidesToShow]);
 
   // 자동 재생
   useEffect(() => {
@@ -93,21 +100,21 @@ const goToPrev = useCallback(() => {
     let animationFrameId;
 
     const observer = new ResizeObserver(() => {
-        // ResizeObserver 콜백 내에서 직접 DOM 조작 대신
-        // requestAnimationFrame으로 updateSliderLayout 호출
-        animationFrameId = requestAnimationFrame(() => {
-            updateSliderLayout();
-        });
+      // ResizeObserver 콜백 내에서 직접 DOM 조작 대신
+      // requestAnimationFrame으로 updateSliderLayout 호출
+      animationFrameId = requestAnimationFrame(() => {
+        updateSliderLayout();
+      });
     });
 
     if (sliderWrapperRef.current) {
-        observer.observe(sliderWrapperRef.current);
+      observer.observe(sliderWrapperRef.current);
     }
 
     // 초기 마운트 시에도 레이아웃 업데이트 (0ms setTimeout 대신 RAF)
     // 이전에 사용했던 setTimeout(updateSliderLayout, 0)과 비슷한 효과를 냅니다.
     animationFrameId = requestAnimationFrame(() => {
-        updateSliderLayout();
+      updateSliderLayout();
     });
 
     return () => {

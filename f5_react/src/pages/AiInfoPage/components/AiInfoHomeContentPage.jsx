@@ -231,8 +231,8 @@ return (
             <BubbleChart
               data={bubbleData}
               onBubbleClick={handleBubbleClick}
-              width={700} // 버블 차트가 그려질 영역의 너비
-              height={700} // 버블 차트가 그려질 영역의 높이
+              width={500} // 버블 차트가 그려질 영역의 너비
+              height={500} // 버블 차트가 그려질 영역의 높이
             />
           </div>
 

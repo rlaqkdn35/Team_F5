@@ -13,9 +13,7 @@ import AiInfoHomeContentPage from './pages/AiInfoPage/components/AiInfoHomeConte
 import PriceAnalysisContent from './pages/AiInfoPage/components/PriceAnalysisContent.jsx'
 import IssueAnalysisContent from './pages/AiInfoPage/components/IssueAnalysisContent.jsx';
 import ThemeSectorContent from './pages/AiInfoPage/components/ThemeSectorContent.jsx';
-import DisclosureAnalysisContent from './pages/AiInfoPage/components/DisclosureAnalysisContent.jsx';
 import NewsContent from './pages/AiInfoPage/components/NewsContent.jsx';
-import ReportAnalysisContent from './pages/AiInfoPage/components/ReportAnalysisContent.jsx';
 import AiPicksPageLayout from './pages/AiPicksPage/AiPicksPageLayout.jsx';
 import AiPicksHomeContent from './pages/AiPicksPage/components/AiPicksHomeContent.jsx';
 import TodayPicksPage from './pages/AiPicksPage/components/TodayPicksPage.jsx';
@@ -35,6 +33,7 @@ import PostDetailPage from './pages/ForumPage/components/PostDetailPage.jsx';
 import Signal from './pages/AiPicksPage/components/Signal.jsx';
 import UserFavorite from './pages/MyPage/components/UserFavorite.jsx';
 import NewsDetailPage from './pages/AiInfoPage/components/NewsDetailPage/NewsDetailPage.jsx';
+import PostEditPage from './pages/ForumPage/components/PostEditPage.jsx';
 
 
 
@@ -70,8 +69,6 @@ function App() {
               <Route path="price-analysis" element={<PriceAnalysisContent />} />
               <Route path="issue-analysis" element={<IssueAnalysisContent />} />
               <Route path="theme-sector" element={<ThemeSectorContent />} />
-              <Route path="disclosure-analysis" element={<DisclosureAnalysisContent />} />
-              <Route path="report-analysis" element={<ReportAnalysisContent />} />
               <Route path="news" element={<NewsContent />} />
               
 
@@ -92,6 +89,8 @@ function App() {
                   <WritePostPage />
                 </ProtectedElement>
               } />
+              <Route path="edit/:postId" element={<PostEditPage />} />
+
               <Route path="post/:postId" element={<PostDetailPage />} /> </Route>
             <Route 
               path="/mypage" 

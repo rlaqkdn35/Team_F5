@@ -1,68 +1,157 @@
-// pages/ForumPage/components/PostDetailPage.jsx
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './PostDetailPage.css';
 
 const PostDetailPage = () => {
-    // URL 파라미터에서 게시글 ID만 가져옵니다. boardType은 제거합니다.
     const { postId } = useParams();
     const navigate = useNavigate();
 
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // 게시판 타입에 따른 한글 제목 매핑 함수는 이제 필요 없거나 간소화됩니다.
-    // 이 페이지는 특정 boardType이 아닌 통합 게시판의 게시글을 보여주기 때문입니다.
-    // const getBoardTitle = (type) => { ... } // 이 함수는 필요 없습니다.
+    const [newComment, setNewComment] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const currentUserId = "123";
+
+    // 게시글 및 댓글 불러오기
+    const fetchPost = () => {
+        setLoading(true);
+        setError(null);
+
+        axios.get(`http://localhost:8084/F5/api/forum/detail/${postId}`)
+            .then(response => {
+                const data = response.data;
+
+                console.log("[fetchPost] 서버에서 받은 게시글 ID:", data.forum.forum_idx);
+
+                const postData = {
+                    id: data.forum.forum_idx,
+                    title: data.forum.forum_title,
+                    author: data.forum.user_id,
+                    date: new Date(data.forum.created_at).toLocaleDateString('ko-KR'),
+                    views: data.forum.forum_views || 0,
+                    content: data.forum.forum_content,
+                    forum_file: data.forum.forum_file,
+                    comments: data.comments || []
+                };
+
+                setPost(postData);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error('게시글 조회 중 오류 발생:', err);
+                setError('게시글을 불러오는 데 실패했습니다.');
+                setLoading(false);
+            });
+    };
 
     useEffect(() => {
-        setLoading(true);
-        setTimeout(() => {
-            const mockPost = {
-                id: parseInt(postId),
-                // boardType: boardType, // 이 속성도 이제 Mock 데이터에서 필요 없습니다.
-                title: `통합 게시판 게시글 제목 ${postId}`, // 통합 게시판 제목으로 변경
-                author: `사용자${Math.floor(Math.random() * 100) + 1}`,
-                date: new Date(Date.now() - Math.random() * 1000 * 60 * 60 * 24 * 30).toLocaleDateString('ko-KR'),
-                views: Math.floor(Math.random() * 1000) + 100,
-                content: `이것은 통합 게시판의 ${postId}번 게시글에 대한 가짜 상세 내용입니다. 백엔드가 없으므로 이 내용은 임시로 생성되었습니다. 여기에는 게시글의 더 길고 자세한 내용이 들어갑니다.
+        // 조회수 증가 호출 제한 (5분 내 중복 호출 방지)
+        const key = `viewed_forum_${postId}`;
+        const lastViewed = localStorage.getItem(key);
+        const now = Date.now();
 
-                주식 시장은 복잡하고 예측 불가능한 요소들로 가득합니다. 기업 실적, 거시 경제 지표, 국제 정세, 기술 혁신 등 다양한 요인들이 주가에 영향을 미칩니다. 이러한 변수들을 분석하고 투자 결정을 내리는 것은 쉽지 않은 일입니다.
+        if (!lastViewed || now - lastViewed > 300000) {
+            axios.put(`http://localhost:8084/F5/api/forum/view/${postId}`)
+                .then(() => {
+                    console.log("조회수 증가 완료");
+                    localStorage.setItem(key, now);
+                    fetchPost();
+                })
+                .catch((err) => {
+                    console.error("조회수 증가 실패:", err);
+                    fetchPost();
+                });
+        } else {
+            console.log("조회수 증가 제한 시간 내, API 호출 안 함");
+            fetchPost();
+        }
+    }, [postId]);
 
-                하지만 꾸준한 학습과 정보 수집, 그리고 자신만의 투자 원칙을 세우는 것이 중요합니다. 단순히 소문에 의존하거나 단기적인 변동에 일희일비하기보다는, 장기적인 관점에서 기업의 본질적인 가치를 평가하고 인내심을 가지고 투자하는 자세가 필요합니다.
+    const handleDelete = () => {
+        if (window.confirm('정말 삭제하시겠습니까?')) {
+            console.log("[handleDelete] 삭제 요청할 게시글 ID:", post.id);
 
-                오늘의 시장 동향은 어떠했는지, 특별히 주목할 만한 이슈는 없었는지 함께 이야기 나눠봅시다. 건강한 투자 습관을 통해 모두 성공적인 투자를 하시길 바랍니다!`,
-                comments: [
-                    { id: 1, author: '댓글러1', text: '좋은 정보 감사합니다!', date: '2023-05-26' },
-                    { id: 2, author: '댓글러2', text: '저도 같은 생각입니다.', date: '2023-05-26' },
-                ]
-            };
-            setPost(mockPost);
-            setLoading(false);
-        }, 500);
-    }, [postId]); // postId가 변경될 때만 데이터를 다시 불러옵니다. boardType은 필요 없습니다.
+            axios.delete(`http://localhost:8084/F5/api/forum/delete/${post.id}`)
+                .then(() => {
+                    console.log("[handleDelete] 삭제 성공, 서버 응답 받음");
+                    alert('게시글이 삭제되었습니다.');
+                    navigate('/forum');
+                })
+                .catch(err => {
+                    console.error('[handleDelete] 게시글 삭제 중 오류 발생:', err);
+                    alert('삭제 실패');
+                });
+        } else {
+            console.log("[handleDelete] 삭제 취소됨");
+        }
+    };
 
-    if (loading) {
-        return <div className="post-detail-container">게시글을 불러오는 중입니다...</div>;
-    }
+    const handleEdit = () => {
+        console.log("[handleEdit] 수정 페이지 이동 요청, 게시글 ID:", post.id);
+        navigate(`/forum/edit/${post.id}`);
+    };
 
-    if (!post) {
-        return <div className="post-detail-container">게시글을 찾을 수 없습니다.</div>;
-    }
+    const handleCommentSubmit = async () => {
+        if (!newComment.trim()) {
+            alert('댓글을 입력하세요.');
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            await axios.post(`http://localhost:8084/F5/api/forum/${postId}/comments`, {
+                user_id: currentUserId,
+                content: newComment
+            });
+
+            setNewComment('');
+            fetchPost();
+        } catch (error) {
+            console.error('댓글 등록 실패:', error);
+            alert('댓글 등록 중 오류가 발생했습니다.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    if (loading) return <div className="post-detail-container">게시글을 불러오는 중입니다...</div>;
+    if (error) return <div className="post-detail-container">{error}</div>;
+    if (!post) return <div className="post-detail-container">게시글을 찾을 수 없습니다.</div>;
+
+    const imageUrl = `http://localhost:8084/F5/api/forum/images/${post.forum_file}`;
 
     return (
         <div className="post-detail-container">
             <div className="post-detail-header">
                 <h2>{post.title}</h2>
                 <div className="post-meta">
-                    <span>작성자: **{post.author}**</span>
+                    <span>작성자: <strong>{post.author}</strong></span>
                     <span>날짜: {post.date}</span>
                     <span>조회수: {post.views}</span>
                 </div>
             </div>
+
             <div className="post-content">
                 <p style={{ whiteSpace: 'pre-wrap' }}>{post.content}</p>
+
+                {post.forum_file && (
+                    <div className="post-image" style={{ marginTop: '1rem' }}>
+                        <img
+                            src={imageUrl}
+                            alt="첨부 이미지"
+                            style={{ maxWidth: '100%', borderRadius: '8px' }}
+                            onError={e => {
+                                console.error('이미지 로딩 실패:', e.target.src);
+                                e.target.style.display = 'none';
+                            }}
+                        />
+                    </div>
+                )}
             </div>
 
             <div className="comments-section">
@@ -70,24 +159,52 @@ const PostDetailPage = () => {
                 {post.comments.length > 0 ? (
                     <ul className="comments-list">
                         {post.comments.map(comment => (
-                            <li key={comment.id} className="comment-item">
+                            <li key={comment.cmtIdx} className="comment-item">
                                 <div className="comment-meta">
-                                    <strong>{comment.author}</strong>
-                                    <span>{comment.date}</span>
+                                    <strong>{comment.userId}</strong>
+                                    <span>{new Date(comment.createdAt).toLocaleDateString('ko-KR')}</span>
                                 </div>
-                                <p>{comment.text}</p>
+                                <p style={{ whiteSpace: 'pre-wrap' }}>{comment.cmtContent}</p>
                             </li>
                         ))}
                     </ul>
                 ) : (
                     <p className="no-comments">아직 댓글이 없습니다.</p>
                 )}
+
+                <div className="comment-form" style={{ marginTop: '2rem' }}>
+                    <textarea
+                        placeholder="댓글을 입력하세요"
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        rows={3}
+                        style={{ width: '100%', padding: '10px', resize: 'none' }}
+                    />
+                    <button
+                        onClick={handleCommentSubmit}
+                        disabled={isSubmitting}
+                        style={{ marginTop: '10px', padding: '8px 16px' }}
+                    >
+                        {isSubmitting ? '등록 중...' : '댓글 등록'}
+                    </button>
+                </div>
             </div>
 
             <div className="post-actions">
-                <button onClick={() => navigate(`/forum`)} className="back-button"> {/* /forum으로 이동 */}
+                <button onClick={() => navigate('/forum')} className="back-button">
                     목록으로
                 </button>
+
+                {post.author === currentUserId && (
+                    <>
+                        <button onClick={handleEdit} className="edit-button" style={{ marginLeft: '1rem' }}>
+                            수정
+                        </button>
+                        <button onClick={handleDelete} className="delete-button" style={{ marginLeft: '0.5rem', color: 'red' }}>
+                            삭제
+                        </button>
+                    </>
+                )}
             </div>
         </div>
     );
