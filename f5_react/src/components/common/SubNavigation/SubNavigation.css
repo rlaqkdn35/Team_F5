@@ -1,0 +1,45 @@
+.sub-navigation-bar {
+  padding: 10px 0;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: var(--color-background-menubar); /* Main red background for the bar */
+}
+
+.sub-navigation-list {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0 20px;
+  flex-wrap: wrap;
+}
+
+.sub-navigation-item {
+  margin: 0 10px;
+}
+
+.sub-nav-link {
+  text-decoration: none;
+  color: var(--color-text-white); /* White text for better contrast on red background */
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.sub-nav-link:hover {
+  color: var(--color-button); /* Red text on hover */
+  background-color: var(--color-background-body); /* Very light red/pink background on hover */
+}
+
+.sub-nav-link.active {
+  font-weight: bold;
+  color: var(--color-text-white);
+  font-size: 1.1em;
+  cursor: default;
+}
+
+.sub-nav-link.active:hover {
+  background-color: transparent; /* 마우스 올려도 배경색은 투명으로 고정 */
+}

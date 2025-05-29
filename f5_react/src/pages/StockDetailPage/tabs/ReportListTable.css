@@ -1,0 +1,55 @@
+/* src/pages/StockDetailPage/tabs/ReportListTable.css */
+.no-data-message-rlt {
+  text-align: center;
+  color: #6c757d;
+  padding: 30px 0;
+  font-size: 1.1em;
+}
+
+.report-list-table-rlt { width: 100%; }
+.table-header-rlt, .table-row-rlt {
+  display: flex;
+  align-items: stretch; 
+  padding: 10px 0; 
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+}
+.table-header-rlt { 
+  font-weight: 600; 
+  color: #4b5563; 
+  background-color: #f9fafb; 
+  padding: 12px 0;
+}
+.table-row-rlt:last-child { border-bottom: none; }
+.table-row-rlt:hover { background-color: #f8f9fa70; }
+
+.table-row-rlt span, .table-header-rlt span {
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  box-sizing: border-box;
+  word-break: keep-all; 
+}
+
+/* 리포트 분석 테이블 컬럼 너비 및 정렬 */
+.col-date-rlt { flex: 0 0 100px; justify-content: center; }
+.col-stock-name-rlt { flex: 1 1 120px; }
+.col-stock-name-rlt a { color: #1f2937; text-decoration: none; font-weight: 500; }
+.col-stock-name-rlt a:hover { text-decoration: underline; color: #0056b3;}
+.col-current-price-rlt { flex: 0 0 90px; justify-content: flex-end; }
+.col-change-rate-rlt { flex: 0 0 90px; justify-content: flex-end; font-weight: 500;}
+.col-target-price-rlt { flex: 0 0 90px; justify-content: flex-end; font-weight: 500;}
+.col-report-title-rlt { 
+  flex: 3 1 300px; /* 제목은 길 수 있으므로 넓게 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.col-report-title-rlt a { color: #0056b3; text-decoration: none; }
+.col-report-title-rlt a:hover { text-decoration: underline; }
+.col-brokerage-rlt { flex: 0 0 100px; justify-content: center; }
+
+/* 등락률 색상 */
+.col-change-rate-rlt.positive { color: #d9534f; }
+.col-change-rate-rlt.negative { color: #28a745; }
+.col-change-rate-rlt.neutral { color: #777777; }

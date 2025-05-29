@@ -1,0 +1,66 @@
+@font-face {
+    font-family: 'Paperlogy-8ExtraBold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'KCC-Ganpan';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+:root {
+
+  /* 색깔구분 */
+  --color-background-menubar: #f44336;
+  --color-background-submenubar: #C8102E;
+  --color-background-body: #ffffff;
+  --color-background-white-red:#fcf1f1;
+  --color-stock-positive:#e53935;
+  --color-stock-nagative:#007bff;
+
+  --header-height: 60px;  
+
+  --color-button:#e74c3c;
+
+  /* 왠지모르겠지만 호버는 색이 잘 안입혀짐 */
+  --color-button-hover:#ffffff;
+  --color-white-hover:#f8f9fa;
+  /* 이게 텍스트 active겸 */
+  --color-text-hover:#e74c3c; 
+
+  --color-border:#ffffff;
+  --color-line: #f0f0f0;
+
+  /* border: none; */
+  /* border: 1px solid black; */
+  --color-text-white: #ffffff;
+  --color-text-dark: #333;
+  --color-text-underline: #eee;
+  --color-text-medium: #dc3545; /* 중간 밝기 텍스트 */
+  /* 폰트 */
+  --font-whole: 'Paperlogy-8ExtraBold';
+  --font-table: 'KCC-Ganpan';
+
+  /* --font-whole: Pretendard,'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif; */
+}
+
+button{
+  font-family: var(--font-whole);
+}
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-whole); /* 전역 폰트 변수 사용 */
+  color: var(--color-text-dark); /* 전역 텍스트 색상 적용 */
+  background-color: var(--color-background-body); /* 전역 배경색 적용 */
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+

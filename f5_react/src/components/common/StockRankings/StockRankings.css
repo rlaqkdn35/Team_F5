@@ -1,0 +1,53 @@
+/* StockRankings.css */
+
+.stock-rankings-section {
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px; /* 아래쪽 여백 추가 */
+}
+
+.section-title {
+  font-size: 1.5em;
+  color: var(--color-text-dark);
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: bold; 
+}
+
+.ranking-tabs {
+  display: flex;
+  justify-content: center;   
+  margin-left: -20px;
+  margin-right: -20px;  
+  padding-left: 20px; 
+  padding-right: 20px; 
+}
+
+.tab-button {
+  font-family: var(--font-whole);
+  background-color: transparent;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 1.05em;
+  font-weight: 500;
+  color: var(--color-text-dark);
+  transition: color 0.3s ease, border-bottom 0.3s ease;
+  white-space: nowrap; /* 탭 이름이 줄바꿈되지 않도록 */
+  position: relative; /* 활성 탭 밑줄을 정확히 배치하기 위해 */
+}
+
+.tab-button:hover {
+  color: var(--color-text-hover); 
+}
+
+.tab-button.active {
+  color: var(--color-text-hover); /* 활성 탭 색상: 빨간색 (주요 색상으로) */
+  font-weight: bold;
+
+  /* 활성 탭의 밑줄을 별도로 디자인하여 더 깔끔하게 */
+}
+
+.rankings-content {
+  padding-top: 20px; 
+}

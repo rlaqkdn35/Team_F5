@@ -1,0 +1,148 @@
+/* src/pages/StockDetailPage/StockDetailPage.css */
+.stock-detail-page {
+  padding: 20px; /* 페이지 전체 패딩 */
+}
+
+.loading-message-sdtp, .no-data-message-sdtp {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.2em;
+  color: #6c757d;
+}
+
+/* 상단 정보 바 */
+.stock-summary-header-sdtp {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* 이름과 가격정보가 여러줄일 경우 대비 */
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.stock-title-price .stock-name-sdtp {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #1f2937;
+  margin: 0 0 5px 0;
+}
+.stock-code-sdtp {
+  font-size: 0.8em;
+  color: #6b7280;
+  margin-left: 5px;
+}
+
+.price-info-sdtp .current-price-sdtp {
+  font-size: 1.6em;
+  font-weight: bold;
+  margin-right: 10px;
+}
+.price-info-sdtp .current-price-sdtp.positive { color: #d9534f; }
+.price-info-sdtp .current-price-sdtp.negative { color: #28a745; }
+.price-info-sdtp .current-price-sdtp.neutral { color: #343a40; }
+
+.price-info-sdtp .change-rate-sdtp {
+  font-size: 1em;
+  font-weight: 500;
+  margin-right: 10px;
+}
+.price-info-sdtp .change-rate-sdtp.positive { color: #d9534f; }
+.price-info-sdtp .change-rate-sdtp.negative { color: #28a745; }
+.price-info-sdtp .change-rate-sdtp.neutral { color: #777; }
+
+.update-time-sdtp {
+  font-size: 0.8em;
+  color: #6b7280;
+}
+
+.favorite-button-sdtp {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.9em;
+  font-weight: 500;
+  transition: background-color 0.2s, color 0.2s;
+}
+.favorite-button-sdtp:hover {
+  background-color: #e9ecef;
+}
+.favorite-button-sdtp svg {
+  margin-right: 5px;
+  font-size: 1.1em;
+}
+
+/* 탭 네비게이션 */
+.stock-detail-tabs-sdtp {
+  display: flex;
+  border-bottom: 2px solid #dee2e6;
+  margin-bottom: 25px;
+  overflow-x: auto; /* 탭이 많을 경우 가로 스크롤 */
+  white-space: nowrap;
+}
+
+.tab-button-sdtp {
+  padding: 12px 20px;
+  font-size: 1em;
+  font-weight: 500;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background-color: transparent;
+  color: #4b5563;
+  cursor: pointer;
+  margin-bottom: -2px; /* 하단 테두리와 겹치도록 */
+  transition: color 0.2s, border-bottom-color 0.2s;
+  white-space: nowrap;
+}
+.tab-button-sdtp:hover {
+  color: #0056b3;
+}
+.tab-button-sdtp.active {
+  color: #007bff;
+  font-weight: bold;
+  border-bottom-color: #007bff;
+}
+.tab-icon-sdtp {
+  margin-right: 6px;
+  vertical-align: middle; /* 아이콘과 텍스트 정렬 */
+}
+
+/* 탭 콘텐츠 영역 */
+.stock-detail-tab-content-sdtp {
+  padding-top: 20px;
+  background-color: #fff; /* 탭 콘텐츠 영역 배경 */
+  border-radius: 0 0 8px 8px; /* 탭 아래 모서리 둥글게 (선택적) */
+  /* border: 1px solid #dee2e6; /* 전체 테두리 (선택적) */
+  /* border-top: none; */
+  /* padding: 20px; /* 탭 콘텐츠 내부 패딩 */
+}
+
+/* 각 탭의 상세 콘텐츠 컴포넌트 내부 스타일은 해당 컴포넌트의 CSS에서 정의 */
+.stock-detail-tab-content-sdtp h2 { /* 각 탭 콘텐츠의 제목 */
+  font-size: 1.5em;
+  color: #34495e;
+  margin-top: 0;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px_dashed #e0e0e0;
+}
+
+.stock-detail-chart-container-sdtp .chart-placeholder-sdtp {
+  width: 100%;
+  height: 400px; /* 상세 페이지 차트 높이 */
+  background-color: #e9ecef;
+  border: 1px dashed #ced4da;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-size: 0.9em;
+  border-radius: 4px;
+}

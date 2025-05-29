@@ -1,0 +1,92 @@
+/* src/pages/StockDetailPage/tabs/MultiAiAnalysisTab.css */
+.multi-ai-analysis-tab {
+  /* 탭 내용 전체 패딩 */
+}
+
+.tab-section-title-mat {
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #34495e;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e9ecef;
+}
+.multi-ai-analysis-tab section:first-of-type .tab-section-title-mat {
+  margin-top: 0;
+}
+
+/* 종합 예측 차트 섹션 */
+.aggregated-chart-section-mat {
+  margin-bottom: 30px;
+}
+.large-chart-wrapper-mat {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  /* StockChart 컴포넌트가 내부에서 높이를 가짐 */
+}
+
+/* 개별 AI 모델 예측 섹션 */
+.individual-ai-charts-section-mat {
+  /* 스타일 */
+}
+.mini-charts-container-mat {
+  display: grid; /* Grid를 사용하여 3개 차트를 나란히 배치 */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 반응형 컬럼 */
+  gap: 20px; /* 차트 카드 간 간격 */
+}
+
+.mini-chart-card-mat {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-model-name-mat {
+  font-size: 1em;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-top: 0;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.mini-chart-wrapper-mat {
+  /* StockChart 컴포넌트가 내부에서 높이를 가짐 (예: 150px) */
+  /* min-height: 150px; */ /* 플레이스홀더용 */
+  margin-bottom: 10px;
+}
+
+.chart-placeholder-mat { /* 미니 차트 데이터 없을 때 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  border: 1px dashed #ced4da;
+  color: #6c757d;
+  font-size: 0.9em;
+  border-radius: 4px;
+  /* height는 StockChart의 chartOptions.height와 맞추거나 여기서 직접 지정 */
+}
+
+.ai-summary-mat {
+  font-size: 0.85em;
+  color: #495057;
+  line-height: 1.5;
+  margin-top: auto; /* 요약 내용을 카드 하단으로 (카드가 flex-direction: column 일 때) */
+  text-align: center;
+  padding-top: 10px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.loading-message-mat, .no-data-message-mat {
+  padding: 20px;
+  text-align: center;
+  color: #6c757d;
+}

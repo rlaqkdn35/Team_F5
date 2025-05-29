@@ -1,0 +1,169 @@
+/* pages/ForumPage/components/WritePostPage.css */
+
+.write-post-container {
+    padding: 30px;
+    background-color: var(--color-background-secondary);
+    border-radius: 8px;
+    box-shadow: var(--shadow-medium);
+    margin: 20px auto; /* 중앙 정렬을 위해 auto 추가 */
+    max-width: 800px; /* 최대 너비 설정 */
+}
+
+.write-post-container h2 {
+    color: var(--color-text-primary);
+    font-size: 2rem;
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 2px solid var(--color-border);
+    padding-bottom: 15px;
+}
+
+.write-post-form .form-group {
+    margin-bottom: 20px;
+}
+
+.write-post-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--color-text-primary);
+    font-size: 1.1rem;
+}
+
+.write-post-form input[type="text"],
+.write-post-form textarea {
+    width: calc(100% - 24px); /* 패딩 고려하여 너비 조정 */
+    padding: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: var(--color-background-input);
+    color: var(--color-text-primary);
+    box-sizing: border-box; /* 패딩이 너비에 포함되도록 설정 */
+}
+
+.write-post-form input[type="text"]:focus,
+.write-post-form textarea:focus {
+    border-color: #E74C3C; /* 포커스 시 빨간색 테두리 */
+    outline: none;
+    box-shadow: 0 0 5px rgba(231, 76, 60, 0.5); /* 빨간색 그림자 */
+}
+
+/* 새로 추가된 파일 입력 필드 관련 스타일 */
+.form-group.file-upload-group {
+    margin-top: 20px;
+    margin-bottom: 25px;
+    border: 1px dashed #E74C3C; /* 점선 테두리 빨간색으로 변경 */
+    padding: 15px;
+    border-radius: 8px;
+    background-color: var(--color-background-tertiary);
+}
+
+.form-group.file-upload-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: var(--color-text-primary);
+}
+
+.form-group.file-upload-group input[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    background-color: var(--color-background-input);
+    color: var(--color-text-primary);
+    cursor: pointer;
+}
+
+/* 웹킷 기반 브라우저용 파일 선택 버튼 스타일 */
+.form-group.file-upload-group input[type="file"]::-webkit-file-upload-button {
+    background-color: #D35400; /* 파일 선택 버튼 색상 (주황빛 빨간색) */
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-group.file-upload-group input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #BA4A00; /* 호버 시 더 어두운 주황빛 빨간색 */
+}
+
+.selected-file-info {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: var(--color-background-input);
+    border-radius: 4px;
+    display: inline-block;
+}
+
+
+/* 액션 버튼 */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.form-actions button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: bold;
+}
+
+.form-actions .submit-button {
+    background-color: #E74C3C; /* 작성 완료 버튼을 빨간색으로 */
+    color: #FFFFFF;
+}
+
+.form-actions .submit-button:hover {
+    background-color: #C0392B; /* 호버 시 더 어두운 빨간색 */
+    transform: translateY(-2px);
+}
+
+.form-actions .cancel-button {
+    background-color: var(--color-button-secondary); /* 기본 회색조 유지 */
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+}
+
+.form-actions .cancel-button:hover {
+    background-color: var(--color-hover-background);
+    transform: translateY(-2px);
+}
+.form-group label[for="stockSearch"] {
+  display: block; /* 라벨이 한 줄 전체를 차지하도록 */
+  margin-bottom: 8px; /* 입력 필드와 라벨 사이 간격 */
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group input[type="text"][id="stockSearch"] {
+  width: 100%; /* 너비를 100%로 설정하여 부모 요소에 맞춤 */
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+  box-sizing: border-box; /* 패딩과 보더가 너비에 포함되도록 */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="text"][id="stockSearch"]::placeholder {
+  color: #999;
+}
+
+.form-group input[type="text"][id="stockSearch"]:focus {
+  border-color: #007bff; /* 포커스 시 테두리 색상 변경 */
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* 포커스 시 그림자 효과 */
+  outline: none; /* 기본 아웃라인 제거 */
+}

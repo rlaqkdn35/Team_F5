@@ -1,0 +1,90 @@
+/* src/pages/StockDetailPage/tabs/PriceChartTab.css */
+.price-chart-tab-content {
+  display: flex;
+  flex-direction: column; /* 섹션들을 세로로 쌓음 */
+  gap: 25px; /* 섹션 간 간격 */
+}
+
+.loading-message-pct { /* 이 탭 내 로딩 메시지 */
+  padding: 30px; text-align: center; color: #6c757d;
+}
+
+/* A. 시세 요약 */
+.stock-snapshot-pct {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+.stock-snapshot-pct h4 { margin-top:0; margin-bottom: 12px; font-size: 1.1em; color: #34495e; }
+.snapshot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* 반응형 그리드 */
+  gap: 8px 15px; /* 행간격, 열간격 */
+  font-size: 0.85em;
+}
+.snapshot-grid span { display: flex; justify-content: space-between; border-bottom: 1px dotted #eee; padding: 3px 0;}
+.snapshot-grid span strong { color: #1f2937; }
+
+
+/* B. 메인 차트 영역 */
+.main-chart-area-pct {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+.chart-controls-pct {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.chart-controls-pct button {
+  padding: 5px 10px;
+  font-size: 0.8em;
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+.chart-controls-pct button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+/* StockChart 컴포넌트 자체의 .stock-chart-render-area 에 height: 400px; 등이 설정되어 있어야 함 */
+
+
+/* C & D. 추가 시장 정보 (호가, 거래원) */
+.additional-market-info-pct {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 반응형 2단 */
+  gap: 20px;
+}
+
+.order-book-pct, .broker-activity-pct {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+.order-book-pct h4, .broker-activity-pct h4 { margin-top:0; margin-bottom: 12px; font-size: 1.1em; color: #34495e; }
+
+.order-book-layout { display: flex; gap: 10px; font-size: 0.8em; }
+.order-book-layout .asks, .order-book-layout .bids { flex: 1; }
+.order-book-layout h5 { margin: 0 0 5px; font-size: 0.9em; text-align: center; }
+.order-row { display: flex; justify-content: space-between; padding: 2px 0; border-bottom: 1px solid #f7f7f7; }
+.order-row.ask-row span:first-child { color: #28a745; } /* 매도호가 파랑 -> 초록으로 변경 */
+.order-row.bid-row span:first-child { color: #d9534f; } /* 매수호가 빨강 */
+.order-row span:last-child { color: #666; } /* 잔량 */
+
+.broker-activity-pct .broker-lists { display: flex; gap: 15px; font-size: 0.85em; }
+.broker-activity-pct .broker-lists > div { flex: 1; }
+.broker-activity-pct .broker-lists h5 { margin: 0 0 5px; font-size: 0.9em; }
+.broker-activity-pct ul { list-style: none; padding:0; margin:0; }
+.broker-activity-pct li { padding: 1px 0; }
+.broker-activity-pct p { font-size: 0.9em; margin-top: 10px; }

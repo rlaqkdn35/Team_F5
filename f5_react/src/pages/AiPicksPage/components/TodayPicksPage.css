@@ -1,0 +1,82 @@
+/* TodayPicksPage.css */
+
+.today-picks-page {
+    background-color: white; /* 기본적인 배경 디자인은 하얀색 */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 900px; /* 너비 약간 증가 */
+    margin: 20px auto; /* 중앙 정렬 */
+}
+
+/* 첫 번째 섹션: 시장 상태 */
+.market-status-section {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.market-status-section p {
+    font-size: 1.1em;
+    margin: 5px 0;
+}
+
+.status-open {
+    color: red; /* 개장 상태는 빨간색 */
+    font-weight: bold;
+}
+
+.status-closed {
+    color: #555; /* 폐장 상태는 기본 색상 */
+    font-weight: bold;
+}
+
+/* 장 상태 옆 불빛 인디케이터 */
+.status-indicator {
+    display: inline-block;
+    width: 12px; /* 불빛 크기 */
+    height: 12px; /* 불빛 크기 */
+    border-radius: 50%; /* 원형 */
+    margin-right: 8px; /* 텍스트와의 간격 */
+    vertical-align: middle; /* 텍스트와 세로 중앙 정렬 */
+}
+
+.status-indicator.open {
+    background-color: limegreen; /* 개장 시 초록색 불빛 */
+}
+
+.status-indicator.closed {
+    background-color: red; /* 폐장 시 빨간색 불빛 */
+}
+
+/* 두 번째 섹션: 탑 종목 */
+.top-stocks-section h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.stock-list-header, .stock-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    align-items: center; /* 세로 중앙 정렬 */
+}
+
+.stock-list-header {
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+    background-color: #f9f9f9;
+}
+
+/* 각 열의 너비와 정렬 */
+.stock-rank { flex: 0.5; text-align: center; } /* 순위 추가 */
+.stock-code { flex: 1; text-align: left; }
+.stock-name { flex: 2; text-align: left; }
+.stock-price { flex: 1; text-align: right; }
+.stock-change-rate { flex: 1; text-align: right; }
+.stock-change-amount { flex: 1; text-align: right; }
+.stock-volume { flex: 1; text-align: right; padding-right: 5px; }
+

@@ -1,0 +1,194 @@
+/* src/pages/AiInfoPage/components/MarketThemesSection/MarketThemesSection.css */
+.market-themes-section {
+  padding: 20px;
+  margin-top: 30px; /* AiInfoHomeContent 내 다른 섹션과의 간격 */
+}
+
+.section-title { /* 컴포넌트 내부 제목 스타일 (선택적) */
+  font-size: 1.75em;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  margin-top: 0;
+  margin-bottom: 20px;
+
+}
+
+
+.sub-filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+.sub-filter-button {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  border-radius: 16px;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.sub-filter-button:hover {
+  background-color: var(--color-white-hover);
+}
+.sub-filter-button.active {
+  background-color: var(--color-button); /* 활성 서브필터 색상 */
+  color: white;
+}
+
+.update-timestamp-mts {
+  font-size: 12px;
+  color: var();
+  margin-bottom: 15px;
+  text-align: right;
+}
+
+/* 테이블 스타일 (이전과 유사, 클래스명에 -mts 추가하여 구분) */
+/* 전체 컨테이너와 테이블 기본 스타일 */
+.stock-list-container { /* 감싸는 div에 클래스를 추가했다고 가정 */
+  width: 100%;
+  max-width: 800px; /* 적절한 최대 너비 설정 */
+  margin: 20px auto; /* 중앙 정렬 */
+  border-radius: 8px;
+  overflow: hidden; /* 모서리 둥글게 처리된 부분에서 내용이 넘치지 않도록 */
+}
+
+.stock-list-table-mts {
+  width: 100%;
+  border-collapse: collapse; /* 테이블 테두리 병합 */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 가독성 좋은 폰트 */
+}
+
+/* 테이블 헤더 (ul) 스타일 */
+.table-header-mts {
+  display: flex; /* Flexbox로 가로 정렬 */
+  background-color: var(--color-background-menubar); /* 강렬한 빨간색 헤더 배경 */
+  color: var(--color-text-white); /* 헤더 텍스트는 흰색 */
+  font-weight: bold;
+  padding: 12px 15px; /* 상하좌우 패딩 */
+}
+
+.table-header-mts li {
+  list-style: none; /* 리스트 마커 제거 */
+  flex: 1; /* 각 항목이 공간을 균등하게 차지하도록 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+  padding: 0 5px; /* 항목별 내부 패딩 */
+}
+
+/* 특정 컬럼 너비 조정 (선택 사항) */
+.table-header-mts .col-time-mts { flex: 0.8; } /* 시간 컬럼은 좀 더 좁게 */
+.table-header-mts .col-name-mts { flex: 1.5; text-align: left; } /* 종목명은 좀 더 넓게, 왼쪽 정렬 */
+.table-header-mts .col-feature-mts { flex: 1.8; text-align: left; } /* 특징내용은 가장 넓게, 왼쪽 정렬 */
+
+
+/* 테이블 바디 (ul) 스타일 */
+.table-body-mts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.table-row-mts {
+  display: flex; /* Flexbox로 가로 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  padding: 10px 15px; /* 상하좌우 패딩 */
+  border-bottom: 1px solid #eee; /* 연한 회색 하단 테두리 */
+  transition: background-color 0.2s ease; /* 호버 시 배경색 변화 애니메이션 */
+}
+
+.table-row-mts:nth-child(even) { /* 짝수 행 배경색 */
+  background-color: var(--color-background-white-red); /* 아주 연한 붉은색 */
+}
+
+.table-row-mts:hover {
+  background-color: #ffeaea; /* 호버 시 더 밝은 붉은색 */
+}
+
+.table-row-mts span {
+  font-family: var(--font-table);
+  flex: 1; /* 헤더와 동일하게 공간 균등 배분 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+  padding: 0 5px;
+  color: var(--color-text-dark); /* 기본 텍스트 색상 */
+  font-size: 0.95em;
+}
+
+/* 바디 컬럼 너비 조정 (헤더와 맞춰야 함) */
+.table-row-mts .col-time-mts { 
+  font-family: var(--font-table);
+  flex: 0.8; 
+  color: var(--color-text-dark); 
+  font-size: 0.85em; 
+}
+.table-row-mts .col-name-mts {
+  font-family: var(--font-table);
+ flex: 1.5; 
+ text-align: left; 
+ font-weight: 500; 
+}
+.table-row-mts .col-feature-mts { 
+  font-family: var(--font-table);
+  flex: 1.8; 
+  text-align: left; 
+  color: var(--color-text-dark); 
+  font-size: 0.88em; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+} /* 특징 내용은 한 줄로 자르고 ... 처리 */
+
+
+/* 종목명 링크 스타일 */
+.table-row-mts .col-name-mts a {
+  text-decoration: none; /* 밑줄 제거 */
+  color: #c00000; /* 진한 빨간색 링크 */
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.table-row-mts .col-name-mts a:hover {
+  color: #ff0000; /* 호버 시 더 밝은 빨간색 */
+}
+
+/* 등락률 색상 */
+.col-change-rate-mts {
+  font-weight: bold;
+}
+
+.col-change-rate-mts.positive {
+  color: var(--color-stock-positive); /* 상승은 밝은 빨간색 */
+}
+
+.col-change-rate-mts.negative {
+  color: var(--color-stock-nagative); /* 하락은 파란색 (주식 차트에서 일반적으로 파란색 사용) */
+
+}
+
+.col-change-rate-mts.neutral {
+  color: #666; /* 변동 없을 때 회색 */
+}
+
+/* 데이터가 없을 때 메시지 스타일 */
+.no-data-message-mts {
+  text-align: center;
+  padding: 30px;
+  color: #888;
+  font-size: 1.1em;
+  background-color: #fdfdfd;
+}
+
+.view-more-button-mts{
+    color: var(--color-text-white);
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    background-color: var(--color-button);
+}

@@ -1,0 +1,181 @@
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FaBars, FaSearch, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
+import './Header.css';
+import AnimatedOverlay from '../../common/AnimatedOverlay/AnimatedOverlay';
+
+const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
+  const [currentOverlayTitle, setCurrentOverlayTitle] = useState(''); // Initialize as empty string
+  const [showOverlay, setShowOverlay] = useState(false); // New state for overlay visibility
+  const location = useLocation();
+  const [activeMenu, setActiveMenu] = useState(null);
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/search?query=${encodeURIComponent(searchTerm.trim())}`);
+      setSearchTerm('');
+    }
+  };
+
+  const handleMenuItemClick = (path, name) => {
+    setCurrentOverlayTitle(name);
+    navigate(path);
+  };
+
+  const mainMenuItems = [
+    {
+      name: 'AI정보분석',
+      path: '/ai-info',
+      subItems: [
+        { name: 'AI정보분석 홈', path: '/ai-info' },
+        { name: '시세분석', path: '/ai-info/price-analysis' },
+        { name: '이슈분석', path: '/ai-info/issue-analysis' },
+        { name: '테마/업종', path: '/ai-info/theme-sector' },
+        { name: '뉴스', path: '/ai-info/news' },
+      ],
+    },
+    {
+      name: 'AI 종목추천',
+      path: '/ai-picks',
+      subItems: [
+        { name: 'AI 종목추천 홈', path: '/ai-picks' },
+        { name: '오늘의 종목', path: '/ai-picks/today' },
+        { name: 'AI 추천', path: '/ai-picks/recommendations' },
+        { name: '매매신호', path: '/ai-picks/signal' },
+      ],
+    },
+    {
+      name: '토론실',
+      path: '/forum',
+    },
+    {
+      name: 'My종목',
+      path: '/mypage',
+      subItems: [
+        { name: 'AI비서', path: '/mypage' },
+        { name: '관심 종목', path: '/mypage/favorite' },
+        { name: '계정 정보', path: '/mypage/profile' },
+      ],
+    },
+  ];
+
+  useEffect(() => {
+    let newTitle = ''; // Initialize to empty string
+    let matched = false;
+
+    const findMatchingTitle = (items, currentPath) => {
+      for (const item of items) {
+        if (item.path === currentPath) {
+          return item.name;
+        }
+        if (item.subItems) {
+          const subItemTitle = findMatchingTitle(item.subItems, currentPath);
+          if (subItemTitle) {
+            return subItemTitle;
+          }
+        }
+      }
+      return null;
+    };
+
+    const matchedTitle = findMatchingTitle(mainMenuItems, location.pathname);
+
+    if (matchedTitle) {
+      newTitle = matchedTitle;
+      matched = true;
+    } else if (location.pathname === '/') {
+      newTitle = '홈';
+      matched = true;
+    } else if (location.pathname.startsWith('/search')) {
+      newTitle = '검색 결과'; // Example for search page
+      matched = true;
+    }
+    // Add more specific path checks here if needed
+    // else if (location.pathname.startsWith('/stock-detail')) {
+    //   newTitle = '종목 상세';
+    //   matched = true;
+    // }
+
+    setCurrentOverlayTitle(newTitle);
+    setShowOverlay(matched); // Set showOverlay based on whether a match was found
+  }, [location.pathname]);
+
+  return (
+    <>
+      <header className="app-header-top">
+        <div className="logo-area">
+          <Link to="/" className="logo-link">
+            <img src='Mainlogo.png' alt='주식AI로고'/>
+          </Link>
+        </div>
+        <div className='right-section'>
+          <div className="auth-area">
+            {isLoggedIn ? (
+              <button onClick={onLogout} className="auth-button">
+                로그아웃
+              </button>
+            ) : (
+              <>
+                <Link to="/login" className="auth-button">
+                  <FaSignInAlt /> 로그인
+                </Link>
+                <Link to="/signup" className="auth-button">
+                  <FaUserPlus /> 회원가입
+                </Link>
+              </>
+            )}
+          </div>
+          <img src='Mainlogo1.png' alt='주식AI로고'/>
+        </div>
+      </header>
+
+      <nav className="app-main-menu-bar">
+
+        <ul className="main-nav-links">
+          {mainMenuItems.map((item) => (
+            <li 
+              key={item.name} 
+              className="main-nav-item"
+              onMouseEnter={() => setActiveMenu(item.name)} // 마우스 올리면 해당 메뉴 활성화
+              onMouseLeave={() => setActiveMenu(null)}     // 마우스 떼면 비활성화
+            >
+              <Link to={item.path} onClick={() => handleMenuItemClick(item.path, item.name)}>{item.name}</Link>
+              {item.subItems && item.subItems.length > 0 && (
+                <ul className={`dropdown-submenu ${activeMenu === item.name ? 'active' : ''}`}>
+                  {item.subItems.map((subItem) => (
+                    <li key={subItem.name}>
+                      <Link to={subItem.path} onClick={() => handleMenuItemClick(subItem.path, subItem.name)}>{subItem.name}</Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+
+        <form className="search-container" onSubmit={handleSearchSubmit}>
+          <input
+            type="text"
+            placeholder="종목명/종목코드 입력"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="search-input"
+          />
+          <button type="submit" className="search-button" aria-label="검색">
+            <FaSearch />
+          </button>
+        </form>
+      </nav>
+
+      {showOverlay && <AnimatedOverlay key={location.pathname} title={currentOverlayTitle} />}
+    </>
+  );
+};
+
+export default Header;

@@ -1,0 +1,201 @@
+/* src/pages/AiInfoPage/components/ThemeSectorContent.css */
+
+
+
+
+.page-main-title-tsc {
+  font-size: 1.8em;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  margin-top: 0;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.section-sub-title-tsc { /* "업종 동향" 등 */
+  font-size: 1.5em;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  margin-top: 30px; /* 위 차트 섹션과의 간격 */
+  margin-bottom: 20px;
+}
+
+/* 상단 차트 섹션 (2단 레이아웃) */
+.sector-performance-charts-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 반응형 2단 */
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.sector-chart-card {
+  background-color: var(--color-background-white);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.sector-chart-card h4 { /* 각 차트 카드 제목 */
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  text-align: center;
+}
+
+/* 업종 동향 테이블 스타일 (접미사 -tsc 사용) */
+.sector-trends-table { 
+  width: 100%;
+  font-family: var(--font-table);
+}
+.table-header-tsc, .table-row-tsc {
+  display: flex;
+  align-items: stretch; 
+  padding: 10px 0; 
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+}
+.table-header-tsc { 
+  font-weight: 600; 
+  color: var(--color-text-dark); 
+  background-color: #f9fafb; 
+  padding: 12px 0;
+}
+.table-row-tsc:last-child { border-bottom: none; }
+.table-row-tsc:hover { background-color: var(--color-background-white); }
+
+.table-row-tsc span, .table-header-tsc span {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  /* box-sizing: border-box; */ /* 전역 적용되었으므로 제거 가능 */
+  word-break: keep-all;
+  white-space: nowrap;
+}
+
+/* 업종 동향 테이블 컬럼 너비 및 정렬 */
+.col-sector-name-tsc { flex: 2 1 180px; } /* 업종명은 좀 더 넓게 */
+.col-sector-name-tsc a { color: var(--color-text-dark); text-decoration: none; font-weight: 500; }
+.col-sector-name-tsc a:hover { text-decoration: none; color: var(--color-text-hover);}
+.col-sector-index-tsc { flex: 1 1 100px; justify-content: flex-end; }
+.col-sector-change-abs-tsc { flex: 1 1 110px; justify-content: flex-end; font-weight: 500;}
+.col-sector-change-rate-tsc { flex: 0 0 90px; justify-content: flex-end; font-weight: 500;}
+.col-sector-trading-value-tsc { flex: 1 1 120px; justify-content: flex-end; }
+.col-sector-volume-tsc { flex: 1 1 110px; justify-content: flex-end; }
+.col-sector-share-tsc { flex: 0 0 90px; justify-content: flex-end; }
+
+/* 등락률 색상 */
+.col-sector-change-abs-tsc.positive,
+.col-sector-change-rate-tsc.positive,
+.positive { /* .positive 클래스 추가 */
+  color: var(--color-stock-positive); 
+}
+.col-sector-change-abs-tsc.negative,
+.col-sector-change-rate-tsc.negative,
+.negative { /* .negative 클래스 추가 */
+  color: var(--color-stock-nagative); 
+}
+.col-sector-change-abs-tsc.neutral,
+.col-sector-change-rate-tsc.neutral { 
+  color: #777777; 
+}
+
+.loading-message-tsc {
+  text-align: center;
+  color: #6c757d;
+  padding: 30px 0;
+  font-size: 1.1em;
+}
+
+
+/* --- 새로 추가된 상위/하위 5개 업종 리스트 섹션 스타일 --- */
+.top-bottom-sectors-list-section {
+    margin-top: 40px; /* 위 섹션과의 간격 */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.summary-lists-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* 반응형 2단 */
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.top-sectors-summary,
+.bottom-sectors-summary {
+    background-color: #fcfcfc;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 15px;
+}
+
+.top-sectors-summary h3,
+.bottom-sectors-summary h3 {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #34495e;
+    display: flex;
+    align-items: center;
+}
+
+.top-sectors-summary h3 { color: #d9534f; } /* 상위는 빨간색 */
+.bottom-sectors-summary h3 { color: #007bff; } /* 하위는 파란색 */
+
+.top-sectors-summary h3 span,
+.bottom-sectors-summary h3 span {
+    margin-right: 8px; /* 이모지와의 간격 */
+}
+
+.top-sectors-summary ul,
+.bottom-sectors-summary ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.top-sectors-summary li,
+.bottom-sectors-summary li {
+    padding: 8px 0;
+    border-bottom: 1px dotted #f5f5f5;
+    font-size: 0.95em;
+}
+
+.top-sectors-summary li:last-child,
+.bottom-sectors-summary li:last-child {
+    border-bottom: none;
+}
+
+.top-sectors-summary li a,
+.bottom-sectors-summary li a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.top-sectors-summary li a:hover,
+.bottom-sectors-summary li a:hover {
+ text-decoration: none; color: var(--color-text-hover);
+}
+
+.top-sectors-summary li a span,
+.bottom-sectors-summary li a span {
+    font-weight: 600; /* 등락률 강조 */
+}
+
+/* 모바일 반응형 조정 */
+@media (max-width: 768px) {
+    .summary-lists-container {
+        grid-template-columns: 1fr; /* 모바일에서는 1단으로 */
+    }
+}

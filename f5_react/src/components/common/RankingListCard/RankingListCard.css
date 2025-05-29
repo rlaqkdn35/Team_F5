@@ -1,0 +1,97 @@
+/* src/components/common/RankingListCard/RankingListCard.css */
+
+.ranking-list-card {
+    flex: 1; 
+    min-width: 100px; 
+    background-color: var(--color-background-body);
+    padding: 15px; /* 패딩도 살짝 줄여서 공간 확보 */
+    border: 1px solid #eee;
+    border-radius: 8px;
+
+}
+
+.ranking-title {
+    font-size: 16px; /* 기존 18px에서 16px로 축소 */
+    font-weight: 600;
+    color: var(--color-text-dark);
+    margin-top: 0;
+    margin-bottom: 12px; /* 마진도 살짝 줄임 */
+    padding-bottom: 6px; /* 패딩도 살짝 줄임 */
+    border-bottom: 1px solid #eee;
+}
+
+.ranking-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ranking-item {
+    margin-bottom: 8px; /* 마진 축소 */
+    padding-bottom: 8px; /* 패딩 축소 */
+    border-bottom: 1px dashed #f0f0f0;
+}
+.ranking-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.ranking-item-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    padding: 3px 0; /* 패딩 축소 */
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+.ranking-item-link:hover {
+    background-color: #f8f9fa;
+}
+
+.ranking-item .rank {
+    font-size: 12px; /* 기존 13px에서 12px로 축소 */
+    color: var(--color-text-dark);
+    margin-right: 6px; /* 마진 축소 */
+    min-width: 18px; /* 최소 너비도 살짝 줄임 */
+}
+
+.ranking-item .stock-name-ranking {
+    flex-grow: 1;
+    font-size: 13px; /* 기존 14px에서 13px로 축소 */
+    font-weight: 500;
+    color: var(--color-text-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 8px; /* 마진 축소 */
+}
+
+.ranking-item .stock-financials {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 12px; /* 기존 13px에서 12px로 축소 */
+    white-space: nowrap;
+}
+
+.ranking-item .price {
+    color: var(--color-text-dark);
+    font-weight: 500;
+}
+
+.ranking-item .change {
+    font-size: 11px; /* 기존 12px에서 11px로 축소 */
+}
+.ranking-item .change.positive { color: var(--color-stock-positive); }
+.ranking-item .change.negative { color: var(--color-stock-nagative); }
+.ranking-item .change.neutral { color: #777777; }
+
+.no-data-message {
+    color: #6c757d;
+    text-align: center;
+    padding: 15px 0; /* 패딩 축소 */
+    font-size: 13px; /* 기존 14px에서 13px로 축소 */
+}
