@@ -17,7 +17,7 @@ const aiInfoSubNavLinks = [ // 실제로는 이 데이터를 props로 받거나 
 const AiInfoPageLayout = () => {
   return (
     <div className="ai-info-page-container">
-      <SubNavigation links={aiInfoSubNavLinks} basePath="/ai-info" />
+      {/* <SubNavigation links={aiInfoSubNavLinks} basePath="/ai-info" /> */}
       <div className="page-content-area">
         {/* 여기에 /ai-info 의 하위 경로에 해당하는 컴포넌트가 렌더링됩니다. */}
         <Outlet /> 

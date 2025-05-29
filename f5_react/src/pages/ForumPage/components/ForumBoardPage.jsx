@@ -60,13 +60,9 @@ const ForumBoardPage = ({ boardTitle }) => {
     return (
         <div className="forum-board-container">
             <div className="board-header">
-                <h2>토론실</h2>
                 <button onClick={() => navigate('/forum/write')} className="write-post-button">
                     글쓰기
                 </button>
-            </div>
-
-            <div className="search-bar">
                 <form onSubmit={handleSearch}>
                     <input
                         type="text"
@@ -78,6 +74,7 @@ const ForumBoardPage = ({ boardTitle }) => {
                     <button type="submit">검색</button>
                 </form>
             </div>
+
 
             <div className="post-list">
                 {filteredPosts.length > 0 ? (

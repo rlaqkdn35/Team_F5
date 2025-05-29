@@ -51,7 +51,12 @@
     overflow: hidden;
     min-height: 400px;
 }
-
+.slider-content-wrapper{
+    width:85%;
+    margin-left: auto;
+    margin-right: auto;
+    margin: 0 auto; /* 위아래 마진은 0, 좌우 마진은 자동으로 설정하여 중앙 정렬 */
+}
 .ai-picked-issue-slide-item {
     width: 100%;
     box-sizing: border-box;

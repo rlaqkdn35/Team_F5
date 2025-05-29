@@ -50,7 +50,7 @@
 .news-list-container-nc {
     display: grid;
     gap: 30px; /* 뉴스 카드 간 간격 */
-        font-family: var(--font-whole);
+    font-family: var(--font-whole);
 }
 
 /* Individual News Card Style */

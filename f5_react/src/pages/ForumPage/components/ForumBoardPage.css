@@ -17,9 +17,23 @@
     border-bottom: 1px solid var(--color-border);
 }
 
-.board-header h2 {
-    color: var(--color-text-primary);
-    margin: 0;
+.board-header input{
+    font-family: var(--font-whole);
+    background-color: var(--color-background-body);
+    border-radius: 10px;
+    padding: 5px;
+    margin-right: 5px;
+}
+
+.board-header button{
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    background-color: rgb(225, 73, 57);
 }
 
 .write-post-button {
@@ -37,33 +51,8 @@
     background-color: #C0392B; /* 기존 --color-primary-dark (어두운 파란색) -> 더 어두운 빨간색 계열 */
 }
 
-.search-bar {
-    margin-bottom: 20px;
-    text-align: right;
-}
 
-.search-bar input[type="text"] {
-    padding: 8px 12px;
-    border: 1px solid var(--color-border);
-    border-radius: 5px;
-    margin-right: 10px;
-    width: 250px;
-    background-color: var(--color-background-input);
-    color: var(--color-text-primary);
-}
 
-.search-bar button {
-    background-color: #D35400; /* 기존 --color-secondary (파란색) -> 주황빛이 도는 빨간색 계열 */
-    color: #FFFFFF; /* 텍스트는 흰색으로 유지 */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.search-bar button:hover {
-    background-color: #BA4A00; /* 기존 --color-secondary-dark (어두운 파란색) -> 더 어두운 주황빛 빨간색 계열 */
-}
 
 .post-list table {
     width: 100%;
