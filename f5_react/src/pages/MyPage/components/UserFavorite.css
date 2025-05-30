@@ -94,12 +94,12 @@
 
 /* 등락률 및 대비 색상 */
 .positive {
-  color: #00a86b; /* 상승: 녹색 계열 */
+  color: var(--color-stock-positive); /* 상승: 빨간 계열 */
   font-weight: bold;
 }
 
 .negative {
-  color: #e53935; /* 하락: 짙은 빨간색 */
+  color: var(--color-stock-nagative); /* 하락: 짙은 빨간색 */
   font-weight: bold;
 }
 

@@ -7,8 +7,10 @@ import AnimatedOverlay from '../../common/AnimatedOverlay/AnimatedOverlay';
 const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
-  const [currentOverlayTitle, setCurrentOverlayTitle] = useState('전체 메뉴');
+  const [currentOverlayTitle, setCurrentOverlayTitle] = useState(''); // Initialize as empty string
+  const [showOverlay, setShowOverlay] = useState(false); // New state for overlay visibility
   const location = useLocation();
+  const [activeMenu, setActiveMenu] = useState(null);
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -64,38 +66,44 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
   ];
 
   useEffect(() => {
-    let newTitle = '전체 메뉴'; // 기본값 (일치하는 경로가 없을 경우)
+    let newTitle = ''; // Initialize to empty string
+    let matched = false;
 
-    // 모든 메뉴 아이템을 순회하며 현재 경로와 일치하는지 확인
-    // 가장 구체적인(긴) 경로가 먼저 매칭되도록 역순으로 정렬하거나, 중첩된 루프 사용
-    // 여기서는 간단하게 모든 subItems까지 검사하도록 구현합니다.
     const findMatchingTitle = (items, currentPath) => {
-        for (const item of items) {
-            if (item.path === currentPath) {
-                return item.name;
-            }
-            if (item.subItems) {
-                const subItemTitle = findMatchingTitle(item.subItems, currentPath);
-                if (subItemTitle) {
-                    return subItemTitle;
-                }
-            }
+      for (const item of items) {
+        if (item.path === currentPath) {
+          return item.name;
         }
-        return null; // 일치하는 것을 찾지 못함
+        if (item.subItems) {
+          const subItemTitle = findMatchingTitle(item.subItems, currentPath);
+          if (subItemTitle) {
+            return subItemTitle;
+          }
+        }
+      }
+      return null;
     };
 
-    // 현재 경로를 찾아서 제목 설정
     const matchedTitle = findMatchingTitle(mainMenuItems, location.pathname);
 
     if (matchedTitle) {
-        newTitle = matchedTitle;
+      newTitle = matchedTitle;
+      matched = true;
     } else if (location.pathname === '/') {
-        newTitle = '홈'; // 루트 경로에 대한 특별 처리 (MainPage가 주석 처리되어 있긴 하지만)
+      newTitle = '홈';
+      matched = true;
+    } else if (location.pathname.startsWith('/search')) {
+      newTitle = '검색 결과'; // Example for search page
+      matched = true;
     }
-    // 여기에 다른 특정 경로에 대한 제목을 추가할 수 있습니다.
-    // 예: if (location.pathname.startsWith('/stock-detail')) newTitle = '종목 상세';
+    // Add more specific path checks here if needed
+    // else if (location.pathname.startsWith('/stock-detail')) {
+    //   newTitle = '종목 상세';
+    //   matched = true;
+    // }
 
     setCurrentOverlayTitle(newTitle);
+    setShowOverlay(matched); // Set showOverlay based on whether a match was found
   }, [location.pathname]);
 
   return (
@@ -109,15 +117,15 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
         <div className='right-section'>
           <div className="auth-area">
             {isLoggedIn ? (
-              <button onClick={onLogout} className="auth-button logout-button">
+              <button onClick={onLogout} className="auth-button">
                 로그아웃
               </button>
             ) : (
               <>
-                <Link to="/login" className="auth-button login-button">
+                <Link to="/login" className="auth-button">
                   <FaSignInAlt /> 로그인
                 </Link>
-                <Link to="/signup" className="auth-button signup-button">
+                <Link to="/signup" className="auth-button">
                   <FaUserPlus /> 회원가입
                 </Link>
               </>
@@ -128,18 +136,18 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
       </header>
 
       <nav className="app-main-menu-bar">
-        <div className="menu-icon-container">
-          <button className="menu-toggle-button" aria-label="전체 메뉴 보기">
-            <FaBars /> <span className="menu-toggle-text">전체메뉴보기</span>
-          </button>
-        </div>
 
         <ul className="main-nav-links">
           {mainMenuItems.map((item) => (
-            <li key={item.name} className="main-nav-item">
+            <li 
+              key={item.name} 
+              className="main-nav-item"
+              onMouseEnter={() => setActiveMenu(item.name)} // 마우스 올리면 해당 메뉴 활성화
+              onMouseLeave={() => setActiveMenu(null)}     // 마우스 떼면 비활성화
+            >
               <Link to={item.path} onClick={() => handleMenuItemClick(item.path, item.name)}>{item.name}</Link>
               {item.subItems && item.subItems.length > 0 && (
-                <ul className="dropdown-submenu">
+                <ul className={`dropdown-submenu ${activeMenu === item.name ? 'active' : ''}`}>
                   {item.subItems.map((subItem) => (
                     <li key={subItem.name}>
                       <Link to={subItem.path} onClick={() => handleMenuItemClick(subItem.path, subItem.name)}>{subItem.name}</Link>
@@ -165,7 +173,7 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
         </form>
       </nav>
 
-      <AnimatedOverlay key={location.pathname} title={currentOverlayTitle} />
+      {showOverlay && <AnimatedOverlay key={location.pathname} title={currentOverlayTitle} />}
     </>
   );
 };

@@ -133,14 +133,15 @@ const MarketThemesSection = () => {
         업데이트 {lastUpdated}
       </div>
 
-      <div className="stock-list-table-mts">
-        <div className="table-header-mts">
-          <span className="col-time-mts">시간</span>
-          <span className="col-name-mts">종목명</span>
-          <span className="col-price-mts">현재가</span>
-          <span className="col-change-rate-mts">등락률</span>
-          <span className="col-feature-mts">특징내용</span>
-        </div>
+      <div >
+        <table className="stock-list-table-mts">
+        <ul className="table-header-mts">
+          <li className="col-time-mts">시간</li>
+          <li className="col-name-mts">종목명</li>
+          <li className="col-price-mts">현재가</li>
+          <li className="col-change-rate-mts">등락률</li>
+          <li className="col-feature-mts">특징내용</li>
+        </ul>
         {stockList.length > 0 ? (
           <ul className="table-body-mts">
             {stockList.map((stock, index) => (
@@ -160,6 +161,7 @@ const MarketThemesSection = () => {
         ) : (
           <p className="no-data-message-mts">해당 조건의 종목 정보가 없습니다.</p>
         )}
+        </table>
       </div>
 
       <div className="actions-footer-mts">

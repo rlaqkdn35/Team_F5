@@ -1,0 +1,154 @@
+.news-detail-page {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 폰트 변경 */
+}
+
+.news-detail-title-ndp {
+    font-size: 2.3em; /* 약간 키움 */
+    margin-bottom: 20px;
+    line-height: 1.3;
+    font-weight: 700; /* 더 굵게 */
+    text-align: center; /* 제목 중앙 정렬 */
+}
+
+.news-detail-meta-ndp {
+    font-size: 0.9em; /* 약간 줄임 */
+    color: #888; /* 회색 톤 */
+    margin-bottom: 30px;
+    border-bottom: 1px solid #f0f0f0; /* 더 부드러운 경계선 */
+    padding-bottom: 15px;
+    text-align: center; /* 메타 정보 중앙 정렬 */
+}
+
+.news-detail-author-ndp {
+    font-weight: bold;
+    margin-right: 15px;
+    color: #666; /* 조금 더 진한 회색 */
+}
+
+.news-detail-date-ndp {
+    font-style: normal; /* 이탤릭체 제거 */
+    color: #999; /* 밝은 회색 */
+}
+
+.news-detail-full-content-ndp {
+    font-size: 1.1em;
+    line-height: 1.9; /* 줄 간격 약간 늘림 */
+    color: #333; /* 더 진한 본문 색상 */
+    margin-bottom: 40px;
+}
+
+.news-detail-full-content-ndp h3 {
+    font-size: 1.6em; /* 약간 키움 */
+    color: #c00; /* 밝은 빨간색 */
+    margin-top: 35px; /* 위 여백 늘림 */
+    margin-bottom: 18px; /* 아래 여백 늘림 */
+    border-left: 6px solid #e74c3c; /* 빨간색 계열 강조 */
+    padding-left: 12px; /* 패딩 늘림 */
+    font-weight: 600; /* 굵기 조정 */
+}
+
+.news-detail-full-content-ndp p {
+    margin-bottom: 1.2em; /* 단락 간격 늘림 */
+    text-align: justify; /* 양쪽 정렬 */
+}
+
+.news-detail-full-content-ndp ul {
+    list-style-type: disc; /* 기본 디스크 스타일 유지 */
+    margin-left: 30px; /* 왼쪽 여백 늘림 */
+    margin-bottom: 1.2em; /* 목록 아래 간격 늘림 */
+    line-height: 1.6; /* 목록 항목 줄 간격 조정 */
+}
+
+.news-detail-full-content-ndp a {
+    color: #e74c3c; /* 빨간색 링크 */
+    text-decoration: none;
+    transition: color 0.2s ease-in-out; /* 부드러운 전환 효과 */
+}
+
+.news-detail-full-content-ndp a:hover {
+    text-decoration: underline;
+    color: #c0392b; /* 호버 시 더 진한 빨간색 */
+}
+
+/* 관련 종목 섹션 스타일 */
+.related-stocks-section-ndp {
+    margin-top: 40px;
+    padding-top: 25px;
+    border-top: 1px solid #f0f0f0; /* 상단 경계선 */
+}
+
+.related-stocks-section-ndp h3 {
+    font-size: 1.5em;
+    color: #c00; /* 빨간색 계열 */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.related-stocks-section-ndp ul {
+    list-style: none; /* 기본 리스트 스타일 제거 */
+    padding: 0;
+    display: flex; /* 가로 정렬 */
+    flex-wrap: wrap; /* 내용이 많으면 줄 바꿈 */
+    justify-content: center; /* 가운데 정렬 */
+    gap: 15px; /* 버튼 사이 간격 */
+}
+
+.related-stocks-section-ndp li {
+    margin-bottom: 0; /* 기존 li 마진 제거 */
+}
+
+.related-stock-button-ndp {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #e74c3c; /* 빨간색 버튼 */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.95em;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.related-stock-button-ndp:hover {
+    background-color: #c0392b; /* 호버 시 더 진한 빨간색 */
+    transform: translateY(-2px); /* 약간 위로 이동 */
+}
+
+.back-button-ndp {
+    display: block; /* 블록 요소로 변경 */
+    width: fit-content; /* 내용에 맞춰 너비 조정 */
+    margin: 40px auto 0; /* 하단 여백 및 중앙 정렬 */
+    padding: 14px 30px; /* 패딩 늘림 */
+    background-color: #e74c3c; /* 빨간색 버튼 */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.05em; /* 글자 크기 약간 키움 */
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 500;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15); /* 그림자 추가 */
+}
+
+.back-button-ndp:hover {
+    background-color: #c0392b; /* 호버 시 더 진한 빨간색 */
+    transform: translateY(-2px); /* 약간 위로 이동 */
+}
+
+.loading-message-ndp,
+.no-data-message-ndp {
+    text-align: center;
+    font-size: 1.3em; /* 글자 크기 약간 키움 */
+    color: #999; /* 더 부드러운 회색 */
+    margin-top: 60px; /* 여백 늘림 */
+    font-weight: 400;
+}

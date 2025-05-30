@@ -21,7 +21,6 @@
 
 /* 국내 주요 지수 섹션 */
 .market-overview-section {
-    max-width: auto;
     box-sizing: border-box;
     padding: 20px;
 }
@@ -35,75 +34,10 @@
 
 /* 주요 종목 랭킹 섹션 (StockRankings) */
 .stock-rankings-container {
-    /* flex: none; */ /* 더 이상 유동적인 공간을 차지하지 않고 고정 너비를 가질 수 있도록 */
-
     width: 100%; /* 부모 컨테이너(left-column-container)의 너비를 따르되 max-width 제한 */
     box-sizing: border-box;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     padding: 20px;
-}
-
-/* StockRankings 내부의 탭 및 리스트 스타일은 그대로 유지 */
-.rankings-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.rankings-header h2 {
-    font-size: 1.5em;
-}
-
-.rankings-tabs {
-    display: flex;
-    border-bottom: 1px solid #eee;
-    margin-bottom: 15px;
-}
-
-.rank-tab {
-    padding: 10px 15px;
-    cursor: pointer;
-    font-weight: bold;
-    color: #777;
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s ease;
-}
-
-.rank-tab.active {
-    color: #007bff;
-    border-bottom-color: #007bff;
-}
-
-.rankings-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.rankings-list li {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px dashed #f0f0f0;
-    font-size: 0.95em;
-}
-
-.rankings-list li:last-child {
-    border-bottom: none;
-}
-
-.rank-item-name {
-    font-weight: bold;
-}
-
-.rank-item-change-positive {
-    color: #e2504c;
-}
-
-.rank-item-change-negative {
-    color: #4c82e2;
 }
 
 /* -------------------------------------------------- */
@@ -112,8 +46,6 @@
     flex: 1; /* 가용한 공간을 차지하도록 */
     min-width: 450px; /* 최소 너비 */
     box-sizing: border-box;
-    border-left: 1px dashed #333;
-
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -121,19 +53,11 @@
     justify-content: center;
 }
 
-.ai-recommendation-section .slider-container {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
 /* -------------------------------------------------- */
 /* AI 이슈분석 섹션 */
 .keyword-analysis-section {
     flex-basis: 100%; /* 새로운 줄에서 전체 너비를 차지하도록 */
     box-sizing: border-box;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     padding: 20px;
 }
 
@@ -214,7 +138,7 @@
 }
 
 .details-pane .detail-item strong {
-    color: #333;
+    color: var(--color-text-dark);
 }
 
 .details-pane ul {
@@ -257,23 +181,24 @@
 }
 
 .view-more-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
+  background-color: var(--color-button); /* ❗ 변경: 기본 배경색을 메인 빨간색으로 */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
 }
 
 .view-more-button:hover {
-    background-color: #0056b3;
+  background-color: #c62828; /* ❗ 변경: 호버 시 더 어두운 빨간색으로 */
 }
 
 /* -------------------------------------------------- */
 /* 공통 스타일 */
 .section-title {
+    width: 100%;
     font-size: 1.5em;
     margin-bottom: 20px;
     border-bottom: 1px solid #eee;

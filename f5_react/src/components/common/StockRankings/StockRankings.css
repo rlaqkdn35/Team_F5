@@ -1,74 +1,53 @@
 /* StockRankings.css */
 
 .stock-rankings-section {
-  /* 섹션 컨테이너의 기본 스타일 */
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  background-color: #ffffff; /* 흰색 배경 */
   margin-bottom: 20px; /* 아래쪽 여백 추가 */
 }
 
 .section-title {
   font-size: 1.5em;
-  color: #333;
+  color: var(--color-text-dark);
   margin-bottom: 20px;
   text-align: center;
-  font-weight: bold; /* 제목을 더 강조 */
+  font-weight: bold; 
 }
 
 .ranking-tabs {
   display: flex;
-  justify-content: center; /* 탭 버튼들을 중앙으로 정렬 */
-  /* margin-bottom: 20px; */ /* 탭 내용과 겹치지 않도록 이 마진은 제거하고 tab-content에 padding-top을 줄 수 있음 */
-  border-bottom: 1px solid #e0e0e0; /* 탭 아래 경계선 */
-  margin-left: -20px; /* 섹션 padding을 상쇄하여 탭이 끝까지 닿도록 */
-  margin-right: -20px; /* 섹션 padding을 상쇄하여 탭이 끝까지 닿도록 */
-  padding-left: 20px; /* 탭 내부 좌우 여백 */
-  padding-right: 20px; /* 탭 내부 좌우 여백 */
+  justify-content: center;   
+  margin-left: -20px;
+  margin-right: -20px;  
+  padding-left: 20px; 
+  padding-right: 20px; 
 }
 
 .tab-button {
+  font-family: var(--font-whole);
   background-color: transparent;
   border: none;
   padding: 10px 15px;
   cursor: pointer;
   font-size: 1.05em;
   font-weight: 500;
-  color: #555;
+  color: var(--color-text-dark);
   transition: color 0.3s ease, border-bottom 0.3s ease;
   white-space: nowrap; /* 탭 이름이 줄바꿈되지 않도록 */
   position: relative; /* 활성 탭 밑줄을 정확히 배치하기 위해 */
-  /* border-bottom: 2px solid transparent; */ /* 기본적으로 투명한 하단 테두리 */
 }
 
 .tab-button:hover {
-  color: #f44336; /* 호버 시 파란색 (주요 색상으로) */
+  color: var(--color-text-hover); 
 }
 
 .tab-button.active {
-  color: #f44336; /* 활성 탭 색상: 빨간색 (주요 색상으로) */
+  color: var(--color-text-hover); /* 활성 탭 색상: 빨간색 (주요 색상으로) */
   font-weight: bold;
-  /* border-bottom: 2px solid #f44336; */ /* 활성 탭 하단 강조선: 빨간색 */
 
   /* 활성 탭의 밑줄을 별도로 디자인하여 더 깔끔하게 */
-  &::after { /* 가상 요소를 사용하여 밑줄 효과 */
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -1px; /* 부모 border-bottom과 겹치지 않도록 조정 */
-    width: 100%;
-    height: 2px;
-    background-color: #f44336; /* 빨간색 밑줄 */
-  }
 }
 
 .rankings-content {
-  /* 탭 내용 컨테이너의 기본 스타일 */
-  padding-top: 20px; /* 탭 바와의 간격 */
-  /* 현재 RankingListCard가 이미 padding을 가지고 있을 수 있으므로,
-     필요에 따라 이 padding을 조절하거나 제거할 수 있습니다. */
+  padding-top: 20px; 
 }
-
-/* RankingListCard의 기본 스타일은 별도의 파일에 있을 것이므로 여기서는 제외 */
-/* .ranking-list-card { ... } */

@@ -2,6 +2,7 @@
 
 /* General Page Layout */
 .news-content-page {
+
     padding: 30px 20px;
     max-width: 1200px; /* 전체 페이지 너비 제한 */
     margin: 0 auto; /* 중앙 정렬 */
@@ -13,6 +14,7 @@
 }
 
 .page-main-title-nc {
+    font-family: var(--font-whole);
     font-size: 2.2em;
     font-weight: 800;
     color: #2c3e50;
@@ -48,6 +50,7 @@
 .news-list-container-nc {
     display: grid;
     gap: 30px; /* 뉴스 카드 간 간격 */
+    font-family: var(--font-whole);
 }
 
 /* Individual News Card Style */
@@ -184,4 +187,9 @@
     .news-meta-nc {
         font-size: 0.7em;
     }
+}
+
+.news-item-card-nc {
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }

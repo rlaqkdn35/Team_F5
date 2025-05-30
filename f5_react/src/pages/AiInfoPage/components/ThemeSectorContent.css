@@ -6,7 +6,7 @@
 .page-main-title-tsc {
   font-size: 1.8em;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-text-dark);
   margin-top: 0;
   margin-bottom: 25px;
   padding-bottom: 15px;
@@ -16,7 +16,7 @@
 .section-sub-title-tsc { /* "업종 동향" 등 */
   font-size: 1.5em;
   font-weight: 600;
-  color: #34495e;
+  color: var(--color-text-dark);
   margin-top: 30px; /* 위 차트 섹션과의 간격 */
   margin-bottom: 20px;
 }
@@ -30,7 +30,7 @@
 }
 
 .sector-chart-card {
-  background-color: #fff;
+  background-color: var(--color-background-white);
   padding: 20px;
   border-radius: 8px;
   border: 1px solid #e0e0e0;
@@ -41,12 +41,15 @@
   margin-bottom: 15px;
   font-size: 1.1em;
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--color-text-dark);
   text-align: center;
 }
 
 /* 업종 동향 테이블 스타일 (접미사 -tsc 사용) */
-.sector-trends-table { width: 100%; }
+.sector-trends-table { 
+  width: 100%;
+  font-family: var(--font-table);
+}
 .table-header-tsc, .table-row-tsc {
   display: flex;
   align-items: stretch; 
@@ -56,12 +59,12 @@
 }
 .table-header-tsc { 
   font-weight: 600; 
-  color: #4b5563; 
+  color: var(--color-text-dark); 
   background-color: #f9fafb; 
   padding: 12px 0;
 }
 .table-row-tsc:last-child { border-bottom: none; }
-.table-row-tsc:hover { background-color: #f8f9fa70; }
+.table-row-tsc:hover { background-color: var(--color-background-white); }
 
 .table-row-tsc span, .table-header-tsc span {
   display: flex;
@@ -74,8 +77,8 @@
 
 /* 업종 동향 테이블 컬럼 너비 및 정렬 */
 .col-sector-name-tsc { flex: 2 1 180px; } /* 업종명은 좀 더 넓게 */
-.col-sector-name-tsc a { color: #1f2937; text-decoration: none; font-weight: 500; }
-.col-sector-name-tsc a:hover { text-decoration: underline; color: #0056b3;}
+.col-sector-name-tsc a { color: var(--color-text-dark); text-decoration: none; font-weight: 500; }
+.col-sector-name-tsc a:hover { text-decoration: none; color: var(--color-text-hover);}
 .col-sector-index-tsc { flex: 1 1 100px; justify-content: flex-end; }
 .col-sector-change-abs-tsc { flex: 1 1 110px; justify-content: flex-end; font-weight: 500;}
 .col-sector-change-rate-tsc { flex: 0 0 90px; justify-content: flex-end; font-weight: 500;}
@@ -87,12 +90,12 @@
 .col-sector-change-abs-tsc.positive,
 .col-sector-change-rate-tsc.positive,
 .positive { /* .positive 클래스 추가 */
-  color: #d9534f; 
+  color: var(--color-stock-positive); 
 }
 .col-sector-change-abs-tsc.negative,
 .col-sector-change-rate-tsc.negative,
 .negative { /* .negative 클래스 추가 */
-  color: #28a745; 
+  color: var(--color-stock-nagative); 
 }
 .col-sector-change-abs-tsc.neutral,
 .col-sector-change-rate-tsc.neutral { 
@@ -182,8 +185,7 @@
 
 .top-sectors-summary li a:hover,
 .bottom-sectors-summary li a:hover {
-    color: #0056b3; /* 호버 시 링크 색상 변경 */
-    text-decoration: underline;
+ text-decoration: none; color: var(--color-text-hover);
 }
 
 .top-sectors-summary li a span,

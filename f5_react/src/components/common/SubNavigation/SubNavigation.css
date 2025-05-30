@@ -1,10 +1,10 @@
 .sub-navigation-bar {
   padding: 10px 0;
-  border-bottom: 1px solid #a83f3f; /* Slightly darker red for the border */
+  border-radius: 10px;
   margin-bottom: 20px;
   margin-left: auto;
   margin-right: auto;
-  background-color: var(--backgroundcolor-menubar); /* Main red background for the bar */
+  background-color: var(--color-background-menubar); /* Main red background for the bar */
 }
 
 .sub-navigation-list {
@@ -22,27 +22,24 @@
 
 .sub-nav-link {
   text-decoration: none;
-  color: #ffffff; /* White text for better contrast on red background */
+  color: var(--color-text-white); /* White text for better contrast on red background */
   padding: 8px 12px;
   border-radius: 4px;
-  font-weight: 500;
   transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
 .sub-nav-link:hover {
-  color: var(--backgroundcolor-menubar); /* Red text on hover */
-  background-color: #ffffff; /* Very light red/pink background on hover */
+  color: var(--color-button); /* Red text on hover */
+  background-color: var(--color-background-body); /* Very light red/pink background on hover */
 }
 
 .sub-nav-link.active {
   font-weight: bold;
-  color: #ffffff;
+  color: var(--color-text-white);
   font-size: 1.1em;
   cursor: default;
 }
 
 .sub-nav-link.active:hover {
-  color: #ffffff; /* 마우스 올려도 글자색은 흰색으로 고정 */
   background-color: transparent; /* 마우스 올려도 배경색은 투명으로 고정 */
-  /* 필요한 경우 다른 hover 관련 스타일(예: border 등)도 여기에 추가하여 초기화할 수 있습니다. */
 }

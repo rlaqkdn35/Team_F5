@@ -14,9 +14,8 @@ const myPageSubNavLinks = [
 const MyPageLayout = () => {
   return (
     <div className="my-page-layout-container">
-      {/* 페이지 제목은 필요에 따라 여기에 추가하거나, 각 하위 페이지 컴포넌트에서 개별적으로 관리할 수 있습니다. */}
-      {/* 예: <h1 className="mypage-section-title">My Page</h1> */}
-      <SubNavigation links={myPageSubNavLinks} basePath="/mypage" />
+
+      {/* <SubNavigation links={myPageSubNavLinks} basePath="/mypage" /> */}
       <div className="mypage-content-outlet">
         <Outlet /> {/* 여기에 'AI 비서' 또는 '계정 정보' 페이지 내용이 렌더링됩니다. */}
       </div>

@@ -124,28 +124,28 @@ const IssueAnalysisContent = () => {
                   </article>
 
                   <h4>연관 종목 분석</h4>
-                  <div className="related-stocks-table">
-                    <div className="table-header-iac">
-                      <span className="col-name-iac">종목명</span>
-                      <span className="col-price-iac">현재가</span>
-                      <span className="col-change-rate-iac">등락률</span>
-                      <span className="col-overview-iac">기업개요</span>
-                      <span className="col-other-issues-iac">다른 이슈</span>
-                    </div>
-                    <ul className="table-body-iac">
+                  <table className="related-stocks-table">
+                    <ul className="related-stocks-table-header"> {/* table-header-iac -> related-stocks-table-header */}
+                      <span className="col-name">종목명</span> {/* col-name-iac -> col-name (공통 컬럼명) */}
+                      <span className="col-price">현재가</span> {/* col-price-iac -> col-price (공통 컬럼명) */}
+                      <span className="col-change-rate">등락률</span> {/* col-change-rate-iac -> col-change-rate (공통 컬럼명) */}
+                      <span className="col-overview">기업개요</span> {/* col-overview-iac -> col-overview */}
+                      <span className="col-other-issues">다른 이슈</span> {/* col-other-issues-iac -> col-other-issues */}
+                    </ul>
+                    <ul className="related-stocks-table-body"> {/* table-body-iac -> related-stocks-table-body */}
                       {issue.relatedStocks.map(stock => (
-                        <li key={stock.code} className="table-row-iac">
-                          <span className="col-name-iac"><Link to={`/stock-detail/${stock.code}`}>{stock.name}</Link></span>
-                          <span className="col-price-iac">{stock.price}</span>
-                          <span className={`col-change-rate-iac ${parseFloat(String(stock.changeRate).replace('%','')) > 0 ? 'positive' : parseFloat(String(stock.changeRate).replace('%','')) < 0 ? 'negative' : 'neutral'}`}>
+                        <li key={stock.code} className="related-stocks-table-row"> {/* table-row-iac -> related-stocks-table-row */}
+                          <span className="col-name"><Link to={`/stock-detail/${stock.code}`}>{stock.name}</Link></span> {/* col-name-iac -> col-name */}
+                          <span className="col-price">{stock.price}</span> {/* col-price-iac -> col-price */}
+                          <span className={`col-change-rate ${parseFloat(String(stock.changeRate).replace('%','')) > 0 ? 'positive' : parseFloat(String(stock.changeRate).replace('%','')) < 0 ? 'negative' : 'neutral'}`}>
                             {stock.changeRate}
                           </span>
-                          <span className="col-overview-iac" title={stock.overview}>{stock.overview}</span>
-                          <span className="col-other-issues-iac" title={stock.otherIssues}>{stock.otherIssues}</span>
+                          <span className="col-overview" title={stock.overview}>{stock.overview}</span>
+                          <span className="col-other-issues" title={stock.otherIssues}>{stock.otherIssues}</span>
                         </li>
                       ))}
                     </ul>
-                  </div>
+                  </table>
 
                   <div className="comparison-section">
                     <h4>연관 종목 비교 분석</h4>
@@ -162,25 +162,34 @@ const IssueAnalysisContent = () => {
     } else if (activeTab === 'recentIssues') { // 최신 이슈 피드 탭 (기존 테이블 유지)
       if (!recentIssues || recentIssues.length === 0) return <p className="no-data-message-iac">최근 이슈가 없습니다.</p>;
       return (
-        <div className="recent-issues-table">
-          <div className="table-header-iac">
-            <span className="col-time-iac">시간</span>
-            <span className="col-title-iac">제목</span>
-            <span className="col-related-stocks-iac">연관종목</span>
-            <span className="col-summary-iac">이슈내용(1줄)</span>
-          </div>
-          <ul className="table-body-iac">
-            {recentIssues.map(issue => (
-              // recentIssues의 title도 Link 컴포넌트를 사용하지만, 여기서는 외부 URL을 가정
-              // 만약 이 링크가 내부 라우트라면 <Link> to={issue.url}</Link> 로 변경
-              <li key={issue.id} className="table-row-iac">
-                <span className="col-time-iac">{issue.date}</span>
-                <span className="col-title-iac"><a href={issue.url || '#'} target="_blank" rel="noopener noreferrer" className="issue-title-link">{issue.title}</a></span>
-                <span className="col-related-stocks-iac">{issue.relatedStocksText}</span>
-                <span className="col-summary-iac" title={issue.summary}>{issue.summary}</span>
-              </li>
-            ))}
-          </ul>
+        <div className="recent-issues-table-container"> {/* 새 컨테이너 추가 */}
+            <table className="recent-issues-table-unified"> {/* 클래스명 통일 및 테이블 태그 사용 */}
+                <thead>
+                    <tr className="table-header-row"> {/* 헤더 행 */}
+                        <th className="col-time">시간</th>
+                        <th className="col-title">제목</th>
+                        <th className="col-related-stocks">연관종목</th>
+                        <th className="col-summary">이슈내용(1줄)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {recentIssues.map(issue => (
+                        <tr key={issue.id} className="table-row"> {/* 데이터 행 */}
+                            <td className="col-time">{issue.date}</td>
+                            <td className="col-title">
+                                {/* 내부 라우트와 외부 URL을 구분하여 Link 또는 a 태그 사용 */}
+                                {issue.url && issue.url.startsWith('/') ? (
+                                    <Link to={issue.url} className="issue-title-link">{issue.title}</Link>
+                                ) : (
+                                    <a href={issue.url || '#'} target="_blank" rel="noopener noreferrer" className="issue-title-link">{issue.title}</a>
+                                )}
+                            </td>
+                            <td className="col-related-stocks">{issue.relatedStocksText}</td>
+                            <td className="col-summary" title={issue.summary}>{issue.summary}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
       );
     }

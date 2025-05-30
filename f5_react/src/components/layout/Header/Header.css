@@ -7,7 +7,7 @@
     justify-content: space-between; 
     align-items: center;
     padding: 0;
-    background-color: #ffffff; /* 밝은 배경 또는 테마색 */
+    background-color: var(--color-background-body); /* 밝은 배경 또는 테마색 */
     /* border-bottom: 1px solid #e0e0e0; */
 }
 .logo-link {
@@ -28,13 +28,16 @@
     width: auto;
     height: 60px;
 }
-.auth-area .auth-button { 
+.auth-area .auth-button 
+{ 
+    font-family: var(--font-whole);
     margin-left: 5px;
-    padding: 10px 8px;
+    padding: 6px 4px;
     text-decoration: none;
-    color: #333;
+    border: 1px solid var(--color-button);
+    color: var(--color-button);
     border-radius: 4px;
-    background-color: white;
+    background-color: var(--color-background-body);
     cursor: pointer;
     font-size: 0.9em;
     display: inline-flex; /* 아이콘과 텍스트 정렬 */
@@ -46,19 +49,12 @@
 }
 
 .auth-area .auth-button:hover {
-    background-color: #e74c3c; /* 브랜드 메인 빨간색으로 채움 */
-    color: white;             /* 텍스트 색상을 흰색으로 변경하여 가독성 높임 */
+    background-color: var(--color-button); /* 브랜드 메인 빨간색으로 채움 */
+    color: var(--color-text-white);             /* 텍스트 색상을 흰색으로 변경하여 가독성 높임 */
     transform: translateY(-2px); /* 기존 움직임 효과 유지 */
 }
 
-.auth-area .logout-button {
-    border-color: #e74c3c; /* 빨간색 계열 */
-    color: #e74c3c; /* 빨간색 계열 */
-}
-.auth-area .logout-button:hover {
-    background-color: #e74c3c; /* 호버 시 빨간색 */
-    color: white;
-}
+
 
 /* 메인 메뉴 바 */
 .app-main-menu-bar {
@@ -67,45 +63,28 @@
   min-height: 50px;
   align-items: center;
   border-radius: 3px;
-  background-color: var(--backgroundcolor-menubar); /* 어두운 배경색 */
+  background-color: var(--color-background-menubar); 
   padding: 10px 20px;
-  color: white;
+  color: var(--color-text-white);
 }
 
-.menu-icon-container {
-  /* 드롭다운 메뉴 방식에서는 이 버튼이 숨겨지거나,
-     모바일 뷰에서만 나타나도록 미디어 쿼리 사용 */
-  display: none; /* 기본적으로 숨김 */
-}
 
-.menu-toggle-button {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.2em;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
 
 .main-nav-links {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex; /* 가로로 나열 */
-  gap: 30px; /* 메뉴 항목 간 간격 */
+  gap: 100px; /* 메뉴 항목 간 간격 */
 }
 
 .main-nav-item {
   position: relative; /* 서브메뉴의 기준 위치 */
-
 }
 
 .main-nav-item > a {
-  font-family: 'GowunBatang-Regular';
   font-weight: bold;
-  color: white;
+  color: var(--color-text-white);
   text-decoration: none;
   padding: 8px 0;
   display: block; /* 클릭 영역 확장 */
@@ -113,38 +92,33 @@
 }
 
 .main-nav-item > a:hover {
-  color: #ffffff; /* 호버 시 색상 변경 */
-  font-size: 1.1em;
+  color: var(--color-text-white); /* 호버 시 색상 변경 */
 }
 
-
-@font-face {
-    font-family: 'GowunBatang-Regular';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunBatang-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
 /* 드롭다운 서브메뉴 스타일 */
 .dropdown-submenu {
   list-style: none;
-  margin: 0;
-  padding: 10px 0;
+
+  padding: 20px 0;
   position: absolute;
   top: 100%; /* 부모 메뉴 아래에 위치 */
   left: -20px;
   /* 변경된 부분: 배경색 및 테두리 */
-  background-color: #f8f9fa; /* 아주 연한 회색 (흰색 대신) */
-  border: 1px solid #e9ecef; /* 연한 회색 테두리 추가 */
-  /* border: 1px solid #dee2e6;  혹은 이것보다 조금 더 진한 테두리 */
-  /* border: 1px solid rgba(0, 0, 0, 0.1); */ /* 투명도를 가진 검은색 테두리도 깔끔합니다 */
-
+  background-color: var(--color-background-submenubar); /* 아주 연한 회색 (흰색 대신) */
+  border: 1px solid var(--color-border); /* 연한 회색 테두리 추가 */
   min-width: 160px; /* 최소 너비 */
   border-radius: 10px;
   z-index: 1000; /* 다른 요소 위에 표시 */
   display: none; /* 기본적으로 숨김 */
-  opacity: 0;
-  transform: translateY(10px); /* 살짝 아래로 내려서 나타나게 */
-  transition: opacity 0.3s ease, transform 0.3s ease; /* transition 시간을 살짝 줄여 더 빠르게 나타나게 */
+
+  overflow: hidden; /* 슬라이드 애니메이션을 위해 중요 */
+  max-height: 0; /* 초기에는 높이를 0으로 설정하여 숨김 */
+  transition: max-height 0.6s ease-out; /* 높이 변화에 애니메이션 적용 */
+}
+/* 이게 슬라이드 옵션 준거임 */
+.dropdown-submenu.active {
+  max-height: 200px; /* 서브메뉴의 예상 최대 높이보다 크게 설정 */
+  /* 예를 들어 서브 메뉴 항목이 5개이고 각 높이가 40px이면 200px. 충분히 큰 값으로 설정 */
 }
 
 .main-nav-item:hover .dropdown-submenu {
@@ -154,26 +128,25 @@
 }
 
 .dropdown-submenu li a {
-  color: var(--backgroundcolor-menubar);
+  color: var(--color-text-white);
   padding: 10px 20px;
   text-decoration: none;
   display: block; /* 클릭 영역 확장 */
   font-size: 0.9em;
   white-space: nowrap; /* 줄바꿈 방지 */
-  font-family: 'GowunBatang-Regular';
   font-weight: bold;
 }
 
 .dropdown-submenu li a:hover {
-  background-color: #ffffff; /* 서브메뉴 항목 호버 시 배경색 */
-  font-size: 1.1em;
+  background-color: var(--color-background-menubar);
+  color: var(--color-text-white);
 }
 
 /* 검색 컨테이너 */
 .search-container {
   display: flex;
   align-items: center;
-  background-color: white;
+  background-color: var(--color-background-body);
   border-radius: 20px;
   padding: 5px;
 }
@@ -188,8 +161,8 @@
 }
 
 .search-button {
-  background-color: #e74c3c; /* 검색 버튼 색상 */
-  color: white;
+  background-color: var(--color-button); /* 검색 버튼 색상 */
+  color: var(--color-text-white);
   border: none;
   border-radius: 50%; /* 원형 버튼 */
   width: 30px;
@@ -202,7 +175,9 @@
 }
 
 .search-button:hover {
-  background-color: #dc3545;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-button-hover);
+  color: var(--color-button);
 }
 
 
@@ -217,9 +192,10 @@
   display: flex; /* 자식 요소를 유연하게 배치 */
   flex-direction: column; /* 자식 요소를 세로로 정렬 */
   justify-content: center; /* 세로 방향으로 가운데 정렬 */
-  min-height: 70vh; /* 화면 높이의 최소 70%를 차지하도록 설정 */
+  min-height: 30vh; /* 화면 높이의 최소 70%를 차지하도록 설정 */
   align-items: center; 
   background-color: #ffffff;
+  border-bottom: 1px solid var(--color-line);
   /* 여기는 AnimatedOverlay 컴포넌트가 화면 전체에 고정되기를 원한다면 추가: */
   /* position: fixed; top: 0; left: 0; width: 100%; height: 100%; */
   /* background-color: rgba(0, 0, 0, 0.7); */ /* 배경색을 추가하여 오버레이임을 명확히 */
@@ -248,7 +224,6 @@
 
 /* --- 애니메이션 클래스 정의 --- */
 
-/* 1. 아래에서 위로 튀어오르는 애니메이션 */
 .overlay-content h1.animate-in {
   opacity: 0;
   visibility: hidden;
@@ -265,26 +240,6 @@
   }
 }
 
-/* 2. 위에서 아래로 떨어지는 애니메이션 */
-.overlay-content h1.animate-down {
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-50px);
-  animation: slideDown 0.8s ease-out forwards;
-  animation-delay: 0.3s;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 /* ==================================================================== */
 /* AnimatedOverlay 컴포넌트가 사용하는 CSS 끝 */

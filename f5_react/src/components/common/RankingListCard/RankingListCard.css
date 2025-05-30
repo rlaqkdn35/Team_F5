@@ -3,21 +3,21 @@
 .ranking-list-card {
     flex: 1; 
     min-width: 100px; 
-    background-color: #ffffff;
+    background-color: var(--color-background-body);
     padding: 15px; /* 패딩도 살짝 줄여서 공간 확보 */
-    border: 1px solid #e0e0e0;
+    border: 1px solid #eee;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
 }
 
 .ranking-title {
     font-size: 16px; /* 기존 18px에서 16px로 축소 */
     font-weight: 600;
-    color: #34495e;
+    color: var(--color-text-dark);
     margin-top: 0;
     margin-bottom: 12px; /* 마진도 살짝 줄임 */
     padding-bottom: 6px; /* 패딩도 살짝 줄임 */
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #eee;
 }
 
 .ranking-list {
@@ -53,7 +53,7 @@
 
 .ranking-item .rank {
     font-size: 12px; /* 기존 13px에서 12px로 축소 */
-    color: #6c757d;
+    color: var(--color-text-dark);
     margin-right: 6px; /* 마진 축소 */
     min-width: 18px; /* 최소 너비도 살짝 줄임 */
 }
@@ -62,7 +62,7 @@
     flex-grow: 1;
     font-size: 13px; /* 기존 14px에서 13px로 축소 */
     font-weight: 500;
-    color: #2c3e50;
+    color: var(--color-text-dark);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -78,15 +78,15 @@
 }
 
 .ranking-item .price {
-    color: #333;
+    color: var(--color-text-dark);
     font-weight: 500;
 }
 
 .ranking-item .change {
     font-size: 11px; /* 기존 12px에서 11px로 축소 */
 }
-.ranking-item .change.positive { color: #d9534f; }
-.ranking-item .change.negative { color: #28a745; }
+.ranking-item .change.positive { color: var(--color-stock-positive); }
+.ranking-item .change.negative { color: var(--color-stock-nagative); }
 .ranking-item .change.neutral { color: #777777; }
 
 .no-data-message {

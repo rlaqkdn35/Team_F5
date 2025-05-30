@@ -25,7 +25,7 @@ const RecommendedStockCard = ({ stock }) => {
         
       </div>
       <div className="recommendation-reason-box">
-        <strong>AI 추천 이유:</strong>
+        <strong>★☆AI 추천 이유☆★</strong>
         <p>{stock.reason}</p>
       </div>
     </div>

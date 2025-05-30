@@ -1,21 +1,12 @@
 /* src/pages/AiInfoPage/components/IssueAnalysisContent.css */
 
-
-.page-main-title-iac {
-    font-size: 1.8em;
-    font-weight: 600;
-    margin-top: 0;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #e5e7eb;
-}
-
+/* Base Tab and Common Message Styles */
 .issue-tabs-container {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 25px;
-    border-bottom: 2px solid #dee2e6;
+    justify-content: center; /* Added from original for centering */
 }
 
 .issue-tab-button {
@@ -23,14 +14,22 @@
     font-size: 1em;
     font-weight: 500;
     border: none;
-    border-bottom: 2px solid transparent;
+    border-bottom: 2px solid var(--color-line);
     background-color: transparent;
     cursor: pointer;
     transition: color 0.2s, border-bottom-color 0.2s;
-    margin-bottom: -2px;
+    margin-bottom: -2px; /* Pulls button up to sit on the border */
 }
 
 .issue-tab-button.active {
+    color: var(--color-text-hover);
+    font-weight: bold;
+    /* Optionally, you could change border color for active tab */
+    /* border-bottom-color: var(--color-text-hover); */
+}
+
+.issue-tab-button:hover {
+    color: var(--color-text-hover);
     font-weight: bold;
 }
 
@@ -43,24 +42,33 @@
     text-align: center;
     padding: 30px 0;
     font-size: 1.1em;
+    color: var(--color-text-dark); /* Using a text variable */
 }
 
-
+/* AI Picked Issue (Slider and Related Stocks Table) Styles */
 .ai-picked-issue-slider-container {
-    width: 100%; /* 부모 요소의 너비를 꽉 채우도록 설정 */
-    overflow: hidden; /* 슬라이더 내용이 컨테이너를 넘어가지 않도록 숨김 */
-    
-    min-height: 400px;  
+    width: 100%;
+    overflow: hidden;
+    min-height: 400px;
 }
-
+.slider-content-wrapper{
+    width:85%;
+    margin-left: auto;
+    margin-right: auto;
+    margin: 0 auto; /* 위아래 마진은 0, 좌우 마진은 자동으로 설정하여 중앙 정렬 */
+}
 .ai-picked-issue-slide-item {
-    width: 100%; /* 슬라이드 아이템이 부모 컨테이너 너비를 따르도록 */
-    box-sizing: border-box; /* 패딩, 보더 포함 너비 계산 */
-    padding: 10px; /* 필요에 따라 패딩 추가 */
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
 }
 
 .ai-picked-issue-card {
     width: 100%;
+    /* Added some basic styling based on original snippet */
+    background-color: var(--color-background-body);
+    border-radius: 8px;
+    padding: 20px; /* Added padding for content inside the card */
 }
 
 .ai-picked-issue-card .main-issue-article {
@@ -68,19 +76,32 @@
 }
 
 .ai-picked-issue-card .main-issue-article h3 {
+    color: var(--color-text-dark);
     font-size: 1.6em;
     margin-top: 0;
     margin-bottom: 10px;
 }
 
+.ai-picked-issue-card .main-issue-article h3 a {
+    text-decoration: none;
+    color: inherit; /* Inherit color from h3 */
+}
+
+.ai-picked-issue-card .main-issue-article h3 a:hover {
+    text-decoration: underline; /* Underline on hover */
+    color: var(--color-text-hover); /* Use hover color */
+}
+
 .ai-picked-issue-card .issue-meta {
     font-size: 0.85em;
     margin-bottom: 15px;
+    color: var(--color-text-secondary); /* A slightly lighter text color for meta */
 }
 
 .ai-picked-issue-card .issue-summary-main {
     font-size: 1em;
     line-height: 1.7;
+    color: var(--color-text-dark);
 }
 
 .ai-picked-issue-card h4 {
@@ -88,20 +109,18 @@
     margin-top: 30px;
     margin-bottom: 15px;
     padding-bottom: 8px;
-    border-bottom: 1px solid #e0e0e0;
-}
-.ai-picked-issue-card h4:first-of-type {
-    margin-top: 0;
+    border-bottom: 1px solid var(--color-light-gray); /* Using variable for border */
+    color: var(--color-text-dark);
 }
 
-.ai-picked-issue-card .related-stocks-table {
-    margin-bottom: 30px;
+.ai-picked-issue-card h4:first-of-type {
+    margin-top: 0;
 }
 
 .ai-picked-issue-card .comparison-section {
     margin-top: 20px;
     padding: 20px;
-    border: 1px dashed #e0e0e0;
+    border: 1px dashed var(--color-light-gray); /* Using variable for border */
     border-radius: 8px;
     text-align: center;
 }
@@ -113,154 +132,264 @@
 
 .ai-picked-issue-card .comparison-charts-placeholder {
     min-height: 200px;
-    background-color: #f8f9fa;
-    border: 1px dashed #ced4da;
+    background-color: var(--color-placeholder-bg); /* Using variable */
+    border: 1px dashed var(--color-placeholder-border); /* Using variable */
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 4px;
     padding: 20px;
     font-size: 0.9em;
+    color: var(--color-text-secondary);
 }
 
----
-
-.recent-issues-table {
+/* AI Picked Issue - Related Stocks Table (related-stocks-table) Styles */
+.related-stocks-table {
     width: 100%;
-    margin-top: 20px;
-    border: 1px solid #e0e0e0;
+    margin: 20px auto;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', sans-serif; /* Original font */
+    font-size: 0.95em; /* Original font size */
+    border: 1px solid var(--color-light-gray); /* Table border */
+    background-color: var(--color-background-body); /* White background */
     border-radius: 8px;
-    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Original shadow */
+    overflow: hidden; /* For rounded corners */
+    font-family: var(--font-table);
 }
 
-.table-header-iac,
-.table-row-iac {
+.related-stocks-table thead tr {
+    background-color: var(--color-table-header-bg); /* Header background */
+    color: var(--color-text-dark);
+    font-weight: 600; /* Original weight */
+}
+
+.related-stocks-table th,
+.related-stocks-table td {
+    padding: 12px 20px; /* Original padding */
+    border: 1px solid var(--color-lighter-gray); /* Cell borders */
+    text-align: left;
+}
+
+.related-stocks-table th {
+    text-align: center;
+}
+
+/* Column Widths and Alignment (keeping original flex-based for .related-stocks-table for consistency with given code) */
+/* Note: The original .related-stocks-table uses flexbox for columns, while the unified table uses table-layout.
+   I'm maintaining the original flex structure for .related-stocks-table where applicable.
+   The `display: flex` was on `related-stocks-table-header` and `related-stocks-table-row`.
+   I'll adapt this for the `<table>` structure, mapping `flex` to `width` where appropriate. */
+
+/* For the actual table, use width properties */
+.related-stocks-table .col-name { width: 20%; text-align: left; }
+.related-stocks-table .col-price { width: 15%; text-align: right; }
+.related-stocks-table .col-change-rate { width: 15%; text-align: right; }
+.related-stocks-table .col-overview { width: 25%; }
+.related-stocks-table .col-other-issues { width: 25%; }
+
+
+.related-stocks-table-header { /* Re-adding this for clarity, as it was in the original snippet */
     display: flex;
-    align-items: stretch;
-    padding: 10px 0;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 13px;
-}
-
-.table-header-iac {
+    background-color: var(--color-table-header-bg);
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--color-light-gray);
     font-weight: 600;
-    background-color: #f9fafb;
-    padding: 12px 0;
+    color: var(--color-text-dark);
+    text-align: center;
 }
 
-.table-row-iac:last-child {
-    border-bottom: none;
+.related-stocks-table-header .col-name { flex: 1.2; text-align: left; }
+.related-stocks-table-header .col-price { flex: 0.8; }
+.related-stocks-table-header .col-change-rate { flex: 0.8; }
+.related-stocks-table-header .col-overview { flex: 1.5; }
+.related-stocks-table-header .col-other-issues { flex: 1.5; }
+
+.related-stocks-table-body {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-.table-row-iac:hover {
-    background-color: #f8f9fa70;
-}
-
-.table-row-iac span,
-.table-header-iac span {
-    display: flex;
+.related-stocks-table-row {
+    display: flex; /* Kept flex for rows as in original snippet */
     align-items: center;
-    padding: 0 8px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--color-lighter-gray); /* Lighter border */
+    transition: background-color 0.2s ease;
+    color: var(--color-text-dark); /* Default text color for rows */
 }
 
-.ai-picked-issue-card .col-name-iac { flex: 1 1 120px; }
-.ai-picked-issue-card .col-price-iac { flex: 0 0 90px; justify-content: flex-end; }
-.ai-picked-issue-card .col-change-rate-iac { flex: 0 0 100px; justify-content: flex-end; padding-right: 10px;}
-.ai-picked-issue-card .col-overview-iac { flex: 2 1 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ai-picked-issue-card .col-other-issues-iac { flex: 1 1 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.related-stocks-table-row:nth-child(even) {
+    background-color: var(--color-table-odd-row); /* Using original #fdfdfd for even, which is lighter */
+}
 
-.recent-issues-table .col-time-iac { flex: 0 0 80px; justify-content: center; }
-.recent-issues-table .col-title-iac { flex: 2 1 300px; }
-.recent-issues-table .col-title-iac a { text-decoration: none; font-weight: 500;}
-.recent-issues-table .col-title-iac a:hover { text-decoration: underline; }
-.recent-issues-table .col-related-stocks-iac { flex: 1 1 150px; }
-.recent-issues-table .col-summary-iac {
-    flex: 3 1 400px;
+.related-stocks-table-row:hover {
+    background-color: var(--color-table-hover);
+}
+
+.related-stocks-table-row span {
+    flex: 1; /* Original flex for span inside rows */
+    text-align: center;
+    color: var(--color-text-dark); /* Using variable */
+    padding: 0 5px;
+}
+
+.related-stocks-table-row .col-name { flex: 1.2; text-align: left; font-weight: 500; }
+.related-stocks-table-row .col-price { flex: 0.8; font-weight: 600; }
+.related-stocks-table-row .col-change-rate { flex: 0.8; font-weight: bold; }
+
+.related-stocks-table-row .col-overview,
+.related-stocks-table-row .col-other-issues {
+    flex: 1.5;
+    text-align: left;
+    font-size: 0.9em;
+    color: var(--color-text-secondary); /* Using variable for lighter text */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
+.related-stocks-table-row .col-name a {
+    text-decoration: none;
+    color: var(--color-text-dark); /* Using variable */
+    transition: color 0.2s ease;
+}
 
-.table-row-iac .col-name-iac a { text-decoration: none; font-weight: 500; }
-.table-row-iac .col-name-iac a:hover { text-decoration: underline; }
+.related-stocks-table-row .col-name a:hover {
+    color: var(--color-text-hover); /* Using variable */
+}
 
+.col-change-rate.positive {
+    color: var(--color-stock-positive); /* Using variable */
+}
 
+.col-change-rate.negative {
+    color: var(--color-stock-negative); /* Using variable */
+}
 
-@media (max-width: 768px) {
-    .issue-tabs-container {
-        gap: 5px;
-        margin-bottom: 15px;
-    }
+.col-change-rate.neutral {
+    color: #7f8c8d; /* No direct variable provided, keeping original */
+}
 
-    .issue-tab-button {
-        padding: 8px 12px;
-        font-size: 0.9em;
-    }
+/* --- Recent Issues Table (recent-issues-table-unified) Styles --- */
+.recent-issues-table-container {
+    width: 100%;
+    margin-top: 20px;
+}
 
-    .issue-tab-content {
-        padding-top: 15px;
-    }
-
-    .main-issue-article {
-        padding: 15px;
-        margin-bottom: 20px;
-    }
-
-    .main-issue-article h3 {
-        font-size: 1.4em;
-    }
-
-    .issue-summary-main {
-        font-size: 0.9em;
-    }
-
-    .ai-picked-issue-card h4 {
-        font-size: 1.2em;
-        margin-top: 20px;
-        margin-bottom: 10px;
-    }
-
-    .ai-picked-issue-card .comparison-charts-placeholder {
-        min-height: 150px;
-        padding: 15px;
-    }
-
-    .ai-picked-issue-card {
-        min-height: 450px;
-        padding: 15px;
-    }
-
-    .table-header-iac,
-    .table-row-iac {
-        flex-wrap: wrap;
-        font-size: 11px;
-        padding: 6px 0;
-    }
-
-    .table-header-iac span,
-    .table-row-iac span {
-        width: 100%;
-        padding: 3px 6px;
-        white-space: normal;
-        text-overflow: clip;
-        overflow: visible;
-        box-sizing: border-box;
-    }
+.recent-issues-table-unified {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-table);
+    font-size: 0.9em;
+    border: 1px solid var(--color-line); /* Table border */
+    background-color: var(--color-background-body);
+    margin-bottom: 100px;
     
-    .ai-picked-issue-card .col-price-iac,
-    .ai-picked-issue-card .col-change-rate-iac {
-        flex: none;
-        width: auto;
-        padding-right: 0;
-        text-align: right;
+}
+
+.recent-issues-table-unified thead tr {
+    background-color: var(--color-table-header-bg);
+    color: var(--color-text-dark);
+    font-weight: bold;
+}
+
+.recent-issues-table-unified th,
+.recent-issues-table-unified td {
+    padding: 10px 15px;
+    border: 1px solid var(--color-line); /* Cell borders */
+    text-align: left;
+    color: var(--color-text-dark);
+}
+
+.recent-issues-table-unified th {
+    text-align: center;
+}
+
+/* Column Widths and Alignment */
+.recent-issues-table-unified .col-time { width: 10%; text-align: center; }
+.recent-issues-table-unified .col-title { width: 35%; }
+.recent-issues-table-unified .col-related-stocks { width: 20%; text-align: center; }
+.recent-issues-table-unified .col-summary { width: 35%; }
+
+.recent-issues-table-unified tbody tr:nth-child(even) {
+    background-color: var(--color-table-even-row-bg); /* Adjusted to use a variable for even rows */
+}
+
+.recent-issues-table-unified tbody tr:hover {
+    background-color: var(--color-table-hover-bg);
+}
+
+.recent-issues-table-unified .issue-title-link {
+    text-decoration: none;
+    color: var(--color-link-default); /* Using variable for link color */
+}
+
+.recent-issues-table-unified .issue-title-link:hover {
+    text-decoration: underline;
+    color: var(--color-text-hover); /* Optional: use hover color on links too */
+}
+
+/* --- Media Queries (Mobile Responsive) --- */
+@media (max-width: 768px) {
+    /* Existing Tab and Card Styles (using variables) */
+    .issue-tabs-container { gap: 5px; margin-bottom: 15px; }
+    .issue-tab-button { padding: 8px 12px; font-size: 0.9em; }
+    .issue-tab-content { padding-top: 15px; }
+    /* Card padding from .ai-picked-issue-card */
+    .ai-picked-issue-card .main-issue-article h3 { font-size: 1.4em; }
+    .ai-picked-issue-card .issue-summary-main { font-size: 0.9em; }
+    .ai-picked-issue-card h4 { font-size: 1.2em; margin-top: 20px; margin-bottom: 10px; }
+    .ai-picked-issue-card .comparison-charts-placeholder { min-height: 150px; padding: 15px; }
+    .ai-picked-issue-card { min-height: 450px; padding: 15px; } /* Adjust padding for card */
+
+    /* Table Responsive Styles (Scrollable on Mobile) */
+    .related-stocks-table,
+    .recent-issues-table-unified {
+
+        display: block;
+        overflow-x: auto;
         white-space: nowrap;
+        border: none; /* Remove outer border to avoid conflict with scrollbar */
     }
 
-    .col-name-iac, .col-title-iac, .col-overview-iac, .col-other-issues-iac,
-    .col-time-iac, .col-related-stocks-iac, .col-summary-iac {
+    .related-stocks-table thead,
+    .recent-issues-table-unified thead {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .related-stocks-table tbody,
+    .recent-issues-table-unified tbody {
+        display: table-row-group;
+    }
+
+    .related-stocks-table tr,
+    .recent-issues-table-unified tr {
+        display: table-row;
+        width: 100%;
+    }
+
+    .related-stocks-table th, .related-stocks-table td,
+    .recent-issues-table-unified th, .recent-issues-table-unified td {
+        display: table-cell;
+        white-space: normal;
+        vertical-align: top;
+    }
+
+    /* Remove specific mobile stacking for recent-issues-table if it's using the unified table structure */
+    /* This rule is likely for a different, non-table-display-based mobile layout.
+       If .recent-issues-table existed as a flex container before.
+       Given the unified approach above, this specific rule might be redundant or for a different context. */
+    /* .recent-issues-table .col-name-iac,
+    .recent-issues-table .col-title-iac,
+    .recent-issues-table .col-time-iac,
+    .recent-issues-table .col-related-stocks-iac,
+    .recent-issues-table .col-summary-iac {
         flex: 1 1 100%;
         justify-content: flex-start;
         text-align: left;
-    }
+    } */
 }
