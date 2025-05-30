@@ -2,8 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './AiPicksHomeContent.css'; // 이 컴포넌트의 스타일 파일
-//import { useEffect } from 'react';
-//import axios from "axios";
 import { Line } from 'react-chartjs-2'; // Chart.js import for graphs
 import {
     Chart as ChartJS,
@@ -15,7 +13,6 @@ import {
     Tooltip,
     Legend
 } from 'chart.js';
-
 
 // Chart.js 모듈 등록
 ChartJS.register(
