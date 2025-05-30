@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './AiPicksHomeContent.css'; // 이 컴포넌트의 스타일 파일
+//import { useEffect } from 'react';
+//import axios from "axios";
 
 // --- 임시 목업 데이터 ---
 const todayPicksData = [
