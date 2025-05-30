@@ -20,11 +20,14 @@
   --color-background-white-red:#fcf1f1;
   --color-stock-positive:#e53935;
   --color-stock-nagative:#007bff;
+  --color-background-red-white:#F5D2D2;
+
+
 
   --header-height: 60px;  
 
   --color-button:#e74c3c;
-
+  --color-button-yellow:#F39C12;
   /* 왠지모르겠지만 호버는 색이 잘 안입혀짐 */
   --color-button-hover:#ffffff;
   --color-white-hover:#f8f9fa;
