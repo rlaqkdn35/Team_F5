@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -25,7 +24,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.smhrd.stock.entity.ForumDTO;
+import com.smhrd.stock.dto.ForumDTO;
+import com.smhrd.stock.dto.ForumListResponse;
 import com.smhrd.stock.entity.StockForum;
 import com.smhrd.stock.service.ForumService;
 
@@ -52,8 +52,8 @@ public class ForumController {
 
     // 1. 글 목록 조회
     @GetMapping("/list")
-    public List<StockForum> getForumList() {
-        return service.boardList();
+    public ForumListResponse getForumList() {
+        return service.getForumListWithCount();
     }
 
     // 2. 글 등록 (파일 포함 가능)
