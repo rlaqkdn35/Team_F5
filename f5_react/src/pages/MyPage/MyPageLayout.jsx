@@ -15,7 +15,7 @@ const MyPageLayout = () => {
   return (
     <div className="my-page-layout-container">
 
-      {/* <SubNavigation links={myPageSubNavLinks} basePath="/mypage" /> */}
+      <SubNavigation links={myPageSubNavLinks} basePath="/mypage" />
       <div className="mypage-content-outlet">
         <Outlet /> {/* 여기에 'AI 비서' 또는 '계정 정보' 페이지 내용이 렌더링됩니다. */}
       </div>

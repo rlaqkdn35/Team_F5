@@ -14,7 +14,7 @@ const aiPicksSubNavLinks = [
 const AiPicksPageLayout = () => {
   return (
     <div className="ai-picks-page-layout">
-      {/* <SubNavigation links={aiPicksSubNavLinks} basePath="/ai-picks" /> */}
+      <SubNavigation links={aiPicksSubNavLinks} basePath="/ai-picks" />
       <div className="page-content-area">
         <Outlet />
       </div>

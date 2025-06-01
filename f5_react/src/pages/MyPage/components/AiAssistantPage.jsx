@@ -32,7 +32,6 @@ const WatchlistItem = ({ item }) => (
         <span className={`change-rate-aia ${item.changeType}`}>{item.changeRate}</span>
         <span className="ai-signal-aia">{item.aiSignal}</span>
       </div>
-      {/* <div className="mini-chart-placeholder-aia">미니차트</div> */}
     </Link>
   </li>
 );

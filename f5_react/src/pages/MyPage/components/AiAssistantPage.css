@@ -16,7 +16,7 @@
 .section-title-aia {
   font-size: 1.6em;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-text-dark);
   margin-top: 0; /* 섹션 첫 제목은 위쪽 마진 없이 */
   margin-bottom: 0; /* header에서 이미 margin-bottom 처리 */
 }
@@ -27,27 +27,27 @@
 
 .view-all-link-aia {
   font-size: 0.9em;
-  color: #007bff;
+  color: var(--color-text-dark);
   text-decoration: none;
 }
+
 .view-all-link-aia:hover {
   text-decoration: underline;
 }
 
 .loading-message-aia, .no-data-message-aia {
   text-align: center;
-  color: #6c757d;
+  color: var(--color-text-dark);
   padding: 30px 0;
   font-size: 1.1em;
-}
-.no-data-message-aia a {
-    color: #0056b3;
-    font-weight: 500;
 }
 
 /* 관심 종목 목록 스타일 */
 .watchlist-section-aia {
   margin-bottom: 40px;
+  background-color: var(--color-background-body);
+  padding: 30px;
+  border-radius: 8px;
 }
 .watchlist-list-aia {
   list-style: none;
@@ -55,11 +55,10 @@
   margin: 0;
 }
 .watchlist-item-aia {
-  background-color: #fff;
-  border: 1px solid #e9ecef;
+  background-color: var(--color-background-body);
+  border: 1px solid var(--color-line);
   border-radius: 6px;
   margin-bottom: 10px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
   transition: box-shadow 0.2s ease;
 }
 .watchlist-item-aia:hover {
@@ -78,17 +77,17 @@
 .item-info-aia .stock-name-aia {
   font-size: 1.05em;
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--color-text-dark);
   display: block; /* 종목코드와 줄바꿈 또는 한줄에 */
   margin-bottom: 3px;
 }
 .item-info-aia .stock-code-aia { /* StockListItem 내부 종목코드와 구분위해 -aia 추가 */
-    font-size: 0.8em;
-    color: #6c757d;
+  font-size: 0.8em;
+  color: var(--color-text-dark);
 }
 .item-info-aia .current-price-aia {
   font-size: 1em;
-  color: #343a40;
+  color: var(--color-text-dark);
 }
 
 .item-status-aia {
@@ -100,33 +99,18 @@
   font-weight: 500;
   margin-bottom: 3px;
 }
-.item-status-aia .change-rate-aia.positive { color: #d9534f; }
-.item-status-aia .change-rate-aia.negative { color: #28a745; }
+.item-status-aia .change-rate-aia.positive { color: var(--color-stock-positive); }
+.item-status-aia .change-rate-aia.negative { color: var(--color-stock-nagative); }
 .item-status-aia .change-rate-aia.neutral { color: #777; }
 
 .item-status-aia .ai-signal-aia {
   font-size: 0.8em;
-  color: #007bff; /* AI 신호 색상 */
+  color: var(--color-text-dark); /* AI 신호 색상 */
   font-weight: bold;
-  background-color: #e7f3ff;
+  background-color: var(--color-background-body);
   padding: 2px 6px;
   border-radius: 4px;
 }
-
-.mini-chart-placeholder-aia { /* 관심종목 또는 추천종목의 미니차트 영역 */
-  width: 80px; /* 예시 크기 */
-  height: 40px;
-  font-size: 0.8em;
-  background-color: #f0f0f0;
-  border: 1px dashed #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #888;
-  border-radius: 3px;
-  margin-left: 10px; /* 정보와의 간격 */
-}
-
 
 /* AI 개인 맞춤 추천 섹션 스타일 */
 .personalized-picks-grid-aia {
@@ -136,19 +120,23 @@
 }
 
 .personalized-pick-card-aia {
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
-  border-left: 5px solid #6f42c1; /* 맞춤 추천 강조색 (예시: 보라색) */
+  background-color: var(--color-background-body);
+  border: 1px solid var(--color-line);
+  border-left: 5px solid var(--color-button); /* 맞춤 추천 강조색 (예시: 보라색) */
   border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 .personalized-pick-card-aia h4 {
   font-size: 1.2em;
-  color: #6f42c1; /* 강조색과 통일 */
+  color: var(--color-text-hover); /* 강조색과 통일 */
   margin-top: 0;
   margin-bottom: 8px;
 }
+
+.stock-name-link-aia{
+  text-decoration-line: none;
+}
+
 .personalized-pick-card-aia .price-info-aia {
   font-size: 0.9em;
   margin-bottom: 10px;
@@ -163,4 +151,10 @@
 }
 .recommendation-reason-aia strong, .ai-prediction-aia strong {
   color: #343a40;
+}
+
+.personalized-picks-section-aia{
+  background-color: var(--color-background-body);
+  padding: 20px;
+  border-radius: 8px;
 }

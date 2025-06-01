@@ -30,7 +30,7 @@
 }
 
 .sector-chart-card {
-  background-color: var(--color-background-white);
+  background-color: var(--color-background-body);
   padding: 20px;
   border-radius: 8px;
   border: 1px solid #e0e0e0;
@@ -49,6 +49,7 @@
 .sector-trends-table { 
   width: 100%;
   font-family: var(--font-table);
+  background-color: var(--color-background-body);
 }
 .table-header-tsc, .table-row-tsc {
   display: flex;

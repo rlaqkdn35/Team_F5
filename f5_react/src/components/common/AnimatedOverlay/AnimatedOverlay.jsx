@@ -1,7 +1,7 @@
 // src/components/AnimatedOverlay.js
 import React, { useEffect, useState } from 'react';
 
-const AnimatedOverlay = ({ title, animationType = 'slideUp' }) => {
+const AnimatedOverlay = ({ title, animationType = 'slideUp' , backgroundImageUrl }) => {
   const [shouldAnimate, setShouldAnimate] = useState(false);
 
   useEffect(() => {
@@ -20,9 +20,14 @@ const AnimatedOverlay = ({ title, animationType = 'slideUp' }) => {
       animationClassName = 'animate-down';
     }
     }
-
+  const overlayStyle = backgroundImageUrl ? {
+      backgroundImage: `url(${backgroundImageUrl})`,
+      backgroundSize: 'auto', // 배경 이미지 크기 조절 (필요에 따라 'contain', 'auto' 등으로 변경)
+      backgroundPosition: 'center', // 배경 이미지 위치 조절
+      // 여기에 추가적인 배경 스타일을 넣을 수 있습니다.
+    } : {};
   return (
-    <div className="fullscreen-overlay">
+    <div className="fullscreen-overlay" style={overlayStyle}>
       <div className="overlay-content">
         {shouldAnimate && (
         <h1 className={animationClassName}>

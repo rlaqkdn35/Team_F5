@@ -104,17 +104,6 @@
   margin-bottom: 10px;
 }
 
-.stock-name {
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #333333; /* 종목명은 짙은 회색 */
-}
-
-.stock-code {
-  font-size: 0.9em;
-  color: #888888; /* 연한 회색 종목 코드 */
-  margin-left: 5px;
-}
 
 .price-info {
   margin-bottom: 15px;

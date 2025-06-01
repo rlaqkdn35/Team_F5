@@ -11,6 +11,12 @@
     font-weight: normal;
     font-style: normal;
 }
+@font-face {
+    font-family: 'EF_jejudoldam';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_jejudoldam.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
 :root {
 
   /* 색깔구분 */
@@ -22,10 +28,7 @@
   --color-stock-nagative:#007bff;
   --color-background-red-white:#F5D2D2;
 
-
-
   --header-height: 60px;  
-
   --color-button:#e74c3c;
   --color-button-yellow:#F39C12;
   /* 왠지모르겠지만 호버는 색이 잘 안입혀짐 */
@@ -36,13 +39,37 @@
 
   --color-border:#ffffff;
   --color-line: #f0f0f0;
-
   /* border: none; */
   /* border: 1px solid black; */
   --color-text-white: #ffffff;
   --color-text-dark: #333;
-  --color-text-underline: #eee;
-  --color-text-medium: #dc3545; /* 중간 밝기 텍스트 */
+
+
+
+  /* 보라색깔구분 */
+  --color-background-menubar: #494B56;
+  --color-background-submenubar: #494B56;
+  --color-background-body: #ffffff;
+  --color-background-white-red:#fcf1f1;
+  --color-stock-positive:#e53935;
+  --color-stock-nagative:#007bff;
+
+  --header-height: 60px;  
+  --color-button:#494B56;
+  --color-button-yellow:#F39C12;
+  /* 왠지모르겠지만 호버는 색이 잘 안입혀짐 */
+  --color-button-hover:#ffffff;
+  --color-white-hover:#f8f9fa;
+    /* 이게 텍스트 active겸 */
+    --color-text-hover:#494B56; 
+
+  --color-border:#ffffff;
+  --color-line: #f0f0f0;
+  /* border: none; */
+  /* border: 1px solid black; */
+  --color-text-white: #ffffff;
+  --color-text-dark: #333;
+
   /* 폰트 */
   --font-whole: 'Paperlogy-8ExtraBold';
   --font-table: 'KCC-Ganpan';
@@ -60,6 +87,7 @@ body {
   font-family: var(--font-whole); /* 전역 폰트 변수 사용 */
   color: var(--color-text-dark); /* 전역 텍스트 색상 적용 */
   background-color: var(--color-background-body); /* 전역 배경색 적용 */
+  background-color: #E6E6E6; /* 전역 배경색 적용 */
 }
 
 code {

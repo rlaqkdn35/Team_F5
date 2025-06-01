@@ -108,7 +108,7 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
 
   return (
     <>
-      <header className="app-header-top">
+      {/* <header className="app-header-top">
         <div className="logo-area">
           <Link to="/" className="logo-link">
             <img src='Mainlogo.png' alt='주식AI로고'/>
@@ -133,10 +133,10 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
           </div>
           <img src='Mainlogo1.png' alt='주식AI로고'/>
         </div>
-      </header>
+      </header> */}
 
       <nav className="app-main-menu-bar">
-
+        <div>Astock</div>
         <ul className="main-nav-links">
           {mainMenuItems.map((item) => (
             <li 
@@ -171,9 +171,29 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
             <FaSearch />
           </button>
         </form>
+        <div className="auth-area">
+            {isLoggedIn ? (
+              <button onClick={onLogout} className="auth-button">
+                로그아웃
+              </button>
+            ) : (
+              <>
+                <Link to="/login" className="auth-button">
+                  <FaSignInAlt /> 로그인
+                </Link>
+                <Link to="/signup" className="auth-button">
+                  <FaUserPlus /> 회원가입
+                </Link>
+              </>
+            )}
+          </div>
       </nav>
 
-      {showOverlay && <AnimatedOverlay key={location.pathname} title={currentOverlayTitle} />}
+      {showOverlay && <AnimatedOverlay 
+      key={location.pathname} 
+      title={currentOverlayTitle} 
+      backgroundImageUrl={`${currentOverlayTitle}.png`}
+      />}
     </>
   );
 };

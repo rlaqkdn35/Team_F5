@@ -1,14 +1,13 @@
 /* src/pages/MyPage/components/UserFavorite.css */
 
 .user-favorite-container {
-  background-color: #ffffff; /* 흰색 배경 */
-  color: #333333; /* 기본 텍스트 색상 */
+  background-color: var(--color-background-body); /* 흰색 배경 */
+  color: var(--color-text-dark); /* 기본 텍스트 색상 */
   padding: 25px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* 은은한 그림자 */
   max-width: 1000px; /* 적절한 너비 설정 */
   margin: 20px auto;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   min-height: 50vh;
   border: 1px solid #e0e0e0; /* 연한 테두리 */
 }
@@ -26,7 +25,7 @@
 }
 
 .favorite-page-title {
-  color: #cc0000; /* 강조되는 빨간색 제목 */
+  color: var(--color-text-dark); /* 강조되는 빨간색 제목 */
   text-align: center;
   margin-bottom: 15px;
   font-size: 2em;

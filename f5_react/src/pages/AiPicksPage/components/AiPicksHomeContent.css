@@ -40,22 +40,20 @@
 
 /* --- 4번 코드 - 시장 상태 섹션 (Market Status Section) --- */
 .market-status-section-aphc {
-    background-color: var(--color-background-red-white); /* 밝은 파랑 배경 */
+    background-color: var(--color-background-body); /* 밝은 파랑 배경 */
     border-radius: 10px;
     padding: 20px;
-
+    border: 1px solid var(--color-line);
 }
 
 .market-info-aphc {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
 }
 
 .market-status-text {
     font-size: 18px;
-    color: #2c3e50;
+    color: var(--color-text-dark);
     font-weight: 600;
 }
 
@@ -84,14 +82,14 @@
 }
 
 .last-updated-text {
-    font-size: 14px;
-    color: #777;
+    font-size: 0.5em;
+    color: var(--color-text-dark);
 }
 
 .sub-section-title-aphc {
     font-size: 22px;
     font-weight: bold;
-    color: #34495e;
+    color: var(--color-text-dark);
     margin-top: 25px;
     margin-bottom: 15px;
 }
@@ -103,8 +101,8 @@
 }
 
 .top-stock-item-aphc {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
+    background-color: var(--color-backgroun-white);
+    border: 1px solid var(--color-line);
     border-radius: 8px;
     padding: 15px;
     display: flex;
@@ -133,10 +131,10 @@
 
 /* --- 2번 코드 - AI 모델 요약 및 추천 섹션 (AI Summary Section) --- */
 .ai-summary-section-aphc {
-    background-color: #ffffff;
+    background-color: var(--color-background-body);
     border-radius: 10px;
     padding: 20px;
-    background-color: var(--color-background-red-white);
+    border: 1px solid var(--color-line);
 }
 
 .ai-model-selection-bar-aphc {
@@ -159,15 +157,15 @@
 }
 
 .model-score-item-aphc:hover {
-    background-color: #e8f5e9; /* Light green on hover */
-    border-color: #a5d6a7;
+    background-color: var(--color-text-hover); /* Light green on hover */
+    border-color: var(--color-text-hover);
+    color: var(--color-text-white);
     transform: translateY(-2px);
 }
 
 .model-score-item-aphc.selected-model-aphc {
-    background-color: #4CAF50; /* Primary green */
-    color: white;
-    border-color: #388e3c;
+    background-color: var(--color-background-body); /* Primary green */
+    color: var(--color-text-hover);
     font-weight: bold;
 }
 
@@ -184,10 +182,11 @@
 }
 
 .selected-ai-recommendation-box-aphc {
-    background-color: #e8f5e9; /* 선택된 모델 추천 박스 색상 */
-    border: 1px solid #a5d6a7;
+    background-color: var(--color-line); /* 선택된 모델 추천 박스 색상 */
+    border: 1px solid var(--color-background-body);
     border-radius: 10px;
     padding: 20px;
+    padding-top: 0px;
 }
 
 .top-ai-indicator-aphc {
@@ -199,14 +198,14 @@
 .recommended-stock-name-aphc {
     font-size: 20px;
     font-weight: bold;
-    color: #2e7d32; /* 진한 녹색 */
+    color: var(--color-text-dark); /* 진한 녹색 */
     margin-top: 10px;
     margin-bottom: 5px;
 }
 
 .stock-code-tag-aphc {
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--color-text-dark);
+    color: var(--color-text-white);
     padding: 4px 8px;
     border-radius: 5px;
     font-size: 14px;
@@ -216,14 +215,14 @@
 
 .recommendation-reason-aphc {
     font-size: 15px;
-    color: #555;
+    color: var(--color-text-dark);
     margin-bottom: 10px;
     line-height: 1.5;
 }
 
 .ai-comment-aphc {
     font-style: italic;
-    color: #666;
+    color: var(--color-text-dark);
     font-size: 14px;
     border-top: 1px dashed #ccc;
     padding-top: 10px;
@@ -267,68 +266,10 @@
     width: 280px; /* 각 슬라이드 아이템의 너비 */
 }
 
-.card-link {
-    text-decoration: none;
-    color: inherit;
-    display: block; /* Link가 전체 카드를 감싸도록 */
-}
-
-.stock-card {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
-    padding: 20px;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    height: 100%; /* 부모에 따라 높이 꽉 채우기 */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.stock-card:hover {
-    transform: translateY(-5px);
-}
-
-.stock-name {
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.card-prediction-text {
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 15px;
-}
-
-.card-details {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap; /* 작은 화면에서 줄바꿈 */
-    margin-top: auto; /* 하단에 붙도록 */
-}
-
-.card-target-price {
-    font-size: 15px;
-    font-weight: 600;
-    color: #007bff; /* 파란색 */
-}
-
-.card-reason-badge {
-    background-color: #f0f8ff; /* 연한 파랑 */
-    color: #007bff;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 13px;
-    font-weight: 500;
-    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
-}
-
 /* --- 3번 코드 - AI 매매 신호 섹션 (AI Signal Section) --- */
 .ai-signal-section-aphc {
-    background-color: var(--color-background-red-white);
+    background-color: var(--color-background-body);
+    border: 1px solid var(--color-line);
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 30px;
@@ -488,36 +429,6 @@
 }
 
 
-/* --- 1번 코드 - 주간 Best 추천 수익률 (Best Profit Section) --- */
-.best-profit-section {
-    margin-bottom: 30px;
-}
-
-.best-profit-cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-}
-
-/* 기존 stock-card 스타일과 통합 */
-/* .stock-card { ... } (상단에 정의됨) */
-
-.card-change-rate {
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.card-date {
-    font-size: 14px;
-    color: #777;
-}
-
-.card-price-info {
-    font-size: 14px;
-    color: #555;
-    margin-left: 10px;
-}
 
 /* --- 반응형 디자인 --- */
 @media (max-width: 992px) { /* 태블릿 가로 */
@@ -545,8 +456,7 @@
     }
 
     .top-stocks-list-aphc,
-    .signal-list-aphc,
-    .best-profit-cards-container {
+    .signal-list-aphc{
         grid-template-columns: 1fr; /* 모바일에서 한 줄에 하나씩 */
     }
 
@@ -558,26 +468,6 @@
     .model-score-item-aphc {
         min-width: unset;
         width: 100%;
-    }
-
-    .stock-card {
-        padding: 15px;
-    }
-
-    .stock-name {
-        font-size: 18px;
-    }
-
-    .card-prediction-text {
-        font-size: 15px;
-    }
-
-    .card-target-price, .card-reason-badge {
-        font-size: 13px;
-    }
-
-    .signal-card-aphc {
-        padding: 15px;
     }
 
     .stock-name-aphc, .current-price-aphc {

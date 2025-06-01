@@ -32,7 +32,7 @@
     transform: translateX(-50%);
     width: 100px;
     height: 5px;
-    background-color: #dc3545; /* 파란색 -> 빨간색으로 변경 */
+    background-color: var(--color-background-menubar);
     border-radius: 2px;
 }
 
@@ -71,7 +71,7 @@
 .news-item-card-nc:hover {
     transform: translateY(-7px); /* 호버 시 살짝 위로 */
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 강조 */
-    border-color: #dc3545; /* 파란색 -> 빨간색으로 변경 */
+    border-color: var(--color-text-hover); /* 파란색 -> 빨간색으로 변경 */
 }
 
 .news-title-nc {

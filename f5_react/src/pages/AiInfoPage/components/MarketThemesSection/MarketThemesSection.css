@@ -145,13 +145,13 @@
 /* 종목명 링크 스타일 */
 .table-row-mts .col-name-mts a {
   text-decoration: none; /* 밑줄 제거 */
-  color: #c00000; /* 진한 빨간색 링크 */
+  color: var(--color-text-dark); /* 진한 빨간색 링크 */
   font-weight: bold;
   transition: color 0.2s ease;
 }
 
 .table-row-mts .col-name-mts a:hover {
-  color: #ff0000; /* 호버 시 더 밝은 빨간색 */
+  color: var(--color-background-menubar); /* 호버 시 더 밝은 빨간색 */
 }
 
 /* 등락률 색상 */

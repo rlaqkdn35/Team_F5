@@ -104,7 +104,7 @@
 }
 
 .dot.active {
-  background-color: #f44336; /* ❗ 변경: 활성화된 점 색상 (메인 빨간색) */
+  background-color: var(--color-button); /* ❗ 변경: 활성화된 점 색상 (메인 빨간색) */
   transform: scale(1.2); /* 활성화 시 약간 커지도록 */
-  border-color: #c62828; /* ❗ 변경: 활성 테두리 색상 (더 어두운 빨간색) */
+  border-color: var(--color-button); /* ❗ 변경: 활성 테두리 색상 (더 어두운 빨간색) */
 }

@@ -19,7 +19,7 @@
 }
 
 .stock-name {
-    font-size: 1.8em;
+    font-size: 1.0em;
     color: var(--color-text-dark); /* 어두운 회색 글씨는 유지 */
     margin: 0;
     font-weight: 700;

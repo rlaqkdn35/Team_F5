@@ -25,21 +25,25 @@ const PostDetailPage = () => {
             .then(response => {
                 const data = response.data;
 
-                console.log("[fetchPost] 서버에서 받은 게시글 ID:", data.forum.forum_idx);
-                
+                console.log('서버 응답 데이터:', data);
+                console.log("[fetchPost] 서버에서 받은 게시글 ID:", data.forum?.forum_idx);
+                console.log("[fetchPost] 서버에서 받은 작성자 닉네임:", data.nickname);  // 수정된 닉네임 출력
+
                 const postData = {
-                    id: data.forum.forum_idx,
-                    title: data.forum.forum_title,
-                    author: data.forum.user_id,
-                    date: new Date(data.forum.updatedAt).toLocaleDateString(),
-                    views: data.forum.forum_views || 0,
-                    content: data.forum.forum_content,
-                    forum_file: data.forum.forum_file,
+                    id: data.forum?.forum_idx,
+                    title: data.forum?.forum_title,
+                    author: data.forum?.user_id,
+                    user_nickname: data.nickname,  // 여기를 data.nickname 으로 수정
+                    date: data.forum?.createdAt ? new Date(data.forum.createdAt).toLocaleDateString('ko-KR') : '',
+                    views: data.forum?.forum_views || 0,
+                    content: data.forum?.forum_content,
+                    forum_file: data.forum?.forum_file,
                     comments: data.comments || []
                 };
 
+                console.log('[fetchPost] 가공된 게시글 데이터:', postData);
+
                 setPost(postData);
-                console.log("[fetchPost] 서버에서 받은 :", postData);
                 setLoading(false);
             })
             .catch(err => {
@@ -50,7 +54,6 @@ const PostDetailPage = () => {
     };
 
     useEffect(() => {
-        // 조회수 증가 호출 제한 (5분 내 중복 호출 방지)
         const key = `viewed_forum_${postId}`;
         const lastViewed = localStorage.getItem(key);
         const now = Date.now();
@@ -127,54 +130,54 @@ const PostDetailPage = () => {
     const imageUrl = `http://localhost:8084/F5/api/forum/images/${post.forum_file}`;
 
     return (
-        
-            <div>
-                <div className="post-detail-container">
-                    <div className="post-detail-header">
-                        <h2>{post.title}</h2>
-                        <div className="post-meta">
-                            <span>작성자: <strong>{post.author}</strong></span>
-                            <span>날짜: {post.date}</span>
-                            <span>조회수: {post.views}</span>
-                        </div>
-                    </div>
-
-                    <div className="post-content">
-                        <p>{post.content}</p>
-
-                        {post.forum_file && (
-                            <div className="post-image">
-                                <img
-                                    src={imageUrl}
-                                    alt="첨부 이미지"
-                                    onError={e => {
-                                        console.error('이미지 로딩 실패:', e.target.src);
-                                        e.target.style.display = 'none';
-                                    }}
-                                />
-                            </div>
-                        )}
-                    </div>
-
-
-                    <div className="post-actions">
-                        <button onClick={() => navigate('/forum')} className="back-button">
-                            목록으로
-                        </button>
-
-                        {post.author === currentUserId && (
-                            <>
-                                <button onClick={handleEdit} className="edit-button" >
-                                    수정
-                                </button>
-                                <button onClick={handleDelete} className="delete-button" >
-                                    삭제
-                                </button>
-                            </>
-                        )}
+        <div>
+            <div className="post-detail-container">
+                <div className="post-detail-header">
+                    <h2>{post.title}</h2>
+                    <div className="post-meta">
+                        <span>작성자: <strong>{post.user_nickname}</strong></span>
+                        <span>날짜: {post.date}</span>
+                        <span>조회수: {post.views}</span>
                     </div>
                 </div>
-            <div className="comments-section">
+
+                <div className="post-content">
+                    <p >{post.content}</p>
+
+                    {post.forum_file && (
+                        <div className="post-image" >
+                            <img
+                                src={imageUrl}
+                                alt="첨부 이미지"
+                                onError={e => {
+                                    console.error('이미지 로딩 실패:', e.target.src);
+                                    e.target.style.display = 'none';
+                                }}
+                            />
+                        </div>
+                    )}
+                </div>
+
+                                                                                           
+
+                <div className="post-actions">
+                    <button onClick={() => navigate('/forum')} className="back-button">
+                        목록으로
+                    </button>
+
+                    {post.author === currentUserId && (
+                        <>
+                            <button onClick={handleEdit} className="edit-button">
+                                수정
+                            </button>
+                            <button onClick={handleDelete} className="delete-button">
+                                삭제
+                            </button>
+                        </>
+                    )}
+                </div>
+            </div>
+            <div className="comment s-section">
                 <h3>댓글 ({post.comments.length})</h3>
                 {post.comments.length > 0 ? (
                     <ul className="comments-list">
@@ -182,7 +185,7 @@ const PostDetailPage = () => {
                             <li key={comment.cmtIdx} className="comment-item">
                                 <p>{comment.cmtContent}</p>
                                 <div className="comment-meta">
-                                    <p>ID: {comment.userId}</p>
+                                    <strong>{comment.userId}</strong>
                                     <span>{new Date(comment.createdAt).toLocaleDateString('ko-KR')}</span>
                                 </div>
                             </li>
@@ -192,7 +195,7 @@ const PostDetailPage = () => {
                     <p className="no-comments">아직 댓글이 없습니다.</p>
                 )}
 
-                <div className="comment-form">
+                <div className="comment-form" >
                     <textarea
                         placeholder="댓글을 입력하세요"
                         value={newComment}
@@ -206,10 +209,7 @@ const PostDetailPage = () => {
                         {isSubmitting ? '등록 중...' : '댓글 등록'}
                     </button>
                 </div>
-            </div>
-
-                
-            
+            </div>   
         </div>
     );
 };

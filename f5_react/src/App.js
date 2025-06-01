@@ -63,7 +63,7 @@ function App() {
         <Header isLoggedIn={!!currentUser} onLogout={handleLogout} />
         <main className="app-main-content-centered"> 
           <Routes>
-            {/* <Route path="/" element={<MainPage />}></Route> */}
+            <Route path="/" element={<Navigate to="/ai-info" replace />}></Route>
             <Route path="/ai-info" element={<AiInfoPageLayout />}>
               <Route index element={<AiInfoHomeContentPage />} />
               <Route path="price-analysis" element={<PriceAnalysisContent />} />

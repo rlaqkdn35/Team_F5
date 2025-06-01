@@ -1,7 +1,11 @@
 /* TodayPicksPage.css */
-
+.stock-prediction-section{
+    background-color: var(--color-background-body);
+    padding: 20px;
+    border-radius: 8px;
+}
 .today-picks-page {
-    background-color: white; /* 기본적인 배경 디자인은 하얀색 */
+    background-color: var(--color-background-body);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
