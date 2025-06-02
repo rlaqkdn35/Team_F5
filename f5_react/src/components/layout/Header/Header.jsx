@@ -1,26 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaBars, FaSearch, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
+import axios from 'axios';
 import './Header.css';
 import AnimatedOverlay from '../../common/AnimatedOverlay/AnimatedOverlay';
 
 const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
-  const [currentOverlayTitle, setCurrentOverlayTitle] = useState(''); // Initialize as empty string
-  const [showOverlay, setShowOverlay] = useState(false); // New state for overlay visibility
+  const [currentOverlayTitle, setCurrentOverlayTitle] = useState('');
+  const [showOverlay, setShowOverlay] = useState(false);
   const location = useLocation();
   const [activeMenu, setActiveMenu] = useState(null);
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
+
+  const handleSearchChange = async (e) => {
+    const input = e.target.value;
+    setSearchTerm(input);
+
+    if (input.trim().length < 2) {
+      setSearchResults([]);
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `http://localhost:8084/F5/api/stocks/search?query=${encodeURIComponent(input.trim())}`
+      );
+      setSearchResults(response.data);
+    } catch (error) {
+      console.error('자동완성 검색 실패:', error);
+      setSearchResults([]);
+    }
   };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (searchTerm.trim()) {
-      navigate(`/search?query=${encodeURIComponent(searchTerm.trim())}`);
-      setSearchTerm('');
+    if (!searchTerm.trim()) return;
+
+    const match = searchTerm.match(/^(\d{4,6})/);
+    const stockCode = match ? match[1] : null;
+
+    if (stockCode) {
+      navigate(`/stock-detail/${stockCode}`);
+    } else {
+      alert('올바른 종목코드를 선택하세요!');
     }
+
+    setSearchTerm('');
   };
 
   const handleMenuItemClick = (path, name) => {
@@ -66,19 +93,15 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
   ];
 
   useEffect(() => {
-    let newTitle = ''; // Initialize to empty string
+    let newTitle = '';
     let matched = false;
 
     const findMatchingTitle = (items, currentPath) => {
       for (const item of items) {
-        if (item.path === currentPath) {
-          return item.name;
-        }
+        if (item.path === currentPath) return item.name;
         if (item.subItems) {
           const subItemTitle = findMatchingTitle(item.subItems, currentPath);
-          if (subItemTitle) {
-            return subItemTitle;
-          }
+          if (subItemTitle) return subItemTitle;
         }
       }
       return null;
@@ -93,64 +116,36 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
       newTitle = '홈';
       matched = true;
     } else if (location.pathname.startsWith('/search')) {
-      newTitle = '검색 결과'; // Example for search page
+      newTitle = '검색 결과';
       matched = true;
     }
-    // Add more specific path checks here if needed
-    // else if (location.pathname.startsWith('/stock-detail')) {
-    //   newTitle = '종목 상세';
-    //   matched = true;
-    // }
 
     setCurrentOverlayTitle(newTitle);
-    setShowOverlay(matched); // Set showOverlay based on whether a match was found
+    setShowOverlay(matched);
   }, [location.pathname]);
 
   return (
     <>
-      {/* <header className="app-header-top">
-        <div className="logo-area">
-          <Link to="/" className="logo-link">
-            <img src='Mainlogo.png' alt='주식AI로고'/>
-          </Link>
-        </div>
-        <div className='right-section'>
-          <div className="auth-area">
-            {isLoggedIn ? (
-              <button onClick={onLogout} className="auth-button">
-                로그아웃
-              </button>
-            ) : (
-              <>
-                <Link to="/login" className="auth-button">
-                  <FaSignInAlt /> 로그인
-                </Link>
-                <Link to="/signup" className="auth-button">
-                  <FaUserPlus /> 회원가입
-                </Link>
-              </>
-            )}
-          </div>
-          <img src='Mainlogo1.png' alt='주식AI로고'/>
-        </div>
-      </header> */}
-
       <nav className="app-main-menu-bar">
         <div>Astock</div>
         <ul className="main-nav-links">
           {mainMenuItems.map((item) => (
-            <li 
-              key={item.name} 
+            <li
+              key={item.name}
               className="main-nav-item"
-              onMouseEnter={() => setActiveMenu(item.name)} // 마우스 올리면 해당 메뉴 활성화
-              onMouseLeave={() => setActiveMenu(null)}     // 마우스 떼면 비활성화
+              onMouseEnter={() => setActiveMenu(item.name)}
+              onMouseLeave={() => setActiveMenu(null)}
             >
-              <Link to={item.path} onClick={() => handleMenuItemClick(item.path, item.name)}>{item.name}</Link>
+              <Link to={item.path} onClick={() => handleMenuItemClick(item.path, item.name)}>
+                {item.name}
+              </Link>
               {item.subItems && item.subItems.length > 0 && (
                 <ul className={`dropdown-submenu ${activeMenu === item.name ? 'active' : ''}`}>
                   {item.subItems.map((subItem) => (
                     <li key={subItem.name}>
-                      <Link to={subItem.path} onClick={() => handleMenuItemClick(subItem.path, subItem.name)}>{subItem.name}</Link>
+                      <Link to={subItem.path} onClick={() => handleMenuItemClick(subItem.path, subItem.name)}>
+                        {subItem.name}
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -159,41 +154,56 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
           ))}
         </ul>
 
+        {/* 🔍 자동완성 검색 입력 */}
         <form className="search-container" onSubmit={handleSearchSubmit}>
           <input
-            type="text"
-            placeholder="종목명/종목코드 입력"
+            list="stockOptions"
+            id="stockSearch"
+            name="stockSearch"
             value={searchTerm}
             onChange={handleSearchChange}
+            placeholder="종목명 또는 종목코드 입력"
             className="search-input"
           />
+          <datalist id="stockOptions">
+            {searchResults.map((stock) => (
+              <option key={stock.stock_code} value={`${stock.stock_code} (${stock.stock_name})`}>
+                {stock.stock_name} ({stock.stock_code})
+              </option>
+            ))}
+          </datalist>
           <button type="submit" className="search-button" aria-label="검색">
             <FaSearch />
           </button>
         </form>
+
+        {/* 로그인/회원가입 영역 */}
         <div className="auth-area">
-            {isLoggedIn ? (
-              <button onClick={onLogout} className="auth-button">
-                로그아웃
-              </button>
-            ) : (
-              <>
-                <Link to="/login" className="auth-button">
-                  <FaSignInAlt /> 로그인
-                </Link>
-                <Link to="/signup" className="auth-button">
-                  <FaUserPlus /> 회원가입
-                </Link>
-              </>
-            )}
-          </div>
+          {isLoggedIn ? (
+            <button onClick={onLogout} className="auth-button">
+              로그아웃
+            </button>
+          ) : (
+            <>
+              <Link to="/login" className="auth-button">
+                <FaSignInAlt /> 로그인
+              </Link>
+              <Link to="/signup" className="auth-button">
+                <FaUserPlus /> 회원가입
+              </Link>
+            </>
+          )}
+        </div>
       </nav>
 
-      {showOverlay && <AnimatedOverlay 
-      key={location.pathname} 
-      title={currentOverlayTitle} 
-      backgroundImageUrl={`${currentOverlayTitle}.png`}
-      />}
+      {/* 페이지 이동 시 애니메이션 오버레이 */}
+      {showOverlay && (
+        <AnimatedOverlay
+          key={location.pathname}
+          title={currentOverlayTitle}
+          backgroundImageUrl={`${currentOverlayTitle}.png`}
+        />
+      )}
     </>
   );
 };

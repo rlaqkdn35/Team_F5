@@ -129,6 +129,10 @@ const PostDetailPage = () => {
 
     const imageUrl = `http://localhost:8084/F5/api/forum/images/${post.forum_file}`;
 
+       const handleRecommendClick= async () =>{
+
+    };
+    
     return (
         <div>
             <div className="post-detail-container">
@@ -139,7 +143,9 @@ const PostDetailPage = () => {
                         <span>날짜: {post.date}</span>
                         <span>조회수: {post.views}</span>
                     </div>
+                    <button onClick={handleRecommendClick}>추천하기</button>
                 </div>
+
 
                 <div className="post-content">
                     <p >{post.content}</p>
