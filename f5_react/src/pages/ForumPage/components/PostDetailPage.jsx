@@ -14,43 +14,45 @@ const PostDetailPage = () => {
     const [newComment, setNewComment] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const [hasRecommended, setHasRecommended] = useState(false);
+
+    // 임시 현재 로그인한 유저 ID (실제 앱에선 로그인 정보로 대체)
     const currentUserId = "123";
 
-    // 게시글 및 댓글 불러오기
+    // 게시글 + 댓글 + 추천 여부 불러오기
     const fetchPost = () => {
         setLoading(true);
         setError(null);
 
-        axios.get(`http://localhost:8084/F5/api/forum/detail/${postId}`)
-            .then(response => {
-                const data = response.data;
+        axios.get(`http://localhost:8084/F5/api/forum/detail/${postId}`, {
+            params: {
+                userId: currentUserId  // 서버에서 추천 여부 판단용
+            }
+        })
+        .then(response => {
+            const data = response.data;
 
-                console.log('서버 응답 데이터:', data);
-                console.log("[fetchPost] 서버에서 받은 게시글 ID:", data.forum?.forum_idx);
-                console.log("[fetchPost] 서버에서 받은 작성자 닉네임:", data.nickname);  // 수정된 닉네임 출력
+            const postData = {
+                id: data.forum?.forum_idx,
+                title: data.forum?.forum_title,
+                author: data.forum?.user_id,
+                user_nickname: data.nickname,
+                date: data.forum?.createdAt ? new Date(data.forum.createdAt).toLocaleDateString('ko-KR') : '',
+                views: data.forum?.forum_views || 0,
+                content: data.forum?.forum_content,
+                forum_file: data.forum?.forum_file,
+                comments: data.comments || []
+            };
 
-                const postData = {
-                    id: data.forum?.forum_idx,
-                    title: data.forum?.forum_title,
-                    author: data.forum?.user_id,
-                    user_nickname: data.nickname,  // 여기를 data.nickname 으로 수정
-                    date: data.forum?.createdAt ? new Date(data.forum.createdAt).toLocaleDateString('ko-KR') : '',
-                    views: data.forum?.forum_views || 0,
-                    content: data.forum?.forum_content,
-                    forum_file: data.forum?.forum_file,
-                    comments: data.comments || []
-                };
-
-                console.log('[fetchPost] 가공된 게시글 데이터:', postData);
-
-                setPost(postData);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error('게시글 조회 중 오류 발생:', err);
-                setError('게시글을 불러오는 데 실패했습니다.');
-                setLoading(false);
-            });
+            setPost(postData);
+            setHasRecommended(data.userRecommended || false);  // 서버에서 받은 추천 여부 설정
+            setLoading(false);
+        })
+        .catch(err => {
+            console.error('게시글 조회 중 오류 발생:', err);
+            setError('게시글을 불러오는 데 실패했습니다.');
+            setLoading(false);
+        });
     };
 
     useEffect(() => {
@@ -61,7 +63,6 @@ const PostDetailPage = () => {
         if (!lastViewed || now - lastViewed > 300000) {
             axios.put(`http://localhost:8084/F5/api/forum/view/${postId}`)
                 .then(() => {
-                    console.log("조회수 증가 완료");
                     localStorage.setItem(key, now);
                     fetchPost();
                 })
@@ -70,18 +71,14 @@ const PostDetailPage = () => {
                     fetchPost();
                 });
         } else {
-            console.log("조회수 증가 제한 시간 내, API 호출 안 함");
             fetchPost();
         }
     }, [postId]);
 
     const handleDelete = () => {
         if (window.confirm('정말 삭제하시겠습니까?')) {
-            console.log("[handleDelete] 삭제 요청할 게시글 ID:", post.id);
-
             axios.delete(`http://localhost:8084/F5/api/forum/delete/${post.id}`)
                 .then(() => {
-                    console.log("[handleDelete] 삭제 성공, 서버 응답 받음");
                     alert('게시글이 삭제되었습니다.');
                     navigate('/forum');
                 })
@@ -89,13 +86,10 @@ const PostDetailPage = () => {
                     console.error('[handleDelete] 게시글 삭제 중 오류 발생:', err);
                     alert('삭제 실패');
                 });
-        } else {
-            console.log("[handleDelete] 삭제 취소됨");
         }
     };
 
     const handleEdit = () => {
-        console.log("[handleEdit] 수정 페이지 이동 요청, 게시글 ID:", post.id);
         navigate(`/forum/edit/${post.id}`);
     };
 
@@ -123,16 +117,35 @@ const PostDetailPage = () => {
         }
     };
 
+    // 추천 토글 함수 (POST 하나만 사용)
+    const handleRecommendToggle = async () => {
+        try {
+            const response = await axios.post(`http://localhost:8084/F5/api/forum-recos/toggle-recommend`, null, {
+                params: {
+                    userId: currentUserId,
+                    forumIdx: post.id
+                }
+            });
+
+            if (response.data === "추천 완료") {
+                setHasRecommended(true);
+                alert("추천이 완료되었습니다.");
+            } else {
+                setHasRecommended(false);
+                alert("추천이 취소되었습니다.");
+            }
+        } catch (error) {
+            console.error("추천 토글 실패:", error);
+            alert("추천 처리 중 오류가 발생했습니다.");
+        }
+    };
+
     if (loading) return <div className="post-detail-container">게시글을 불러오는 중입니다...</div>;
     if (error) return <div className="post-detail-container">{error}</div>;
     if (!post) return <div className="post-detail-container">게시글을 찾을 수 없습니다.</div>;
 
     const imageUrl = `http://localhost:8084/F5/api/forum/images/${post.forum_file}`;
 
-       const handleRecommendClick= async () =>{
-
-    };
-    
     return (
         <div>
             <div className="post-detail-container">
@@ -143,15 +156,16 @@ const PostDetailPage = () => {
                         <span>날짜: {post.date}</span>
                         <span>조회수: {post.views}</span>
                     </div>
-                    <button onClick={handleRecommendClick}>추천하기</button>
+                    <button onClick={handleRecommendToggle}>
+                        {hasRecommended ? "추천 취소" : "추천하기"}
+                    </button>
                 </div>
 
-
                 <div className="post-content">
-                    <p >{post.content}</p>
+                    <p>{post.content}</p>
 
                     {post.forum_file && (
-                        <div className="post-image" >
+                        <div className="post-image">
                             <img
                                 src={imageUrl}
                                 alt="첨부 이미지"
@@ -163,8 +177,6 @@ const PostDetailPage = () => {
                         </div>
                     )}
                 </div>
-
-                                                                                           
 
                 <div className="post-actions">
                     <button onClick={() => navigate('/forum')} className="back-button">
@@ -183,6 +195,7 @@ const PostDetailPage = () => {
                     )}
                 </div>
             </div>
+
             <div className="comment s-section">
                 <h3>댓글 ({post.comments.length})</h3>
                 {post.comments.length > 0 ? (
@@ -201,7 +214,7 @@ const PostDetailPage = () => {
                     <p className="no-comments">아직 댓글이 없습니다.</p>
                 )}
 
-                <div className="comment-form" >
+                <div className="comment-form">
                     <textarea
                         placeholder="댓글을 입력하세요"
                         value={newComment}
@@ -215,7 +228,7 @@ const PostDetailPage = () => {
                         {isSubmitting ? '등록 중...' : '댓글 등록'}
                     </button>
                 </div>
-            </div>   
+            </div>
         </div>
     );
 };
