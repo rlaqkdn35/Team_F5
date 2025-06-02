@@ -17,8 +17,7 @@
   font-size: 1.5em;
   font-weight: 600;
   color: var(--color-text-dark);
-  margin-top: 30px; /* 위 차트 섹션과의 간격 */
-  margin-bottom: 20px;
+  margin: 10px;
 }
 
 /* 상단 차트 섹션 (2단 레이아웃) */
@@ -30,11 +29,11 @@
 }
 
 .sector-chart-card {
-  background-color: var(--color-background-body);
+  background-color: var(--color-white-hover); /* 아주 연한 회색 배경 */
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
   padding: 20px;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: 15px;
+
 }
 .sector-chart-card h4 { /* 각 차트 카드 제목 */
   margin-top: 0;
@@ -44,7 +43,12 @@
   color: var(--color-text-dark);
   text-align: center;
 }
-
+.sector-trends-table-section{
+  border-radius: 15px;
+  padding: 10px;
+  background-color: var(--color-white-hover); /* 아주 연한 회색 배경 */
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
 /* 업종 동향 테이블 스타일 (접미사 -tsc 사용) */
 .sector-trends-table { 
   width: 100%;
@@ -114,11 +118,10 @@
 /* --- 새로 추가된 상위/하위 5개 업종 리스트 섹션 스타일 --- */
 .top-bottom-sectors-list-section {
     margin-top: 40px; /* 위 섹션과의 간격 */
-    background-color: #fff;
     padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-radius: 15px;
+    background-color: var(--color-white-hover); /* 아주 연한 회색 배경 */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
 }
 
 .summary-lists-container {

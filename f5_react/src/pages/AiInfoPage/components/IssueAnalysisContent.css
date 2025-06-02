@@ -10,6 +10,7 @@
 }
 
 .issue-tab-button {
+    color: var(--color-text-hover);
     padding: 10px 18px;
     font-size: 1em;
     font-weight: 500;
@@ -22,19 +23,22 @@
 }
 
 .issue-tab-button.active {
-    color: var(--color-text-hover);
+    color: var(--color-text-dark);
     font-weight: bold;
     /* Optionally, you could change border color for active tab */
     /* border-bottom-color: var(--color-text-hover); */
 }
 
 .issue-tab-button:hover {
-    color: var(--color-text-hover);
+    color: var(--color-text-dark);
     font-weight: bold;
 }
 
 .issue-tab-content {
-    padding-top: 20px;
+    border-radius: 15px;
+    background-color: var(--color-white-hover); /* 아주 연한 회색 배경 */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+    padding: 20px;
 }
 
 .loading-message-iac,
@@ -50,6 +54,7 @@
     width: 100%;
     overflow: hidden;
     min-height: 400px;
+    text-align: center;
 }
 .slider-content-wrapper{
     width:85%;
@@ -66,9 +71,10 @@
 .ai-picked-issue-card {
     width: 100%;
     /* Added some basic styling based on original snippet */
-    background-color: var(--color-background-body);
+    background-color: var(--color-white-hover);
     border-radius: 8px;
-    padding: 20px; /* Added padding for content inside the card */
+    padding: 8px;
+    margin: 20px; /* Added padding for content inside the card */
 }
 
 .ai-picked-issue-card .main-issue-article {
@@ -99,6 +105,7 @@
 }
 
 .ai-picked-issue-card .issue-summary-main {
+    width: 95%;
     font-size: 1em;
     line-height: 1.7;
     color: var(--color-text-dark);
@@ -114,6 +121,7 @@
 }
 
 .ai-picked-issue-card h4:first-of-type {
+    text-align: center;
     margin-top: 0;
 }
 
@@ -145,10 +153,9 @@
 
 /* AI Picked Issue - Related Stocks Table (related-stocks-table) Styles */
 .related-stocks-table {
-    width: 100%;
+    width: 95%;
     margin: 20px auto;
     border-collapse: collapse;
-    font-family: 'Segoe UI', sans-serif; /* Original font */
     font-size: 0.95em; /* Original font size */
     border: 1px solid var(--color-light-gray); /* Table border */
     background-color: var(--color-background-body); /* White background */
