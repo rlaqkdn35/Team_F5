@@ -9,8 +9,6 @@ import Slider from '../../../components/common/Slider/Slider.jsx';
 import RecommendedStockCard from '../../../components/common/RecommendedStockCard/RecommendedStockCard.jsx';
 import BubbleChart from '../../../components/charts/BubbleChart/BubbleChart.jsx';
 
-// --- 임시 데이터 및 내부 컴포넌트 정의 (이전 답변 내용 활용 및 일부 수정) ---
-
 // 코스피/코스닥 데이터 (예시)
 const kospiData = { name: '코스피', value: '2,750.50', change: '+15.20 (+0.55%)', changeType: 'positive', chartData: [{ time: '2024-05-11', value: 2750.50 }] };
 const kosdaqData = { name: '코스닥', value: '870.10', change: '-2.80 (-0.32%)', changeType: 'negative', chartData: [{ time: '2024-05-11', value: 870.10 }] };
@@ -33,8 +31,9 @@ const getDetailDataForKeyword = (keyword) => {
     clickFrequency: Math.floor(Math.random() * 1000),
     chartData: [ { time: '2024-05-10', value: Math.random() * 100 + 50 } ],
     relatedItems: [`${keyword.text} 관련주 A`, `${keyword.text} 관련 ETF B`],
-    news: [ { id: 1, title: `${keyword.text}, 시장 관심`, url: '#' } ],
+    news: [ { id: 1, title: `${keyword.text}, 시장 관심`, url: '/news/news1' } ], //url부분에 new의 링크적기
   };
+  
 };
 const SimpleBubbleChartPlaceholder = ({ data, onBubbleClick }) => (
   <div className="bubble-chart-placeholder-container">
@@ -251,7 +250,7 @@ return (
               </div>
               <div className="detail-item">
                 <strong>최신 뉴스:</strong>
-                <ul>{detailData.news.map(newsItem => (<li key={newsItem.id}><a href={newsItem.url} target="_blank" rel="noopener noreferrer">{newsItem.title}</a></li>))}</ul>
+                <ul>{detailData.news.map(newsItem => (<li key={newsItem.id}><a href={newsItem.url}  target="_blank" rel="noopener noreferrer">{newsItem.title}</a></li>))}</ul>
               </div>
             </aside>
           ) : (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaBars, FaSearch, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
 import axios from 'axios';
@@ -7,31 +7,66 @@ import AnimatedOverlay from '../../common/AnimatedOverlay/AnimatedOverlay';
 
 const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [allStocks, setAllStocks] = useState([]); // 전체 150개 데이터
+  const [filteredStocks, setFilteredStocks] = useState([]);
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const [currentOverlayTitle, setCurrentOverlayTitle] = useState('');
   const [showOverlay, setShowOverlay] = useState(false);
   const location = useLocation();
   const [activeMenu, setActiveMenu] = useState(null);
+  const wrapperRef = useRef(null);
 
-  const handleSearchChange = async (e) => {
-    const input = e.target.value;
-    setSearchTerm(input);
+  // 전체 종목 데이터 최초 1회만 받아오기
+  useEffect(() => {
+    const fetchAllStocks = async () => {
+      try {
+        const response = await axios.get('http://localhost:8084/F5/api/stocks');
+        setAllStocks(response.data.slice(0, 150)); // 최대 150개 제한
+      } catch (error) {
+        console.error('전체 종목 불러오기 실패:', error);
+      }
+    };
+    fetchAllStocks();
+  }, []);
 
-    if (input.trim().length < 2) {
-      setSearchResults([]);
+  // 외부 클릭 시 드롭다운 닫기 처리
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // 검색어 변경 시 필터링
+  useEffect(() => {
+    if (searchTerm.trim().length < 2) {
+      setFilteredStocks([]);
+      setDropdownOpen(false);
       return;
     }
 
-    try {
-      const response = await axios.get(
-        `http://localhost:8084/F5/api/stocks/search?query=${encodeURIComponent(input.trim())}`
-      );
-      setSearchResults(response.data);
-    } catch (error) {
-      console.error('자동완성 검색 실패:', error);
-      setSearchResults([]);
-    }
+    // 소문자 변환 후 종목코드 또는 종목명에 포함 여부 검사
+    const term = searchTerm.toLowerCase();
+    const filtered = allStocks.filter(
+      (stock) =>
+        stock.stock_code.toLowerCase().includes(term) ||
+        stock.stock_name.toLowerCase().includes(term)
+    );
+    setFilteredStocks(filtered);
+    setDropdownOpen(filtered.length > 0);
+  }, [searchTerm, allStocks]);
+
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSelect = (stock) => {
+    setSearchTerm(`${stock.stock_code} (${stock.stock_name})`);
+    setDropdownOpen(false);
   };
 
   const handleSearchSubmit = (e) => {
@@ -48,6 +83,8 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
     }
 
     setSearchTerm('');
+    setFilteredStocks([]);
+    setDropdownOpen(false);
   };
 
   const handleMenuItemClick = (path, name) => {
@@ -154,28 +191,61 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
           ))}
         </ul>
 
-        {/* 🔍 자동완성 검색 입력 */}
-        <form className="search-container" onSubmit={handleSearchSubmit}>
-          <input
-            list="stockOptions"
-            id="stockSearch"
-            name="stockSearch"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            placeholder="종목명 또는 종목코드 입력"
-            className="search-input"
-          />
-          <datalist id="stockOptions">
-            {searchResults.map((stock) => (
-              <option key={stock.stock_code} value={`${stock.stock_code} (${stock.stock_name})`}>
-                {stock.stock_name} ({stock.stock_code})
-              </option>
-            ))}
-          </datalist>
-          <button type="submit" className="search-button" aria-label="검색">
-            <FaSearch />
-          </button>
-        </form>
+        {/* 검색 부분 - input + ul 직접 구현 */}
+        <div ref={wrapperRef} style={{ position: 'relative', width: '250px' }}>
+          <form onSubmit={handleSearchSubmit} style={{ display: 'flex' }}>
+            <input
+              type="text"
+              placeholder="종목명 또는 종목코드 입력"
+              value={searchTerm}
+              onChange={handleInputChange}
+              style={{ flex: 1, padding: '6px 10px' }}
+              aria-autocomplete="list"
+              aria-expanded={isDropdownOpen}
+              aria-controls="autocomplete-list"
+              aria-haspopup="listbox"
+              autoComplete="off"
+            />
+            <button type="submit" aria-label="검색" style={{ padding: '6px 10px' }}>
+              <FaSearch />
+            </button>
+          </form>
+
+          {isDropdownOpen && filteredStocks.length > 0 && (
+            <ul
+              id="autocomplete-list"
+              role="listbox"
+              style={{
+                position: 'absolute',
+                top: '100%',
+                left: 0,
+                right: 0,
+                maxHeight: '200px',
+                overflowY: 'auto',
+                backgroundColor: 'white',
+                border: '1px solid #ccc',
+                borderTop: 'none',
+                zIndex: 9999,
+                margin: 0,
+                padding: 0,
+                listStyle: 'none',
+              }}
+            >
+              {filteredStocks.map((stock) => (
+                <li
+                  key={stock.stock_code}
+                  role="option"
+                  onClick={() => handleSelect(stock)}
+                  style={{ padding: '8px 10px', cursor: 'pointer' }}
+                  onMouseDown={(e) => e.preventDefault()}
+                  tabIndex={-1}
+                >
+                  {stock.stock_code} ({stock.stock_name})
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
         {/* 로그인/회원가입 영역 */}
         <div className="auth-area">
