@@ -15,27 +15,30 @@ import lombok.Data;
 public class StockPrice {
 
     @Id
-    private Long price_id;
+    @Column(name = "price_id")
+    private Long priceId;
 
-    private String stock_code;
+    @Column(name = "stock_code")
+    private String stockCode;
 
-    private Timestamp price_date;
+    @Column(name = "price_date")
+    private Timestamp priceDate;
 
-    @Column(precision = 12, scale = 1)
-    private BigDecimal open_price;
+    @Column(name = "open_price", precision = 12, scale = 1)
+    private BigDecimal openPrice;
 
-    @Column(precision = 12, scale = 1)
-    private BigDecimal hight_price;
+    @Column(name = "high_price", precision = 12, scale = 1)
+    private BigDecimal highPrice;
 
-    @Column(precision = 12, scale = 1)
-    private BigDecimal low_price;
+    @Column(name = "low_price", precision = 12, scale = 1)
+    private BigDecimal lowPrice;
 
-    @Column(precision = 12, scale = 1)
-    private BigDecimal close_price;
+    @Column(name = "close_price", precision = 12, scale = 1)
+    private BigDecimal closePrice;
 
-    @Column(precision = 12, scale = 1)
-    private BigDecimal stock_volume;
+    @Column(name = "stock_volume", precision = 12, scale = 1)
+    private BigDecimal stockVolume;
 
-
-
+    @Column(name = "stock_fluctuation", precision = 12, scale = 1)
+    private BigDecimal stockFluctuation;
 }

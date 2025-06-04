@@ -2,6 +2,7 @@ package com.smhrd.stock.entity;
 
 import java.sql.Timestamp;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
@@ -10,14 +11,23 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="t_stock")
+@Table(name = "t_stock")
 public class Stock {
 
-	@Id
-	private String stock_code;
-	private String stock_name;
-	private String market_type;
-	@Lob
-	private String company_info;
-	private Timestamp listing_date;
+    @Id
+    @Column(name = "stock_code")
+    private String stockCode;
+
+    @Column(name = "stock_name")
+    private String stockName;
+
+    @Column(name = "market_type")
+    private String marketType;
+
+    @Lob
+    @Column(name = "company_info")
+    private String companyInfo;
+
+    @Column(name = "listing_date")
+    private Timestamp listingDate;
 }
