@@ -6,7 +6,7 @@ import './AiPicksPageLayout.css';
 
 const aiPicksSubNavLinks = [
   { name: 'AI종목추천홈', path: '/ai-picks' },
-  { name: '오늘의 종목', path: '/ai-picks/today' },
+  { name: '코스닥150', path: '/ai-picks/today' },
   { name: 'AI 추천', path: '/ai-picks/recommendations' },
   { name: '매매신호', path: '/ai-picks/signal' }, 
 ];

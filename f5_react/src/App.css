@@ -19,9 +19,10 @@
 }
 
 .app-main-content-centered {
-  padding: 20px;
   flex-grow: 1;
 }
+
+
 
 @media (max-width: 1200px) {
   .App {
