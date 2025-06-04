@@ -29,17 +29,14 @@
 }
 
 .sub-nav-link:hover {
-  color: var(--color-button); /* Red text on hover */
-  background-color: var(--color-background-body); /* Very light red/pink background on hover */
+  color: var(--color-button); 
+  background-color: var(--color-background-body); 
 }
 
 .sub-nav-link.active {
   font-weight: bold;
-  color: var(--color-text-white);
-  font-size: 1.1em;
+  color: var(--color-button); 
+  background-color: var(--color-background-body); 
   cursor: default;
 }
 
-.sub-nav-link.active:hover {
-  background-color: transparent; /* 마우스 올려도 배경색은 투명으로 고정 */
-}

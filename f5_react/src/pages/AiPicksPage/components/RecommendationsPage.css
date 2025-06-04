@@ -39,14 +39,19 @@
     padding: 10px 15px;
     border-radius: 6px;
     transition: all 0.3s ease;
-    background-color: #ffffff;
+    background-color: var(--color-background-body);
     border: 1px solid #ddd;
     flex: 1;
     margin: 0 5px;
 }
 
 .model-score-item:hover {
-    transform: translateY(-3px);
+    background-color: var(--color-background-body);
+}
+
+.model-score-item:active {
+    border: 5px solid var(--color-button-yellow);
+    background-color: var(--color-background-body);
 }
 
 .model-name {

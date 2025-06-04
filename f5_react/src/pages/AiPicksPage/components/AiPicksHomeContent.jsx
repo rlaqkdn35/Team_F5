@@ -134,13 +134,15 @@ const AiPicksHomeContent = () => {
                     <h3 className="sub-section-title-aphc">오늘의 탑 종목 (TOP 5)</h3>
                     <div className="top-stocks-list-aphc">
                         {topStocks.map((stock, index) => (
-                            <div key={stock.code} className="top-stock-item-aphc">
-                                <span className="stock-rank-aphc">{index + 1}.</span>
-                                <span className="stock-name-aphc">{stock.name} ({stock.code})</span>
-                                <span className={`stock-change-rate-aphc ${stock.changeRate > 0 ? 'positive' : stock.changeRate < 0 ? 'negative' : ''}`}>
-                                    {stock.changeRate > 0 ? '+' : ''}{stock.changeRate.toFixed(2)}%
-                                </span>
-                            </div>
+                            <Link to={`/stock-detail/${stock.code}`} className='stock-link'>
+                                <div key={stock.code} className="top-stock-item-aphc">
+                                    <span className="stock-rank-aphc">{index + 1}.</span>
+                                    <span className="stock-name-aphc">{stock.name} ({stock.code})</span>
+                                    <span className={`stock-change-rate-aphc ${stock.changeRate > 0 ? 'positive' : stock.changeRate < 0 ? 'negative' : ''}`}>
+                                        {stock.changeRate > 0 ? '+' : ''}{stock.changeRate.toFixed(2)}%
+                                    </span>
+                                </div>
+                            </Link>
                         ))}
                     </div>
                 </section>
@@ -161,6 +163,7 @@ const AiPicksHomeContent = () => {
                         ))}
                     </div>
                     {selectedAiModel && (
+                        <Link to={`/stock-detail/${selectedAiModel.recommendedStock.code}`} className='stock-link'>
                         <div className="selected-ai-recommendation-box-aphc">
                             <h3><span className="top-ai-indicator-aphc">🌟</span> {selectedAiModel.name} 추천 종목</h3>
                             <p className="recommended-stock-name-aphc">
@@ -169,6 +172,7 @@ const AiPicksHomeContent = () => {
                             <p className="recommendation-reason-aphc">{selectedAiModel.recommendedStock.reason}</p>
                             <p className="ai-comment-aphc">AI 요약: {selectedAiModel.summary}</p>
                         </div>
+                        </Link>
                     )}
                 </section>
             </div> {/* top-sections-container 닫기 */}
@@ -188,6 +192,7 @@ const AiPicksHomeContent = () => {
                 <div className="signal-list-aphc">
                     {displaySignals.slice(0, 3).map(signal => ( // 최신 3개만 표시
                         <div key={signal.id} className={`signal-card-aphc ${signal.type.toLowerCase()}`}>
+                            <Link to={`/stock-detail/${signal.code}`} className='stock-link'>
                             <div className="signal-header-aphc">
                                 <span className={`signal-type-aphc ${signal.type.toLowerCase()}-text`}>
                                     {signal.type === 'BUY' && '매수'}
@@ -207,6 +212,7 @@ const AiPicksHomeContent = () => {
                                     {signal.change}
                                 </span>
                             </div>
+                            </Link>
                             {!isLoggedIn && signal.premium && (
                                 <div className="premium-overlay-aphc">
                                     <p>로그인 후 상세 정보 확인</p>
