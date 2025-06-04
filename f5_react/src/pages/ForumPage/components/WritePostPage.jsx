@@ -127,7 +127,7 @@ const WritePostPage = () => {
                         id="stockSearch"
                         value={selectedStockCode}
                         onChange={handleStockCodeChange}
-                        placeholder="종목 코드 또는 이름 입력 (예: 005930 또는 삼성전자)"
+                        placeholder="종목 코드 또는 이름 입력"
                         autoComplete="off"
                         onFocus={() => {
                             if (filteredStocks.length > 0) setShowDropdown(true);

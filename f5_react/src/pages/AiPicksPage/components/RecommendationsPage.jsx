@@ -197,7 +197,6 @@ const RecommendationsPage = () => {
         <div className="recommendations-page">
             {/* --- 섹션 1: AI 모델 요약 및 추천 --- */}
             <div className="ai-summary-section">
-                <h2>오늘의 AI 추천</h2>
                 {/* AI 모델 점수 요약 바 */}
                 <div className="today-recommendations-grid">
                     {combinedRecommendation && (
@@ -213,12 +212,13 @@ const RecommendationsPage = () => {
                     
                 </div>
                 <div className="ai-score-summary-bar">
+                    <h3>모델별 AI 추천 종목</h3>
                 {aiModels.map(model => (
                     <div
-                                key={model.id}
-                                className={`model-score-item ${selectedModelId === model.id ? 'selected-model' : ''}`} // className 변경
-                                onClick={() => setSelectedModelId(model.id)} // onClick 이벤트 핸들러 추가
-                            >
+                        key={model.id}
+                        className={`model-score-item ${selectedModelId === model.id ? 'selected-model' : ''}`} // className 변경
+                        onClick={() => setSelectedModelId(model.id)} // onClick 이벤트 핸들러 추가
+                    >
                     <p>이미지 공간</p>
                     <span className="model-name">{model.name}</span>
                     <span className="model-score">{model.score}점</span>
