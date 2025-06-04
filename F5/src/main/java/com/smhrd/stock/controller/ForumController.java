@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.smhrd.stock.dto.ForumDTO;
 import com.smhrd.stock.dto.ForumListResponse;
 import com.smhrd.stock.entity.StockForum;
+import com.smhrd.stock.service.ForumRecosService;
 import com.smhrd.stock.service.ForumService;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -35,10 +36,12 @@ import com.smhrd.stock.service.ForumService;
 public class ForumController {
 
     private final ForumService service;
+    private final ForumRecosService recoService;
 
     @Autowired
-    public ForumController(ForumService service) {
+    public ForumController(ForumService service, ForumRecosService recoService) {
         this.service = service;
+        this.recoService = recoService;
     }
 
     // 업로드 및 서빙 경로 통일: OS별 구분자 자동 적용
@@ -167,9 +170,7 @@ public class ForumController {
         return ResponseEntity.ok("Update success");
     }
 
-
-
- // 4. 글 삭제
+    // 4. 글 삭제
     @DeleteMapping("/delete/{forumIdx}")
     public ResponseEntity<String> deleteForum(@PathVariable("forumIdx") Integer forumIdx) {
         System.out.println("[deleteForum] 삭제 요청 받은 게시글 ID: " + forumIdx);
@@ -185,14 +186,21 @@ public class ForumController {
         }
     }
 
-
     // 5. 글 상세 조회
     @GetMapping("/detail/{forumId}")
-    public ResponseEntity<?> getForumDetail(@PathVariable Integer forumId) {
+    public ResponseEntity<?> getForumDetail(
+            @PathVariable Integer forumId,
+            @RequestParam String userId  // userId를 받아야 추천 여부 체크 가능
+    ) {
         ForumDTO dto = service.getForumDetailWithComments(forumId);
         if (dto == null) {
             return ResponseEntity.status(404).body("게시글을 찾을 수 없습니다.");
         }
+        
+        // 추천 여부 조회
+        boolean hasRecommended = recoService.hasUserRecommended(userId, forumId);
+        dto.setUserRecommended(hasRecommended);
+        
         return ResponseEntity.ok(dto);
     }
 
@@ -236,7 +244,7 @@ public class ForumController {
             return ResponseEntity.badRequest().build();
         }
     }
-    
+
     @PutMapping("/view/{forumIdx}")
     public ResponseEntity<String> increaseViewCount(@PathVariable("forumIdx") Integer forumIdx) {
         service.incrementViewCount(forumIdx);
@@ -245,5 +253,4 @@ public class ForumController {
 
 
 
-    
 }
