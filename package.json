@@ -1,0 +1,19 @@
+{
+  "name": "team_f5",
+  "version": "1.0.0",
+  "description": "ㅎㅇㅎㅇ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rlaqkdn35/Team_F5.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rlaqkdn35/Team_F5/issues"
+  },
+  "homepage": "https://github.com/rlaqkdn35/Team_F5#readme"
+}
