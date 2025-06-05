@@ -9,22 +9,20 @@ const WritePostPage = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [attachedFile, setAttachedFile] = useState(null);
-    const [selectedStockCode, setSelectedStockCode] = useState(''); // 선택된 종목 코드 상태
-    const [userId, setUserId] = useState('123'); // 예시, 실제 로그인된 유저 아이디 넣기
-    const [stockOptions, setStockOptions] = useState([]); // 서버에서 받아올 종목 리스트
+    const [selectedStockCode, setSelectedStockCode] = useState('');
+    const [userId, setUserId] = useState('123');
+    const [stockOptions, setStockOptions] = useState([]);
+    const [filteredStocks, setFilteredStocks] = useState([]);
+    const [showDropdown, setShowDropdown] = useState(false);
 
-    const pageTitle = "새 글 작성";
-
-    // 서버에서 종목 리스트를 가져오는 useEffect
     useEffect(() => {
         const fetchStocks = async () => {
             try {
                 const response = await axios.get('http://localhost:8084/F5/api/stocks');
-                // response.data가 [{stock_code, stock_name, ...}, ...] 형태라고 가정
                 setStockOptions(response.data);
             } catch (error) {
                 console.error('종목 정보를 가져오는 중 오류 발생:', error);
-                setStockOptions([]); // 에러시 빈 배열
+                setStockOptions([]);
             }
         };
         fetchStocks();
@@ -33,13 +31,31 @@ const WritePostPage = () => {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         setAttachedFile(file);
-        if (file) {
-            console.log("선택된 파일:", file.name, file.size, file.type);
-        }
     };
 
     const handleStockCodeChange = (e) => {
-        setSelectedStockCode(e.target.value);
+        const inputValue = e.target.value;
+        setSelectedStockCode(inputValue);
+
+        if (inputValue.trim() === '') {
+            setFilteredStocks([]);
+            setShowDropdown(false);
+            return;
+        }
+
+        const filtered = stockOptions.filter(stock =>
+            `${stock.stock_code} ${stock.stock_name}`.toLowerCase().includes(inputValue.toLowerCase())
+        );
+
+        setFilteredStocks(filtered.slice(0, 10)); // 최대 10개만 표시
+        setShowDropdown(true);
+    };
+
+    const handleSelectStock = (stock) => {
+        const value = `${stock.stock_code} (${stock.stock_name})`;
+        setSelectedStockCode(value);
+        setFilteredStocks([]);
+        setShowDropdown(false);
     };
 
     const handleSubmit = async (e) => {
@@ -50,20 +66,19 @@ const WritePostPage = () => {
             return;
         }
 
-        // 선택된 종목 코드가 유효한지 확인
-        const isValidStockCode = stockOptions.some(stock =>
-            `${stock.stock_code} (${stock.stock_name})` === selectedStockCode || stock.stock_code === selectedStockCode
-        );
+        const stockCode = selectedStockCode.split(' ')[0];
+
+        const isValidStockCode = stockOptions.some(stock => stock.stock_code === stockCode);
 
         if (selectedStockCode.trim() && !isValidStockCode) {
-            alert("유효한 종목 코드를 선택하거나 정확하게 입력해주세요.");
+            alert("유효한 종목을 선택해주세요.");
             return;
         }
 
         const formData = new FormData();
         formData.append('forum_title', title);
         formData.append('forum_content', content);
-        formData.append('stock_code', selectedStockCode.split(' ')[0]); // '005930 (삼성전자)' -> '005930'
+        formData.append('stock_code', stockCode);
         formData.append('user_id', userId);
         if (attachedFile) {
             formData.append('forum_file', attachedFile);
@@ -91,7 +106,7 @@ const WritePostPage = () => {
 
     return (
         <div className="write-post-container">
-            <h2>{pageTitle}</h2>
+            <h2>새 글 작성</h2>
             <form onSubmit={handleSubmit} className="write-post-form">
                 <div className="form-group">
                     <label htmlFor="title">제목:</label>
@@ -104,24 +119,35 @@ const WritePostPage = () => {
                         required
                     />
                 </div>
+
                 <div className="form-group">
                     <label htmlFor="stockSearch">관련 종목:</label>
                     <input
-                        list="stockOptions"
+                        type="text"
                         id="stockSearch"
-                        name="stockSearch"
                         value={selectedStockCode}
                         onChange={handleStockCodeChange}
-                        placeholder="종목명 또는 종목코드 입력"
+                        placeholder="종목 코드 또는 이름 입력"
+                        autoComplete="off"
+                        onFocus={() => {
+                            if (filteredStocks.length > 0) setShowDropdown(true);
+                        }}
+                        onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
                     />
-                    <datalist id="stockOptions">
-                        {stockOptions.map((stock) => (
-                            <option key={stock.stock_code} value={`${stock.stock_code} (${stock.stock_name})`}>
-                                {stock.stock_name} ({stock.stock_code})
-                            </option>
-                        ))}
-                    </datalist>
+                    {showDropdown && (
+                        <ul className="dropdown">
+                            {filteredStocks.map(stock => (
+                                <li
+                                    key={stock.stock_code}
+                                    onClick={() => handleSelectStock(stock)}
+                                >
+                                    {stock.stock_code} ({stock.stock_name})
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
+
                 <div className="form-group">
                     <label htmlFor="content">내용:</label>
                     <textarea
@@ -133,6 +159,7 @@ const WritePostPage = () => {
                         required
                     ></textarea>
                 </div>
+
                 <div className="form-group file-upload-group">
                     <label htmlFor="file">첨부 파일:</label>
                     <input
@@ -146,6 +173,7 @@ const WritePostPage = () => {
                         </p>
                     )}
                 </div>
+
                 <div className="form-actions">
                     <button type="submit" className="submit-button">작성 완료</button>
                     <button type="button" onClick={handleCancel} className="cancel-button">취소</button>

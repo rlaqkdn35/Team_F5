@@ -1,7 +1,7 @@
 .recommendations-page {
-    padding: 20px;
+    padding: 20px 10px;
     max-width: 1200px;
-    margin: 20px auto;
+    margin: 20px;
     border-radius: 10px;
 }
 
@@ -18,57 +18,13 @@
 
 /* --- 섹션 1: AI 모델 요약 및 추천 --- */
 .ai-summary-section {
-    background-color: #ffffff;
+    border-radius: 15px;
+    background-color: var(--color-white-hover); /* 아주 연한 회색 배경 */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
     padding: 25px;
     margin-bottom: 40px;
 }
 
-.ai-score-summary-bar {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    padding: 15px 0;
-    border-radius: 15px;
-    background-color: var(--color-white-hover); /* 아주 연한 회색 배경 */
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
-}
-
-.model-score-item {
-    text-align: center;
-    padding: 10px 15px;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    flex: 1;
-    margin: 0 5px;
-}
-
-.model-score-item:hover {
-    transform: translateY(-3px);
-}
-
-.model-name {
-    display: block;
-    font-size: 1.1em;
-    margin-bottom: 5px;
-}
-
-.model-score {
-    font-size: 1.4em;
-    font-weight: bold;
-    color: var(--color-text-medium);
-}
-
-
-.recommendation-box {
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 10px;
-    border-left: 5px solid #3498db;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
 
 .combined-recommendation {
     border-color: #27ae60;
@@ -79,7 +35,7 @@
 }
 
 .recommendation-box h3 {
-    color: #2c3e50;
+    color: var(--color-text-dark);
     margin-top: 0;
     margin-bottom: 15px;
     font-size: 1.5em;
@@ -94,37 +50,6 @@
     margin-bottom: 15px;
 }
 
-.top-ai-indicator {
-    font-size: 1.2em;
-    margin-right: 8px;
-    color: #f1c40f; /* Star color */
-}
-
-.recommended-stock-name {
-    font-size: 1.3em;
-    font-weight: bold;
-    color: var(--text-dark);
-    margin-bottom: 10px;
-}
-
-.stock-code-tag {
-    background-color: var(--backgroundcolor-menubar);
-    color: white;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 0.8em;
-    margin-right: 8px;
-    vertical-align: middle;
-}
-
-.ai-comment {
-    font-size: 0.85em;
-    color: #7f8c8d;
-    font-style: italic;
-    border-top: 1px dashed #bdc3c7;
-    padding-top: 10px;
-    margin-top: 15px;
-}
 /* --- 섹션 2: AI별 종목 예측 및 수익률 (표 형식) --- */
 
 
@@ -166,7 +91,140 @@
 }
 
 .today-recommendations-grid{
+    padding: 30px;
+    margin-bottom: 50px;
     border-radius: 15px;
     background-color: var(--color-white-hover); /* 아주 연한 회색 배경 */
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
 }
+
+.selected-model{
+    border: 5px solid var(--color-button-yellow);
+}
+
+/* 기본 컨테이너 스타일 */
+.ai-score-summary-bar {
+    color: var(--color-text-dark); /* 기본 글씨색: 검은색 계열 (예: Bootstrap의 text-dark와 유사) */
+    padding: 15px;
+    border-radius: 15px;
+    background-color: var(--color-white-hover); /* 아주 연한 회색 배경 */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* AI 모델 점수 아이템 공통 스타일 */
+.model-score-item {
+    border-radius: 15px;
+    background-color: var(--color-white-hover); /* 아주 연한 회색 배경 */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.model-score-item:hover {
+}
+
+/* 선택된 AI 모델 아이템 스타일 */
+.model-score-item.selected-model {
+  background-color: var(--color-button-yellow); /* 선택 시 파란색 배경 (예시) */
+}
+
+.model-score-item.selected-model .model-name,
+.model-score-item.selected-model .model-score {
+  color: #ffffff; /* 선택된 아이템 내부 텍스트도 흰색으로 */
+}
+
+
+/* "이미지 공간" 단락 스타일 */
+.model-score-item p {
+  margin: 0 0 5px 0; /* 이미지 공간 텍스트 하단 마진 */
+  font-style: italic;
+  color: #6c757d; /* 약간 연한 검은색 (회색) */
+}
+
+.model-score-item.selected-model p {
+ color: var(--color-text-white); /* 선택되었을때 이미지 공간 텍스트 색*/
+}
+
+/* 모델 이름 및 점수 스타일 */
+.model-name {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #343a40; /* 모델 이름 글씨색 */
+}
+
+.model-score {
+  font-size: 0.9em;
+  color: #495057; /* 모델 점수 글씨색 */
+}
+
+/* 추천 박스 스타일 */
+
+.top-ai-recommendation h3 {
+  font-size: 1.2em;
+  color: #007bff; /* 제목 색상 (예시: 파란색) */
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.top-ai-indicator {
+  margin-right: 5px;
+}
+
+.recommended-stock-name {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #343a40; /* 추천 종목명 글씨색 */
+}
+
+.stock-code-tag {
+  background-color: #e9ecef; /* 종목 코드 태그 배경 */
+  color: #495057; /* 종목 코드 태그 글씨색 */
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  margin-right: 8px;
+}
+
+.recommendation-reason,
+.ai-comment {
+  font-size: 0.95em;
+  line-height: 1.6;
+  margin-bottom: 8px;
+  color: #495057; /* 추천 이유 및 AI 요약 글씨색 */
+}
+
+.ai-comment {
+  font-style: italic;
+  color: #5a6268;
+}
+
+/* 모든 내부 텍스트가 검은색 계열이 되도록 확실히 하기 */
+.ai-score-summary-bar,
+.ai-score-summary-bar p,
+.ai-score-summary-bar span {
+  color: #212529; /* 기본 검은색 계열 */
+}
+
+.ai-score-summary-bar h3 {
+
+    font-family: var(--font-whole);
+    color: var(--color-text-dark);
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+}
+
+/* 선택된 모델 내부 텍스트는 위에서 흰색으로 지정했으므로, 여기서는 기본값만 설정 */
+.model-score-item.selected-model span,
+.model-score-item.selected-model p {
+    /* 이미 위에서 .selected-model 내부 텍스트 색상을 지정했습니다.
+       여기는 기본 상태의 .model-score-item 내부 span, p 에 대한 색상을 명시적으로 지정할 수 있습니다.
+       하지만 보통 .model-score-item의 color를 상속받습니다. */
+}
+
+/* 명시적으로 model-name과 model-score 색상 다시 한번 확인 (selected-model 아닐 때) */

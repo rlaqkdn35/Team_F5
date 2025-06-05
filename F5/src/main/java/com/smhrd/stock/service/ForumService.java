@@ -67,7 +67,7 @@ public class ForumService {
         }
     }
 
-    // 게시글 + 댓글 + 작성자 닉네임 조회 (로그 포함)
+    // 게시글 + 댓글 + 작성자 닉네임 조회 (추천 여부는 여기서 처리하지 않고 컨트롤러에서 처리)
     public ForumDTO getForumDetailWithComments(Integer forumId) {
         System.out.println("[ForumService] getForumDetailWithComments 호출 - forumId: " + forumId);
 
@@ -95,7 +95,8 @@ public class ForumService {
             System.out.println("[ForumService] user_id가 null이거나 비어있음");
         }
 
-        return new ForumDTO(forum, comments, nickname);
+        // 추천 여부 필드는 false 기본값으로 반환, 실제 추천 여부는 컨트롤러에서 세팅
+        return new ForumDTO(forum, comments, nickname, false);
     }
 
     @Transactional
@@ -125,14 +126,13 @@ public class ForumService {
                     forum.getForum_title(),
                     forum.getUser_id(),
                     nickname,
-                    forum.getCreatedAt(),     // 작성일 필드명에 맞게 수정
-                    forum.getForum_views(),   // 조회수
-                    forum.getForum_recos()    // 추천수
+                    forum.getCreatedAt(),
+                    forum.getForum_views(),
+                    forum.getForum_recos()
             );
             forumDTOs.add(dto);
         }
 
         return new ForumListResponse(totalCount, forumDTOs);
     }
-
 }

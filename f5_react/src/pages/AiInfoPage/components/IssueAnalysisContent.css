@@ -20,17 +20,18 @@
     cursor: pointer;
     transition: color 0.2s, border-bottom-color 0.2s;
     margin-bottom: -2px; /* Pulls button up to sit on the border */
+    border-radius: 15px;
 }
 
 .issue-tab-button.active {
-    color: var(--color-text-dark);
+    background-color: var(--color-text-dark);
+    color: var(--color-text-white);
     font-weight: bold;
-    /* Optionally, you could change border color for active tab */
-    /* border-bottom-color: var(--color-text-hover); */
 }
 
 .issue-tab-button:hover {
-    color: var(--color-text-dark);
+    background-color: var(--color-text-dark);
+    color: var(--color-text-white);
     font-weight: bold;
 }
 
@@ -182,13 +183,6 @@
     text-align: center;
 }
 
-/* Column Widths and Alignment (keeping original flex-based for .related-stocks-table for consistency with given code) */
-/* Note: The original .related-stocks-table uses flexbox for columns, while the unified table uses table-layout.
-   I'm maintaining the original flex structure for .related-stocks-table where applicable.
-   The `display: flex` was on `related-stocks-table-header` and `related-stocks-table-row`.
-   I'll adapt this for the `<table>` structure, mapping `flex` to `width` where appropriate. */
-
-/* For the actual table, use width properties */
 .related-stocks-table .col-name { width: 20%; text-align: left; }
 .related-stocks-table .col-price { width: 15%; text-align: right; }
 .related-stocks-table .col-change-rate { width: 15%; text-align: right; }

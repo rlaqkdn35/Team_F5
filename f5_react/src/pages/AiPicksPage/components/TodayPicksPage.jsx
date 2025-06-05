@@ -1,55 +1,87 @@
-import React, { useState, useEffect } from 'react';
-import './TodayPicksPage.css'; // CSS 파일을 위한 임포트
+import React, { useState, useEffect, useMemo } from 'react';
+import './TodayPicksPage.css';
+import axios from 'axios';
 
 const TodayPicksPage = () => {
     const [marketStatus, setMarketStatus] = useState({ isOpen: false, lastUpdated: '' });
-    const [topStocks, setTopStocks] = useState([]);
+    const [fullStockList, setFullStockList] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [selectedStock, setSelectedStock] = useState(null);
+
+    const itemsPerPage = 15;
 
     useEffect(() => {
-        // 첫 번째 섹션: 나스닥 장 상태 및 업데이트 시간
         const now = new Date();
         const hour = now.getHours();
         const minute = now.getMinutes();
-
-        // 임시로 장 운영 시간 설정 (예시: 오전 10시부터 오후 4시)
-        // 실제 나스닥 개장 시간 (한국 시간 기준): 대략 밤 11시 30분 ~ 다음날 오전 6시 (서머타임 적용 시)
-        // 여기서는 더미를 위해 간단한 시간으로 설정
-        const isOpen = hour >= 10 && hour < 16; 
+        const isOpen = hour >= 10 && hour < 16;
         const updatedTime = `${now.toLocaleDateString()} ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-
         setMarketStatus({ isOpen, lastUpdated: updatedTime });
 
-        // 두 번째 섹션: 탑 종목 더미 데이터 (오름차순, 내림차순 섞어서)
-        const dummyStocks = [
-            { code: 'NVDA', name: 'NVIDIA Corp.', price: 950.70, changeRate: 5.80, changeAmount: 52.00, volume: '150M' },
-            { code: 'AMZN', name: 'Amazon.com Inc.', price: 185.90, changeRate: -3.50, changeAmount: -6.70, volume: '110M' },
-            { code: 'TSLA', name: 'Tesla Inc.', price: 178.00, changeRate: -4.00, changeAmount: -7.40, volume: '130M' },
-            { code: 'AAPL', name: 'Apple Inc.', price: 175.50, changeRate: 3.25, changeAmount: 5.50, volume: '120M' },
-            { code: 'AMD', name: 'Advanced Micro Devices', price: 160.40, changeRate: 4.50, changeAmount: 7.00, volume: '100M' },
-            { code: 'MSFT', name: 'Microsoft Corp.', price: 420.10, changeRate: -2.10, changeAmount: -8.80, volume: '95M' },
-            { code: 'META', name: 'Meta Platforms Inc.', price: 490.20, changeRate: 2.80, changeAmount: 13.50, volume: '80M' },
-            { code: 'GOOGL', name: 'Alphabet Inc.', price: 170.30, changeRate: 1.50, changeAmount: 2.50, volume: '70M' },
-            { code: 'NFLX', name: 'Netflix Inc.', price: 620.00, changeRate: 1.90, changeAmount: 11.50, volume: '50M' },
-            { code: 'INTC', name: 'Intel Corp.', price: 30.15, changeRate: -1.20, changeAmount: -0.36, volume: '60M' },
-            { code: 'SAMSUNG', name: 'Samsung Electronics', price: 75000, changeRate: 0.80, changeAmount: 600, volume: '20M' },
-            { code: 'HYUNDAI', name: 'Hyundai Motor', price: 200000, changeRate: -0.50, changeAmount: -1000, volume: '5M' },
-        ];
+        const fixedDateStr = '2025-05-20 00:00:00.000000';
 
-        // 등락률 절댓값 기준으로 정렬 (상위 10개)
-        const sortedStocks = [...dummyStocks].sort((a, b) =>
-            Math.abs(b.changeRate) - Math.abs(a.changeRate)
-        ).slice(0, 10); // 상위 10개만 선택
+        const fetchTopStocks = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const response = await axios.get(
+                    `http://localhost:8084/F5/api/stocks/daily-top?date=${encodeURIComponent(fixedDateStr)}`
+                );
+                const fetchedStocks = response.data;
 
-        setTopStocks(sortedStocks);
+                if (!Array.isArray(fetchedStocks)) {
+                    setError('서버에서 올바른 데이터 배열을 받지 못했습니다.');
+                    setFullStockList([]);
+                    return;
+                }
+
+                const sortedStocks = [...fetchedStocks].sort((a, b) => Math.abs(b.stock_fluctuation) - Math.abs(a.stock_fluctuation));
+                setFullStockList(sortedStocks);
+                setCurrentPage(1);
+            } catch (err) {
+                console.error('Failed to fetch top stocks:', err);
+                setError('데이터를 불러오는 데 실패했습니다. 서버 상태를 확인해주세요.');
+                setFullStockList([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchTopStocks();
     }, []);
+
+    const displayedStocks = useMemo(() => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return fullStockList.slice(startIndex, endIndex);
+    }, [fullStockList, currentPage]);
+
+    const formatStockData = (stock) => {
+        const formattedChangeRate = `${stock.stock_fluctuation > 0 ? '+' : ''}${stock.stock_fluctuation.toFixed(2)}%`;
+        const formattedPriceChange = `${stock.priceChange > 0 ? '+' : ''}${stock.priceChange.toFixed(2)}`;
+        const formattedVolume = `${(stock.stockVolume / 1000000).toFixed(0)}M`;
+
+        return {
+            ...stock,
+            formattedChangeRate,
+            formattedPriceChange,
+            formattedVolume
+        };
+    };
+
+    const toggleDetails = (stockCode) => {
+        setSelectedStock(selectedStock === stockCode ? null : stockCode);
+    };
+
+    const totalPages = Math.ceil(fullStockList.length / itemsPerPage);
 
     return (
         <div className="today-picks-page">
-            {/* 첫 번째 섹션: 시장 상태 */}
             <div className="market-status-section">
                 <p>
-                  <p>가능하면 실시간으로 짜기!</p>
-                    나스닥 장 상태: {' '}
+                    나스닥 장 상태:{' '}
                     <span className={marketStatus.isOpen ? 'status-open' : 'status-closed'}>
                         <span className={`status-indicator ${marketStatus.isOpen ? 'open' : 'closed'}`}></span>
                         {marketStatus.isOpen ? '개장' : '폐장'}
@@ -58,34 +90,73 @@ const TodayPicksPage = () => {
                 <p>업데이트: {marketStatus.lastUpdated}</p>
             </div>
 
-            {/* 두 번째 섹션: 탑 종목 */}
             <div className="top-stocks-section">
-                <h2>오늘의 탑 종목</h2>
-                <div className="stock-list-header">
-                    <span className="stock-rank">순위</span>
-                    <span className="stock-code">종목코드</span>
-                    <span className="stock-name">종목이름</span>
-                    <span className="stock-price">시가</span>
-                    <span className="stock-change-rate">등락률</span>
-                    <span className="stock-change-amount">대비</span>
-                    <span className="stock-volume">거래량</span>
-                </div>
-                {topStocks.map((stock, index) => (
-                    <div key={stock.code} className="stock-item">
-                        <span className="stock-rank">{index + 1}</span> {/* 순위 추가 */}
-                        <span className="stock-code">{stock.code}</span>
-                        <span className="stock-name">{stock.name}</span>
-                        <span className="stock-price">{stock.price.toFixed(2)}</span>
-                        <span className={`stock-change-rate ${stock.changeRate > 0 ? 'positive' : stock.changeRate < 0 ? 'negative' : ''}`}>
-                            {stock.changeRate > 0 ? '+' : ''}{stock.changeRate.toFixed(2)}%
-                        </span>
-                        <span className={`stock-change-amount ${stock.changeAmount > 0 ? 'positive' : stock.changeAmount < 0 ? 'negative' : ''}`}>
-                            {stock.changeAmount > 0 ? '+' : ''}{stock.changeAmount.toFixed(2)}
-                        </span>
-                        <span className="stock-volume">{stock.volume}</span>
-                    </div>
-                ))}
+                <h2>오늘의 탑 종목 (총 {fullStockList.length}개)</h2>
+
+                {loading && <p>데이터를 불러오는 중입니다...</p>}
+                {error && <p className="error-message">{error}</p>}
+                {!loading && !error && fullStockList.length === 0 && <p>표시할 종목 데이터가 없습니다.</p>}
+
+                {!loading && !error && fullStockList.length > 0 && (
+                    <>
+                        <div className="stock-list-header">
+                            <span>순위</span>
+                            <span>종목코드</span>
+                            <span>종목이름</span>
+                            <span>현재가</span>
+                            <span>등락률</span>
+                            <span>대비</span>
+                            <span>거래량</span>
+                        </div>
+                        {displayedStocks.map((stock, index) => {
+                            const formatted = formatStockData(stock);
+                            return (
+                                <div key={formatted.stockCode} className="stock-item">
+                                    <div
+                                        className="stock-summary"
+                                        onClick={() => toggleDetails(formatted.stockCode)}
+                                    >
+                                        <span>{(currentPage - 1) * itemsPerPage + index + 1}</span>
+                                        <span>{formatted.stockCode}</span>
+                                        <span>{formatted.stockName}</span>
+                                        <span>{formatted.closePrice.toLocaleString()}</span>
+                                        <span className={formatted.stockFluctuation > 0 ? 'positive' : 'negative'}>
+                                            {formatted.formattedChangeRate}
+                                        </span>
+                                        <span className={formatted.priceChange > 0 ? 'positive' : 'negative'}>
+                                            {formatted.formattedPriceChange}
+                                        </span>
+                                        <span>{formatted.formattedVolume}</span>
+                                    </div>
+
+                                    {selectedStock === formatted.stockCode && (
+                                        <div className="stock-details">
+                                            <p>시가: {formatted.openPrice.toLocaleString()}</p>
+                                            <p>고가: {formatted.highPrice.toLocaleString()}</p>
+                                            <p>저가: {formatted.lowPrice.toLocaleString()}</p>
+                                            <p>날짜: {formatted.priceDate}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </>
+                )}
             </div>
+
+            {fullStockList.length > 0 && totalPages > 1 && (
+                <div className="pagination-controls">
+                    {[...Array(totalPages)].map((_, i) => (
+                        <button
+                            key={i + 1}
+                            onClick={() => setCurrentPage(i + 1)}
+                            className={`page-number ${currentPage === i + 1 ? 'active' : ''}`}
+                        >
+                            {i + 1}
+                        </button>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

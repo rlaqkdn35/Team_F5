@@ -178,3 +178,26 @@
   box-sizing: border-box; /* padding과 border가 width/height에 포함되도록 함 */
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* 부드러운 전환 효과 */
 }
+
+
+/* WritePostPage.css에 추가 */
+.dropdown {
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    background-color: white;
+    z-index: 1000;
+}
+
+.dropdown li {
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.dropdown li:hover {
+    background-color: #f0f0f0;
+}

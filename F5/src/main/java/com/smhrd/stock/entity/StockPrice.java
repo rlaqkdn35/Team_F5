@@ -11,26 +11,34 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="t_stockprice")
+@Table(name = "t_stockprice")
 public class StockPrice {
 
-	@Id
-	private Long price_id;
-	private String stock_code;
-	private Timestamp price_date;
-	
-	@Column(precision = 12, scale = 1) 
-	private BigDecimal open_price;
-	
-	@Column(precision = 12, scale = 1) 
-	private BigDecimal high_price;
-	
-	@Column(precision = 12, scale = 1)
-	private BigDecimal low_price;
-	
-	@Column(precision = 12, scale = 1) 
-	private BigDecimal close_price;
-	
-	@Column(precision = 12, scale = 1)
-	private BigDecimal stock_volume;
+    @Id
+    @Column(name = "price_id")
+    private Long priceId;
+
+    @Column(name = "stock_code")
+    private String stockCode;
+
+    @Column(name = "price_date")
+    private Timestamp priceDate;
+
+    @Column(name = "open_price", precision = 12, scale = 1)
+    private BigDecimal openPrice;
+
+    @Column(name = "high_price", precision = 12, scale = 1)
+    private BigDecimal highPrice;
+
+    @Column(name = "low_price", precision = 12, scale = 1)
+    private BigDecimal lowPrice;
+
+    @Column(name = "close_price", precision = 12, scale = 1)
+    private BigDecimal closePrice;
+
+    @Column(name = "stock_volume", precision = 12, scale = 1)
+    private BigDecimal stockVolume;
+
+    @Column(name = "stock_fluctuation", precision = 12, scale = 1)
+    private BigDecimal stockFluctuation;
 }

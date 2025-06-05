@@ -1,27 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './RecommendationsPage.css'; // CSS 파일을 위한 임포트
-import { Line } from 'react-chartjs-2';
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-} from 'chart.js';
 
-// Chart.js 모듈 등록
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-);
+// Chart.js 관련 임포트 및 모듈 등록이 제거되었습니다.
 
 const RecommendationsPage = () => {
     const [aiModels, setAiModels] = useState([]);
@@ -217,7 +197,6 @@ const RecommendationsPage = () => {
         <div className="recommendations-page">
             {/* --- 섹션 1: AI 모델 요약 및 추천 --- */}
             <div className="ai-summary-section">
-                <h2>오늘의 AI 추천</h2>
                 {/* AI 모델 점수 요약 바 */}
                 <div className="today-recommendations-grid">
                     {combinedRecommendation && (
@@ -233,19 +212,21 @@ const RecommendationsPage = () => {
                     
                 </div>
                 <div className="ai-score-summary-bar">
+                    <h3>모델별 AI 추천 종목</h3>
                 {aiModels.map(model => (
                     <div
-                                    key={model.id}
-                                    className={`model-score-item ${selectedModelId === model.id ? 'selected-model' : ''}`} // className 변경
-                                    onClick={() => setSelectedModelId(model.id)} // onClick 이벤트 핸들러 추가
-                                >
+                        key={model.id}
+                        className={`model-score-item ${selectedModelId === model.id ? 'selected-model' : ''}`} // className 변경
+                        onClick={() => setSelectedModelId(model.id)} // onClick 이벤트 핸들러 추가
+                    >
                     <p>이미지 공간</p>
                     <span className="model-name">{model.name}</span>
                     <span className="model-score">{model.score}점</span>
                     </div>
                 ))}
-   
+    
                 {selectedAiModel && ( // 이 조건문이 topAi에서 selectedAiModel로 변경
+                    // <Link to>
                     <div className="recommendation-box top-ai-recommendation">
                     <h3><span className="top-ai-indicator">🌟</span> 선택된 AI 추천 종목 ({selectedAiModel.name})</h3> {/* 텍스트 및 변수 변경 */}
                     <p className="recommended-stock-name">
@@ -254,6 +235,7 @@ const RecommendationsPage = () => {
                     <p className="recommendation-reason">{selectedAiModel.recommendedStock.reason}</p>
                     <p className="ai-comment">AI 요약: {selectedAiModel.summary}</p>
                     </div>
+                    // </Link>
                 )}
                 </div>
             </div>

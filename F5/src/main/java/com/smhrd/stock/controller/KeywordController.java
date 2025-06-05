@@ -21,13 +21,10 @@ public class KeywordController {
 	private KeywordService keywordService;
 	
 	@GetMapping("/keywordData")
-    public List<Map<String, Object>> keywordData() {
-        System.out.println("Requested /F5/keyword/keywordData");
-        
+    public List<Map<String, Object>> keywordData() { 
         List<Map<String, Object>> list = keywordService.keywordData();
-        System.out.println("데이터는요??" + list.toString());
+        
         return list;
-
     }
 
 }
