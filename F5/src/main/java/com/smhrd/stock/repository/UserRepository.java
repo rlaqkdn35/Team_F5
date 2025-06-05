@@ -10,8 +10,8 @@ import org.springframework.data.repository.query.Param;
 import com.smhrd.stock.entity.User;
 
 public interface UserRepository extends JpaRepository<User, String> {
-    @Query("SELECT u.nickname FROM User u WHERE u.user_id = :userId")
-    Optional<String> findNicknameByUserId(@Param("userId") String userId);
+//    @Query("SELECT u.nickname FROM User u WHERE u.user_id = :userId")
+//    Optional<String> findNicknameByUserId(@Param("userId") String userId);
     
     
     Optional<User> findByEmailAndPw(String email, String pw);

@@ -31,16 +31,6 @@ public class UserController {
         return ResponseEntity.ok(registeredUser);
     }
 
-    // 로그인
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user, HttpSession session) {
-        User loginUser = userService.login(user.getEmail(), user.getPw(), session);
-        if (loginUser != null) {
-            return ResponseEntity.ok(loginUser);
-        } else {
-            return ResponseEntity.status(401).body("이메일 또는 비밀번호가 일치하지 않습니다.");
-        }
-    }
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(HttpSession session) {
         Object loginUser = session.getAttribute("loginUser");
@@ -106,14 +96,5 @@ public class UserController {
         return result;
     }
     
-    @GetMapping("/login/success")
-    @ResponseBody
-    public ResponseEntity<?> loginSuccess(HttpSession session) {
-        User loginUser = (User) session.getAttribute("loginUser");
-        if (loginUser == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("세션 없음");
-        }
-        return ResponseEntity.ok(loginUser);
-    }
     }
 
