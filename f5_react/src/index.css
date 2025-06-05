@@ -94,3 +94,34 @@ code {
     monospace;
 }
 
+
+body.main-page-active .app-left-sidebar,
+body.main-page-active .app-body-layout-3col nav,
+body.main-page-active .app-right-sidebar,
+body.main-page-active .app-footer {
+
+ display: none !important;
+
+}
+
+
+
+/* MainPage가 활성화될 때, 메인 컨텐츠 영역이 전체 너비를 사용하도록 조정합니다.
+
+  이 역시 실제 클래스 이름과 레이아웃 구조에 맞게 조정해야 합니다.
+*/
+
+body.main-page-active .app-body-layout-3col {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+body.main-page-active .App {
+  grid-template-columns: 0 auto 1fr; /* 첫 번째 컬럼 너비를 0으로, 또는 상황에 맞게 조정 */
+
+}
+
+body.main-page-active .app-main-content-centered {
+  max-width: 100%;
+  padding: 0;
+}

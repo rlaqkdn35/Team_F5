@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import './MainPage.css'; // CSS 파일은 여기에 스타일 추가 또는 MainPage.css 사용
+import { useNavigate } from 'react-router-dom';
 
 // --- 애니메이션 상수 ---
 const transition = { duration: 0.8, ease: [0.6, -0.05, 0.01, 0.99] };
@@ -81,16 +82,24 @@ const AiIcon = ({ char = "💡", color = "#007bff" }) => (
 // --- 숫자 카운팅 애니메이션 컴포넌트 ---
 const AnimatedNumber = ({ value, duration = 1.5 }) => {
   const [displayValue, setDisplayValue] = useState(0);
-  const ref = useRef();
-  const { inView } = useInView(ref, { triggerOnce: true, threshold: 0.5 });
+  const countRef = useRef(null); // Renamed ref to avoid conflict with useInView's ref
+  const { ref: inViewRefHook, inView } = useInView({ triggerOnce: true, threshold: 0.5 }); // Assign useInView's ref to a different variable
+
+  // Combine refs
+  const setRefs = useCallback(
+    (node) => {
+      countRef.current = node;
+      inViewRefHook(node);
+    },
+    [inViewRefHook]
+  );
 
   useEffect(() => {
     if (inView) {
       let start = 0;
-      // value가 문자열일 수 있으므로 숫자로 변환 (쉼표 제거)
       const end = parseFloat(String(value).replace(/,/g, ''));
-      if (isNaN(end)) { // 숫자로 변환할 수 없는 경우 처리
-        setDisplayValue(String(value)); // 원래 값 표시
+      if (isNaN(end)) {
+        setDisplayValue(String(value));
         return;
       }
 
@@ -101,8 +110,7 @@ const AnimatedNumber = ({ value, duration = 1.5 }) => {
 
       const range = end - start;
       let current = start;
-      // 애니메이션 부드러움을 위한 프레임 설정
-      const animationFrames = Math.max(Math.floor(duration * 60), 1); // 초당 60프레임 기준
+      const animationFrames = Math.max(Math.floor(duration * 60), 1);
       const incrementPerFrame = range / animationFrames;
       let frame = 0;
 
@@ -114,7 +122,6 @@ const AnimatedNumber = ({ value, duration = 1.5 }) => {
           current = end;
           clearInterval(timer);
         }
-        // 소수점 첫째 자리까지 표시하거나 정수로 표시
         setDisplayValue(current % 1 === 0 || current.toFixed(1).endsWith('.0') ? Math.round(current).toLocaleString() : current.toFixed(1));
       }, duration * 1000 / animationFrames);
 
@@ -124,51 +131,81 @@ const AnimatedNumber = ({ value, duration = 1.5 }) => {
 
   useEffect(() => {
     if (!inView) {
-      // 숫자가 아닌 경우 원본 값, 숫자면 0
       setDisplayValue(isNaN(parseFloat(String(value).replace(/,/g, ''))) ? String(value) : 0);
     }
   }, [inView, value]);
 
-  return <span ref={ref}>{displayValue}</span>;
+  return <span ref={setRefs}>{displayValue}</span>;
 };
 
 // --- Accuracy Bar Fill 컴포넌트 (자체 InView 사용) ---
 const AccuracyBarFill = ({ percentage }) => {
-    const { ref, inView } = useInView({
-        triggerOnce: true,
-        threshold: 0.5, // 50% 보일 때 애니메이션
-    });
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.5,
+  });
 
-    return (
-        <div ref={ref} className="accuracy-bar-wrapper">
-            <motion.div
-                className="accuracy-bar-fill"
-                initial={{ width: 0 }}
-                animate={inView ? { width: `${percentage}%`, transition: { duration: 2, delay: 0.2, ease: "circOut" } } : { width: 0 }}
-            />
-        </div>
-    );
+  return (
+    <div ref={ref} className="accuracy-bar-wrapper">
+      <motion.div
+        className="accuracy-bar-fill"
+        initial={{ width: 0 }}
+        animate={inView ? { width: `${percentage}%`, transition: { duration: 2, delay: 0.2, ease: "circOut" } } : { width: 0 }}
+      />
+    </div>
+  );
+};
+
+// --- SectionWrapper 컴포넌트 (MainPage 외부로 이동) ---
+const SectionWrapper = ({ children, sectionIndex, className = "", onSectionRef }) => {
+  const { ref: inViewRef, inView } = useInView({ // Renamed to avoid potential naming conflicts
+    threshold: 0.3,
+    triggerOnce: true,
+  });
+
+  const combinedRef = useCallback(
+    (el) => {
+      inViewRef(el); // For useInView
+      if (onSectionRef) { // For MainPage's sectionsRef
+        onSectionRef(sectionIndex, el);
+      }
+    },
+    [inViewRef, onSectionRef, sectionIndex] // Dependencies for useCallback
+  );
+
+  return (
+    <motion.section
+      ref={combinedRef}
+      className={`section ${className}`}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+      variants={{
+        hidden: { opacity: 0.8, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
+      }}
+    >
+      {children}
+    </motion.section>
+  );
 };
 
 
 // --- MainPage 컴포넌트 ---
 export default function MainPage() {
-  // body 클래스 추가/제거용 useEffect
+  const navigate = useNavigate();
+
   useEffect(() => {
-    console.log('MainPage 마운트됨, body에 "main-page-active" 클래스 추가');
     document.body.classList.add('main-page-active');
     return () => {
-      console.log('MainPage 언마운트됨, body에서 "main-page-active" 클래스 제거');
       document.body.classList.remove('main-page-active');
     };
   }, []);
 
   const [showSplash, setShowSplash] = useState(true);
   const [showChartText, setShowChartText] = useState(false);
-  const [activeSection, setActiveSection] = useState(0);
+  const [activeSection, setActiveSection] = useState(0); // setActiveSection is stable
   const sectionsRef = useRef([]);
 
-  // 헤더 표시 상태 및 로직 추가
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
 
   useEffect(() => {
@@ -176,10 +213,13 @@ export default function MainPage() {
     const chartTextTimer = setTimeout(() => setShowChartText(true), 3300);
 
     const handleMouseMoveForHeader = (event) => {
-      if (event.clientY < 70) { // 화면 상단 70px 영역
-        setIsHeaderVisible(true);
-      } else if (event.clientY > 150) { // 마우스가 150px 아래로 내려가면 숨김 (깜빡임 방지 약간)
-        setIsHeaderVisible(false);
+      const y = event.clientY;
+      if (y < 70) {
+        // Only update if state needs to change to prevent unnecessary re-renders
+        setIsHeaderVisible(prev => !prev ? true : prev);
+      } else if (y > 150) {
+        // Only update if state needs to change
+        setIsHeaderVisible(prev => prev ? false : prev);
       }
     };
 
@@ -190,7 +230,11 @@ export default function MainPage() {
       clearTimeout(chartTextTimer);
       window.removeEventListener('mousemove', handleMouseMoveForHeader);
     };
-  }, []); // 의존성 배열 비워둠
+  }, []); // Empty dependency array ensures this runs only once
+
+  const assignSectionRef = useCallback((index, element) => {
+    sectionsRef.current[index] = element;
+  }, []); // This callback is stable
 
   const scrollToSection = useCallback((index) => {
     if (sectionsRef.current[index]) {
@@ -200,63 +244,36 @@ export default function MainPage() {
       });
       setActiveSection(index);
     }
-  }, []);
+  }, [setActiveSection]); // Include setActiveSection if its stability isn't guaranteed by useState dispatch nature
+                           // Though React's setState dispatchers are stable.
 
   const goToHome = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    // alert('AISTOCK 홈페이지(최상단)로 이동합니다!'); // 필요시 사용
-  };
-
-  const SectionWrapper = ({ children, sectionIndex, className = "" }) => {
-    const { ref, inView } = useInView({
-      threshold: 0.3,
-      triggerOnce: true,
-    });
-
-    return (
-      <motion.section
-        ref={(el) => {
-          sectionsRef.current[sectionIndex] = el;
-          if(el) ref(el); // ref에 el 할당
-        }}
-        className={`section ${className}`}
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-        variants={{
-          hidden: { opacity: 0.8, y: 50 },
-          visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
-        }}
-      >
-        {children}
-      </motion.section>
-    );
+    navigate('/ai-info')
   };
 
   return (
     <div className="mainpage-container">
-      {/* MainPage 내에 직접 구현된 헤더 */}
       <AnimatePresence>
         {isHeaderVisible && (
           <motion.header
-            className="mainpage-inline-header" // CSS 클래스명
+            className="mainpage-inline-header"
             variants={headerMotionVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
           >
             <motion.button
-              className="mainpage-home-link-button" // CSS 클래스명
+              className="mainpage-home-link-button"
               onClick={goToHome}
-              whileHover={{ scale: 1.05, backgroundColor: '#0056b3', color: '#fff' }}
+              whileHover={{ scale: 1.05, backgroundColor: '#C7A980', color: '#fff' }}
               whileTap={{ scale: 0.95 }}
             >
-              ASTOCK 홈페이지로 가기? ↖️
+              ASTOCK 홈페이지로 가기? 
             </motion.button>
           </motion.header>
         )}
       </AnimatePresence>
 
-      {/* 스플래시 화면 */}
       <AnimatePresence>
         {showSplash && (
           <motion.div
@@ -271,8 +288,8 @@ export default function MainPage() {
         )}
       </AnimatePresence>
 
-      {/* 섹션 1: 메인 배너 */}
-      <SectionWrapper sectionIndex={0} className="section1">
+      {/* Pass assignSectionRef to each SectionWrapper */}
+      <SectionWrapper sectionIndex={0} className="section1" onSectionRef={assignSectionRef}>
         {!showSplash && (
           <motion.div
             className="background-chart-image"
@@ -311,9 +328,16 @@ export default function MainPage() {
         )}
       </SectionWrapper>
 
-      {/* 섹션 2: AI 모델 추천 */}
-      <SectionWrapper sectionIndex={1} className="section2">
+      <SectionWrapper sectionIndex={1} className="section2" onSectionRef={assignSectionRef}>
         <motion.div className="section-content" variants={staggerContainerVariants}>
+          {!showSplash && (
+            <motion.div
+              className="background-chart2-image"
+              variants={backgroundVariants}
+              initial="hidden"
+              animate="visible"
+            />
+          )}
           <motion.h2 variants={sectionTitleVariants}>
             <strong>3가지 AI 모델</strong>로<br />최적의 주식을 추천받으세요 📊
           </motion.h2>
@@ -339,8 +363,7 @@ export default function MainPage() {
         </motion.div>
       </SectionWrapper>
 
-      {/* 섹션 3: 이용자 수 및 정확도 */}
-      <SectionWrapper sectionIndex={2} className="section3">
+      <SectionWrapper sectionIndex={2} className="section3" onSectionRef={assignSectionRef}>
         <motion.div className="section-content" variants={staggerContainerVariants}>
           <motion.h2 variants={sectionTitleVariants}>ASTOCK의 신뢰도 🎯</motion.h2>
           <div className="stats-flex-container">
@@ -356,7 +379,6 @@ export default function MainPage() {
               <p className="stat-number-large">
                 <AnimatedNumber value="87.5" /> %
               </p>
-              {/* AccuracyBarFill 컴포넌트 사용 */}
               <AccuracyBarFill percentage={87.5} />
               <p className="stat-description">백테스팅 및 실전 데이터 기반</p>
             </motion.div>
@@ -364,8 +386,7 @@ export default function MainPage() {
         </motion.div>
       </SectionWrapper>
 
-      {/* 섹션 4: 현재 수익률 및 CTA */}
-      <SectionWrapper sectionIndex={3} className="section4">
+      <SectionWrapper sectionIndex={3} className="section4" onSectionRef={assignSectionRef}>
         <motion.div className="section-content" variants={staggerContainerVariants}>
           <motion.h2 variants={sectionTitleVariants}>
             ASTOCK AI가 만들어낸<br /><strong>놀라운 누적 수익률</strong> 💰
@@ -382,7 +403,7 @@ export default function MainPage() {
           <motion.button
             className="cta-button-primary"
             variants={{...itemVariants, ...buttonHoverVariants}}
-            whileHover="hover"
+            whileHover={{backgroundColor:"#C7A980"}}
             whileTap="tap"
             onClick={() => alert('프리미엄 서비스 체험 페이지로 이동합니다!')}
           >
@@ -394,8 +415,7 @@ export default function MainPage() {
         </motion.div>
       </SectionWrapper>
 
-      {/* 섹션 5: 뉴스 분석 기반 예측 */}
-      <SectionWrapper sectionIndex={4} className="section5">
+      <SectionWrapper sectionIndex={4} className="section5" onSectionRef={assignSectionRef}>
         <motion.div className="section-content feature-section-layout" variants={staggerContainerVariants}>
           <motion.div className="feature-text-content" variants={itemVariants}>
             <motion.h2 variants={sectionTitleVariants}>실시간 뉴스 분석 📰<br/>시장의 맥을 짚다</motion.h2>
@@ -414,8 +434,7 @@ export default function MainPage() {
         </motion.div>
       </SectionWrapper>
 
-      {/* 섹션 6: 실시간 변동 알림 */}
-      <SectionWrapper sectionIndex={5} className="section6">
+      <SectionWrapper sectionIndex={5} className="section6" onSectionRef={assignSectionRef}>
         <motion.div className="section-content feature-section-layout reverse-layout" variants={staggerContainerVariants}>
            <motion.div className="feature-visual-content alert-visual" variants={itemVariants}>
             <motion.span className="icon-emphasis large-icon" whileHover={{y: -10}}>🔔</motion.span>
@@ -441,8 +460,7 @@ export default function MainPage() {
         </motion.div>
       </SectionWrapper>
 
-      {/* 섹션 7: 개인화된 추천 */}
-      <SectionWrapper sectionIndex={6} className="section7">
+      <SectionWrapper sectionIndex={6} className="section7" onSectionRef={assignSectionRef}>
         <motion.div className="section-content feature-section-layout" variants={staggerContainerVariants}>
           <motion.div className="feature-text-content" variants={itemVariants}>
             <motion.h2 variants={sectionTitleVariants}>나만을 위한 맞춤 포트폴리오 🎯<br/>AI 개인 비서</motion.h2>
@@ -461,7 +479,6 @@ export default function MainPage() {
         </motion.div>
       </SectionWrapper>
 
-      {/* Footer */}
       <motion.footer
         className="mainpage-footer"
         initial={{ opacity: 0 }}
