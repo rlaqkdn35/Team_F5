@@ -47,19 +47,19 @@
 
 
   /* 보라색깔구분 */ 
-  --color-background-menubar: #494B56;
-  --color-background-submenubar: #707073;
+  --color-background-menubar: #C7A980;
+  --color-background-submenubar: #EEE3BE;
   --color-background-body: #ffffff;
   --color-background-white-red:#DBDBDD;
   --color-stock-positive:#e53935;
   --color-stock-nagative:#007bff;
 
   --header-height: 60px;  
-  --color-button:#494B56;
+  --color-button:#C7A980;
   --color-button-yellow:#F39C12;
 
   --color-button-hover:#ffffff;
-  --color-white-hover:#f8f9fa;
+  --color-white-hover:#EEE3BE;
   
   --color-text-hover:#494B56; 
 
@@ -67,7 +67,7 @@
   --color-line: #f0f0f0;
 
   --color-text-white: #ffffff;
-  --color-text-dark: #333; 
+  --color-text-dark: #494B56; 
 
   /* 폰트 */
   --font-whole: 'Paperlogy-8ExtraBold';

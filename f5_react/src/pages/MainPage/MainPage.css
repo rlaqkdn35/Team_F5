@@ -1,0 +1,535 @@
+/* --- Global Resets & Base Styles --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  scroll-behavior: smooth;
+  /* For JS-controlled full-page scroll, or use CSS scroll-snap */
+  /* overflow-y: hidden; /* If using JS for all scrolling */
+}
+
+body {
+  background-color: #eee3be59;
+  color: #333;
+  line-height: 1.6;
+  overflow-x: hidden; /* Prevent horizontal scrollbars */
+}
+
+.mainpage-container {
+  width: 100%;
+  /* For CSS Scroll Snap (optional alternative to JS full-page scroll) */
+  /* scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh; */
+}
+
+/* --- Splash Screen --- */
+.splash-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #0a192f; /* Deep navy */
+  font-size: clamp(3rem, 10vw, 6rem); /* Responsive font size */
+  font-weight: 700;
+  color: #64ffda; /* Neon teal/mint */
+  letter-spacing: 0.05em;
+  z-index: 10000;
+  text-shadow: 0 0 15px rgba(100, 255, 218, 0.5), 0 0 30px rgba(100, 255, 218, 0.3);
+}
+
+/* --- Section Base --- */
+.section {
+  width: 100vw;
+  height: 100vh;
+  min-height: 600px; /* Minimum height for content visibility */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5vh 5vw; /* Responsive padding */
+  position: relative;
+  overflow: hidden; /* Clip child animations */
+  /* scroll-snap-align: start; /* For CSS Scroll Snap */
+}
+
+.section-content {
+  max-width: 1100px;
+  width: 100%;
+  text-align: center;
+  z-index: 2;
+  position: relative;
+}
+
+.section h2 {
+  font-size: clamp(2rem, 5vw, 3.2rem); /* Responsive heading */
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
+  color: #1e2a3a; /* Dark blue-gray */
+}
+.section h2 strong {
+  color: #007bff; /* Highlight color */
+}
+
+/* --- Section 1: Main Banner --- */
+.section1 {
+  background-color: #000; /* Fallback */
+}
+
+.background-chart-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3RvY2slMjBtYXJrZXQlMjBncmFwaHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=1920&q=80'); /* High-quality placeholder */
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.6) contrast(1.1);
+  z-index: 0;
+}
+
+.chart-recommend-text {
+  position: absolute;
+  top: clamp(20px, 10vh, 80px); /* Responsive positioning */
+  right: clamp(20px, 7vw, 70px);
+  background: rgba(10, 25, 47, 0.75); /* Dark, slightly transparent */
+  backdrop-filter: blur(5px);
+  color: #e6f1ff; /* Light blueish text */
+  padding: clamp(1rem, 2.5vw, 1.8rem);
+  border-radius: 12px;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 500;
+  text-align: right;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  border: 1px solid rgba(100, 255, 218, 0.3);
+  z-index: 3;
+}
+.chart-recommend-text p {
+  margin-bottom: 0.5rem;
+  color: #fff;
+  font-weight: 600;
+}
+.chart-recommend-text .sub-text {
+  font-size: clamp(0.75rem, 1.5vw, 1rem);
+  opacity: 0.8;
+  display: block;
+}
+
+.scroll-prompt {
+  position: absolute;
+  bottom: clamp(20px, 5vh, 50px);
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.8);
+  font-size: clamp(0.8rem, 1.5vw, 1rem);
+  font-weight: 500;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 25px;
+  background-color: rgba(0,0,0,0.3);
+  transition: color 0.3s ease, transform 0.3s ease;
+  z-index: 3;
+}
+
+/* --- Section 2: AI Model Recommends --- */
+.section2 {
+  background-color: #ffffff;
+}
+
+.ai-model-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem); /* Responsive gap */
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.ai-model-card {
+  background-color: #f8f9fa;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.07);
+  text-align: left;
+  border: 1px solid #e9ecef;
+  position: relative;
+  overflow: hidden; /* For card-decoration */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; /* For framer-motion whileHover */
+}
+
+.ai-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  color: #fff;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.ai-model-card h3 {
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+  margin-bottom: 0.75rem;
+  color: #343a40;
+  font-weight: 600;
+}
+
+.ai-model-card p {
+  font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+  color: #5a6570;
+  line-height: 1.7;
+}
+
+.card-decoration {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 80px;
+  height: 80px;
+  background-color: rgba(0, 123, 255, 0.05);
+  border-radius: 50%;
+  transform: rotate(45deg);
+  opacity: 0.7;
+}
+
+/* --- Section 3: User Stats & Accuracy --- */
+.section3 {
+  background-color: #e9ecef; /* Light gray */
+}
+.section3 h2 {
+  color: #007bff; /* Blue theme for this section */
+}
+
+.stats-flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  justify-content: center;
+  align-items: stretch; /* Make cards same height if possible */
+  margin-top: 2rem;
+}
+
+.stat-item-card {
+  background-color: #fff;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  flex: 1 1 300px; /* Flex grow, shrink, basis */
+  max-width: 450px;
+  text-align: center;
+}
+
+.stat-item-card h3 {
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  color: #495057;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.stat-number-large {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 700;
+  color: #007bff;
+  margin-bottom: 0.5rem;
+  line-height: 1.1;
+}
+.stat-number-large span { /* AnimatedNumber target */
+  display: inline-block;
+}
+
+.stat-description {
+  font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+  color: #6c757d;
+}
+
+.accuracy-bar-wrapper {
+  width: 90%;
+  max-width: 300px;
+  height: 20px;
+  background-color: #d6d8db;
+  border-radius: 10px;
+  margin: 1rem auto 0.5rem;
+  overflow: hidden;
+}
+
+.accuracy-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #28a745, #20c997); /* Green gradient */
+  border-radius: 10px;
+  box-shadow: inset 0 -2px 4px rgba(0,0,0,0.1);
+}
+
+/* --- Section 4: Profitability & CTA --- */
+.section4 {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); /* Blue gradient */
+  color: #fff;
+}
+.section4 h2 {
+ color: #fff;
+ text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.section4 h2 strong {
+ color: #cce5ff; /* Lighter blue for strong tag */
+}
+
+.profit-highlight-area {
+  margin-bottom: 2.5rem;
+  background: rgba(255,255,255,0.1);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border-radius: 15px;
+  display: inline-block; /* Center content better */
+  box-shadow: 0 0 30px rgba(0,0,0,0.1);
+}
+
+.profit-highlight-area p {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.profit-highlight-area h3 {
+  font-size: clamp(3.5rem, 9vw, 6rem);
+  font-weight: 700;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  color: #ffdd57; /* Gold-like color for profit */
+}
+.profit-highlight-area h3 span { /* AnimatedNumber target */
+  display: inline-block;
+}
+
+.cta-button-primary {
+  background-color: #ffc107; /* Bright yellow/gold */
+  color: #333;
+  padding: clamp(0.9rem, 1.8vw, 1.2rem) clamp(1.8rem, 3.6vw, 2.5rem);
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-weight: 600;
+  border: none;
+  border-radius: 50px; /* Pill shape */
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+.cta-subtext {
+  margin-top: 1rem;
+  font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+  opacity: 0.85;
+}
+
+/* --- Sections 5, 6, 7: Feature Sections --- */
+.section5, .section7 { background-color: #ffffff; }
+.section6 { background-color: #f8f9fa; } /* Alternate bg for rhythm */
+
+.feature-section-layout {
+  display: flex;
+  flex-direction: column; /* Default for mobile */
+  align-items: center;
+  gap: clamp(2rem, 4vw, 3rem);
+  width: 100%;
+}
+
+.feature-text-content,
+.feature-visual-content {
+  flex: 1;
+  width: 100%;
+  max-width: 500px; /* Limit width for readability/layout */
+}
+
+.feature-text-content {
+  text-align: left;
+}
+.feature-text-content h2 {
+  text-align: left;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  margin-bottom: 1.5rem;
+}
+.feature-text-content p {
+  font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+  color: #454f5b;
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+}
+.feature-text-content ul,
+.feature-text-content ol {
+  list-style-position: inside;
+  padding-left: 0; /* Remove default padding if using custom markers or none */
+  margin-bottom: 1.5rem;
+}
+.feature-text-content li {
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem; /* Space for custom bullet */
+  position: relative;
+}
+.feature-text-content li::before {
+  content: '✔'; /* Example custom bullet */
+  color: #007bff;
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.feature-visual-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 250px; /* Ensure some space for visuals */
+  padding: 1rem;
+  border-radius: 10px;
+}
+/* Specific visual styles */
+.news-visual { background-color: rgba(245, 166, 35, 0.1); gap: 1rem; }
+.alert-visual { background-color: rgba(0, 123, 255, 0.08); flex-direction: column; gap: 0.5rem;}
+.personalized-visual { background-color: rgba(80, 227, 194, 0.1); gap: 1.5rem; }
+
+.icon-emphasis {
+  font-size: clamp(3rem, 7vw, 5rem);
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+.icon-emphasis.large-icon {
+  font-size: clamp(4rem, 9vw, 6rem);
+}
+
+.mini-alerts {
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 250px;
+}
+.mini-alerts p {
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem !important; /* Override general p margin */
+  display: flex;
+  justify-content: space-between;
+}
+.mini-alerts p span {
+  font-weight: 600;
+  color: #007bff;
+}
+
+
+.cta-button-secondary {
+  background-color: #6c757d; /* Grayish */
+  color: white;
+  padding: clamp(0.8rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+  font-weight: 500;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  margin-top: 1rem; /* Add some space above */
+}
+
+
+/* --- Footer --- */
+.mainpage-footer {
+  background-color: #0a192f; /* Deep navy, same as splash */
+  color: #a8b2d1; /* Lighter text for dark background */
+  padding: clamp(2rem, 5vh, 3rem) 5vw;
+  text-align: center;
+  font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+}
+.mainpage-footer p {
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+.mainpage-footer a {
+  color: #64ffda; /* Mint color for links */
+  text-decoration: none;
+  margin: 0 0.75rem;
+  transition: color 0.3s ease;
+}
+.mainpage-footer a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+.footer-links {
+  margin-top: 1rem;
+}
+
+/* --- Responsive Adjustments for Layouts --- */
+@media (min-width: 768px) {
+  .feature-section-layout {
+    flex-direction: row; /* Side-by-side on larger screens */
+    text-align: left; /* Align text left when side-by-side */
+  }
+  .feature-section-layout.reverse-layout {
+    flex-direction: row-reverse;
+  }
+  .feature-text-content h2 {
+    text-align: left;
+  }
+  .feature-text-content {
+    padding-right: 2rem; /* Space between text and visual */
+  }
+  .feature-section-layout.reverse-layout .feature-text-content {
+    padding-right: 0;
+    padding-left: 2rem;
+  }
+}
+
+/* --- MainPage 내 헤더 스타일 --- */
+.mainpage-inline-header {
+  position: fixed; /* 화면 상단에 고정 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(26, 58, 104, 0.85); /* 약간 투명한 어두운 파란색 배경 (기존 테마와 유사하게) */
+  backdrop-filter: blur(8px); /* 배경 블러 효과 (지원하는 브라우저) */
+  padding: 12px 20px;
+  z-index: 5000; /* 다른 요소들보다 위에 오도록 높은 z-index 설정 */
+  display: flex;
+  justify-content: center; /* 버튼을 중앙 정렬 */
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* 하단에 미세한 구분선 */
+}
+
+.mainpage-home-link-button {
+  background-color: #007bff; /* 기존 CTA 버튼과 유사한 색상 */
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 20px; /* 둥근 버튼 */
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Framer Motion과 별도로 CSS 전환도 추가 */
+  box-shadow: 0 3px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Framer Motion의 whileHover와 유사한 CSS 호버 효과 (선택적) */
+/* Framer Motion이 JS로 제어하므로 필수 아니지만, JS 비활성화 시 대비 또는 추가 효과용 */
+.mainpage-home-link-button:hover {
+  background-color: #0056b3; /* Framer Motion과 동일하게 */
+  color: #fff; /* Framer Motion과 동일하게 */
+  box-shadow: 0 5px 12px rgba(0, 86, 179, 0.5);
+  transform: scale(1.05); /* Framer Motion과 동일하게 */
+}
+
+.mainpage-home-link-button:active {
+  transform: scale(0.95); /* Framer Motion과 동일하게 */
+  background-color: #004085;
+}
+/* Additional animations or utility classes if needed by framer-motion beyond inline styles */
+/* (Framer Motion generally handles its own animation states well) */

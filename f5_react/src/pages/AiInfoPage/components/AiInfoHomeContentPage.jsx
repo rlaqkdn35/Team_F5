@@ -155,9 +155,9 @@ const AiInfoHomeContentPage = () => {
       setLoading(true);
       try {
         const response = await axios.get('http://localhost:8084/F5/keyword/keywordData');
+        console.log(response.data);
         setBubbleData(response.data); // Axios는 자동으로 JSON 파싱
         setError(null);
-        
       } catch (error) {
         console.error('버블 데이터를 가져오는 중 오류 발생:', error.message);
         setError('데이터를 불러오지 못했습니다. 서버를 확인하세요.');
@@ -289,7 +289,7 @@ return (
           {selectedKeyword && detailData ? (
             <aside className="details-pane visible">
               <h3><span className="keyword-highlight">{detailData.keyword}</span> 상세정보</h3>
-              <div className="detail-item"><strong>언급 빈도수 (예시):</strong> {selectedKeyword.value}</div>
+              <div className="detail-item"><strong>언급 빈도수:</strong> {selectedKeyword.value}</div>
               <div className="detail-item"><strong>클릭 빈도수 (예시):</strong> {detailData.clickFrequency}</div>
               <div className="detail-item detail-chart-container">
                 <strong>관련 데이터 차트 (예시):</strong>

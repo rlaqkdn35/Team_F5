@@ -50,7 +50,7 @@ const BubbleChart = ({ data, onBubbleClick, width = 600, height = 400 }) => {
     const colorScale = d3
       .scaleLinear()
       .domain([0, maxValue])
-      .range(['#ffcdd2', '#f44336']); // 빨간색 계열 유지
+      .range(['#FDE3DB', '#E2A59C']); // 빨간색 계열 유지
 
     // D3 팩(Pack) 레이아웃 설정
     const pack = d3.pack()
@@ -97,7 +97,7 @@ const BubbleChart = ({ data, onBubbleClick, width = 600, height = 400 }) => {
     // 기본 폰트 크기 비율: 반지름의 몇 분의 1로 할지 결정합니다.
     // 이 값을 조절하여 텍스트 크기를 변경할 수 있습니다. (예: 2, 2.5, 3 등)
     // 숫자가 클수록 텍스트는 버블에 비해 작아집니다.
-    const baseFontSize = radius / 3;
+    const baseFontSize = radius / 3.5;
 
     // 최소/최대 폰트 크기 (px 단위)
     const minFontSize = 5;  // 너무 작은 버블에서도 최소한의 가독성을 확보

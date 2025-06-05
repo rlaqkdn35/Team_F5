@@ -61,7 +61,7 @@ const LoginPage = ({ onLoginSuccess }) => {
     <div className="login-page-container">
       <div className="branding-section">
         <div className="branding-content">
-          <img src="/Mainlogo.png" className="ai-logo" alt="AI 로고" />
+          <img src="/MainIcon2.png" className="ai-logo" alt="AI 로고" />
           <p className="branding-slogan">복잡한 시장, AI가 찾아낸 기회</p>
         </div>
       </div>

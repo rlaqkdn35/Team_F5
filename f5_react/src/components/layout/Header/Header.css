@@ -128,7 +128,7 @@
 .dropdown-submenu li a {
   border-radius: 15px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
-  border: 1px solid #333;
+  background-color: var(--color-background-submenubar);
   color:var(--color-text-dark);
   margin: 10px;
   padding: 10px 20px;
@@ -145,46 +145,30 @@
 }
 
 /* 검색 컨테이너 */
-.search-container {
-  display: flex;
-  align-items: center;
-  border-radius: 20px;
-  padding: 5px;
-}
 
-.search-input {
-  display: block;
-  border: none;
-  outline: none;
-  padding: 10px 20px;
-  border-radius: 20px;
-  flex-grow: 1; /* 남은 공간 채우기 */
-  font-size: 0.9em;
-  margin-right: 10px;
-}
 
-.search-button {
-  background-color: var(--color-button); /* 검색 버튼 색상 */
-  color: var(--color-text-white);
-  border: none;
-  border-radius: 50%; /* 원형 버튼 */
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  border: 1px solid var(--color-text-white);
-}
-
-.search-button:hover {
+.search-stock:hover button{
   border: 1px solid var(--color-border);
   background-color: var(--color-button-hover);
   color: var(--color-button);
 }
 
+.search-stock input{
+  border: 1px solid var(--color-border);
+  background-color: var(--color-button-hover);
+  color: var(--color-button);
+  padding: 1em 4em;
+  margin-right: 1em;
+  border-radius: 12px;
+}
 
+.search-stock button{
+  padding: 1em;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-button);
+  color: var(--color-button-hover);
+    border-radius: 50%;
+}
 
 
 /* ==================================================================== */
@@ -198,10 +182,11 @@
   justify-content: center; /* 세로 방향으로 가운데 정렬 */
   min-height: 50vh; /* 화면 높이의 최소 70%를 차지하도록 설정 */
   align-items: center; 
-  border-bottom: 1px solid var(--color-line);
-  
-
 }
+
+
+
+
 
 
 @font-face {
@@ -210,17 +195,29 @@
     font-weight: normal;
     font-style: normal;
 }
+@font-face {
+    font-family: 'PyeongChangPeace-Bold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/PyeongChangPeace-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Cafe24Oneprettynight';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Oneprettynight.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 .overlay-content h1 {
 /* 글씨체 키우기 */
   font-size: 5em;
   
   /* 색깔 넣기 */
-  color: #333;
+  color: var(--color-text-dark);
   /* !!! 추가: 초기 렌더링 시 글자가 보이지 않도록 설정 !!! */
   opacity: 0;         /* 텍스트가 완전히 투명하게 시작 */
   visibility: hidden; /* 요소 자체가 보이지 않도록 설정 (레이아웃 공간은 차지) */
   transition: opacity 0.05s, visibility 0.05s; /* 아주 짧은 트랜지션으로 섬광 방지 */
-  font-family: 'GongGothicMedium';
+  font-family: 'Cafe24Oneprettynight';
 }
 
 /* --- 애니메이션 클래스 정의 --- */

@@ -6,10 +6,18 @@
     justify-content: center;
     align-items: center;
     overflow: hidden; /* 버블이 넘치면 숨김 */
+
 }
 
 .bubble {
     cursor: pointer;
+    
     transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
 }
 
+.bubble circle{
+    stroke: var(--color-background-menubar);
+}
+.bubble:hover circle {
+    fill: var(--color-background-menubar);
+}

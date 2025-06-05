@@ -8,7 +8,7 @@ const SignUpPage = () => {
   const [form, setForm] = useState({
     username: '',
     password: '',
-    confirmPassword: '',
+    confirmpassword: '',
     nickname: '',
     email: ''
   });
@@ -24,9 +24,9 @@ const SignUpPage = () => {
     e.preventDefault();
     setMessage('');
 
-    const { username, password, confirmPassword, nickname, email } = form;
+    const { username, password, confirmpassword, nickname, email } = form;
 
-    if (password !== confirmPassword) {
+    if (password !== confirmpassword) {
       setMessage('❗ 비밀번호가 일치하지 않습니다.');
       return;
     }
@@ -60,16 +60,22 @@ const SignUpPage = () => {
 
   return (
     <div className="login-page-container">
+      <div className="branding-section">
+        <div className="branding-content">
+          <img src='MainIcon.png' className='ai-logo' alt="AI 로고"/>
+          <p className="branding-slogan">복잡한 시장, AI가 찾아낸 기회</p>
+        </div>
+      </div>
       <div className="login-form-section">
         <div className="login-content-wrapper">
           <h1 className="login-title">회원가입</h1>
           <p className="login-slogan">AI 기반 투자를 경험하기 위해 가입해주세요.</p>
 
           <form onSubmit={handleSubmit} className="login-form">
-            {['username', 'password', 'confirmPassword', 'nickname', 'email'].map((field, idx) => (
+            {['username', 'password', 'confirmpassword', 'nickname', 'email'].map((field, idx) => (
               <div className="form-group" key={idx}>
                 <label htmlFor={field}>{
-                  { username: '아이디', password: '비밀번호', confirmPassword: '비밀번호 확인', nickname: '닉네임', email: '이메일' }[field]
+                  { username: '아이디', password: '비밀번호', confirmpassword: '비밀번호 확인', nickname: '닉네임', email: '이메일' }[field]
                 }</label>
                 <input
                   type={field.includes('password') ? 'password' : field === 'email' ? 'email' : 'text'}
@@ -77,15 +83,14 @@ const SignUpPage = () => {
                   name={field}
                   placeholder={{
                     username: '사용할 아이디를 입력해주세요',
-                    password: '비밀번호 (8자 이상)',
-                    confirmPassword: '비밀번호를 다시 입력해주세요',
+                    password: '사용할 비밀번호를 입력해주세요',
+                    confirmpassword: '비밀번호를 다시 입력해주세요',
                     nickname: '표시될 닉네임을 입력해주세요',
                     email: '연락받을 이메일을 입력해주세요',
                   }[field]}
                   value={form[field]}
                   onChange={handleChange}
                   required
-                  minLength={field.includes('password') ? 8 : undefined}
                 />
               </div>
             ))}
@@ -100,12 +105,7 @@ const SignUpPage = () => {
         </div>
       </div>
 
-      <div className="branding-section">
-        <div className="branding-content">
-          <img src='Mainlogo.png' className='ai-logo' alt="AI 로고"/>
-          <p className="branding-slogan">복잡한 시장, AI가 찾아낸 기회</p>
-        </div>
-      </div>
+   
     </div>
   );
 };

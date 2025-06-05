@@ -16,7 +16,6 @@ import LeftSidebar from './components/layout/Sidebar/LeftSidebar.jsx';
 import RightSidebar from './components/layout/Sidebar/RightSidebar.jsx';
 import Footer from './components/layout/Footer/Footer.jsx';
 
-import MainPage from './pages/MainPage.jsx';
 import LoginPage from './pages/LoginPage/LoginPage.jsx';
 import SignUpPage from './pages/SignUpPage/SignUpPage.jsx';
 import FindUserPage from './pages/FindUserPage/FindUserPage.jsx';
@@ -47,6 +46,7 @@ import MyPageLayout from './pages/MyPage/MyPageLayout.jsx';
 import AiAssistantPage from './pages/MyPage/components/AiAssistantPage.jsx';
 import UserProfilePage from './pages/MyPage/components/UserProfilePage.jsx';
 import UserFavorite from './pages/MyPage/components/UserFavorite.jsx';
+import MainPage from './pages/MainPage/MainPage.jsx';
 
 function ProtectedElement({ currentUser, children }) {
   const location = useLocation();
@@ -97,9 +97,10 @@ function App() {
           <Header isLoggedIn={!!currentUser} onLogout={handleLogout} />
           <main className="app-main-content-centered">
             <Routes>
-              <Route path="/" element={<MainPage />} />
+              <Route path="/Main" element={<MainPage />} />
 
               {/* AI INFO */}
+              <Route path="/" element={<Navigate to="/ai-info" replace />} />
               <Route path="/ai-info" element={<AiInfoPageLayout />}>
                 <Route index element={<AiInfoHomeContentPage />} />
                 <Route path="price-analysis" element={<PriceAnalysisContent />} />

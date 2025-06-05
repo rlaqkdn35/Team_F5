@@ -19,7 +19,7 @@ const FindUserPage = () => {
   const handleFindIdSubmit = (e) => {
     e.preventDefault();
     setFindIdResultMessage('아이디를 찾는 중입니다...');
-    
+
     // TODO: 실제 아이디 찾기 API 호출 로직 구현
     // 이메일을 백엔드로 보내서 해당 이메일로 가입된 아이디를 조회
     setTimeout(() => {
@@ -54,78 +54,79 @@ const FindUserPage = () => {
 
   return (
     <div className="find-user-page-container">
-      {/* 좌측: 아이디 찾기 섹션 */}
-      <div className="recovery-section find-id-section">
-        <div className="recovery-content-wrapper">
-          <h1 className="recovery-title">아이디 찾기</h1>
-          <p className="recovery-slogan">가입 시 등록한 이메일을 입력해주세요.</p>
+      {/* 아이디 찾기와 비밀번호 찾기 섹션을 묶는 wrapper */}
+      <div className="recovery-sections-wrapper">
+        {/* 좌측: 아이디 찾기 섹션 */}
+        <div className="recovery-section find-id-section">
+          <div className="recovery-content-wrapper">
+            <h1 className="recovery-title">아이디 찾기</h1>
+            <p className="recovery-slogan">가입 시 등록한 이메일을 입력해주세요.</p>
 
-          <form onSubmit={handleFindIdSubmit} className="recovery-form">
-            <div className="form-group">
-              <label htmlFor="findIdEmail">이메일</label>
-              <input 
-                type="email" 
-                id="findIdEmail" 
-                placeholder="이메일 주소를 입력해주세요" 
-                value={findIdEmail}
-                onChange={(e) => setFindIdEmail(e.target.value)}
-                required 
-              />
-            </div>
-            
-            <button type="submit" className="recovery-button">아이디 찾기</button>
-          </form>
+            <form onSubmit={handleFindIdSubmit} className="recovery-form">
+              <div className="form-group">
+                <label htmlFor="findIdEmail">이메일</label>
+                <input
+                  type="email"
+                  id="findIdEmail"
+                  placeholder="이메일 주소를 입력해주세요"
+                  value={findIdEmail}
+                  onChange={(e) => setFindIdEmail(e.target.value)}
+                  required
+                />
+              </div>
 
-          {/* innerHTML 사용에 주의 (XSS 공격 방어) */}
-          {findIdResultMessage && <p className="result-message" dangerouslySetInnerHTML={{ __html: findIdResultMessage }}></p>}
+              <button type="submit" className="recovery-button">아이디 찾기</button>
+            </form>
 
-          <div className="recovery-links">
-            <Link to="/login">로그인</Link>
-            <Link to="/signup">회원가입</Link>
+            {/* innerHTML 사용에 주의 (XSS 공격 방어) */}
+            {findIdResultMessage && <p className="result-message" dangerouslySetInnerHTML={{ __html: findIdResultMessage }}></p>}
+
           </div>
         </div>
-      </div>
 
-      {/* 우측: 비밀번호 찾기 섹션 */}
-      <div className="recovery-section forgot-pw-section">
-        <div className="recovery-content-wrapper">
-          <h1 className="recovery-title">비밀번호 찾기</h1>
-          <p className="recovery-slogan">아이디와 이메일을 입력해주세요.</p>
+        {/* 우측: 비밀번호 찾기 섹션 */}
+        <div className="recovery-section forgot-pw-section">
+          <div className="recovery-content-wrapper">
+            <h1 className="recovery-title">비밀번호 찾기</h1>
+            <p className="recovery-slogan">아이디와 이메일을 입력해주세요.</p>
 
-          <form onSubmit={handleForgotPwSubmit} className="recovery-form">
-            <div className="form-group">
-              <label htmlFor="forgotPwUserId">아이디</label>
-              <input 
-                type="text" 
-                id="forgotPwUserId" 
-                placeholder="아이디를 입력해주세요" 
-                value={forgotPwUserId}
-                onChange={(e) => setForgotPwUserId(e.target.value)}
-                required 
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="forgotPwEmail">이메일</label>
-              <input 
-                type="email" 
-                id="forgotPwEmail" 
-                placeholder="가입 시 등록한 이메일" 
-                value={forgotPwEmail}
-                onChange={(e) => setForgotPwEmail(e.target.value)}
-                required 
-              />
-            </div>
-            
-            <button type="submit" className="recovery-button">비밀번호 재설정</button>
-          </form>
+            <form onSubmit={handleForgotPwSubmit} className="recovery-form">
+              <div className="form-group">
+                <label htmlFor="forgotPwUserId">아이디</label>
+                <input
+                  type="text"
+                  id="forgotPwUserId"
+                  placeholder="아이디를 입력해주세요"
+                  value={forgotPwUserId}
+                  onChange={(e) => setForgotPwUserId(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="forgotPwEmail">이메일</label>
+                <input
+                  type="email"
+                  id="forgotPwEmail"
+                  placeholder="가입 시 등록한 이메일"
+                  value={forgotPwEmail}
+                  onChange={(e) => setForgotPwEmail(e.target.value)}
+                  required
+                />
+              </div>
 
-          {forgotPwResultMessage && <p className="result-message">{forgotPwResultMessage}</p>}
+              <button type="submit" className="recovery-button">비밀번호 찾기</button>
+            </form>
 
-          <div className="recovery-links">
-            <Link to="/login">로그인</Link>
-            <Link to="/signup">회원가입</Link>
+            {forgotPwResultMessage && <p className="result-message">{forgotPwResultMessage}</p>}
+
           </div>
         </div>
+      </div> {/* recovery-sections-wrapper 종료 */}
+
+      {/* 두 섹션 아래에 통합된 recovery-links */}
+      <div className="recovery-links-footer">
+        <Link to="/login" className="footer-link-button">로그인</Link>
+        <Link to="/signup" className="footer-link-button">회원가입</Link>
       </div>
     </div>
   );

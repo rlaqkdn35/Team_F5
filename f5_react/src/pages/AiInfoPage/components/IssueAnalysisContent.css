@@ -16,7 +16,7 @@
     font-weight: 500;
     border: none;
     border-bottom: 2px solid var(--color-line);
-    background-color: transparent;
+    background-color: var(--color-white-hover);
     cursor: pointer;
     transition: color 0.2s, border-bottom-color 0.2s;
     margin-bottom: -2px; /* Pulls button up to sit on the border */
@@ -24,13 +24,13 @@
 }
 
 .issue-tab-button.active {
-    background-color: var(--color-text-dark);
+    background-color: var(--color-button);
     color: var(--color-text-white);
     font-weight: bold;
 }
 
 .issue-tab-button:hover {
-    background-color: var(--color-text-dark);
+    background-color: var(--color-button);
     color: var(--color-text-white);
     font-weight: bold;
 }

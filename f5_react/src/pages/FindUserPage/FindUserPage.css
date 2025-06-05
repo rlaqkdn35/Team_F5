@@ -1,170 +1,279 @@
+/* src/pages/FindUserPage/FindUserPage.css */
+
+/* Define CSS Variables for consistency across your application */
+/* These should ideally be defined in a global stylesheet or a :root block */
+:root {
+  --color-background-menubar: #C7A980;
+  --color-background-submenubar: #EEE3BE;
+  --color-background-body: #ffffff;
+  --color-text-white: #ffffff;
+  --color-text-dark: #494B56;
+  --color-button: #C7A980;
+  --color-button-hover: #EEE3BE;
+  --color-white-hover: #EEE3BE; /* Assuming this is for white/light hover effects */
+  
+  /* Additional colors that might be useful for this page based on the new palette */
+  --color-accent-light: #EEE3BE; /* Lighter accent from your palette */
+  --color-accent-dark: #C7A980;  /* Darker accent from your palette */
+}
+
 
 .find-user-page-container {
     display: flex;
-    min-height: 100vh;
-    background-color: #fefefe; /* 전체 배경을 밝은 색으로 */
+    flex-direction: column; /* 세로 방향으로 정렬 (섹션 묶음 + 하단 링크) */
+    justify-content: center; /* 세로 중앙 정렬 (내용이 많으면 flex-start) */
+    align-items: center; /* 가로 중앙 정렬 */
+    min-height: 100vh; /* Full viewport height */
+    padding: 40px 20px; /* Add some padding around the container */
+    gap: 40px; /* 섹션 묶음과 하단 링크 사이의 간격 */
+    box-sizing: border-box; /* Include padding in element's total width and height */
+    background-color: #f4f7f6; /* Keeping a light background for the page container itself */
+}
+
+/* 두 섹션이 나란히 배치되도록 Wrapper 추가 */
+.recovery-sections-wrapper {
+    display: flex;
+    justify-content: center; /* 섹션들을 중앙 정렬 */
+    align-items: flex-start; /* 섹션들을 상단에 정렬 */
+    gap: 40px; /* 섹션들 사이의 간격 */
+    width: 100%;
+    max-width: 1000px; /* 두 섹션의 최대 너비 */
 }
 
 .recovery-section {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: var(--color-background-body); /* White background for each section */
+    border-radius: 12px; /* Slightly more rounded corners */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Stronger, softer shadow */
     padding: 40px;
-    background-color: #ffffff; /* 섹션 배경은 흰색 */
+    width: 100%;
+    max-width: 450px; /* Max width for each section */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content within each section */
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
 }
 
-.find-id-section {
-    border-right: 1px solid #ffccbc; /* 연한 빨강 테두리 */
+.recovery-section:hover {
+    transform: translateY(-5px); /* Slight lift effect on hover */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
 }
 
 .recovery-content-wrapper {
-    max-width: 400px;
     width: 100%;
-    text-align: center;
-    padding: 20px;
+    max-width: 350px; /* Limit content width within the section */
 }
 
 .recovery-title {
-    font-size: 2.2em;
-    margin-bottom: 10px;
+    font-size: 2.2em; /* Larger title */
+    color: var(--color-text-dark); /* Using dark text color for titles */
+    margin-bottom: 15px;
     font-weight: 700;
-    color: #e53935; /* 강렬한 빨간색 제목 */
 }
 
 .recovery-slogan {
-    font-size: 1.0em;
+    font-size: 1.1em;
+    color: #555; /* Keeping a slightly lighter grey for slogans, not explicitly in your vars */
     margin-bottom: 30px;
     line-height: 1.5;
-    color: #666666; /* 일반 텍스트 색상 */
 }
 
 .recovery-form .form-group {
     margin-bottom: 20px;
-    text-align: left;
+    text-align: left; /* Align labels and inputs to the left */
+    width: 100%;
 }
 
 .recovery-form label {
     display: block;
     font-size: 0.95em;
-    margin-bottom: 10px;
+    color: var(--color-text-dark); /* Using dark text color for labels */
+    margin-bottom: 8px;
     font-weight: 600;
-    color: #444444; /* 라벨 색상 */
 }
 
 .recovery-form input[type="text"],
-.recovery-form input[type="tel"],
-.recovery-form input[type="email"] {
+.recovery-form input[type="email"],
+.recovery-form input[type="password"] {
     width: 100%;
     padding: 14px 18px;
-    border: 1px solid #ffab91; /* 부드러운 빨강 계열 테두리 */
-    border-radius: 8px;
-    font-size: 1.05em;
+    border: 1px solid var(--color-background-menubar); /* Using a primary color for border */
+    border-radius: 8px; /* Slightly more rounded input fields */
+    font-size: 1em;
+    color: #333333; /* Keeping a dark grey for input text */
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    color: #333333; /* 입력 텍스트 색상 */
+    box-sizing: border-box; /* Ensures padding doesn't increase total width */
 }
 
 .recovery-form input[type="text"]:focus,
-.recovery-form input[type="tel"]:focus,
-.recovery-form input[type="email"]:focus {
-    border-color: #e53935; /* 포커스 시 강렬한 빨강 테두리 */
-    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.25); /* 빨간색 그림자 */
+.recovery-form input[type="email"]:focus,
+.recovery-form input[type="password"]:focus {
+    border-color: var(--color-button); /* Using button color for focus highlight */
+    box-shadow: 0 0 0 3px rgba(199, 169, 128, 0.25); /* Derived from --color-button for subtle shadow */
     outline: none;
 }
 
 .recovery-button {
     width: 100%;
-    padding: 16px 20px;
+    padding: 15px 20px;
+    background-color: var(--color-button); /* Main button color */
+    color: var(--color-text-white);
     border: none;
     border-radius: 8px;
     font-size: 1.1em;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease;
-    margin-top: 25px;
-    background-color: #e53935; /* 강렬한 빨간색 버튼 */
-    color: #ffffff; /* 흰색 텍스트 */
+    transition: background-color 0.3s ease, transform 0.1s ease, color 0.3s ease;
+    margin-top: 10px; /* Space above the button */
 }
 
 .recovery-button:hover {
-    background-color: #c62828; /* 호버 시 더 깊은 빨간색 */
-    transform: translateY(-2px);
+    background-color: var(--color-button-hover); /* Darker button color on hover */
+    color: var(--color-text-dark); /* Change text color for better contrast on lighter hover */
+    transform: translateY(-2px); /* Slight lift */
 }
 
 .recovery-button:active {
-    background-color: #b71c1c; /* 클릭 시 더 진한 빨간색 */
-    transform: translateY(0);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.recovery-links {
-    margin-top: 30px;
-    font-size: 0.9em;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.recovery-links a {
-    text-decoration: none;
-    padding: 5px 0;
-    color: #e53935; /* 링크 텍스트도 빨간색 */
-    transition: color 0.3s ease, text-decoration 0.3s ease;
-}
-
-.recovery-links a:hover {
-    text-decoration: underline;
-    color: #c62828; /* 호버 시 더 진한 빨간색 */
+    transform: translateY(0); /* Press effect */
 }
 
 .result-message {
-    margin-top: 20px;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 0.9em;
-    font-weight: 500;
-    border: 1px solid #ffab91; /* 연한 빨강 테두리 */
-    background-color: #fff3e0; /* 아주 연한 주황색 배경 (경고/정보 느낌) */
-    color: #d84315; /* 주황색 계열 텍스트 */
+    margin-top: 25px;
+    font-size: 1.05em;
+    color: var(--color-text-dark); /* Message text color */
+    line-height: 1.5;
+    background-color: var(--color-background-submenubar); /* Light background for message */
+    border-left: 5px solid var(--color-button); /* Darker accent for emphasis */
+    padding: 15px 20px;
+    border-radius: 8px;
+    word-break: break-word; /* Prevent long words from overflowing */
 }
 
-/* --- 반응형 디자인 --- */
-@media (max-width: 768px) {
+.result-message .highlight-id {
+    color: var(--color-text-dark); /* Darker text color for highlighted ID */
+    font-weight: 700;
+    font-size: 1.1em;
+}
+
+/* 새롭게 추가된 하단 링크 영역 */
+.recovery-links-footer {
+    margin-top: 40px; /* 섹션들과의 충분한 간격 */
+    display: flex;
+    gap: 25px; /* 버튼 사이의 간격 */
+    width: 100%;
+    max-width: 400px; /* 버튼 그룹의 최대 너비 */
+    justify-content: center; /* 버튼들을 중앙 정렬 */
+}
+
+.footer-link-button {
+    flex-grow: 1; /* 공간을 균등하게 분배 */
+    padding: 18px 25px;
+    background-color: var(--color-button); /* Use button color */
+    color: var(--color-text-white);
+    border: none;
+    border-radius: 10px; /* 더 둥근 버튼 */
+    font-size: 1.2em; /* 더 큰 폰트 크기 */
+    font-weight: 700;
+    text-decoration: none; /* 밑줄 제거 */
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease, color 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 버튼 그림자 */
+}
+
+.footer-link-button:hover {
+    background-color: var(--color-button-hover); /* Use button hover color */
+    color: var(--color-text-dark); /* Change text color for contrast */
+    transform: translateY(-3px); /* 약간 위로 떠오르는 효과 */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 강화 */
+}
+
+.footer-link-button:active {
+    transform: translateY(0); /* 클릭 시 원위치 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 클릭 시 그림자 약화 */
+}
+
+
+/* --- Media Queries for Responsiveness --- */
+@media (max-width: 992px) {
     .find-user-page-container {
-        flex-direction: column;
+        padding: 30px 15px;
+        gap: 30px; /* 섹션 묶음과 하단 링크 사이 간격 */
+    }
+
+    .recovery-sections-wrapper {
+        flex-direction: column; /* 세로로 쌓기 */
+        align-items: center; /* 중앙 정렬 */
+        gap: 30px; /* 세로로 쌓였을 때 섹션들 사이 간격 */
     }
 
     .recovery-section {
-        width: 100%;
-        padding: 30px 20px;
-        box-shadow: none;
-        border-right: none;
-    }
-
-    .find-id-section {
-        border-bottom: 1px solid #ffccbc; /* 하단 테두리로 변경 */
+        padding: 30px;
+        max-width: 400px; /* Slightly smaller max-width for stacked sections */
     }
 
     .recovery-title {
         font-size: 2em;
     }
+
+    .recovery-slogan {
+        font-size: 1em;
+    }
+
+    .recovery-links-footer {
+        flex-direction: column; /* 버튼들도 세로로 쌓기 */
+        max-width: 300px; /* 세로로 쌓일 때 버튼 그룹 너비 조정 */
+        gap: 15px; /* 버튼 사이 간격 줄임 */
+    }
+
+    .footer-link-button {
+        padding: 15px 20px;
+        font-size: 1.1em;
+    }
 }
 
-@media (max-width: 480px) {
-    .recovery-content-wrapper {
-        padding: 15px;
+@media (max-width: 576px) {
+    .find-user-page-container {
+        padding: 20px 10px;
+        gap: 25px;
+    }
+
+    .recovery-section {
+        padding: 25px;
+        border-radius: 10px;
     }
 
     .recovery-title {
         font-size: 1.8em;
+        margin-bottom: 10px;
     }
 
     .recovery-slogan {
+        font-size: 0.9em;
+        margin-bottom: 20px;
+    }
+
+    .recovery-form input {
+        padding: 12px 15px;
         font-size: 0.95em;
     }
 
     .recovery-button {
+        padding: 13px 18px;
         font-size: 1em;
-        padding: 14px 18px;
+    }
+
+    .result-message {
+        font-size: 0.95em;
+        padding: 12px 15px;
+    }
+
+    .recovery-links-footer {
+        margin-top: 25px;
+        gap: 10px;
+    }
+
+    .footer-link-button {
+        padding: 12px 15px;
+        font-size: 1em;
     }
 }

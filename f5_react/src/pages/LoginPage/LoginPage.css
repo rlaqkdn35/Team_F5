@@ -1,98 +1,304 @@
-/* src/pages/SignupPage/SignupPage.css */
+/* LoginPage.css */
 
-/*
-  이 파일은 회원가입 페이지에만 특화된 스타일을 정의합니다.
-  대부분의 공통 스타일은 '../LoginPage/LoginPage.css'에서 상속받습니다.
-  따라서 이곳에서는 공통 스타일을 오버라이드하거나 추가적인 스타일을 정의합니다.
-*/
-
-/* 회원가입 폼 컨테이너의 최대 너비를 로그인 폼보다 살짝 넓게 설정 */
-/* 이 셀렉터는 LoginPage.css의 .login-content-wrapper를 오버라이드합니다. */
-.login-page-container .login-form-section .login-content-wrapper {
-  max-width: 450px; /* 로그인 폼의 400px보다 살짝 넓게 */
-  padding: 25px; /* 내부 여백 조정 */
+/* :root 안에 전역 CSS 변수 정의 */
+:root {
+  --color-background-menubar: #C7A980;
+  --color-background-submenubar: #EEE3BE;
+  --color-background-body: #ffffff;
+  --color-text-white: #ffffff;
+  --color-text-dark: #494B56;
+  --color-button: #C7A980;
+  --color-button-hover: #EEE3BE;
+  --color-white-hover: #EEE3BE;
 }
 
-/* 회원가입 제목의 마진 조정 */
-.login-page-container .login-content-wrapper .login-title {
-  margin-bottom: 15px; /* 제목 아래 간격 */
+/* 전체 페이지 컨테이너 */
+.login-page-container {
+  display: flex;
+  min-height: 100vh; /* 최소 화면 높이만큼 채우도록 설정 */
+  font-family: 'Inter', 'NanumSquare', sans-serif; /* 기본 폰트 설정, NanumSquare는 예시 한국어 폰트 */
+  background: linear-gradient(135deg, var(--color-background-menubar) 0%, var(--color-background-submenubar) 100%);
+  overflow: hidden; /* 스크롤바 방지 */
 }
 
-/* 회원가입 슬로건의 마진 조정 */
-.login-page-container .login-content-wrapper .login-slogan {
-  margin-bottom: 35px; /* 슬로건 아래 간격 */
-}
-
-/* 회원가입 폼 그룹 간격 조정 */
-.login-page-container .login-form .form-group {
-  margin-bottom: 22px; /* 폼 그룹 간격 */
-}
-
-/* 회원가입 버튼 마진 조정 */
-.login-page-container .login-button {
-  margin-top: 25px; /* 버튼 위 간격 */
-}
-
-/* --- 추가: 이메일 입력 필드 스타일 --- */
-/* SignupPage에서 사용되는 email input에 대한 스타일 */
-/* 이는 LoginPage.css의 input 스타일과 동일하게 적용되도록 합니다. */
-.login-form input[type="password"] 
-.login-form input[type="text"] 
-.login-form input[type="email"] {
-  width: 100%;
-  padding: 14px 18px;
-  border: 1px solid var(--border-color); /* LoginPage.css의 변수 사용 */
-  border-radius: 8px;
-  font-size: 1.05em;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* --- 이메일 입력 필드 스타일 끝 --- */
-
-
-/* 회원가입 결과 메시지 스타일 강화 */
-/* .result-message는 LoginPage.css에 정의되어 있으므로,
-   여기에 .success나 .error 같은 특정 상태에 대한 스타일을 추가할 수 있습니다. */
-.result-message {
+/* 브랜딩 섹션 (왼쪽) */
+.branding-section {
+  flex: 1; /* 비율로 공간 차지 */
+ color: var(--color-text-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
   text-align: center;
-  font-weight: 600;
 }
 
-.result-message.success {
-  color: #1a751a; /* 진한 초록색 */
-  background-color: #e6ffe6; /* 연한 초록색 배경 */
-  border-color: #8cd98c;
-  padding: 12px;
+.branding-content {
+  max-width: 400px; /* 최대 너비 제한 */
 }
 
-.result-message.error {
-  color: #cc0000; /* 진한 빨간색 */
-  background-color: #ffe6e6; /* 연한 빨간색 배경 */
-  border-color: #ff8080;
-  padding: 12px;
+.ai-logo {
+  width: 400px; /* 로고 크기 */
+  height: auto;
+  margin-bottom: 30px; /* 로고와 슬로건 사이 간격 */
+  border-radius: 12px; /* 로고 이미지 모서리 둥글게 */
+  opacity: 0; 
+  animation: fadeIn 1s ease-in-out forwards;
 }
 
-.ai-logo{
-  width: 500px;
-  height: 500px;
+@keyframes fadeIn {
+from {
+opacity: 0;
+}
+to {
+opacity: 1;
+}
 }
 
-/* 모바일 반응형 조정 */
+.branding-slogan {
+  font-size: 1.8rem; /* 슬로건 폰트 크기 */
+  font-weight: 600; /* 슬로건 폰트 굵기 */
+  line-height: 1.4; /* 줄 간격 */
+}
+
+/* 로그인 폼 섹션 (오른쪽) */
+.login-form-section {
+  flex: 1; /* 비율로 공간 차지 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.login-content-wrapper {
+  width: 100%;
+  max-width: 420px; /* 폼 최대 너비 */
+  padding: 30px;
+  border-radius: 12px; /* 폼 컨테이너 모서리 둥글게 */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  background-color: var(--color-background-body);
+}
+
+.login-title {
+  font-size: 2.5rem; /* 제목 폰트 크기 */
+  font-weight: 700; /* 제목 폰트 굵기 */
+  color: var(--color-text-dark);
+  margin-bottom: 10px; /* 제목과 슬로건 사이 간격 */
+  text-align: center;
+}
+
+.login-slogan {
+  font-size: 1.1rem; /* 슬로건 폰트 크기 */
+  color: #555; /* 슬로건 색상 (변수에 없음, 기존 유지) */
+  margin-bottom: 30px; /* 슬로건과 폼 사이 간격 */
+  text-align: center;
+}
+
+/* 폼 스타일 */
+.login-form .form-group {
+  margin-bottom: 20px; /* 각 폼 그룹 사이 간격 */
+}
+
+.login-form label {
+  display: block; /* 레이블을 블록 요소로 만들어 줄바꿈 */
+  font-size: 0.9rem; /* 레이블 폰트 크기 */
+  color: #444; /* 레이블 색상 (변수에 없음, 기존 유지) */
+  margin-bottom: 8px; /* 레이블과 입력 필드 사이 간격 */
+  font-weight: 500;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"],
+.login-form input[type="email"] {
+  width: 100%; /* 입력 필드 너비 100% */
+  padding: 12px 15px; /* 입력 필드 내부 여백 */
+  border: 1px solid #ddd; /* 입력 필드 테두리 */
+  border-radius: 8px; /* 입력 필드 모서리 둥글게 */
+  font-size: 1rem; /* 입력 필드 폰트 크기 */
+  box-sizing: border-box; /* padding과 border를 너비에 포함 */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* 테두리 및 그림자 색상 변경 시 부드러운 전환 효과 */
+}
+
+.login-form input[type="text"]:focus,
+.login-form input[type="password"]:focus,
+.loigin-form input[type="email"]:focus {
+  outline: none; /* 포커스 시 기본 아웃라인 제거 */
+  border-color: var(--color-button);
+  box-shadow: 0 0 0 2px rgba(199, 169, 128, 0.2); /* var(--color-button)의 RGB 값으로 rgba 설정 */
+}
+
+.login-button {
+  width: 100%; /* 버튼 너비 100% */
+  padding: 14px; /* 버튼 내부 여백 */
+  background-color: var(--color-button);
+  color: var(--color-text-white);
+  border: none; /* 버튼 테두리 제거 */
+  border-radius: 8px; /* 버튼 모서리 둥글게 */
+  font-size: 1.1rem; /* 버튼 폰트 크기 */
+  font-weight: 600; /* 버튼 폰트 굵기 */
+  cursor: pointer; /* 마우스 오버 시 커서 변경 */
+  transition: background-color 0.3s ease, color 0.3s ease; /* 배경색 및 텍스트 색상 변경 시 부드러운 전환 효과 */
+  margin-top: 10px; /* 폼 요소와 버튼 사이 간격 */
+}
+
+.login-button:hover {
+  background-color: var(--color-button-hover);
+  color: var(--color-text-dark); /* 호버 시 텍스트 색상 변경 */
+}
+
+/* 로그인 링크 (아이디/비밀번호 찾기, 회원가입) */
+.login-links {
+  display: flex;
+  justify-content: space-between; /* 링크들을 양쪽으로 분산 */
+  margin-top: 20px; /* 폼과 링크 사이 간격 */
+  font-size: 0.9rem; /* 링크 폰트 크기 */
+}
+
+.login-links a {
+  color: var(--color-button);
+  text-decoration: none; /* 밑줄 제거 */
+  transition: color 0.3s ease; /* 색상 변경 시 부드러운 전환 효과 */
+}
+
+.login-links a:hover {
+  color: var(--color-white-hover);
+  text-decoration: underline; /* 마우스 오버 시 밑줄 표시 */
+}
+
+/* 소셜 로그인 섹션 */
+.social-login-section {
+  margin-top: 30px; /* 링크와 소셜 로그인 섹션 사이 간격 */
+  text-align: center; /* 내부 요소들 가운데 정렬 */
+}
+
+.social-login-title {
+  font-size: 0.95rem; /* 소셜 로그인 제목 폰트 크기 */
+  color: #777; /* 소셜 로그인 제목 색상 (변수에 없음, 기존 유지) */
+  margin-bottom: 15px; /* 제목과 버튼들 사이 간격 */
+  position: relative; /* 가상 요소를 사용하기 위해 relative 설정 */
+  display: flex; /* flex를 사용하여 양쪽에 선 추가 */
+  align-items: center; /* 수직 가운데 정렬 */
+}
+
+/* "SNS 로그인" 텍스트 양 옆에 선 추가 */
+.social-login-title::before,
+.social-login-title::after {
+  content: '';
+  flex-grow: 1; /* 남은 공간을 채우도록 설정 */
+  height: 1px; /* 선의 두께 */
+  background-color: #ddd; /* 선 색상 (변수에 없음, 기존 유지) */
+  margin: 0 10px; /* 텍스트와의 간격 */
+}
+
+.social-login-btn {
+  width: 100%; /* 버튼 너비 100% */
+  padding: 12px; /* 버튼 내부 여백 */
+  border: 1px solid #ddd; /* 버튼 테두리 */
+  border-radius: 8px; /* 버튼 모서리 둥글게 */
+  font-size: 1rem; /* 버튼 폰트 크기 */
+  font-weight: 500; /* 버튼 폰트 굵기 */
+  cursor: pointer; /* 마우스 오버 시 커서 변경 */
+  margin-bottom: 10px; /* 각 소셜 로그인 버튼 사이 간격 */
+  display: flex; /* 아이콘과 텍스트 정렬을 위해 flex 사용 */
+  align-items: center; /* 수직 가운데 정렬 */
+  justify-content: center; /* 수평 가운데 정렬 */
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+/* 소셜 로그인 버튼 아이콘 (Font Awesome 등 아이콘 라이브러리 사용 시 예시) */
+.social-login-btn i {
+  margin-right: 10px; /* 아이콘과 텍스트 사이 간격 */
+  font-size: 1.2rem; /* 아이콘 크기 */
+}
+
+/* 각 소셜 로그인 버튼 스타일 (브랜드 색상은 유지) */
+.social-login-btn.google {
+  background-color: #ffffff;
+  color: #4285F4;
+  border-color: #4285F4;
+}
+.social-login-btn.google:hover {
+  background-color: #f1f6fe;
+}
+
+.social-login-btn.kakao {
+  background-color: #FEE500;
+  color: #3C1E1E;
+  border-color: #FEE500;
+}
+.social-login-btn.kakao:hover {
+  background-color: #f0d900;
+}
+
+.social-login-btn.naver {
+  background-color: #03C75A;
+  color: white;
+  border-color: #03C75A;
+}
+.social-login-btn.naver:hover {
+  background-color: #02b350;
+}
+
+/* 반응형 디자인: 화면 너비가 768px 이하일 때 적용 */
 @media (max-width: 768px) {
-  .login-page-container .login-form-section .login-content-wrapper {
-    max-width: 100%; /* 모바일에서는 전체 너비 사용 */
-    padding: 20px;
+  .login-page-container {
+    flex-direction: column; /* 세로로 쌓이도록 변경 */
+  }
+
+  .branding-section {
+    min-height: 250px; /* 브랜딩 섹션 최소 높이 설정 */
+    flex: none; /* 비율 대신 고정 크기 */
+    padding: 30px 20px; /* 패딩 조정 */
+  }
+
+  .branding-slogan {
+    font-size: 1.5rem; /* 작은 화면에서 슬로건 폰트 크기 조정 */
+  }
+
+  .ai-logo {
+    /* ... (기존 스타일) ... */
+    opacity: 0; 
+    animation: fadeIn 1s ease-in-out forwards;
+  }
+
+  @keyframes fadeIn {
+  from {
+  opacity: 0;
+  }
+  to {
+  opacity: 1;
+  }
+  }
+
+  .login-form-section {
+    padding: 30px 20px; /* 패딩 조정 */
+  }
+
+  .login-content-wrapper {
+    padding: 25px; /* 작은 화면에서 폼 패딩 조정 */
+    box-shadow: none; /* 작은 화면에서는 그림자 제거 (선택 사항) */
+  }
+
+  .login-title {
+    font-size: 2rem; /* 작은 화면에서 제목 폰트 크기 조정 */
+  }
+
+  .login-slogan {
+    font-size: 1rem; /* 작은 화면에서 슬로건 폰트 크기 조정 */
+    margin-bottom: 25px;
   }
 }
 
-@media (max-width: 480px) {
-  .login-page-container .login-content-wrapper {
-    padding: 15px;
-  }
-  .login-page-container .login-title {
-    font-size: 2em;
-  }
-  .login-page-container .login-slogan {
-    font-size: 0.95em;
-  }
+/* 추가: 입력 필드 플레이스홀더 색상 */
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #aaa;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #aaa;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: #aaa;
 }
