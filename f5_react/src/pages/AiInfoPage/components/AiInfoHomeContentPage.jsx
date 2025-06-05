@@ -8,6 +8,7 @@ import MarketInfoCard from '../../../components/common/MarketInfoCard/MarketInfo
 import Slider from '../../../components/common/Slider/Slider.jsx';
 import RecommendedStockCard from '../../../components/common/RecommendedStockCard/RecommendedStockCard.jsx';
 import BubbleChart from '../../../components/charts/BubbleChart/BubbleChart.jsx';
+import axios from 'axios';
 
 // 코스피/코스닥 데이터 (예시)
 const kospiData = { name: '코스피', value: '2,750.50', change: '+15.20 (+0.55%)', changeType: 'positive', chartData: [{ time: '2024-05-11', value: 2750.50 }] };
@@ -139,29 +140,80 @@ const aiRecommendedStocks = [
 ];
 
 const AiInfoHomeContentPage = () => {
+  // 버블 차트 코드 작성 부분
   // 버블 차트 관련 상태
-  const [bubbleData, setBubbleData] = useState(initialBubbleData);
+  const [bubbleData, setBubbleData] = useState([]);
   const [selectedKeyword, setSelectedKeyword] = useState(null);
   const [detailData, setDetailData] = useState(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true); // 로딩 상태 추가
+  const [error, setError] = useState(null); // 에러 상태 추가
 
+  // API 호출로 버블 데이터 가져오기 (axios.get 사용)
+  useEffect(() => {
+    const fetchBubbleData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get('http://localhost:8084/F5/keyword/keywordData');
+        setBubbleData(response.data); // Axios는 자동으로 JSON 파싱
+        setError(null);
+        
+      } catch (error) {
+        console.error('버블 데이터를 가져오는 중 오류 발생:', error.message);
+        setError('데이터를 불러오지 못했습니다. 서버를 확인하세요.');
+        // 오류 발생 시 기본 데이터로 대체
+        setBubbleData([
+          { text: '삼성전자', value: 150, id: '005930' },
+          { text: 'SK하이닉스', value: 90, id: '000660' },
+          { text: 'AI', value: 85, id: 'theme_ai' },
+          { text: '배터리', value: 70, id: 'theme_battery' },
+          { text: '클라우드', value: 65, id: 'theme_cloud' },
+          { text: '로봇', value: 60, id: 'theme_robot' },
+          { text: '반도체', value: 55, id: 'theme_semiconductor' },
+          { text: '전기차', value: 50, id: 'theme_ev' },
+          { text: '바이오', value: 45, id: 'theme_bio' },
+          { text: '엔터테인먼트', value: 40, id: 'theme_entertainment' },
+          { text: '게임', value: 35, id: 'theme_game' },
+          { text: 'ESG', value: 30, id: 'theme_esg' },
+          { text: '신재생에너지', value: 25, id: 'theme_renewable' },
+          { text: '콘텐츠', value: 20, id: 'theme_content' },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBubbleData();
+  }, []);
+
+  console.log("data", bubbleData)
+
+  // 버블 클릭 핸들러 (기존 코드 유지)
   const handleBubbleClick = (bubble) => {
     setSelectedKeyword(bubble);
-    setDetailData(getDetailDataForKeyword(bubble));
+    setDetailData({
+      keyword: bubble.text,
+      clickFrequency: Math.floor(Math.random() * 100), // 임시 데이터
+      relatedItems: ['관련 품목 1', '관련 품목 2'],
+      news: [
+        { id: 1, title: '뉴스 제목 1', url: '#' },
+        { id: 2, title: '뉴스 제목 2', url: '#' },
+      ],
+    });
   };
 
+// 무슨 페이지인지 모름 - 김현수 작성
   const handleNavigateToIssueNews = () => {
     navigate('/ai-info/issue-analysis'); // 이슈분석 페이지의 뉴스로 이동
   };
   const handleNavigateToAirecommend = () => {
     navigate('/ai-picks'); // 이슈분석 페이지의 뉴스로 이동
   };
+
   //랭킹
   const [popularItems, setPopularItems] = useState(popularSearchesData);
   const [hitRateItems, setHitRateItems] = useState(topHitRatesData);
   const [profitRateItems, setProfitRateItems] = useState(topProfitRatesData);
-
-
 
   // AiInfoHomeContentPage.jsx (일부 수정 예시)
 // ... (기존 import 및 임시 데이터) ...
@@ -221,7 +273,6 @@ return (
         </section>
 
      {/* 섹션 3: AI 이슈분석 */}
-
       <section className="keyword-analysis-section">
         <h2 className="section-title">AI 이슈분석</h2>
         <div className="content-wrapper">
@@ -230,13 +281,13 @@ return (
             <BubbleChart
               data={bubbleData}
               onBubbleClick={handleBubbleClick}
-              width={500} // 버블 차트가 그려질 영역의 너비
-              height={500} // 버블 차트가 그려질 영역의 높이
+              width={500}
+              height={500}
             />
           </div>
 
           {selectedKeyword && detailData ? (
-            <aside className={`details-pane visible`}>
+            <aside className="details-pane visible">
               <h3><span className="keyword-highlight">{detailData.keyword}</span> 상세정보</h3>
               <div className="detail-item"><strong>언급 빈도수 (예시):</strong> {selectedKeyword.value}</div>
               <div className="detail-item"><strong>클릭 빈도수 (예시):</strong> {detailData.clickFrequency}</div>
@@ -265,9 +316,8 @@ return (
           </button>
         </div>
       </section>
-        {/* ... (다른 섹션들) ... */}
     </div>
-);
+  );
 };
 
 export default AiInfoHomeContentPage;
