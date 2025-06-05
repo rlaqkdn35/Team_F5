@@ -53,8 +53,8 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
     const term = searchTerm.toLowerCase();
     const filtered = allStocks.filter(
       (stock) =>
-        stock.stock_code.toLowerCase().includes(term) ||
-        stock.stock_name.toLowerCase().includes(term)
+        stock.stockCode.toLowerCase().includes(term) ||
+        stock.stockName.toLowerCase().includes(term)
     );
     setFilteredStocks(filtered);
     setDropdownOpen(filtered.length > 0);
@@ -65,7 +65,7 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
   };
 
   const handleSelect = (stock) => {
-    setSearchTerm(`${stock.stock_code} (${stock.stock_name})`);
+    setSearchTerm(`${stock.stockCode} (${stock.stockName})`);
     setDropdownOpen(false);
   };
 
@@ -192,21 +192,21 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
         </ul>
 
         {/* 검색 부분 - input + ul 직접 구현 */}
-        <div ref={wrapperRef} >
-          <form onSubmit={handleSearchSubmit} className='search-container'>
-              <input
-                type="text"
-                placeholder="종목명 또는 종목코드 입력"
-                value={searchTerm}
-                onChange={handleInputChange}
-                aria-autocomplete="list"
-                aria-expanded={isDropdownOpen}
-                aria-controls="autocomplete-list"
-                aria-haspopup="listbox"
-                autoComplete="off"
-                className='search-input'
-                />  
-            <button type="submit" aria-label="검색" className='search-button'>
+        <div ref={wrapperRef} style={{ position: 'relative', width: '250px' }}>
+          <form onSubmit={handleSearchSubmit} style={{ display: 'flex' }}>
+            <input
+              type="text"
+              placeholder="종목명 또는 종목코드 입력"
+              value={searchTerm}
+              onChange={handleInputChange}
+              style={{ flex: 1, padding: '6px 10px' }}
+              aria-autocomplete="list"
+              aria-expanded={isDropdownOpen}
+              aria-controls="autocomplete-list"
+              aria-haspopup="listbox"
+              autoComplete="off"
+            />
+            <button type="submit" aria-label="검색" style={{ padding: '6px 10px' }}>
               <FaSearch />
             </button>
           </form>
@@ -215,16 +215,32 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
             <ul
               id="autocomplete-list"
               role="listbox"
+              style={{
+                position: 'absolute',
+                top: '100%',
+                left: 0,
+                right: 0,
+                maxHeight: '200px',
+                overflowY: 'auto',
+                backgroundColor: 'white',
+                border: '1px solid #ccc',
+                borderTop: 'none',
+                zIndex: 9999,
+                margin: 0,
+                padding: 0,
+                listStyle: 'none',
+              }}
             >
               {filteredStocks.map((stock) => (
                 <li
-                  key={stock.stock_code}
+                  key={stock.stockCode}
                   role="option"
                   onClick={() => handleSelect(stock)}
+                  style={{ padding: '8px 10px', cursor: 'pointer' }}
                   onMouseDown={(e) => e.preventDefault()}
                   tabIndex={-1}
                 >
-                  {stock.stock_code} ({stock.stock_name})
+                  {stock.stockCode} ({stock.stockName})
                 </li>
               ))}
             </ul>
