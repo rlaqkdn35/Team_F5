@@ -23,7 +23,7 @@ public class StockPrice {
 	private BigDecimal open_price;
 	
 	@Column(precision = 12, scale = 1) 
-	private BigDecimal hight_price;
+	private BigDecimal high_price;
 	
 	@Column(precision = 12, scale = 1)
 	private BigDecimal low_price;

@@ -28,7 +28,6 @@ public class Comment {
     @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @Column(name="user_id")
     private String userId;
 }
