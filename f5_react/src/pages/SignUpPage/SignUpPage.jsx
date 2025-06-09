@@ -34,8 +34,8 @@ const SignUpPage = () => {
     try {
       setMessage('회원가입 처리 중입니다...');
 
-      const response = await axios.post('http://localhost:8084/F5/signup', {
-        user_id: username,
+      const response = await axios.post('http://localhost:8084/F5/user/register', {
+        userId: username,
         pw: password,
         nickname: nickname,
         email: email

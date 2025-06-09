@@ -186,8 +186,6 @@ const AiInfoHomeContentPage = () => {
     fetchBubbleData();
   }, []);
 
-  console.log("data", bubbleData)
-
   // 버블 클릭 핸들러 (기존 코드 유지)
   const handleBubbleClick = (bubble) => {
     setSelectedKeyword(bubble);

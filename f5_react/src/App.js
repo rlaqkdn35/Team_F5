@@ -1,16 +1,16 @@
-// App.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; // useEffect 임포트
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Navigate,
+    useLocation,
 } from 'react-router-dom';
 import axios from 'axios';
 
 import './App.css';
 
+// ... (기존 임포트 유지) ...
 import Header from './components/layout/Header/Header.jsx';
 import LeftSidebar from './components/layout/Sidebar/LeftSidebar.jsx';
 import RightSidebar from './components/layout/Sidebar/RightSidebar.jsx';
@@ -48,151 +48,168 @@ import UserProfilePage from './pages/MyPage/components/UserProfilePage.jsx';
 import UserFavorite from './pages/MyPage/components/UserFavorite.jsx';
 import MainPage from './pages/MainPage/MainPage.jsx';
 
-
 function ProtectedElement({ currentUser, children }) {
-  const location = useLocation();
-  if (!currentUser) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-  return children;
+    const location = useLocation();
+    if (!currentUser) {
+        return <Navigate to="/login" state={{ from: location }} replace />;
+    }
+    return children;
 }
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [loading, setLoading] = useState(true); // 로그인 상태 확인 중임을 나타내는 로딩 상태
 
-  useEffect(() => {
-    // 로그인 세션 유지 체크
-    fetch('http://localhost:8084/F5/api/me', {
-      credentials: 'include',
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error('Not logged in');
-        return res.json();
-      })
-      .then((user) => setCurrentUser(user))
-      .catch(() => setCurrentUser(null));
-  }, []);
+    // 앱 로드 시 세션 유효성 검사 (새로고침 시 로그인 상태 유지)
+    useEffect(() => {
+        const checkLoginStatus = async () => {
+            try {
+                // withCredentials: true를 통해 브라우저가 저장된 JSESSIONID를 자동으로 보냄
+                const response = await axios.get('http://localhost:8084/F5/user/me', {
+                    withCredentials: true,
+                });
+                setCurrentUser(response.data); // 세션이 유효하면 사용자 정보 설정
+                console.log('세션 확인 성공:', response.data.userId);
+            } catch (error) {
+                console.error('세션 확인 중 오류 (로그인되지 않음 또는 세션 만료):', error.response ? error.response.status : error.message);
+                setCurrentUser(null); // 세션 만료 또는 없음
+            } finally {
+                setLoading(false); // 로딩 완료
+            }
+        };
 
-  const handleLoginSuccess = (userData) => {
-    setCurrentUser(userData);
-  };
+        checkLoginStatus();
+    }, []); // 빈 배열: 컴포넌트 마운트 시 한 번만 실행
 
-  const handleLogout = () => {
-    axios
-      .post(
-        'http://localhost:8084/F5/logout',
-        {},
-        {
-          withCredentials: true,
+    const handleLoginSuccess = (userData) => {
+        setCurrentUser(userData);
+    };
+
+    const handleLogout = async () => {
+        try {
+            // 백엔드 컨텍스트 패스 포함
+            await axios.post('http://localhost:8084/F5/user/logout', {}, {
+                withCredentials: true,
+            });
+            setCurrentUser(null);
+            alert('로그아웃 되었습니다.');
+            console.log('로그아웃 성공.');
+        } catch (error) {
+            console.error('로그아웃 중 오류:', error);
+            // 오류가 발생해도 클라이언트 상태는 로그아웃으로 처리
+            setCurrentUser(null);
+            alert('로그아웃 실패!');
         }
-      )
-      .then(() => setCurrentUser(null))
-      .catch(() => setCurrentUser(null));
-  };
+    };
 
-  return (
-    <Router>
-      <div className="App">
-        <LeftSidebar />
-        <div className="app-body-layout-3col">
-          <Header isLoggedIn={!!currentUser} onLogout={handleLogout} />
-          <main className="app-main-content-centered">
-            <Routes>
-              <Route path="/Main" element={<MainPage />} />
+    // 로딩 중일 때 아무것도 렌더링하지 않거나 로딩 스피너를 보여줄 수 있습니다.
+    if (loading) {
+        return <div>Loading authentication status...</div>; // 로딩 스피너 등
+    }
 
-              {/* AI INFO */}
-              <Route path="/" element={<Navigate to="/ai-info" replace />} />
-              <Route path="/ai-info" element={<AiInfoPageLayout />}>
-                <Route index element={<AiInfoHomeContentPage />} />
-                <Route path="price-analysis" element={<PriceAnalysisContent />} />
-                <Route path="issue-analysis" element={<IssueAnalysisContent />} />
-                <Route path="theme-sector" element={<ThemeSectorContent />} />
-                <Route path="news" element={<NewsContent />} />
-              </Route>
+    return (
+        <Router>
+            <div className="App">
+                <LeftSidebar />
+                <div className="app-body-layout-3col">
+                    <Header isLoggedIn={!!currentUser} onLogout={handleLogout} />
+                    <main className="app-main-content-centered">
+                        <Routes>
+                            <Route path="/Main" element={<MainPage />} />
 
-              {/* AI PICKS */}
-              <Route path="/ai-picks" element={<AiPicksPageLayout />}>
-                <Route index element={<AiPicksHomeContent />} />
-                <Route path="today" element={<TodayPicksPage />} />
-                <Route path="recommendations" element={<RecommendationsPage />} />
-                <Route path="signal" element={<Signal />} />
-              </Route>
+                            {/* AI INFO */}
+                            <Route path="/" element={<Navigate to="/ai-info" replace />} />
+                            <Route path="/ai-info" element={<AiInfoPageLayout />}>
+                                <Route index element={<AiInfoHomeContentPage />} />
+                                <Route path="price-analysis" element={<PriceAnalysisContent />} />
+                                <Route path="issue-analysis" element={<IssueAnalysisContent />} />
+                                <Route path="theme-sector" element={<ThemeSectorContent />} />
+                                <Route path="news" element={<NewsContent />} />
+                            </Route>
 
-              {/* FORUM */}
-              <Route path="/forum" element={<ForumPageLayout />}>
-                <Route index element={<ForumBoardPage />} />
-                <Route
-                  path="write"
-                  element={
-                    <ProtectedElement currentUser={currentUser}>
-                      <WritePostPage />
-                    </ProtectedElement>
-                  }
-                />
-                <Route path="edit/:postId" element={<PostEditPage />} />
-                <Route path="post/:postId" element={<PostDetailPage />} />
-              </Route>
+                            {/* AI PICKS */}
+                            <Route path="/ai-picks" element={<AiPicksPageLayout />}>
+                                <Route index element={<AiPicksHomeContent />} />
+                                <Route path="today" element={<TodayPicksPage />} />
+                                <Route path="recommendations" element={<RecommendationsPage />} />
+                                <Route path="signal" element={<Signal />} />
+                            </Route>
 
-              {/* MYPAGE */}
-              <Route
-                path="/mypage"
-                element={
-                  <ProtectedElement currentUser={currentUser}>
-                    <MyPageLayout />
-                  </ProtectedElement>
-                }
-              >
-                <Route index element={<AiAssistantPage />} />
-                <Route
-                  path="profile"
-                  element={
-                    <UserProfilePage
-                      currentUser={currentUser}
-                      onLogout={handleLogout}
-                    />
-                  }
-                />
-                <Route
-                  path="favorite"
-                  element={
-                    <UserFavorite
-                      currentUser={currentUser}
-                      onLogout={handleLogout}
-                    />
-                  }
-                />
-              </Route>
+                            {/* FORUM */}
+                            <Route path="/forum" element={<ForumPageLayout />}>
+                                <Route index element={<ForumBoardPage />} />
+                                <Route
+                                    path="write"
+                                    element={
+                                        <ProtectedElement currentUser={currentUser}>
+                                            <WritePostPage />
+                                        </ProtectedElement>
+                                    }
+                                />
+                                <Route path="edit/:postId" element={<PostEditPage />} />
+                                <Route path="post/:postId" element={<PostDetailPage />} />
+                            </Route>
 
-              {/* 기타 페이지 */}
-              <Route path="/news/:id" element={<NewsDetailPage />} />
-              <Route path="/stock-detail/:stockCode" element={<StockDetailPage />} />
-              <Route path="/find-user" element={<FindUserPage />} />
+                            {/* MYPAGE */}
+                            <Route
+                                path="/mypage"
+                                element={
+                                    <ProtectedElement currentUser={currentUser}>
+                                        <MyPageLayout />
+                                    </ProtectedElement>
+                                }
+                            >
+                                <Route index element={<AiAssistantPage />} />
+                                <Route
+                                    path="profile"
+                                    element={
+                                        <UserProfilePage
+                                            currentUser={currentUser}
+                                            onLogout={handleLogout}
+                                        />
+                                    }
+                                />
+                                <Route
+                                    path="favorite"
+                                    element={
+                                        <UserFavorite
+                                            currentUser={currentUser}
+                                            onLogout={handleLogout}
+                                        />
+                                    }
+                                />
+                            </Route>
 
-              {/* 로그인/회원가입 */}
-              <Route
-                path="/signup"
-                element={!currentUser ? <SignUpPage /> : <Navigate to="/" replace />}
-              />
-              <Route
-                path="/login"
-                element={
-                  !currentUser ? (
-                    <LoginPage onLoginSuccess={handleLoginSuccess} />
-                  ) : (
-                    <Navigate to="/" replace />
-                  )
-                }
-              />
+                            {/* 기타 페이지 */}
+                            <Route path="/news/:id" element={<NewsDetailPage />} />
+                            <Route path="/stock-detail/:stockCode" element={<StockDetailPage />} />
+                            <Route path="/find-user" element={<FindUserPage />} />
 
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-        <RightSidebar />
-      </div>
-    </Router>
-  );
+                            {/* 로그인/회원가입 */}
+                            <Route
+                                path="/signup"
+                                element={!currentUser ? <SignUpPage /> : <Navigate to="/" replace />}
+                            />
+                            <Route
+                                path="/login"
+                                element={
+                                    !currentUser ? (
+                                        <LoginPage onLoginSuccess={handleLoginSuccess} />
+                                    ) : (
+                                        <Navigate to="/" replace />
+                                    )
+                                }
+                            />
+
+                            <Route path="*" element={<NotFoundPage />} />
+                        </Routes>
+                    </main>
+                    <Footer />
+                </div>
+                <RightSidebar />
+            </div>
+        </Router>
+    );
 }
 
 export default App;
