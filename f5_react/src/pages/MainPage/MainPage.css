@@ -1,4 +1,3 @@
-/* --- Global Resets & Base Styles --- */
 *,
 *::before,
 *::after {
@@ -6,21 +5,25 @@
   margin: 0;
   padding: 0;
 }
-
+/* 
 html {
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   scroll-behavior: smooth;
 }
 
 body {
-  background-color: #EEE3BE; /* Warm beige base */
-  color: #4A3B31; /* Dark warm brown for text */
+  background-color: #EEE3BE; 
+  color: #4A3B31; 
   line-height: 1.6;
-  overflow-x: hidden; /* Prevent horizontal scrollbars */
-}
+  overflow-x: hidden; 
+} */
 
 .mainpage-container {
   width: 100%;
+  background-color: #EEE3BE; 
+  color: #4A3B31; 
+  line-height: 1.6;
+  overflow-x: hidden; 
 }
 
 /* --- Splash Screen --- */

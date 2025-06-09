@@ -19,47 +19,19 @@
 }
 :root {
 
-  /* 
-  --color-background-menubar: #a16f3d;
-  --color-background-submenubar: #C8102E;
-  --color-background-body: #ffffff;
-  --color-background-white-red:#fcf1f1;
-  --color-stock-positive:#e53935;
-  --color-stock-nagative:#007bff;
-  --color-background-red-white:#F5D2D2;
-
-  --header-height: 60px;  
-  --color-button:#e74c3c;
-  --color-button-yellow:#F39C12;
-
-  --color-button-hover:#ffffff;
-  --color-white-hover:#f8f9fa;
-
-  --color-text-hover:#e74c3c; 
-
-  --color-border:#ffffff;
-  --color-line: #f0f0f0;
-
-  --color-text-white: #ffffff;
-  --color-text-dark: #333;
-  */
-
-
-
-  /* 보라색깔구분 */ 
-  --color-background-menubar: #C7A980;
-  --color-background-submenubar: #EEE3BE;
+  --color-background-menubar: #494B56;
+  --color-background-submenubar: #707073;
   --color-background-body: #ffffff;
   --color-background-white-red:#DBDBDD;
   --color-stock-positive:#e53935;
   --color-stock-nagative:#007bff;
 
   --header-height: 60px;  
-  --color-button:#C7A980;
+  --color-button:#494B56;
   --color-button-yellow:#F39C12;
 
   --color-button-hover:#ffffff;
-  --color-white-hover:#EEE3BE;
+  --color-white-hover:#f8f9fa;
   
   --color-text-hover:#494B56; 
 
@@ -67,13 +39,12 @@
   --color-line: #f0f0f0;
 
   --color-text-white: #ffffff;
-  --color-text-dark: #494B56; 
+  --color-text-dark: #333; 
 
   /* 폰트 */
   --font-whole: 'Paperlogy-8ExtraBold';
   --font-table: 'KCC-Ganpan';
 
-  /* --font-whole: Pretendard,'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif; */
 }
 
 button{
@@ -99,9 +70,7 @@ body.main-page-active .app-left-sidebar,
 body.main-page-active .app-body-layout-3col nav,
 body.main-page-active .app-right-sidebar,
 body.main-page-active .app-footer {
-
  display: none !important;
-
 }
 
 

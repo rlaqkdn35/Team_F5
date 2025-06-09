@@ -1,16 +1,3 @@
-/* LoginPage.css */
-
-/* :root 안에 전역 CSS 변수 정의 */
-:root {
-  --color-background-menubar: #C7A980;
-  --color-background-submenubar: #EEE3BE;
-  --color-background-body: #ffffff;
-  --color-text-white: #ffffff;
-  --color-text-dark: #494B56;
-  --color-button: #C7A980;
-  --color-button-hover: #EEE3BE;
-  --color-white-hover: #EEE3BE;
-}
 
 /* 전체 페이지 컨테이너 */
 .login-page-container {

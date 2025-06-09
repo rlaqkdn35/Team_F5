@@ -48,6 +48,7 @@ import UserProfilePage from './pages/MyPage/components/UserProfilePage.jsx';
 import UserFavorite from './pages/MyPage/components/UserFavorite.jsx';
 import MainPage from './pages/MainPage/MainPage.jsx';
 
+
 function ProtectedElement({ currentUser, children }) {
   const location = useLocation();
   if (!currentUser) {

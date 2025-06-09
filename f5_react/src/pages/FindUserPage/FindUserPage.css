@@ -1,21 +1,3 @@
-/* src/pages/FindUserPage/FindUserPage.css */
-
-/* Define CSS Variables for consistency across your application */
-/* These should ideally be defined in a global stylesheet or a :root block */
-:root {
-  --color-background-menubar: #C7A980;
-  --color-background-submenubar: #EEE3BE;
-  --color-background-body: #ffffff;
-  --color-text-white: #ffffff;
-  --color-text-dark: #494B56;
-  --color-button: #C7A980;
-  --color-button-hover: #EEE3BE;
-  --color-white-hover: #EEE3BE; /* Assuming this is for white/light hover effects */
-  
-  /* Additional colors that might be useful for this page based on the new palette */
-  --color-accent-light: #EEE3BE; /* Lighter accent from your palette */
-  --color-accent-dark: #C7A980;  /* Darker accent from your palette */
-}
 
 
 .find-user-page-container {

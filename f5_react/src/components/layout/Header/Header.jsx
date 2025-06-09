@@ -164,7 +164,9 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
   return (
     <>
       <nav className="app-main-menu-bar">
-        <div>Astock</div>
+        <Link to="/ai-picks" className='app-main-logo'>
+          <div>Astock</div>
+        </Link>
         <ul className="main-nav-links">
           {mainMenuItems.map((item) => (
             <li
