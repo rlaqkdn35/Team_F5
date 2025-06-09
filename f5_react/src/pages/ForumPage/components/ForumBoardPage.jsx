@@ -16,7 +16,7 @@ const ForumBoardPage = ({ boardTitle }) => {
         setLoading(true);
         console.log(`\n[ForumBoardPage] 데이터 요청 시작 - currentPage: ${currentPage}, searchTerm: "${searchTerm}", boardTitle: "${boardTitle}"`);
 
-        axios.get('http://localhost:8084/F5/api/forum/list', {
+        axios.get('http://localhost:8084/F5/forum/list', {
             withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',

@@ -16,7 +16,7 @@ const PostEditPage = () => {
 
     useEffect(() => {
         console.log('useEffect 실행, postId:', postId);
-        axios.get(`http://localhost:8084/F5/api/forum/detail/${postId}`)
+        axios.get(`http://localhost:8084/F5/forum/detail/${postId}`)
             .then(response => {
                 const forum = response.data.forum;
                 console.log('게시글 데이터 받아옴:', forum);
@@ -52,7 +52,7 @@ const PostEditPage = () => {
         }
 
         try {
-            await axios.put(`http://localhost:8084/F5/api/forum/update/${postId}`, formData, {
+            await axios.put(`http://localhost:8084/F5/forum/update/${postId}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

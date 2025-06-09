@@ -32,7 +32,7 @@ import com.smhrd.stock.service.ForumService;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
-@RequestMapping("/api/forum")
+@RequestMapping("/forum")
 public class ForumController {
 
     private final ForumService service;

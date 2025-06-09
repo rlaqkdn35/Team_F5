@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/forum")
+@RequestMapping("/forum")
 @CrossOrigin(origins = "http://localhost:3000") // 필요 시 추가
 public class CommentController {
 

@@ -18,7 +18,7 @@ const WritePostPage = () => {
     useEffect(() => {
         const fetchStocks = async () => {
             try {
-                const response = await axios.get('http://localhost:8084/F5/api/stocks');
+                const response = await axios.get('http://localhost:8084/F5/stocks');
                 setStockOptions(response.data);
             } catch (error) {
                 console.error('종목 정보를 가져오는 중 오류 발생:', error);
@@ -85,7 +85,7 @@ const WritePostPage = () => {
         }
 
         try {
-            await axios.post('http://localhost:8084/F5/api/forum/insert', formData, {
+            await axios.post('http://localhost:8084/F5/forum/insert', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },

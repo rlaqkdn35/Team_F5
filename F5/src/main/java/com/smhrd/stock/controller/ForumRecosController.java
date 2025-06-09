@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/forum-recos")
+@RequestMapping("/forum-recos")
 @RequiredArgsConstructor
 public class ForumRecosController {
 

@@ -13,6 +13,7 @@ import com.smhrd.stock.dto.ForumListResponse;
 import com.smhrd.stock.dto.ForumSummaryDTO;
 import com.smhrd.stock.entity.Comment;
 import com.smhrd.stock.entity.StockForum;
+import com.smhrd.stock.entity.User;
 import com.smhrd.stock.repository.CommentRepository;
 import com.smhrd.stock.repository.ForumRepository;
 import com.smhrd.stock.repository.UserRepository;
@@ -86,10 +87,10 @@ public class ForumService {
         if (forum.getUser_id() != null && !forum.getUser_id().isEmpty()) {
             System.out.println("[ForumService] 작성자 user_id: " + forum.getUser_id());
 
-            Optional<String> optNickname = userRepository.findNicknameByUserId(forum.getUser_id());
-            System.out.println("[ForumService] userRepository.findNicknameByUserId 결과 Optional: " + optNickname);
+            Optional<User> optUser = userRepository.findByUserId(forum.getUser_id());
+            System.out.println("[ForumService] userRepository.findByUserId 결과 Optional: " + optUser);
 
-            nickname = optNickname.orElse(null);
+            nickname = optUser.map(User::getNickname).orElse(null);
             System.out.println("[ForumService] 조회된 닉네임: " + nickname);
         } else {
             System.out.println("[ForumService] user_id가 null이거나 비어있음");
@@ -99,6 +100,7 @@ public class ForumService {
         return new ForumDTO(forum, comments, nickname, false);
     }
 
+    
     @Transactional
     public void incrementViewCount(Integer forumIdx) {
         StockForum forum = repository.findById(forumIdx)
@@ -117,8 +119,10 @@ public class ForumService {
         for (StockForum forum : forums) {
             String nickname = null;
             if (forum.getUser_id() != null && !forum.getUser_id().isEmpty()) {
-                Optional<String> optNickname = userRepository.findNicknameByUserId(forum.getUser_id());
-                nickname = optNickname.orElse(null);
+                Optional<User> optUser = userRepository.findByUserId(forum.getUser_id());
+                if (optUser.isPresent()) {
+                    nickname = optUser.get().getNickname(); // User 엔티티의 getNickname() 호출
+                }
             }
 
             ForumSummaryDTO dto = new ForumSummaryDTO(
@@ -135,4 +139,5 @@ public class ForumService {
 
         return new ForumListResponse(totalCount, forumDTOs);
     }
+
 }

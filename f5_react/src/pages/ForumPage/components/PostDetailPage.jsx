@@ -24,7 +24,7 @@ const PostDetailPage = () => {
         setLoading(true);
         setError(null);
 
-        axios.get(`http://localhost:8084/F5/api/forum/detail/${postId}`, {
+        axios.get(`http://localhost:8084/F5/forum/detail/${postId}`, {
             params: {
                 userId: currentUserId  // 서버에서 추천 여부 판단용
             }
@@ -61,7 +61,7 @@ const PostDetailPage = () => {
         const now = Date.now();
 
         if (!lastViewed || now - lastViewed > 300000) {
-            axios.put(`http://localhost:8084/F5/api/forum/view/${postId}`)
+            axios.put(`http://localhost:8084/F5/forum/view/${postId}`)
                 .then(() => {
                     localStorage.setItem(key, now);
                     fetchPost();
@@ -77,7 +77,7 @@ const PostDetailPage = () => {
 
     const handleDelete = () => {
         if (window.confirm('정말 삭제하시겠습니까?')) {
-            axios.delete(`http://localhost:8084/F5/api/forum/delete/${post.id}`)
+            axios.delete(`http://localhost:8084/F5/forum/delete/${post.id}`)
                 .then(() => {
                     alert('게시글이 삭제되었습니다.');
                     navigate('/forum');
@@ -102,7 +102,7 @@ const PostDetailPage = () => {
         setIsSubmitting(true);
 
         try {
-            await axios.post(`http://localhost:8084/F5/api/forum/${postId}/comments`, {
+            await axios.post(`http://localhost:8084/F5/forum/${postId}/comments`, {
                 user_id: currentUserId,
                 content: newComment
             });
@@ -120,7 +120,7 @@ const PostDetailPage = () => {
     // 추천 토글 함수 (POST 하나만 사용)
     const handleRecommendToggle = async () => {
         try {
-            const response = await axios.post(`http://localhost:8084/F5/api/forum-recos/toggle-recommend`, null, {
+            const response = await axios.post(`http://localhost:8084/F5/forum-recos/toggle-recommend`, null, {
                 params: {
                     userId: currentUserId,
                     forumIdx: post.id
@@ -144,7 +144,7 @@ const PostDetailPage = () => {
     if (error) return <div className="post-detail-container">{error}</div>;
     if (!post) return <div className="post-detail-container">게시글을 찾을 수 없습니다.</div>;
 
-    const imageUrl = `http://localhost:8084/F5/api/forum/images/${post.forum_file}`;
+    const imageUrl = `http://localhost:8084/F5/forum/images/${post.forum_file}`;
 
     return (
         <div>

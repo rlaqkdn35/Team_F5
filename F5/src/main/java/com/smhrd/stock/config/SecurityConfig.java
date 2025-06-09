@@ -56,13 +56,17 @@ public class SecurityConfig {
                     // --- 인증 없이 접근 허용할 경로들 (애플리케이션 내부 경로 기준) ---
                     "/", // 루트 경로
                     // API 관련
-                    "/api/register", // 회원가입 API (추가 고려)
-                    "/api/login",    // 사용자 정의 로그인 처리 API
-                    "/api/logout",   // 사용자 정의 로그아웃 처리 API
+                    "/stocks/",
+                    "/stocks/**",
+                    "/forum/",
+                    "/forum/**",
+                    "/user/register", // 회원가입 API (추가 고려)
+                    "/user/login",    // 사용자 정의 로그인 처리 API
+                    "/user/logout",   // 사용자 정의 로그아웃 처리 API
                     // "/api/me",    // 현재 사용자 정보 (인증 필요 시 여기서 제외)
-                    "/api/login/success", // 로그인 성공 리다이렉션 (서버 내부용)
-                    "/api/find-id",       // 아이디 찾기 API (추가 고려)
-                    "/api/find-password", // 비밀번호 찾기 API (추가 고려)
+                    "/user/login/success", // 로그인 성공 리다이렉션 (서버 내부용)
+                    "/user/find-id",       // 아이디 찾기 API (추가 고려)
+                    "/user/find-password", // 비밀번호 찾기 API (추가 고려)
                     // OAuth2 관련 (Spring Security 내부 처리 경로 및 커스텀 경로)
                     "/oauth2/**",             // 예: "/login/oauth2/code/*", "/oauth2/authorization/*"
                     // 정적 리소스
@@ -77,17 +81,17 @@ public class SecurityConfig {
             .formLogin(form -> form
                 // Spring Security가 제공하는 로그인 페이지 대신 커스텀 로그인 페이지 사용 시
                 // .loginPage("/login") // 예시: 로그인 폼을 보여주는 페이지 경로 (Controller에서 매핑)
-                .loginProcessingUrl("/api/login") // 로그인 폼 데이터가 POST될 URL (Spring Security가 이 요청을 처리)
+                .loginProcessingUrl("/user/login") // 로그인 폼 데이터가 POST될 URL (Spring Security가 이 요청을 처리)
                                                   // UserController의 @PostMapping("/api/login")과 충돌 가능성 있음.
                                                   // 만약 UserController에서 직접 로그인 처리 시 이 URL은 변경하거나,
                                                   // formLogin().disable() 후 커스텀 필터로 처리
-                .defaultSuccessUrl("/api/login/success", true) // 로그인 성공 시 리다이렉트될 기본 URL
+                .defaultSuccessUrl("/user/login/success", true) // 로그인 성공 시 리다이렉트될 기본 URL
                 .failureUrl("/login?error=true") // 로그인 실패 시 리다이렉트될 URL (Thymeleaf 등에서 오류 메시지 처리)
                 .permitAll() // 로그인 페이지, 처리 URL, 실패 URL 등은 모두 접근 허용
             )
             // 5. 로그아웃 설정
             .logout(logout -> logout
-                .logoutUrl("/api/logout") // 로그아웃을 처리할 URL
+                .logoutUrl("/user/logout") // 로그아웃을 처리할 URL
                 .logoutSuccessUrl("/login?logout=true") // 로그아웃 성공 시 리다이렉트될 URL
                 .invalidateHttpSession(true) // HTTP 세션 무효화
                 .deleteCookies("JSESSIONID", "remember-me") // JSESSIONID 및 기타 쿠키 삭제
