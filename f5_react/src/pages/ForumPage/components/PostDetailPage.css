@@ -22,111 +22,122 @@
 }
 
 /* 댓글 입력 폼 */
+/* 댓글 섹션 전체 */
 .comments-section {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 8px;
+  margin-top: 30px;
+  padding: 20px;
+  border-top: 1px solid #eee; /* 위쪽 구분선 */
 }
 
 .comments-section h3 {
-  font-size: 0.8em;
-  color: var(--color-text-dark);
-  margin-top: 0;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #333;
 }
 
+/* 댓글 목록 */
 .comments-list {
-  list-style-type: none;
+  list-style: none; /* 목록 마커 제거 */
   padding: 0;
   margin: 0;
 }
 
+/* 개별 댓글 아이템 */
 .comment-item {
-  background-color: var(--color-background-body);
-  border-radius: 6px;
-  padding: 10px 12px;
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 15px;
   margin-bottom: 10px;
-  font-size: 0.7em;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+   line-height: 0.5; /* 줄 간격: 기본 1.5 (폰트 크기의 1.5배). 1.4 또는 1.3으로 줄여보세요. */
 }
 
-.comment-item:last-child {
-  margin-bottom: 0;
+/* 댓글 내용 (p 태그)의 글 간격 */
+.comment-item p {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 10px;
+  /* --- 여기서 글 간격을 줄입니다 --- */
+  line-height: 0.5; /* 줄 간격: 기본 1.5 (폰트 크기의 1.5배). 1.4 또는 1.3으로 줄여보세요. */
+  letter-spacing: -0.2px; /* 글자 간격: 0px보다 약간 줄여서 빽빽하게 (음수 값) */
+  /* ------------------------------- */
 }
 
+/* 댓글 메타 정보 (작성자, 날짜) */
 .comment-meta {
   display: flex;
-  flex-direction: column; /* 아이템들을 세로로 쌓습니다. */
-  align-items: flex-end;   /* 세로로 쌓인 아이템들을 오른쪽으로 정렬합니다. */
-  margin-bottom: 8px;
-  font-size: 0.8em;
-  color: var(--color-text-dark);
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  font-size: 12px;
+  color: #888;
+  gap: 10px; /* 작성자와 날짜 사이 간격 */
 }
 
 .comment-meta strong {
-  font-weight: bold;
-  color: var(--color-text-dark);
-  margin-right: 8px;
+  color: #666;
 }
 
-.comment-meta span {
-  font-size: 0.75em;
-  color: var(--color-text-dark);
-}
-
-.comment-item p {
-  margin: 0;
-  line-height: 1.5;
-  color: var(--color-text-dark);
-  word-wrap: break-word; /* Prevents long words from breaking layout */
-}
-
+/* 댓글이 없는 경우 */
 .no-comments {
-  color: var(--color-text-dark);
+  text-align: center;
+  color: #999;
+  padding: 20px 0;
   font-style: italic;
-  font-size: 0.9em;
-  padding: 10px 0;
 }
 
+/* 댓글 작성 폼 */
 .comment-form {
-  margin-top: 20px;
+  margin-top: 25px;
   display: flex;
-  flex-direction: column;
-  gap: 10px; /* Space between textarea and button */
+  flex-direction: column; /* 세로로 정렬 */
+  gap: 10px; /* textarea와 버튼 사이 간격 */
 }
 
+/* textarea 스타일링 */
 .comment-form textarea {
-  width: calc(100% - 24px); /* Account for padding */
-  padding: 10px 12px;
-  border: 1px solid var(--color-button);
-  border-radius: 4px;
-  font-size: 0.9em;
-  line-height: 1.4;
-  resize: vertical; /* Allow vertical resizing, disable horizontal */
-  min-height: 40px; /* Minimum height before scrolling */
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-family: inherit; /* 부모 폰트 상속 */
+  font-size: 15px;
+  resize: vertical; /* 세로 크기만 조절 가능하게 */
+  /* --- 여기서 textarea 글 간격을 줄입니다 --- */
+  line-height: 1.4; /* 줄 간격 조절 */
+  letter-spacing: -0.2px; /* 글자 간격 조절 */
+  /* ------------------------------- */
 }
 
 .comment-form textarea:focus {
   outline: none;
-
+  border-color: var(--color-button); /* 포커스 시 테두리 색상 변경 */
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
+/* 댓글 등록 버튼 */
 .comment-form button {
-  align-self: flex-end; /* Align button to the right */
-  padding: 8px 15px;
+  align-self: flex-end; /* 오른쪽으로 정렬 */
   background-color: var(--color-button);
   color: white;
   border: none;
-  border-radius: 4px;
+  padding: 10px 20px;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 0.9em;
-  transition: background-color 0.2s ease-in-out;
+  font-size: 15px;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  border: 1px solid var(--color-text-dark);
+}
+
+.comment-form button:hover:not(:disabled) {
+  background-color: var(--color-button-hover);
+  color: var(--color-text-dark);
+  border: 1px solid var(--color-text-dark);
 }
 
 .comment-form button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
+  opacity: 0.7;
 }
 
 /* 액션 버튼들 */
@@ -182,4 +193,29 @@
 }
 .post-meta span{
   margin-right: 20px;
+}
+
+.post-meta button {
+  margin-left: auto; /* 이 버튼을 가장 오른쪽으로 보냄 */
+  /* 기존 버튼 스타일 (색상, 패딩 등)은 여기에 유지하거나 추가하세요 */
+  background-color: white;
+  color: black;
+  border: 1px solid #ddd;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.post-detail-header button:hover {
+  background-color: black; /* Invert background on hover */
+  color: white; /* Invert text color on hover */
+  border-color: black; /* Ensure border matches on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow on hover for depth */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+.post-detail-header button:active {
+  transform: translateY(0); /* Press down effect on click */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

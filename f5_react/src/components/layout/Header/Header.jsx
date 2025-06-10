@@ -119,7 +119,7 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
       path: '/forum',
     },
     {
-      name: 'My종목',
+      name: 'My 페이지',
       path: '/mypage',
       subItems: [
         { name: 'AI비서', path: '/mypage' },
@@ -160,7 +160,24 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
     setCurrentOverlayTitle(newTitle);
     setShowOverlay(matched);
   }, [location.pathname]);
-
+  const titleToImageMap = {
+    'AI정보분석': 'analysis',
+    'AI정보분석 홈': 'analysis',
+    '시세분석': 'analysis',
+    '이슈분석': 'analysis',
+    '테마/업종': 'analysis',
+    '뉴스': 'analysis',
+    'AI 종목추천': 'recommend',
+    'AI 종목추천 홈': 'recommend',
+    '코스닥150': 'recommend',
+    'AI 추천': 'recommend',
+    '매매신호': 'recommend',
+    '토론실': 'toron',
+    'My 페이지': 'mypage',
+    '관심 종목': 'mypage',
+    '계정 정보': 'mypage',
+    // 필요한 항목들 추가
+  };
   return (
     <>
       <nav className="app-main-menu-bar">
@@ -257,7 +274,7 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
         <AnimatedOverlay
           key={location.pathname}
           title={currentOverlayTitle}
-          backgroundImageUrl={`${currentOverlayTitle}.png`}
+          backgroundImageUrl={`/${titleToImageMap[currentOverlayTitle] || 'default'}.png`}
         />
       )}
     </>

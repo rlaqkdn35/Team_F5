@@ -104,7 +104,7 @@
   top: 100%; /* 부모 메뉴 아래에 위치 */
   left: -50%;
   border-radius: 15px;
-  background-color: #ddf7fc00; /* 아주 연한 회색 배경 */
+  background-color: #3636367e; /* 아주 연한 회색 배경 */
   /* box-shadow: 0 5px 10px rgba(0, 0, 0, 0.02); */
   min-width: 160px; /* 최소 너비 */
   z-index: 1000; /* 다른 요소 위에 표시 */
@@ -112,10 +112,11 @@
   overflow: hidden; /* 슬라이드 애니메이션을 위해 중요 */
   max-height: 0; /* 초기에는 높이를 0으로 설정하여 숨김 */
   transition: max-height 0.6s ease-out; /* 높이 변화에 애니메이션 적용 */
+  opacity: 0.1;
 }
 /* 이게 슬라이드 옵션 준거임 */
 .dropdown-submenu.active {
-  max-height: 250px; /* 서브메뉴의 예상 최대 높이보다 크게 설정 */
+  max-height: 300px; /* 서브메뉴의 예상 최대 높이보다 크게 설정 */
   /* 예를 들어 서브 메뉴 항목이 5개이고 각 높이가 40px이면 200px. 충분히 큰 값으로 설정 */
 }
 
@@ -128,8 +129,8 @@
 .dropdown-submenu li a {
   border-radius: 15px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
-  background-color: var(--color-background-submenubar);
-  color:var(--color-text-dark);
+  background-color: var(--color-background-menubar);
+  color:var(--color-text-white);
   margin: 10px;
   padding: 10px 20px;
   text-decoration: none;
@@ -140,8 +141,8 @@
 }
 
 .dropdown-submenu li a:hover {
-  background-color: var(--color-background-menubar);
-  color: var(--color-text-white);
+  background-color: var(--color-background-body);
+  color: var(--color-text-dark);
 }
 
 /* 검색 컨테이너 */
@@ -214,9 +215,7 @@
 .overlay-content h1 {
 /* 글씨체 키우기 */
   font-size: 5em;
-  
-  /* 색깔 넣기 */
-  color: var(--color-text-dark);
+  color: var(--color-text-white);
   /* !!! 추가: 초기 렌더링 시 글자가 보이지 않도록 설정 !!! */
   opacity: 0;         /* 텍스트가 완전히 투명하게 시작 */
   visibility: hidden; /* 요소 자체가 보이지 않도록 설정 (레이아웃 공간은 차지) */

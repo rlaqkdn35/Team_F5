@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-// import { AuthContext } from '../context/AuthContext'; // AuthContext를 사용하는 경우
+import './LoginPage.css';
 
 const LoginPage = ({ onLoginSuccess }) => { // onLoginSuccess prop을 통해 App.js와 통신
-    const [credentials, setCredentials] = useState({ userId: '', password: '' }); // username 대신 userId로 변경
+    const [credentials, setCredentials] = useState({ userId: '', password: '' }); // userId 대신 userId로 변경
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || '/Main'; // 로그인 후 이동할 기본 경로
@@ -73,21 +73,33 @@ const LoginPage = ({ onLoginSuccess }) => { // onLoginSuccess prop을 통해 App
 
     return (
         <div className="login-page-container">
+            <div className="branding-section">
+                <div className="branding-content">
+                <img src="/MainIcon2.png" className="ai-logo" alt="AI 로고" />
+                <p className="branding-slogan">복잡한 시장, AI가 찾아낸 기회</p>
+                </div>
+            </div>
             {/* ... (기존 HTML 구조 유지) ... */}
-            <form onSubmit={handleSubmit} className="login-form">
-                <div className="form-group">
-                    <label htmlFor="userId">아이디</label> {/* username 대신 userId로 변경 */}
+            
+            <div className="login-form-section">
+                <div className="login-content-wrapper">
+                <h1 className="login-title">환영합니다!</h1>
+                <p className="login-slogan">AI 기반 투자 분석을 경험하세요.</p>
+
+                <form onSubmit={handleSubmit} className="login-form">
+                    <div className="form-group">
+                    <label htmlFor="userId">아이디</label>
                     <input
                         type="text"
                         id="userId"
-                        name="userId" // name 속성도 userId로 변경
+                        name="userId"
                         placeholder="아이디를 입력해주세요"
                         required
-                        value={credentials.userId} // credentials.username 대신 credentials.userId
+                        value={credentials.userId}
                         onChange={handleChange}
                     />
-                </div>
-                <div className="form-group">
+                    </div>
+                    <div className="form-group">
                     <label htmlFor="password">비밀번호</label>
                     <input
                         type="password"
@@ -98,22 +110,23 @@ const LoginPage = ({ onLoginSuccess }) => { // onLoginSuccess prop을 통해 App
                         value={credentials.password}
                         onChange={handleChange}
                     />
+                    </div>
+                    <button type="submit" className="login-button">로그인</button>
+                </form>
+
+                <div className="login-links">
+                    <Link to="/find-user">아이디/비밀번호 찾기</Link>
+                    <Link to="/signup">회원가입</Link>
                 </div>
-                <button type="submit" className="login-button">로그인</button>
-            </form>
 
-            <div className="login-links">
-                <Link to="/find-user">아이디/비밀번호 찾기</Link>
-                <Link to="/signup">회원가입</Link>
+                <div className="social-login-section">
+                    <p className="social-login-title">SNS 로그인</p>
+                    <button className="social-login-btn google" onClick={() => handleSocialLogin('google')}>구글로 로그인</button>
+                    <button className="social-login-btn kakao" onClick={() => handleSocialLogin('kakao')}>카카오로 로그인</button>
+                    <button className="social-login-btn naver" onClick={() => handleSocialLogin('naver')}>네이버로 로그인</button>
+                </div>
+                </div>
             </div>
-
-            <div className="social-login-section">
-                <p className="social-login-title">SNS 로그인</p>
-                <button className="social-login-btn google" onClick={() => handleSocialLogin('google')}>구글로 로그인</button>
-                <button className="social-login-btn kakao" onClick={() => handleSocialLogin('kakao')}>카카오로 로그인</button>
-                <button className="social-login-btn naver" onClick={() => handleSocialLogin('naver')}>네이버로 로그인</button>
-            </div>
-            {/* ... (기존 HTML 구조 유지) ... */}
         </div>
     );
 };

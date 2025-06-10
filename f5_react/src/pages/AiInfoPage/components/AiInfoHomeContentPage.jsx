@@ -162,22 +162,7 @@ const AiInfoHomeContentPage = () => {
         console.error('버블 데이터를 가져오는 중 오류 발생:', error.message);
         setError('데이터를 불러오지 못했습니다. 서버를 확인하세요.');
         // 오류 발생 시 기본 데이터로 대체
-        setBubbleData([
-          { text: '삼성전자', value: 150, id: '005930' },
-          { text: 'SK하이닉스', value: 90, id: '000660' },
-          { text: 'AI', value: 85, id: 'theme_ai' },
-          { text: '배터리', value: 70, id: 'theme_battery' },
-          { text: '클라우드', value: 65, id: 'theme_cloud' },
-          { text: '로봇', value: 60, id: 'theme_robot' },
-          { text: '반도체', value: 55, id: 'theme_semiconductor' },
-          { text: '전기차', value: 50, id: 'theme_ev' },
-          { text: '바이오', value: 45, id: 'theme_bio' },
-          { text: '엔터테인먼트', value: 40, id: 'theme_entertainment' },
-          { text: '게임', value: 35, id: 'theme_game' },
-          { text: 'ESG', value: 30, id: 'theme_esg' },
-          { text: '신재생에너지', value: 25, id: 'theme_renewable' },
-          { text: '콘텐츠', value: 20, id: 'theme_content' },
-        ]);
+        setBubbleData([]);
       } finally {
         setLoading(false);
       }
@@ -191,7 +176,7 @@ const AiInfoHomeContentPage = () => {
     setSelectedKeyword(bubble);
     setDetailData({
       keyword: bubble.text,
-      clickFrequency: Math.floor(Math.random() * 100), // 임시 데이터
+      articleFrequency: bubble.numArticlesMentionedIn, // 임시 데이터
       relatedItems: ['관련 품목 1', '관련 품목 2'],
       news: [
         { id: 1, title: '뉴스 제목 1', url: '#' },
@@ -213,8 +198,7 @@ const AiInfoHomeContentPage = () => {
   const [hitRateItems, setHitRateItems] = useState(topHitRatesData);
   const [profitRateItems, setProfitRateItems] = useState(topProfitRatesData);
 
-  // AiInfoHomeContentPage.jsx (일부 수정 예시)
-// ... (기존 import 및 임시 데이터) ...
+
 
 return (
     <div className="ai-info-home-dashboard">
@@ -279,6 +263,8 @@ return (
             <BubbleChart
               data={bubbleData}
               onBubbleClick={handleBubbleClick}
+              activeBubbleId={selectedKeyword ? selectedKeyword.id : null} // 여기에 추가
+           
               width={500}
               height={500}
             />
@@ -288,7 +274,7 @@ return (
             <aside className="details-pane visible">
               <h3><span className="keyword-highlight">{detailData.keyword}</span> 상세정보</h3>
               <div className="detail-item"><strong>언급 빈도수:</strong> {selectedKeyword.value}</div>
-              <div className="detail-item"><strong>클릭 빈도수 (예시):</strong> {detailData.clickFrequency}</div>
+              <div className="detail-item"><strong>언급된 기사 수 :</strong> {detailData.articleFrequency}</div>
               <div className="detail-item detail-chart-container">
                 <strong>관련 데이터 차트 (예시):</strong>
                 <div className="mini-chart-placeholder">미니 차트 (150x80)</div>

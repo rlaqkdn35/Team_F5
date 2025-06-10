@@ -44,7 +44,7 @@ const WritePostPage = () => {
         }
 
         const filtered = stockOptions.filter(stock =>
-            `${stock.stock_code} ${stock.stock_name}`.toLowerCase().includes(inputValue.toLowerCase())
+            `${stock.stockCode} ${stock.stockName}`.toLowerCase().includes(inputValue.toLowerCase())
         );
 
         setFilteredStocks(filtered.slice(0, 10)); // 최대 10개만 표시
@@ -52,7 +52,7 @@ const WritePostPage = () => {
     };
 
     const handleSelectStock = (stock) => {
-        const value = `${stock.stock_code} (${stock.stock_name})`;
+        const value = `${stock.stockCode} (${stock.stockName})`;
         setSelectedStockCode(value);
         setFilteredStocks([]);
         setShowDropdown(false);
@@ -68,7 +68,7 @@ const WritePostPage = () => {
 
         const stockCode = selectedStockCode.split(' ')[0];
 
-        const isValidStockCode = stockOptions.some(stock => stock.stock_code === stockCode);
+        const isValidStockCode = stockOptions.some(stock => stock.stockCode === stockCode);
 
         if (selectedStockCode.trim() && !isValidStockCode) {
             alert("유효한 종목을 선택해주세요.");
@@ -91,7 +91,7 @@ const WritePostPage = () => {
                 },
                 withCredentials: true
             });
-
+            console.log(formData);
             alert("게시글이 성공적으로 작성되었습니다!");
             navigate('/forum');
         } catch (error) {
@@ -138,10 +138,10 @@ const WritePostPage = () => {
                         <ul className="dropdown">
                             {filteredStocks.map(stock => (
                                 <li
-                                    key={stock.stock_code}
+                                    key={stock.stockCode}
                                     onClick={() => handleSelectStock(stock)}
                                 >
-                                    {stock.stock_code} ({stock.stock_name})
+                                    {stock.stockCode} ({stock.stockName})
                                 </li>
                             ))}
                         </ul>

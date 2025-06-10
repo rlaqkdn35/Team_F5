@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import './BubbleChart.css';
 
-const BubbleChart = ({ data, onBubbleClick, width = 600, height = 400 }) => {
+const BubbleChart = ({ data, onBubbleClick, activeBubbleId, width = 600, height = 400 }) => {
   const svgRef = useRef();
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const BubbleChart = ({ data, onBubbleClick, width = 600, height = 400 }) => {
     const colorScale = d3
       .scaleLinear()
       .domain([0, maxValue])
-      .range(['#FDE3DB', '#E2A59C']); // 빨간색 계열 유지
+      .range(['#F0F0F0', '#A88AFF']); // 연보라 계열로 변경
 
     // D3 팩(Pack) 레이아웃 설정
     const pack = d3.pack()
@@ -72,20 +72,27 @@ const BubbleChart = ({ data, onBubbleClick, width = 600, height = 400 }) => {
       .enter()
       .append('g')
       .attr('class', 'bubble')
+      .classed('active', d => d.data.id === activeBubbleId) // 이 버블의 ID가 activeBubbleId와 일치하면 'active' 클래스 추가
       .attr('transform', d => {
         const x = isNaN(d.x) ? chartWidth / 2 : d.x; // x가 NaN이면 기본값
         const y = isNaN(d.y) ? chartHeight / 2 : d.y; // y가 NaN이면 기본값
         return `translate(${x},${y})`;
       })
-      .on('click', (event, d) => onBubbleClick(d.data)); // 클릭 이벤트
-
+      .on('click', function(event, d) {
+        // 모든 버블의 'active' 클래스를 직접 제거하는 대신,
+        // 부모 컴포넌트의 handleBubbleClick을 호출하여 상태를 변경합니다.
+        // D3는 다음에 렌더링될 때 activeBubbleId에 따라 클래스를 다시 설정합니다.
+        if (onBubbleClick) {
+          onBubbleClick(d.data);
+        }
+      });
     bubble
       .append('circle')
       .attr('r', d => (isNaN(d.r) ? 10 : d.r)) // r이 NaN이면 기본값 10
       .attr('fill', d => colorScale(d.data.value || 0))
       .attr('opacity', 0.8)
       .attr('stroke', '#fff')
-      .attr('stroke-width', 2);
+      .attr('stroke-width', 0);
 
     bubble.append('text')
       .attr('dy', '0.35em') // 텍스트를 원의 중앙에 정렬

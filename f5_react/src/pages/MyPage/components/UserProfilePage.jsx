@@ -49,7 +49,6 @@ const MyPage = ({ currentUser, onLogout }) => {
         </div>
         <div className="profile-actions">
           <button onClick={handleEditProfile} className="action-button-mypage">회원정보 수정</button>
-          <button onClick={handleChangePassword} className="action-button-mypage">비밀번호 변경</button>
         </div>
       </section>
 

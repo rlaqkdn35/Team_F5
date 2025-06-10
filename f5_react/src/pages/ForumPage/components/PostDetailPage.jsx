@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './PostDetailPage.css';
+import { FaHeart } from 'react-icons/fa';
+import { FaHeartCrack } from 'react-icons/fa6';
 
 const PostDetailPage = () => {
     const { postId } = useParams();
@@ -155,10 +157,19 @@ const PostDetailPage = () => {
                         <span>작성자: <strong>{post.user_nickname}</strong></span>
                         <span>날짜: {post.date}</span>
                         <span>조회수: {post.views}</span>
+                        <button onClick={handleRecommendToggle}>
+                            {hasRecommended ? (
+                            <>
+                                {/* 추천 취소 상태: 깨진 하트 아이콘 */}
+                                <FaHeartCrack /> 추천 취소
+                            </>
+                            ) : (
+                            <>
+                                <FaHeart /> 추천하기 {/* 또는 <FaThumbsUp /> 추천하기 */}
+                            </>
+                            )}
+                        </button>
                     </div>
-                    <button onClick={handleRecommendToggle}>
-                        {hasRecommended ? "추천 취소" : "추천하기"}
-                    </button>
                 </div>
 
                 <div className="post-content">
@@ -196,7 +207,7 @@ const PostDetailPage = () => {
                 </div>
             </div>
 
-            <div className="comment s-section">
+            <div className="comments-section">
                 <h3>댓글 ({post.comments.length})</h3>
                 {post.comments.length > 0 ? (
                     <ul className="comments-list">

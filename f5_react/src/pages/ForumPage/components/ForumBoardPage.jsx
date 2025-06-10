@@ -14,7 +14,7 @@ const ForumBoardPage = ({ boardTitle }) => {
 
     useEffect(() => {
         setLoading(true);
-        console.log(`\n[ForumBoardPage] 데이터 요청 시작 - currentPage: ${currentPage}, searchTerm: "${searchTerm}", boardTitle: "${boardTitle}"`);
+        // console.log(`\n[ForumBoardPage] 데이터 요청 시작 - currentPage: ${currentPage}, searchTerm: "${searchTerm}", boardTitle: "${boardTitle}"`);
 
         axios.get('http://localhost:8084/F5/forum/list', {
             withCredentials: true,
@@ -29,23 +29,23 @@ const ForumBoardPage = ({ boardTitle }) => {
         })
         .then((response) => {
             const data = response.data;
-            console.log('[ForumBoardPage] 전체 응답 데이터:', data);
-            console.log('[ForumBoardPage] totalCount:', data.totalCount);
-            console.log('[ForumBoardPage] forums 리스트 길이:', Array.isArray(data.forums) ? data.forums.length : 0);
+            // console.log('[ForumBoardPage] 전체 응답 데이터:', data);
+            // console.log('[ForumBoardPage] totalCount:', data.totalCount);
+            // console.log('[ForumBoardPage] forums 리스트 길이:', Array.isArray(data.forums) ? data.forums.length : 0);
 
             if (Array.isArray(data.forums)) {
                 data.forums.forEach((post, index) => {
-                    console.log(`[ForumBoardPage] ${index + 1}번째 게시글 주요 정보:`);
-                    console.log(`  forumIdx: ${post.forumIdx ?? 'undefined'}`);
-                    console.log(`  forumTitle: ${post.forumTitle ?? 'undefined'}`);
-                    console.log(`  nickname: ${post.nickname ?? 'undefined'}`);
-                    console.log(`  userId: ${post.userId ?? 'undefined'}`);
-                    console.log(`  createdAt: ${post.createdAt ?? 'undefined'}`);
-                    console.log(`  forumViews: ${post.forumViews ?? 'undefined'}`);
-                    console.log(`  forumRecos: ${post.forumRecos ?? 'undefined'}`);
+                    // console.log(`[ForumBoardPage] ${index + 1}번째 게시글 주요 정보:`);
+                    // console.log(`  forumIdx: ${post.forumIdx ?? 'undefined'}`);
+                    // console.log(`  forumTitle: ${post.forumTitle ?? 'undefined'}`);
+                    // console.log(`  nickname: ${post.nickname ?? 'undefined'}`);
+                    // console.log(`  userId: ${post.userId ?? 'undefined'}`);
+                    // console.log(`  createdAt: ${post.createdAt ?? 'undefined'}`);
+                    // console.log(`  forumViews: ${post.forumViews ?? 'undefined'}`);
+                    // console.log(`  forumRecos: ${post.forumRecos ?? 'undefined'}`);
 
                     // 추가로 서버에서 오는 실제 키들 확인
-                    console.log('  전체 키:', Object.keys(post));
+                    // console.log('  전체 키:', Object.keys(post));
                 });
             } else {
                 console.warn('[ForumBoardPage] forums 데이터가 배열이 아닙니다.');

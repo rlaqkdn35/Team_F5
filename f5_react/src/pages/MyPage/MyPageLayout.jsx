@@ -19,7 +19,7 @@ const MyPageLayout = () => {
       <aside className="mypage-sidebar">
         <SubNavigation 
           links={myPageSubNavLinks} 
-          activePath={location.pathname}
+          basePath="/mypage"
         />
       </aside>
 
