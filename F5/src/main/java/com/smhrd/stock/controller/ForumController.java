@@ -65,7 +65,7 @@ public class ForumController {
             @RequestPart("forum_title") String forumTitle,
             @RequestPart("forum_content") String forumContent,
             @RequestPart(value = "forum_file", required = false) MultipartFile forumFile,
-            @RequestPart("stock_code") String stockCode,
+            @RequestPart("stockCode") String stockCode,
             @RequestPart("user_id") String userId
     ) {
         System.out.println("게시글 등록 요청 시작");
@@ -119,7 +119,7 @@ public class ForumController {
             @RequestParam("forum_title") String forumTitle,
             @RequestParam("forum_content") String forumContent,
             @RequestParam(value = "forum_file", required = false) MultipartFile forumFile,
-            @RequestParam("stock_code") String stockCode,
+            @RequestParam("stockCode") String stockCode,
             @RequestParam("user_id") String userId
     ) {
         System.out.println("=== 게시글 수정 요청 시작 ===");

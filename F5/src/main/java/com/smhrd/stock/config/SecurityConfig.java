@@ -60,6 +60,10 @@ public class SecurityConfig {
                     "/stocks/**",
                     "/forum/",
                     "/forum/**",
+                    "/forum/update/",
+                    "/forum/update/**",
+                    "/forum-recos/",
+                    "/forum-recos/**",
                     "/user/register", // 회원가입 API (추가 고려)
                     "/user/login",    // 사용자 정의 로그인 처리 API
                     "/user/logout",   // 사용자 정의 로그아웃 처리 API

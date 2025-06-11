@@ -10,7 +10,7 @@ const WritePostPage = () => {
     const [content, setContent] = useState('');
     const [attachedFile, setAttachedFile] = useState(null);
     const [selectedStockCode, setSelectedStockCode] = useState('');
-    const [userId, setUserId] = useState('123');
+    const [userId, setUserId] = useState('12341234');
     const [stockOptions, setStockOptions] = useState([]);
     const [filteredStocks, setFilteredStocks] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
@@ -78,7 +78,7 @@ const WritePostPage = () => {
         const formData = new FormData();
         formData.append('forum_title', title);
         formData.append('forum_content', content);
-        formData.append('stock_code', stockCode);
+        formData.append('stockCode', stockCode);
         formData.append('user_id', userId);
         if (attachedFile) {
             formData.append('forum_file', attachedFile);

@@ -12,62 +12,75 @@ const PostEditPage = () => {
     const [file, setFile] = useState(null);
     const [originalFileName, setOriginalFileName] = useState('');
     const [stockCode, setStockCode] = useState('');
-    const currentUserId = '123'; // 임시 사용자 ID
+    const currentUserId = '12341234'; // 임시 사용자 ID
 
     useEffect(() => {
-        console.log('useEffect 실행, postId:', postId);
+        console.log('[useEffect] postId:', postId);
         axios.get(`http://localhost:8084/F5/forum/detail/${postId}`)
             .then(response => {
+                console.log('[GET] 게시글 상세 응답:', response);
                 const forum = response.data.forum;
-                console.log('게시글 데이터 받아옴:', forum);
+                console.log('[GET] forum 데이터:', forum);
                 setTitle(forum.forum_title ?? '');
                 setContent(forum.forum_content ?? '');
                 setOriginalFileName(forum.forum_file ?? '');
-                setStockCode(forum.stock_code ?? '');
+                setStockCode(forum.stockCode ?? '');
             })
             .catch(err => {
-                console.error('게시글 불러오기 실패:', err);
+                console.error('[GET] 게시글 불러오기 실패:', err);
                 alert('게시글 정보를 불러오는 데 실패했습니다.');
                 navigate('/forum');
             });
     }, [postId, navigate]);
 
     const handleFileChange = (e) => {
-        console.log('파일 변경:', e.target.files[0]);
-        setFile(e.target.files[0]);
+        const selectedFile = e.target.files[0];
+        console.log('[File Change] 선택된 파일:', selectedFile);
+        setFile(selectedFile);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('수정 제출 클릭 - 상태값들:', { postId, title, content, file, stockCode, currentUserId });
+        console.log('[Submit] 수정 요청 시작');
+        console.log('[Submit] 현재 입력값:', {
+            postId,
+            title,
+            content,
+            file,
+            stockCode,
+            currentUserId
+        });
 
         const formData = new FormData();
         formData.append('forum_title', title);
         formData.append('forum_content', content);
-        formData.append('stock_code', stockCode); // 히든 필드로 전달
+        formData.append('stockCode', stockCode);
         formData.append('user_id', currentUserId);
 
         if (file) {
-            formData.append('forum_file', file); // 새 파일이 있으면 첨부
+            console.log('[Submit] 새 파일 포함됨:', file.name);
+            formData.append('forum_file', file);
+        } else {
+            console.log('[Submit] 파일 없음, 기존 파일 유지');
         }
 
         try {
-            await axios.put(`http://localhost:8084/F5/forum/update/${postId}`, formData, {
+            const response = await axios.put(`http://localhost:8084/F5/forum/update/${postId}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            console.log('수정 완료, postId:', postId);
+            console.log('[PUT] 수정 완료 응답:', response);
             alert('게시글이 수정되었습니다.');
             navigate(`/forum/post/${postId}`);
         } catch (error) {
-            console.error('수정 실패:', error);
+            console.error('[PUT] 게시글 수정 실패:', error);
             alert('게시글 수정에 실패했습니다.');
         }
     };
 
     const handleCancel = () => {
-        console.log('취소 버튼 클릭, postId:', postId);
+        console.log('[Cancel] 수정 취소 - postId:', postId);
         navigate(`/forum/post/${postId}`);
     };
 
@@ -80,7 +93,10 @@ const PostEditPage = () => {
                     <input
                         type="text"
                         value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        onChange={(e) => {
+                            console.log('[Input] 제목 변경:', e.target.value);
+                            setTitle(e.target.value);
+                        }}
                         required
                     />
                 </div>
@@ -88,7 +104,10 @@ const PostEditPage = () => {
                     <label>내용</label>
                     <textarea
                         value={content}
-                        onChange={(e) => setContent(e.target.value)}
+                        onChange={(e) => {
+                            console.log('[Input] 내용 변경');
+                            setContent(e.target.value);
+                        }}
                         rows={10}
                         required
                     />
@@ -101,8 +120,7 @@ const PostEditPage = () => {
                     )}
                 </div>
 
-                {/* 히든 처리된 stock_code */}
-                <input type="hidden" name="stock_code" value={stockCode} />
+                <input type="hidden" name="stockCode" value={stockCode} />
 
                 <div className="form-actions">
                     <button type="submit" className="submit-button">수정 완료</button>
