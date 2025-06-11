@@ -47,6 +47,7 @@ import AiAssistantPage from './pages/MyPage/components/AiAssistantPage.jsx';
 import UserProfilePage from './pages/MyPage/components/UserProfilePage.jsx';
 import UserFavorite from './pages/MyPage/components/UserFavorite.jsx';
 import MainPage from './pages/MainPage/MainPage.jsx';
+import UserProfileEditPage from './pages/UserProfileEditPage/UserProfileEditPage.jsx';
 
 function ProtectedElement({ currentUser, children }) {
     const location = useLocation();
@@ -69,7 +70,7 @@ function App() {
                     withCredentials: true,
                 });
                 setCurrentUser(response.data); // 세션이 유효하면 사용자 정보 설정
-                console.log('세션 확인 성공:', response.data.userId);
+                console.log('세션 확인 성공:', response.data);
             } catch (error) {
                 console.error('세션 확인 중 오류 (로그인되지 않음 또는 세션 만료):', error.response ? error.response.status : error.message);
                 setCurrentUser(null); // 세션 만료 또는 없음
@@ -184,7 +185,10 @@ function App() {
                             <Route path="/news/:id" element={<NewsDetailPage />} />
                             <Route path="/stock-detail/:stockCode" element={<StockDetailPage />} />
                             <Route path="/find-user" element={<FindUserPage />} />
-
+                            <Route path="/edit-profile" element={<UserProfileEditPage 
+                                                                 currentUser={currentUser}
+                                                                onLogout={handleLogout}
+                                                                />} />
                             {/* 로그인/회원가입 */}
                             <Route
                                 path="/signup"
@@ -206,7 +210,7 @@ function App() {
                     </main>
                     <Footer />
                 </div>
-                <RightSidebar />
+                <RightSidebar currentUser={currentUser} />
             </div>
         </Router>
     );

@@ -84,8 +84,6 @@
   display: flex;
   border-bottom: 2px solid #dee2e6;
   margin-bottom: 25px;
-  overflow-x: auto; /* 탭이 많을 경우 가로 스크롤 */
-  white-space: nowrap;
 }
 
 .tab-button-sdtp {

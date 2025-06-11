@@ -43,7 +43,7 @@ const MyPage = ({ currentUser, onLogout }) => {
       <section className="profile-info-section-mypage">
         <h2 className="section-title-mypage">회원 정보</h2>
         <div className="profile-details">
-          <p><strong>아이디:</strong> {currentUser.id || '정보 없음'}</p> {/* 실제로는 currentUser.username 또는 id 등 */}
+          <p><strong>아이디:</strong> {currentUser.userId || '정보 없음'}</p> {/* 실제로는 currentUser.username 또는 id 등 */}
           <p><strong>닉네임:</strong> {currentUser.name || currentUser.nickname || '정보 없음'}</p>
           <p><strong>이메일:</strong> {currentUser.email || '정보 없음'}</p>
         </div>

@@ -265,7 +265,6 @@ export default function MainPage() {
             <motion.button
               className="mainpage-home-link-button"
               onClick={goToHome}
-              whileHover={{ scale: 1.05, backgroundColor: '#C7A980', color: '#fff' }}
               whileTap={{ scale: 0.95 }}
             >
               ASTOCK 홈페이지로 가기? 

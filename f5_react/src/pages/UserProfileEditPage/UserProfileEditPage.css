@@ -1,0 +1,181 @@
+/* UserProfileEditPage.css - 회색, 흰색, 검은색 기반 테마 */
+
+/* 전체 컨테이너 스타일 */
+.user-profile-edit-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    /* 흰색 배경에 그림자로 깔끔하게 */
+    background-color: #FFFFFF; /* 흰색 배경 */
+    border: 1px solid #E0E0E0; /* 아주 연한 회색 테두리 */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* 부드러운 그림자 */
+    font-family: 'Arial', sans-serif; /* 가독성 좋은 폰트 */
+    color: #333333; /* 기본 텍스트 색상: 진한 회색 */
+}
+
+/* 제목 스타일 */
+h2 {
+    text-align: center;
+    color: #222222; /* 제목 색상: 거의 검정에 가까운 진한 회색 */
+    margin-bottom: 30px;
+    font-size: 2em;
+    font-weight: 600; /* 약간 두꺼운 폰트 */
+    border-bottom: 1px solid #EEEEEE; /* 제목 아래 연한 구분선 */
+    padding-bottom: 15px;
+}
+
+/* 폼 그룹 (라벨 + 입력 필드) */
+.form-group {
+    margin-bottom: 25px; /* 각 그룹 간 간격 증가 */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500; /* 보통 두께 */
+    color: #555555; /* 라벨 색상: 중간 회색 */
+    font-size: 0.95em;
+}
+
+/* 입력 필드 기본 스타일 */
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    width: calc(100% - 24px); /* 패딩 및 보더 고려 */
+    padding: 12px;
+    border: 1px solid #CCCCCC; /* 중간 회색 테두리 */
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #F8F8F8; /* 아주 연한 회색 배경 */
+    color: #333333;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+/* 입력 필드 포커스 시 */
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
+    border-color: #888888; /* 포커스 시 약간 진한 회색 테두리 */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* 약한 그림자 */
+    outline: none; /* 기본 아웃라인 제거 */
+    background-color: #FFFFFF; /* 포커스 시 흰색 배경 */
+}
+
+/* 읽기 전용 입력 필드 */
+.form-group input.read-only {
+    background-color: #EFEFEF; /* 더 짙은 연회색 */
+    color: #777777; /* 더 연한 텍스트 색상 */
+    cursor: not-allowed;
+    border-style: dashed; /* 읽기 전용임을 시각적으로 표현 */
+}
+
+/* 에러 메시지 */
+.error-message {
+    color: #DC3545; /* 경고를 위한 붉은색 */
+    font-size: 0.85em;
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+/* 비밀번호 힌트 */
+.password-hint {
+    font-size: 0.8em;
+    color: #AAAAAA; /* 아주 연한 회색 */
+    margin-top: 8px;
+    line-height: 1.4;
+}
+
+/* 비밀번호 변경 섹션 */
+.password-change-section {
+    margin-top: 35px;
+    padding-top: 25px;
+    border-top: 1px solid #EEEEEE; /* 섹션 구분선 */
+}
+
+.password-change-section h3 {
+    color: #333333;
+    margin-bottom: 25px;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+/* 제출/피드백 메시지 */
+.submit-message {
+    text-align: center;
+    margin-top: 25px;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 0.95em;
+}
+
+.submit-message.success { /* 성공 메시지 (초록색 텍스트) */
+    color: #28A745;
+    background-color: #E6FFE6; /* 아주 연한 초록색 배경 */
+}
+
+.submit-message.error { /* 실패 메시지 (붉은색 텍스트) */
+    color: #DC3545;
+    background-color: #FFEBEE; /* 아주 연한 붉은색 배경 */
+}
+
+/* 폼 액션 버튼 그룹 */
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* 버튼 간 간격 */
+    margin-top: 40px;
+}
+
+.form-actions button {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* 호버 시 애니메이션 */
+    min-width: 120px; /* 최소 너비 지정 */
+}
+
+/* 저장 버튼 */
+.save-button {
+    background-color: #555555; /* 어두운 회색 */
+    color: #FFFFFF; /* 흰색 텍스트 */
+}
+
+.save-button:hover {
+    background-color: #333333; /* 더 어둡게 */
+    transform: translateY(-2px); /* 살짝 위로 */
+}
+
+/* 취소 버튼 */
+.cancel-button {
+    background-color: #AAAAAA; /* 중간 회색 */
+    color: #FFFFFF;
+}
+
+.cancel-button:hover {
+    background-color: #888888; /* 더 어둡게 */
+    transform: translateY(-2px);
+}
+
+/* 선택적: 회원 탈퇴 링크 */
+.member-withdrawal-section {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.member-withdrawal-section a {
+    color: #777777; /* 연한 회색 링크 */
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: color 0.3s ease;
+}
+
+.member-withdrawal-section a:hover {
+    color: #333333; /* 호버 시 진한 회색 */
+    text-decoration: underline;
+}

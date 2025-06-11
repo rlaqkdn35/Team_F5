@@ -3,8 +3,9 @@
 .login-page-container {
   display: flex;
   min-height: 100vh; /* 최소 화면 높이만큼 채우도록 설정 */
-  background: linear-gradient(135deg, var(--color-background-menubar) 0%, var(--color-background-submenubar) 100%);
+  background: linear-gradient(135deg, var(--color-background-menubar) 0%, #914a07 100%);
   overflow: hidden; /* 스크롤바 방지 */
+  border-radius: 8px;
 }
 
 /* 브랜딩 섹션 (왼쪽) */
@@ -24,12 +25,14 @@
 }
 
 .ai-logo {
-  width: 400px; /* 로고 크기 */
-  height: auto;
+  width: 800px; /* 로고 크기 */
+  height: 600px;
   margin-bottom: 30px; /* 로고와 슬로건 사이 간격 */
   border-radius: 12px; /* 로고 이미지 모서리 둥글게 */
-  opacity: 0; 
-  animation: fadeIn 1s ease-in-out forwards;
+  /* opacity: 0;  */
+  /* animation: fadeIn 1s ease-in-out forwards; */
+  opacity: 1;
+  z-index: 0;
 }
 
 @keyframes fadeIn {
@@ -63,6 +66,7 @@ opacity: 1;
   border-radius: 12px; /* 폼 컨테이너 모서리 둥글게 */
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
   background-color: var(--color-background-body);
+  z-index: 1;
 }
 
 .login-title {
