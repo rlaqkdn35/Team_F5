@@ -30,7 +30,7 @@ const AiPicksHomeContent = () => {
     const [todayPicks, setTodayPicks] = useState([]);
     const [bestProfitStocks, setBestProfitStocks] = useState([]);
     const [marketStatus, setMarketStatus] = useState({ isOpen: false, lastUpdated: '' });
-    const [topStocks, setTopStocks] = useState([]);
+    const [topStocks, setTopStocks] = useState([]); // 실시간 탑 종목 5개
     const [aiModels, setAiModels] = useState([]);
     const [selectedModelId, setSelectedModelId] = useState(null); // 추가: 선택된 AI 모델 ID
     const [isLoggedIn, setIsLoggedIn] = useState(true); // 임시 로그인 상태 (Signal.jsx에서 가져옴)
@@ -38,68 +38,87 @@ const AiPicksHomeContent = () => {
     const [signals, setSignals] = useState([]); // Signal 데이터 상태 추가
 
     useEffect(() => {
-        // 데이터 로딩 시뮬레이션
-        setTimeout(() => {
-            // 1. AiPicksHomeContent.jsx 기존 데이터
-            const todayPicksData = [
-                { id: 'pick1', stockName: '에이테크', stockCode: 'A001', prediction: '단기 급등 예상', targetPrice: '15,000', reason: 'AI 모델 신호 포착' },
-                { id: 'pick2', stockName: '비솔루션', stockCode: 'B002', prediction: '안정적 우상향', targetPrice: '120,000', reason: '실적 개선 기대' },
-                { id: 'pick3', stockName: '씨에너지', stockCode: 'C003', prediction: '테마주 순환매', targetPrice: '8,500', reason: '수급 집중' },
-            ];
-
-            const bestProfitData = [
-                { id: 'profit1', stockName: '가온칩스', stockCode: 'GA01', changeRate: '+25.8%', date: '05/06~05/13', lowBuyPrice: '60,000', highSellPrice: '75,500' },
-                { id: 'profit2', stockName: '나노신소재', stockCode: 'NA02', changeRate: '+18.2%', date: '05/06~05/13', lowBuyPrice: '120,000', highSellPrice: '141,800' },
-            ];
-
-            setTodayPicks(todayPicksData);
-            setBestProfitStocks(bestProfitData);
-
-            // 2. RecommendationsPage.jsx 핵심 데이터
-            const dummyAiModels = [
-                { id: 'modelA', name: 'AI 모델 A', score: 92, summary: '시장 데이터를 기반으로 단기 급등 종목을 예측합니다.', recommendedStock: { code: 'NVDA', name: 'NVIDIA Corp.', reason: '최근 기술 혁신 발표와 시장 수요 증가로 긍정적 모멘텀이 예상됩니다.' } },
-                { id: 'modelB', name: 'AI 모델 B', score: 88, summary: '거시 경제 지표와 기업 펀더멘털을 분석하여 장기 투자를 제안합니다.', recommendedStock: { code: 'MSFT', name: 'Microsoft Corp.', reason: '클라우드 컴퓨팅 부문의 꾸준한 성장과 안정적인 수익 구조를 갖추고 있습니다.' } },
-                { id: 'modelC', name: 'AI 모델 C', score: 95, summary: '소셜 미디어 트렌드와 뉴스 심리를 반영하여 시장 변동성을 포착합니다.', recommendedStock: { code: 'TSLA', name: 'Tesla Inc.', reason: '일론 머스크의 최신 트윗과 전기차 시장의 회복 기대감이 반영되었습니다.' } },
-            ];
-            setAiModels(dummyAiModels);
-            // 가장 높은 점수의 모델을 초기 선택 모델로 설정
-            if (dummyAiModels.length > 0) {
-                const initialTopAi = dummyAiModels.reduce((prev, current) => (prev.score > current.score) ? prev : current);
-                setSelectedModelId(initialTopAi.id);
+        const fetchData = async () => {
+            try {
+                // 1. AiPicksHomeContent.jsx 기존 데이터 (시뮬레이션 유지)
+                const todayPicksData = [
+                    { id: 'pick1', stockName: '에이테크', stockCode: 'A001', prediction: '단기 급등 예상', targetPrice: '15,000', reason: 'AI 모델 신호 포착' },
+                    { id: 'pick2', stockName: '비솔루션', stockCode: 'B002', prediction: '안정적 우상향', targetPrice: '120,000', reason: '실적 개선 기대' },
+                    { id: 'pick3', stockName: '씨에너지', stockCode: 'C003', prediction: '테마주 순환매', targetPrice: '8,500', reason: '수급 집중' },
+                ];
+    
+                const bestProfitData = [
+                    { id: 'profit1', stockName: '가온칩스', stockCode: 'GA01', changeRate: '+25.8%', date: '05/06~05/13', lowBuyPrice: '60,000', highSellPrice: '75,500' },
+                    { id: 'profit2', stockName: '나노신소재', stockCode: 'NA02', changeRate: '+18.2%', date: '05/06~05/13', lowBuyPrice: '120,000', highSellPrice: '141,800' },
+                ];
+    
+                setTodayPicks(todayPicksData);
+                setBestProfitStocks(bestProfitData);
+    
+                // 2. RecommendationsPage.jsx 핵심 데이터 (시뮬레이션 유지)
+                const dummyAiModels = [
+                    { id: 'modelA', name: 'AI 모델 A', score: 92, summary: '시장 데이터를 기반으로 단기 급등 종목을 예측합니다.', recommendedStock: { code: 'NVDA', name: 'NVIDIA Corp.', reason: '최근 기술 혁신 발표와 시장 수요 증가로 긍정적 모멘텀이 예상됩니다.' } },
+                    { id: 'modelB', name: 'AI 모델 B', score: 88, summary: '거시 경제 지표와 기업 펀더멘털을 분석하여 장기 투자를 제안합니다.', recommendedStock: { code: 'MSFT', name: 'Microsoft Corp.', reason: '클라우드 컴퓨팅 부문의 꾸준한 성장과 안정적인 수익 구조를 갖추고 있습니다.' } },
+                    { id: 'modelC', name: 'AI 모델 C', score: 95, summary: '소셜 미디어 트렌드와 뉴스 심리를 반영하여 시장 변동성을 포착합니다.', recommendedStock: { code: 'TSLA', name: 'Tesla Inc.', reason: '일론 머스크의 최신 트윗과 전기차 시장의 회복 기대감이 반영되었습니다.' } },
+                ];
+                setAiModels(dummyAiModels);
+                if (dummyAiModels.length > 0) {
+                    const initialTopAi = dummyAiModels.reduce((prev, current) => (prev.score > current.score) ? prev : current);
+                    setSelectedModelId(initialTopAi.id);
+                }
+    
+                // 3. Signal.jsx 핵심 데이터 (allSignals 정의) (시뮬레이션 유지)
+                const allSignalsData = [
+                    { id: 1, type: 'BUY', stock: '삼성전자', code: '005930', price: 82000, change: '+2.5%', time: '2025-05-27 10:30', strength: '매우 강함', reason: '강력한 거래량 동반 이동평균선 돌파', premium: true },
+                    { id: 2, type: 'SELL', stock: 'SK하이닉스', code: '000660', price: 195000, change: '-1.0%', time: '2025-05-27 10:00', strength: '중간', reason: '단기 과열 및 저항선 도달', premium: true },
+                    { id: 3, type: 'HOLD', stock: '네이버', code: '035420', price: 180000, change: '+0.5%', time: '2025-05-27 09:45', strength: '보통', reason: '특별한 변동성 없음', premium: false },
+                    { id: 4, type: 'BUY', stock: '카카오', code: '035720', price: 50000, change: '+3.2%', time: '2025-05-27 09:30', strength: '강함', reason: '바닥 다지기 후 매수 시그널 발생', premium: true },
+                    { id: 5, type: 'WATCH', stock: '현대차', code: '005380', price: 230000, change: '-0.8%', time: '2025-05-27 09:00', strength: '약함', reason: '추세 전환 가능성 모니터링', premium: false },
+                ];
+                setSignals(allSignalsData);
+    
+                // 4. TodayPicksPage.jsx 핵심 데이터 (시뮬레이션 유지)
+                const now = new Date();
+                const hour = now.getHours();
+                const minute = now.getMinutes();
+                const isOpen = hour >= 10 && hour < 16; 
+                const updatedTime = `${now.toLocaleDateString()} ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                setMarketStatus({ isOpen, lastUpdated: updatedTime });
+    
+                // 실시간 탑 종목 5개 데이터 불러오기 (API 호출)
+                const response = await fetch('http://localhost:8084/F5/stock/daily');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+    
+                // 등락률(stockFluctuation)이 양수인 종목만 필터링하고, 등락률이 높은 순서대로 5개 뽑기
+                const sortedTopStocks = data
+                    .filter(stock => stock.stockFluctuation > 0)
+                    .sort((a, b) => b.stockFluctuation - a.stockFluctuation)
+                    .slice(0, 5)
+                    .map((stock, index) => ({ // 클라이언트에서 rank 세팅
+                        ...stock,
+                        rank: index + 1,
+                        // Chart.js에서 사용될 수 있도록 changeRate, changeAmount, volume 필드 추가 (임시)
+                        // 실제로는 백엔드에서 필요한 데이터를 제공하거나 프론트에서 계산해야 합니다.
+                        price: stock.closePrice, // 예시: 종가 사용
+                        changeRate: parseFloat(stock.stockFluctuation.toFixed(2)), // 등락률을 changeRate로 사용
+                        changeAmount: null, // API 응답에 없는 필드이므로 null
+                        volume: null // API 응답에 없는 필드이므로 null
+                    }));
+                setTopStocks(sortedTopStocks);
+    
+            } catch (error) {
+                console.error("데이터 로딩 중 오류 발생:", error);
+                // 오류 발생 시에도 loading 상태를 해제하여 UI를 보여줄 수 있도록 합니다.
+                // 필요에 따라 사용자에게 오류 메시지를 표시할 수 있습니다.
+            } finally {
+                setLoading(false);
             }
+        };
 
-            // 3. Signal.jsx 핵심 데이터 (allSignals 정의)
-            const allSignalsData = [ // 변수명 충돌 방지를 위해 'allSignalsData'로 변경
-                { id: 1, type: 'BUY', stock: '삼성전자', code: '005930', price: 82000, change: '+2.5%', time: '2025-05-27 10:30', strength: '매우 강함', reason: '강력한 거래량 동반 이동평균선 돌파', premium: true },
-                { id: 2, type: 'SELL', stock: 'SK하이닉스', code: '000660', price: 195000, change: '-1.0%', time: '2025-05-27 10:00', strength: '중간', reason: '단기 과열 및 저항선 도달', premium: true },
-                { id: 3, type: 'HOLD', stock: '네이버', code: '035420', price: 180000, change: '+0.5%', time: '2025-05-27 09:45', strength: '보통', reason: '특별한 변동성 없음', premium: false },
-                { id: 4, type: 'BUY', stock: '카카오', code: '035720', price: 50000, change: '+3.2%', time: '2025-05-27 09:30', strength: '강함', reason: '바닥 다지기 후 매수 시그널 발생', premium: true },
-                { id: 5, type: 'WATCH', stock: '현대차', code: '005380', price: 230000, change: '-0.8%', time: '2025-05-27 09:00', strength: '약함', reason: '추세 전환 가능성 모니터링', premium: false },
-            ];
-            setSignals(allSignalsData); // signals 상태 업데이트
-
-            // 4. TodayPicksPage.jsx 핵심 데이터
-            const now = new Date();
-            const hour = now.getHours();
-            const minute = now.getMinutes();
-            const isOpen = hour >= 10 && hour < 16; 
-            const updatedTime = `${now.toLocaleDateString()} ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-            setMarketStatus({ isOpen, lastUpdated: updatedTime });
-
-            const dummyStocks = [
-                { code: 'NVDA', name: 'NVIDIA Corp.', price: 950.70, changeRate: 5.80, changeAmount: 52.00, volume: '150M' },
-                { code: 'AMZN', name: 'Amazon.com Inc.', price: 185.90, changeRate: -3.50, changeAmount: -6.70, volume: '110M' },
-                { code: 'TSLA', name: 'Tesla Inc.', price: 178.00, changeRate: -4.00, changeAmount: -7.40, volume: '130M' },
-                { code: 'AAPL', name: 'Apple Inc.', price: 175.50, changeRate: 3.25, changeAmount: 5.50, volume: '120M' },
-                { code: 'AMD', name: 'Advanced Micro Devices', price: 160.40, changeRate: 4.50, changeAmount: 7.00, volume: '100M' },
-            ];
-            const sortedStocks = [...dummyStocks].sort((a, b) =>
-                Math.abs(b.changeRate) - Math.abs(a.changeRate)
-            ).slice(0, 5); // 상위 5개만 선택
-            setTopStocks(sortedStocks);
-
-            setLoading(false);
-        }, 500);
+        fetchData();
     }, []);
 
     const selectedAiModel = aiModels.find(model => model.id === selectedModelId);
@@ -134,12 +153,12 @@ const AiPicksHomeContent = () => {
                     <h3 className="sub-section-title-aphc">오늘의 탑 종목 (TOP 5)</h3>
                     <div className="top-stocks-list-aphc">
                         {topStocks.map((stock, index) => (
-                            <Link to={`/stock-detail/${stock.code}`} className='stock-link'>
-                                <div key={stock.code} className="top-stock-item-aphc">
-                                    <span className="stock-rank-aphc">{index + 1}.</span>
-                                    <span className="stock-name-aphc">{stock.name} ({stock.code})</span>
-                                    <span className={`stock-change-rate-aphc ${stock.changeRate > 0 ? 'positive' : stock.changeRate < 0 ? 'negative' : ''}`}>
-                                        {stock.changeRate > 0 ? '+' : ''}{stock.changeRate.toFixed(2)}%
+                            <Link to={`/stock-detail/${stock.stockCode}`} className='stock-link' key={stock.priceId}> {/* stockCode를 사용하여 Link to 변경 */}
+                                <div className="top-stock-item-aphc">
+                                    <span className="stock-rank-aphc">{stock.rank}.</span> {/* rank 사용 */}
+                                    <span className="stock-name-aphc">{stock.stockName} ({stock.stockCode})</span> {/* stockName, stockCode 사용 */}
+                                    <span className={`stock-change-rate-aphc ${stock.stockFluctuation > 0 ? 'positive' : stock.stockFluctuation < 0 ? 'negative' : ''}`}>
+                                        {stock.stockFluctuation > 0 ? '+' : ''}{stock.stockFluctuation.toFixed(2)}%
                                     </span>
                                 </div>
                             </Link>

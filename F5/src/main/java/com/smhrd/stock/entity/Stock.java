@@ -1,11 +1,13 @@
 package com.smhrd.stock.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -30,4 +32,7 @@ public class Stock {
 
     @Column(name = "listing_date")
     private Timestamp listingDate;
+    
+    @OneToMany(mappedBy = "stock")  // StockPrice에서 stock 필드로 매핑됨
+    private List<StockPrice> stockPrices; // StockPrice와의 관계
 }

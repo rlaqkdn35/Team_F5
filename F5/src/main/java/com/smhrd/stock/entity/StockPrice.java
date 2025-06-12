@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -21,8 +23,14 @@ public class StockPrice {
     @Column(name = "price_id")
     private Long priceId;
 
-    @Column(name = "stock_code")
-    private String stockCode;
+    @ManyToOne
+    @JoinColumn(name = "stock_code")
+    private Stock stock;
+
+    // stockCode를 직접 사용하는 대신, stock 객체를 통해 접근
+    public String getStockCode() {
+        return stock != null ? stock.getStockCode() : null;
+    }
 
     @Column(name = "price_date")
     private Timestamp priceDate;

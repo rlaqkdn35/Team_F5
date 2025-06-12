@@ -16,23 +16,50 @@ const PostEditPage = () => {
 
     useEffect(() => {
         console.log('[useEffect] postId:', postId);
-        axios.get(`http://localhost:8084/F5/forum/detail/${postId}`)
-            .then(response => {
+
+        const fetchPostDetail = async () => {
+            try {
+                console.log(`[GET] 게시글 상세 정보 요청: /F5/forum/detail/${postId}`);
+                const response = await axios.get(`http://localhost:8084/F5/forum/detail/${postId}`, {
+                    withCredentials: true,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
                 console.log('[GET] 게시글 상세 응답:', response);
-                const forum = response.data.forum;
+
+                const forum = response.data?.forum;
+
+                if (!forum) {
+                    console.warn('[GET] forum 데이터 없음 또는 비어 있음:', response.data);
+                    alert('게시글 데이터를 불러올 수 없습니다.');
+                    navigate('/forum');
+                    return;
+                }
+
                 console.log('[GET] forum 데이터:', forum);
                 setTitle(forum.forum_title ?? '');
                 setContent(forum.forum_content ?? '');
                 setOriginalFileName(forum.forum_file ?? '');
                 setStockCode(forum.stockCode ?? '');
-            })
-            .catch(err => {
+
+                console.log('[State] 상태 초기화 완료:', {
+                    forum_title: forum.forum_title,
+                    forum_content: forum.forum_content,
+                    forum_file: forum.forum_file,
+                    stockCode: forum.stockCode
+                });
+
+            } catch (err) {
                 console.error('[GET] 게시글 불러오기 실패:', err);
                 alert('게시글 정보를 불러오는 데 실패했습니다.');
                 navigate('/forum');
-            });
-    }, [postId, navigate]);
+            }
+        };
 
+        fetchPostDetail();
+    }, [postId, navigate]);
+    
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         console.log('[File Change] 선택된 파일:', selectedFile);
@@ -41,7 +68,8 @@ const PostEditPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('[Submit] 수정 요청 시작');
+
+        console.log('[Submit] 게시글 수정 요청 시작');
         console.log('[Submit] 현재 입력값:', {
             postId,
             title,
@@ -65,12 +93,19 @@ const PostEditPage = () => {
         }
 
         try {
-            const response = await axios.put(`http://localhost:8084/F5/forum/update/${postId}`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+            console.log(`[PUT] 게시글 수정 요청: /F5/forum/update/${postId}`);
+            const response = await axios.put(
+                `http://localhost:8084/F5/forum/update/${postId}`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    withCredentials: true
                 }
-            });
-            console.log('[PUT] 수정 완료 응답:', response);
+            );
+            console.log('[PUT] 게시글 수정 완료 응답:', response);
+
             alert('게시글이 수정되었습니다.');
             navigate(`/forum/post/${postId}`);
         } catch (error) {
@@ -80,7 +115,7 @@ const PostEditPage = () => {
     };
 
     const handleCancel = () => {
-        console.log('[Cancel] 수정 취소 - postId:', postId);
+        console.log('[Cancel] 수정 취소 - 이동할 postId:', postId);
         navigate(`/forum/post/${postId}`);
     };
 
@@ -100,21 +135,27 @@ const PostEditPage = () => {
                         required
                     />
                 </div>
+
                 <div className="form-group">
                     <label>내용</label>
                     <textarea
                         value={content}
                         onChange={(e) => {
-                            console.log('[Input] 내용 변경');
+                            console.log('[Input] 내용 변경:', e.target.value);
                             setContent(e.target.value);
                         }}
                         rows={10}
                         required
                     />
                 </div>
+
                 <div className="form-group">
                     <label>이미지 파일 (선택)</label>
-                    <input type="file" accept="image/*" onChange={handleFileChange} />
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                    />
                     {originalFileName && (
                         <p>현재 이미지: {originalFileName}</p>
                     )}

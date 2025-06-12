@@ -92,7 +92,7 @@ const PostDetailPage = () => {
     };
 
     const handleEdit = () => {
-        navigate(`/forum/edit/${post.id}`);
+        navigate(`/forum/edit/${postId}`);
     };
 
     const handleCommentSubmit = async () => {

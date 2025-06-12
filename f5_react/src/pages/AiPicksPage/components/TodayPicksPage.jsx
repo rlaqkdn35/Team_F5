@@ -20,32 +20,39 @@ const TodayPicksPage = () => {
         const updatedTime = `${now.toLocaleDateString()} ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
         setMarketStatus({ isOpen, lastUpdated: updatedTime });
 
-        const fixedDateStr = '2025-05-20 00:00:00.000000';
-
         const fetchTopStocks = async () => {
             setLoading(true);
             setError(null);
+            console.log('[fetchTopStocks] 요청 시작');
+
             try {
-                const response = await axios.get(
-                    `http://localhost:8084/F5/api/stocks/daily-top?date=${encodeURIComponent(fixedDateStr)}`
-                );
+                const response = await axios.get('http://localhost:8084/F5/stock/daily');
+                console.log('[fetchTopStocks] 응답 수신:', response);
+
                 const fetchedStocks = response.data;
 
                 if (!Array.isArray(fetchedStocks)) {
+                    console.warn('[fetchTopStocks] 데이터 형식이 배열이 아님:', fetchedStocks);
                     setError('서버에서 올바른 데이터 배열을 받지 못했습니다.');
                     setFullStockList([]);
                     return;
                 }
 
-                const sortedStocks = [...fetchedStocks].sort((a, b) => Math.abs(b.stock_fluctuation) - Math.abs(a.stock_fluctuation));
+                console.log(`[fetchTopStocks] 수신된 종목 수: ${fetchedStocks.length}`);
+                const sortedStocks = [...fetchedStocks].sort((a, b) =>
+                    Math.abs(parseFloat(b.stockFluctuation ?? 0)) - Math.abs(parseFloat(a.stockFluctuation ?? 0))
+                );
+                console.log('[fetchTopStocks] 정렬된 종목 리스트:', sortedStocks);
+
                 setFullStockList(sortedStocks);
                 setCurrentPage(1);
             } catch (err) {
-                console.error('Failed to fetch top stocks:', err);
+                console.error('[fetchTopStocks] 데이터 요청 실패:', err);
                 setError('데이터를 불러오는 데 실패했습니다. 서버 상태를 확인해주세요.');
                 setFullStockList([]);
             } finally {
                 setLoading(false);
+                console.log('[fetchTopStocks] 요청 종료');
             }
         };
 
@@ -54,20 +61,26 @@ const TodayPicksPage = () => {
 
     const displayedStocks = useMemo(() => {
         const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        return fullStockList.slice(startIndex, endIndex);
+        return fullStockList.slice(startIndex, startIndex + itemsPerPage);
     }, [fullStockList, currentPage]);
 
     const formatStockData = (stock) => {
-        const formattedChangeRate = `${stock.stock_fluctuation > 0 ? '+' : ''}${stock.stock_fluctuation.toFixed(2)}%`;
-        const formattedPriceChange = `${stock.priceChange > 0 ? '+' : ''}${stock.priceChange.toFixed(2)}`;
-        const formattedVolume = `${(stock.stockVolume / 1000000).toFixed(0)}M`;
+        const fluctuation = parseFloat(stock.stockFluctuation ?? 0);
+        const priceChange = parseFloat(stock.priceChange ?? 0);
+        const volume = parseFloat(stock.stockVolume ?? 0);
+
+        const formattedChangeRate = `${fluctuation > 0 ? '+' : ''}${fluctuation.toFixed(2)}%`;
+        const formattedPriceChange = `${priceChange > 0 ? '+' : ''}${priceChange.toFixed(2)}`;
+        const formattedVolume = `${(volume / 1000000).toFixed(0)}M`;
 
         return {
             ...stock,
             formattedChangeRate,
             formattedPriceChange,
-            formattedVolume
+            formattedVolume,
+            stockFluctuation: fluctuation,
+            priceChange: priceChange,
+            stockVolume: volume,
         };
     };
 
@@ -119,7 +132,7 @@ const TodayPicksPage = () => {
                                         <span>{(currentPage - 1) * itemsPerPage + index + 1}</span>
                                         <span>{formatted.stockCode}</span>
                                         <span>{formatted.stockName}</span>
-                                        <span>{formatted.closePrice.toLocaleString()}</span>
+                                        <span>{Number(formatted.closePrice).toLocaleString()}</span>
                                         <span className={formatted.stockFluctuation > 0 ? 'positive' : 'negative'}>
                                             {formatted.formattedChangeRate}
                                         </span>
@@ -131,9 +144,9 @@ const TodayPicksPage = () => {
 
                                     {selectedStock === formatted.stockCode && (
                                         <div className="stock-details">
-                                            <p>시가: {formatted.openPrice.toLocaleString()}</p>
-                                            <p>고가: {formatted.highPrice.toLocaleString()}</p>
-                                            <p>저가: {formatted.lowPrice.toLocaleString()}</p>
+                                            <p>시가: {Number(formatted.openPrice).toLocaleString()}</p>
+                                            <p>고가: {Number(formatted.highPrice).toLocaleString()}</p>
+                                            <p>저가: {Number(formatted.lowPrice).toLocaleString()}</p>
                                             <p>날짜: {formatted.priceDate}</p>
                                         </div>
                                     )}
