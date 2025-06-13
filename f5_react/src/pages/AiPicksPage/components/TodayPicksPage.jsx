@@ -40,7 +40,7 @@ const TodayPicksPage = () => {
 
                 console.log(`[fetchTopStocks] 수신된 종목 수: ${fetchedStocks.length}`);
                 const sortedStocks = [...fetchedStocks].sort((a, b) =>
-                    Math.abs(parseFloat(b.stockFluctuation ?? 0)) - Math.abs(parseFloat(a.stockFluctuation ?? 0))
+                    (parseFloat(b.stockFluctuation ?? 0)) - (parseFloat(a.stockFluctuation ?? 0))
                 );
                 console.log('[fetchTopStocks] 정렬된 종목 리스트:', sortedStocks);
 
@@ -71,7 +71,7 @@ const TodayPicksPage = () => {
 
         const formattedChangeRate = `${fluctuation > 0 ? '+' : ''}${fluctuation.toFixed(2)}%`;
         const formattedPriceChange = `${priceChange > 0 ? '+' : ''}${priceChange.toFixed(2)}`;
-        const formattedVolume = `${(volume / 1000000).toFixed(0)}M`;
+        const formattedVolume = Number(volume).toLocaleString(undefined, { maximumFractionDigits: 0 });
 
         return {
             ...stock,
@@ -93,69 +93,77 @@ const TodayPicksPage = () => {
     return (
         <div className="today-picks-page">
             <div className="market-status-section">
-                <p>
-                    나스닥 장 상태:{' '}
-                    <span className={marketStatus.isOpen ? 'status-open' : 'status-closed'}>
-                        <span className={`status-indicator ${marketStatus.isOpen ? 'open' : 'closed'}`}></span>
-                        {marketStatus.isOpen ? '개장' : '폐장'}
-                    </span>
-                </p>
-                <p>업데이트: {marketStatus.lastUpdated}</p>
-            </div>
+    <p>
+        나스닥 장 상태:{' '}
+        <span className={marketStatus.isOpen ? 'status-open' : 'status-closed'}>
+            <span className={`status-indicator ${marketStatus.isOpen ? 'open' : 'closed'}`}></span>
+            {marketStatus.isOpen ? '개장' : '폐장'}
+        </span>
+    </p>
+    <p>업데이트: {marketStatus.lastUpdated}</p>
+</div>
 
-            <div className="top-stocks-section">
-                <h2>오늘의 탑 종목 (총 {fullStockList.length}개)</h2>
+<div className="top-stocks-section">
+    <h2>오늘의 탑 종목 (총 {fullStockList.length}개)</h2>
 
-                {loading && <p>데이터를 불러오는 중입니다...</p>}
-                {error && <p className="error-message">{error}</p>}
-                {!loading && !error && fullStockList.length === 0 && <p>표시할 종목 데이터가 없습니다.</p>}
+    {loading && <p>데이터를 불러오는 중입니다...</p>}
+    {error && <p className="error-message">{error}</p>}
+    {!loading && !error && fullStockList.length === 0 && <p>표시할 종목 데이터가 없습니다.</p>}
 
-                {!loading && !error && fullStockList.length > 0 && (
-                    <>
-                        <div className="stock-list-header">
-                            <span>순위</span>
-                            <span>종목코드</span>
-                            <span>종목이름</span>
-                            <span>현재가</span>
-                            <span>등락률</span>
-                            <span>대비</span>
-                            <span>거래량</span>
-                        </div>
-                        {displayedStocks.map((stock, index) => {
-                            const formatted = formatStockData(stock);
-                            return (
-                                <div key={formatted.stockCode} className="stock-item">
-                                    <div
-                                        className="stock-summary"
-                                        onClick={() => toggleDetails(formatted.stockCode)}
-                                    >
-                                        <span>{(currentPage - 1) * itemsPerPage + index + 1}</span>
-                                        <span>{formatted.stockCode}</span>
-                                        <span>{formatted.stockName}</span>
-                                        <span>{Number(formatted.closePrice).toLocaleString()}</span>
-                                        <span className={formatted.stockFluctuation > 0 ? 'positive' : 'negative'}>
-                                            {formatted.formattedChangeRate}
-                                        </span>
-                                        <span className={formatted.priceChange > 0 ? 'positive' : 'negative'}>
-                                            {formatted.formattedPriceChange}
-                                        </span>
-                                        <span>{formatted.formattedVolume}</span>
-                                    </div>
-
-                                    {selectedStock === formatted.stockCode && (
-                                        <div className="stock-details">
+    {!loading && !error && fullStockList.length > 0 && (
+        <>
+            <table className="stock-table">
+                <thead>
+                    <tr className="stock-list-header">
+                        <th>순위</th>
+                        <th>종목코드</th>
+                        <th>종목이름</th>
+                        <th>현재가</th>
+                        <th>등락률</th>
+                        {/* <th>대비</th> */}
+                        <th>거래량</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {displayedStocks.map((stock, index) => {
+                        const formatted = formatStockData(stock);
+                        return (
+                            <React.Fragment key={formatted.stockCode}>
+                                <tr className="stock-item" onClick={() => toggleDetails(formatted.stockCode)}>
+                                    <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                                    <td>{String(formatted.stockCode).padStart(6, '0')}</td>
+                                    <td>{formatted.stockName}</td>
+                                    <td>{Number(formatted.closePrice).toLocaleString()}</td>
+                                    <td className={
+                                        formatted.stockFluctuation > 1 ? 'positive' :
+                                        formatted.stockFluctuation < -1 ? 'negative' :
+                                        'neutral' // 새로운 클래스 추가
+                                    }>
+                                        {formatted.formattedChangeRate}
+                                    </td>
+                                    {/* <td className={formatted.priceChange > 0 ? 'positive' : 'negative'}>
+                                        {formatted.formattedPriceChange}
+                                    </td> */}
+                                    <td>{formatted.formattedVolume}</td>
+                                </tr>
+                                {selectedStock === formatted.stockCode && (
+                                    <tr>
+                                        <td colSpan="7" className="stock-details">
                                             <p>시가: {Number(formatted.openPrice).toLocaleString()}</p>
                                             <p>고가: {Number(formatted.highPrice).toLocaleString()}</p>
                                             <p>저가: {Number(formatted.lowPrice).toLocaleString()}</p>
                                             <p>날짜: {formatted.priceDate}</p>
-                                        </div>
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </>
-                )}
-            </div>
+                                        </td>
+                                    </tr>
+                                )}
+                            </React.Fragment>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </>
+    )}
+</div>
 
             {fullStockList.length > 0 && totalPages > 1 && (
                 <div className="pagination-controls">

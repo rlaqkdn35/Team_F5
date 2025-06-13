@@ -57,38 +57,140 @@
 }
 
 /* 두 번째 섹션: 탑 종목 */
+/* top-stocks-section 내부의 stock-table에 적용 */
+/* top-stocks-section 내부의 stock-table에 적용 */
+.top-stocks-section .stock-table {
+    width: 100%; /* 부모 요소의 너비에 맞춤 */
+    border-collapse: collapse; /* 셀 경계를 합쳐 깔끔하게 */
+    margin-top: 20px; /* 상단 여백 */
+    border: 1px solid #ddd; /* 테이블 전체 외곽선 추가 (선택 사항) */
+}
+
 .top-stocks-section h2 {
     text-align: center;
     color: #333;
     margin-bottom: 20px;
 }
 
-.stock-list-header, .stock-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-    align-items: center; /* 세로 중앙 정렬 */
-}
-
+/* --- 테이블 헤더 스타일 --- */
 .stock-list-header {
     font-weight: bold;
     border-bottom: 2px solid #ccc;
     background-color: #f9f9f9;
 }
 
-/* 각 열의 너비와 정렬 */
-.stock-rank { flex: 0.5; text-align: center; } /* 순위 추가 */
-.stock-code { flex: 1; text-align: left; }
-.stock-name { flex: 2; text-align: left; }
-.stock-price { flex: 1; text-align: right; }
-.stock-change-rate { flex: 1; text-align: right; }
-.stock-change-amount { flex: 1; text-align: right; }
-.stock-volume { flex: 1; text-align: right; padding-right: 5px; }
+.stock-list-header th {
+    padding: 10px 5px; /* 헤더 셀 내부 여백 */
+    text-align: center; /* 기본 가운데 정렬 */
+    /* 너비는 th에 직접 지정하지 않고, 나중에 td와 함께 맞춰줄 수 있습니다. */
+}
 
+/* --- 테이블 본문 (데이터 행) 스타일 --- */
+.stock-item {
+    /* table 구조에서는 display: flex를 사용하지 않습니다. */
+    /* 클릭 가능한 영역임을 나타내기 위한 커서 */
+    cursor: pointer;
+}
+
+.stock-item:hover {
+    background-color: #f5f5f5; /* 마우스 오버 시 배경색 변경 */
+}
+
+.stock-item td {
+    padding: 8px 5px; /* 데이터 셀 내부 여백 */
+    border-bottom: 1px solid #eee;
+    vertical-align: middle; /* 세로 중앙 정렬 (셀 내용이 여러 줄일 경우 유용) */
+    text-align: center; /* 기본 가운데 정렬 */
+}
+
+/* --- 각 열(column)의 너비와 정렬 --- */
+/* th와 td에 동일하게 적용하여 열의 정렬과 너비를 맞춥니다. */
+/* --- 각 열(column)의 너비와 정렬 --- */
+/* th와 td에 동일하게 적용하여 열의 정렬과 너비를 맞춥니다. */
+
+/* 순위 (1번째 열) */
+.stock-list-header th:nth-child(1),
+.stock-item td:nth-child(1) {
+    text-align: center; /* 순위는 보통 가운데 정렬 */
+    width: 8%; /* 예시 너비 */
+}
+
+/* 종목코드 (2번째 열) */
+.stock-list-header th:nth-child(2),
+.stock-item td:nth-child(2) {
+    text-align: left;
+    width: 12%; /* 예시 너비 */
+}
+
+/* 종목이름 (3번째 열) */
+.stock-list-header th:nth-child(3),
+.stock-item td:nth-child(3) {
+    text-align: left;
+    width: 25%; /* 예시 너비, 이름이 길 수 있으므로 넓게 */
+}
+
+/* 현재가 (4번째 열) */
+.stock-list-header th:nth-child(4),
+.stock-item td:nth-child(4) {
+    text-align: right;
+    width: 15%; /* 예시 너비 */
+}
+
+/* 등락률 (5번째 열) */
+.stock-list-header th:nth-child(5),
+.stock-item td:nth-child(5) {
+    text-align: right;
+    width: 10%; /* 예시 너비 */
+}
+
+/* 대비 (6번째 열) */
+.stock-list-header th:nth-child(6),
+.stock-item td:nth-child(6) {
+    text-align: right;
+    width: 10%; /* 예시 너비 */
+}
+
+/* 거래량 (7번째 열) */
+.stock-list-header th:nth-child(7),
+.stock-item td:nth-child(7) {
+    text-align: right;
+    width: 20%; /* 예시 너비 */
+    padding-right: 5px; /* 오른쪽 여백 */
+}
+
+
+/* --- 등락률 및 대비 색상 --- */
+.positive {
+    color: #00a86b; /* 녹색 (상승) */
+    font-weight: bold;
+}
+
+.negative {
+    color: #ff4d4f; /* 빨간색 (하락) */
+    font-weight: bold;
+}
+
+/* --- 상세 정보 섹션 (클릭 시 나타나는 부분) --- */
+.stock-details {
+    background-color: #fdfdfd; /* 상세 정보 섹션 배경색을 더 밝게 */
+    padding: 15px;
+    border-top: 1px solid #e0e0e0;
+    text-align: left; /* 텍스트 왼쪽 정렬 */
+    font-size: 0.9em;
+    color: #555;
+}
+
+.stock-details p {
+    margin: 5px 0;
+}
+
+/* --- 링크 스타일 (사용할 경우) --- */
 .stock-link {
     text-decoration: none;
-    color: var(--color-text-dark);
+    color: inherit; /* 부모 요소의 색상 상속 */
+}
+.stock-link:hover {
+    text-decoration: underline;
 }
 /* 페이지네이션 컨트롤 컨테이너 스타일 (기존과 동일) */
 .pagination-controls {
@@ -131,7 +233,7 @@
 }
 
 
-.stock-list-header,
+
 .stock-summary {
     display: grid;
     grid-template-columns: 1fr 1.5fr 2fr 1.5fr 1.5fr 1.5fr 2fr;
@@ -141,12 +243,7 @@
     text-align: center;
 }
 
-/* 각 종목 항목 기본 스타일 */
-.stock-item {
-    display: flex;
-    flex-direction: column; /* 드롭다운이 아래로 열리도록 */
-    padding: 10px 0;
-}
+
 
 /* 상세 정보 */
 .stock-details {
@@ -160,3 +257,7 @@
 }
 
 
+.neutral {
+    color: #808080; /* 회색 (예시 색상, 원하는 회색 코드로 변경 가능) */
+    /* font-weight는 그대로 두거나 필요에 따라 조정 */
+}
