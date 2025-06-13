@@ -16,14 +16,15 @@ public interface StockPriceRepository extends Repository<StockPrice, Long> {
 	           "sp.priceId, " +
 	           "sp.stock.stockCode, " +
 	           "s.stockName, " +
-	           "sp.priceDate, " +  // Timestamp로 priceDate를 그대로 반환
+	           "sp.priceDate, " +
 	           "sp.openPrice, " +
 	           "sp.highPrice, " +
 	           "sp.lowPrice, " +
 	           "sp.closePrice, " +
-	           "sp.stockFluctuation) " +
+	           "sp.stockFluctuation, " +
+	           "sp.stockVolume) " + // DTO 생성자 괄호 뒤에 충분한 공백을 추가했습니다.
 	           "FROM StockPrice sp " +
 	           "JOIN Stock s ON sp.stock.stockCode = s.stockCode " +
-	           "WHERE FUNCTION('DATE', sp.priceDate) = :targetDate")  // DB에서 date만 추출하여 비교
+	           "WHERE FUNCTION('DATE', sp.priceDate) = :targetDate")
 	    List<StockPriceWithNameDto> findAllByPriceDateWithStockName(@Param("targetDate") LocalDate targetDate);
 	}

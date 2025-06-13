@@ -3,6 +3,8 @@ package com.smhrd.stock.entity;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -34,5 +36,6 @@ public class Stock {
     private Timestamp listingDate;
     
     @OneToMany(mappedBy = "stock")  // StockPrice에서 stock 필드로 매핑됨
+    @JsonIgnore
     private List<StockPrice> stockPrices; // StockPrice와의 관계
 }

@@ -18,10 +18,11 @@ public class StockPriceWithNameDto {
 	private BigDecimal lowPrice;
 	private BigDecimal closePrice;
 	private BigDecimal stockFluctuation;
+	private BigDecimal stockVolume;
 
 	public StockPriceWithNameDto(Long priceId, String stockCode, String stockName, Timestamp priceDate,
 			BigDecimal openPrice, BigDecimal highPrice, BigDecimal lowPrice, BigDecimal closePrice,
-			BigDecimal stockFluctuation) {
+			BigDecimal stockFluctuation, BigDecimal stockVolume) {
 		this.priceId = priceId;
 		this.stockCode = stockCode;
 		this.stockName = stockName;
@@ -31,5 +32,6 @@ public class StockPriceWithNameDto {
 		this.lowPrice = lowPrice;
 		this.closePrice = closePrice;
 		this.stockFluctuation = stockFluctuation;
+		this.stockVolume = stockVolume;
 	}
 }
