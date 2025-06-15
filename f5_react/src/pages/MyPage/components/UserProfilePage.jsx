@@ -52,15 +52,14 @@ const MyPage = ({ currentUser, onLogout }) => {
         </div>
       </section>
 
-      <section className="my-activity-links-section">
+      {/* <section className="my-activity-links-section">
         <h2 className="section-title-mypage">나의 활동 바로가기</h2>
         <ul className="activity-link-list">
           <li><Link to="/my-stocks" className="activity-link">My종목 (관심 종목)</Link></li>
           <li><Link to="/forum/my-activity" className="activity-link">토론실 나의 활동</Link></li>
           <li><Link to="/trading-signals/my-signals" className="activity-link">나의 매매신호</Link></li>
-          {/* 필요에 따라 다른 개인화된 페이지 링크 추가 */}
         </ul>
-      </section>
+      </section> */}
       
       {/* 선택: 알림 설정 등 다른 섹션 추가 가능 */}
       {/* <section className="notification-settings-section">

@@ -63,7 +63,7 @@
 .stock-list-table-mts {
   width: 100%;
   border-collapse: collapse; /* 테이블 테두리 병합 */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 가독성 좋은 폰트 */
+  margin-bottom: 200px;
 }
 
 /* 테이블 헤더 (ul) 스타일 */

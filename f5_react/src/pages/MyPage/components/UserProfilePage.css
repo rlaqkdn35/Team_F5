@@ -117,3 +117,7 @@
   text-align: center;
   color: var(--color-text-dark);
 }
+
+.account-management-section{
+  margin-bottom: 300px;
+}

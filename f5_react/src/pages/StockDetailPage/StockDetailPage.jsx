@@ -19,9 +19,9 @@ const TABS_STOCK_DETAIL = [
   { id: 'priceChart', name: '시세 차트', icon: <FaChartLine />, content: PriceChartTab },
   { id: 'multiAi', name: '다중 AI', icon: <FaBrain />, content: MultiAiAnalysisTab }, 
   { id: 'discussion', name: '종목 토론', icon: <FaComments />, content: StockDiscussionTab }, 
-  { id: 'issues', name: '이슈', icon: <FaBookOpen />, content: IssuesTabContent }, 
-  { id: 'newsDisclosure', name: '뉴스/공시', icon: <FaNewspaper />, content: NewsDisclosureTabContent }, 
-  { id: 'reports', name: '리포트', icon: <FaFileAlt />, content: ReportsTabContent }, 
+  // { id: 'issues', name: '이슈', icon: <FaBookOpen />, content: IssuesTabContent }, 
+  { id: 'newsDisclosure', name: '뉴스', icon: <FaNewspaper />, content: NewsDisclosureTabContent }, 
+  // { id: 'reports', name: '리포트', icon: <FaFileAlt />, content: ReportsTabContent }, 
 ];
 
 const StockDetailPage = () => {

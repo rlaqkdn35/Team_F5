@@ -14,10 +14,9 @@ const MAIN_TABS = [
 // 2단계 서브필터/카테고리 정의 (예시)
 const SUB_FILTERS = {
   feature: [
-    { id: 'issueStock', name: '이슈종목' },
-    { id: 'high52w', name: '52주 신고가' },
-    { id: 'upperLimit', name: '상한가' },
-    { id: 'topVolumeShare', name: '거래비중상위' },
+    { id: 'high52w', name: '52주 신고가 (52주간 가장 높은것)' },
+    { id: 'upperLimit', name: '상한가(30%이상 오른 등락률)' },
+    { id: 'topVolumeShare', name: '거래비중상위(거래량이 100%로 이상 증가한것)' },
   ],
   supplyDemand: [
     { id: 'buyVolumeShare', name: '매수비중상위' },
@@ -164,11 +163,6 @@ const MarketThemesSection = () => {
         </table>
       </div>
 
-      <div className="actions-footer-mts">
-        <button onClick={handleViewMoreClick} className="view-more-button-mts">
-          {currentActiveSubFilterName || currentActiveTabName} 더보기
-        </button>
-      </div>
     </section>
   );
 };

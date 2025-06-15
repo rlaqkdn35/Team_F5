@@ -1,5 +1,6 @@
 // src/pages/MyPage/components/UserFavorite.jsx
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // Link 컴포넌트 import
 import './UserFavorite.css'; // 관심 종목 페이지 전용 CSS
 
 const UserFavorite = ({ currentUser, onLogout }) => {
@@ -15,20 +16,20 @@ const UserFavorite = ({ currentUser, onLogout }) => {
     // 실제 API 호출 로직:
     // if (currentUser && currentUser.userId) {
     //   fetch(`/api/users/${currentUser.userId}/interest-stocks`)
-    //     .then(response => {
-    //       if (!response.ok) {
-    //         throw new Error('Failed to fetch interest stocks');
-    //       }
-    //       return response.json();
-    //     })
-    //     .then(data => {
-    //       setInterestStocks(data);
-    //       setLoading(false);
-    //     })
-    //     .catch(err => {
-    //       setError(err.message);
-    //       setLoading(false);
-    //     });
+    //   .then(response => {
+    //   if (!response.ok) {
+    //     throw new Error('Failed to fetch interest stocks');
+    //   }
+    //   return response.json();
+    //   })
+    //   .then(data => {
+    //     setInterestStocks(data);
+    //     setLoading(false);
+    //   })
+    //   .catch(err => {
+    //     setError(err.message);
+    //     setLoading(false);
+    //   });
     // } else {
     //   // 로그인하지 않은 경우 (MyPage는 ProtectedElement로 보호되지만, 만약을 대비)
     //   setInterestStocks([]);
@@ -44,7 +45,7 @@ const UserFavorite = ({ currentUser, onLogout }) => {
         setLoading(false);
         return;
       }
-      
+
       const mockData = [
         { id: '005930', name: '삼성전자', currentPrice: 82000, 대비: '+2,000', changeRate: '+2.50%', tradeVolume: '15,234,567' },
         { id: '000660', name: 'SK하이닉스', currentPrice: 195000, 대비: '-1,500', changeRate: '-0.76%', tradeVolume: '8,123,456' },
@@ -91,7 +92,12 @@ const UserFavorite = ({ currentUser, onLogout }) => {
             <tbody>
               {interestStocks.map(stock => (
                 <tr key={stock.id}>
-                  <td className="stock-name-cell">{stock.name}</td>
+                  <td className="stock-name-cell">
+                    {/* 종목별 링크 추가 */}
+                    <Link to={`/stock-detail/${stock.id}`} className="stock-link">
+                      {stock.name}
+                    </Link>
+                  </td>
                   <td className="align-right">{stock.currentPrice.toLocaleString()}원</td>
                   <td className={`align-right ${parseFloat(stock.대비.replace(',', '')) > 0 ? 'positive' : parseFloat(stock.대비.replace(',', '')) < 0 ? 'negative' : ''}`}>
                     {stock.대비}
