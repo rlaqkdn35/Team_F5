@@ -43,7 +43,7 @@ function Stockchat(){
         onChange={e => setInput(e.target.value)}
         onKeyDown={e => e.key === "Enter" && sendMessage()}
         placeholder="메시지를 입력하세요"
-        style={{ width: "80%" }}
+        className="chat-input"
       />
       <button onClick={sendMessage} style={{ width: "18%", marginLeft: "2%" }}>전송</button>
     </div>

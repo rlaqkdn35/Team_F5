@@ -2,6 +2,7 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
+  z-index: 1000; /* 다른 요소 위에 표시되도록 z-index 추가 (선택 사항) */
 }
 
 .chat-toggle {
@@ -28,6 +29,7 @@
   margin-top: 10px;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 강화 (선택 사항) */
 }
 
 .chat-messages {
@@ -35,27 +37,36 @@
   overflow-y: auto;
   margin-bottom: 10px;
   font-size: 14px;
+  padding-right: 5px; /* 스크롤바와 텍스트 겹침 방지 */
 }
 
 .message {
   margin: 5px 0;
+  padding: 5px 8px;
+  border-radius: 8px;
+  max-width: 80%; /* 메시지 버블 최대 너비 */
+  word-wrap: break-word; /* 긴 단어 줄바꿈 */
 }
 
 .message.user {
   text-align: right;
+  background-color: #e0f7fa; /* 사용자 메시지 배경색 */
+  margin-left: auto; /* 오른쪽 정렬 */
 }
 
-input[type="text"] {
+.message.bot {
+  text-align: left;
+  background-color: #f1f0f0; /* 봇 메시지 배경색 */
+  margin-right: auto; /* 왼쪽 정렬 */
+}
+
+/* <<< 이 부분이 수정되었습니다! */
+.chat-input { /* input[type="text"] 대신 .chat-input 사용 */
   padding: 8px;
-  width: calc(100% - 16px);
+  width: calc(100% - 16px); /* padding 고려하여 너비 설정 */
   margin-bottom: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box; /* padding이 너비에 포함되도록 */
 }
 
-button {
-  padding: 6px;
-  width: 100%;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-}

@@ -125,13 +125,7 @@ const NewsDetailPage = () => {
                 dangerouslySetInnerHTML={{ __html: newsDetail.newsContent }}
             ></div>
 
-            {newsDetail.newsUrl && (
-                <div className="news-detail-link-section-ndp">
-                    <a href={newsDetail.newsUrl} target="_blank" rel="noopener noreferrer" className="news-detail-original-link-ndp">
-                        <i className="fas fa-external-link-alt"></i> 원본 기사 보러가기
-                    </a>
-                </div>
-            )}
+            
             
             {newsDetail.relatedStocks && newsDetail.relatedStocks.length > 0 && (
                 <div className="related-stocks-section-ndp">
@@ -150,8 +144,16 @@ const NewsDetailPage = () => {
                     </ul>
                 </div>
             )}
-
-            <button onClick={() => navigate('/news/list')} className="back-button-ndp">목록으로 돌아가기</button>
+            <div className="news-detail-buttons-container"> {/* 버튼들을 감싸는 컨테이너 */}
+                {newsDetail.newsUrl && (
+                    <button onClick={() => window.open(newsDetail.newsUrl, '_blank', 'noopener noreferrer')} className="news-detail-original-link-button-ndp">
+                        <i className="fas fa-external-link-alt"></i> 원본 기사 보러가기
+                    </button>
+                )}
+                <button onClick={() => navigate('/news/list')} className="back-button-ndp">
+                    목록으로 돌아가기
+                </button>
+            </div>
         </div>
     );
 };
