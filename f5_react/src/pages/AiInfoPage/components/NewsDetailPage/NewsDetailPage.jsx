@@ -1,84 +1,138 @@
-import React, { useEffect, useState } from 'react';
+// src/main/frontend/src/NewsDetailPage.jsx
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './NewsDetailPage.css'; // 이 CSS 파일은 스타일링을 위해 필요합니다.
+import axios from 'axios';
+import './NewsDetailPage.css';
 
 const NewsDetailPage = () => {
-    const { id } = useParams(); // URL에서 뉴스 ID를 가져옵니다.
-    const navigate = useNavigate(); // 프로그래밍 방식으로 페이지 이동을 위한 훅입니다.
+    // [디버그 로그] 컴포넌트 렌더링 시작 시점
+    console.log("🚀 NewsDetailPage 컴포넌트 렌더링 시작");
+
+    // URL에서 뉴스 ID(newsIdx)를 가져옵니다.
+    const { newsIdx } = useParams();
+    // [디버그 로그] useParams()로부터 얻은 newsIdx 값
+    console.log(`[디버그] useParams에서 추출한 newsIdx: "${newsIdx}" (타입: ${typeof newsIdx})`);
+
+    const navigate = useNavigate();
+
     const [newsDetail, setNewsDetail] = useState(null);
     const [loading, setLoading] = useState(true);
-
-    // 임시 Mock 데이터입니다. 실제 애플리케이션에서는 API에서 데이터를 가져와야 합니다.
-    const mockNewsData = [];
-    for (let i = 1; i <= 20; i++) {
-        mockNewsData.push({
-            id: `news${i}`,
-            title: `주요 뉴스 제목 ${i}: 시장 변동성과 AI의 역할에 대한 심층 분석 및 전망`,
-            date: `2024-05-${String(14 - Math.floor(i / 5)).padStart(2, '0')}`,
-            author: (i % 3 === 0) ? 'AI 투자일보' : (i % 3 === 1) ? '블록체인 뉴스' : '이코노미 리뷰',
-            summary: `뉴스 내용 요약 ${i}: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`,
-            fullContent: `
-                <p>이것은 <b>뉴스 ${i}</b>의 전체 내용입니다. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                <p>이 뉴스는 시장 변동성에 대한 심층적인 분석을 제공하며, 인공지능(AI)이 미래 금융 시장에서 어떻게 중요한 역할을 할지에 대한 전망을 담고 있습니다. 최근의 기술 발전과 함께 AI는 데이터 분석, 예측 모델링, 자동화된 거래 시스템 등 다양한 분야에서 혁신을 이끌고 있습니다.</p>
-                <p>전문가들은 AI의 도입이 투자 전략의 효율성을 높이고, 리스크 관리를 강화하며, 새로운 투자 기회를 창출할 것이라고 예상합니다. 그러나 동시에 AI 시스템의 투명성, 윤리적 문제, 그리고 잠재적인 시장 교란 가능성에 대한 논의도 활발하게 이루어지고 있습니다.</p>
-                <p>본 뉴스의 전체 내용을 통해 독자들은 AI와 관련된 최신 동향과 함께, 이것이 개인 및 기관 투자자들에게 미칠 영향에 대해 심층적으로 이해할 수 있을 것입니다. 지속적인 연구와 개발을 통해 AI는 금융 산업의 미래를 재편할 핵심 동력이 될 것입니다.</p>
-            `,
-            // 관련 종목 데이터 추가 (임시 목업 데이터)
-            relatedStocks: [
-                { name: '삼성전자', code: '005930' },
-                { name: '네이버', code: '035420' },
-                { name: '카카오', code: '035720' },
-            ]
-        });
-    }
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        setLoading(true);
-        // 뉴스 상세 정보를 가져오는 것을 시뮬레이션합니다.
-        setTimeout(() => {
-            const foundNews = mockNewsData.find(news => news.id === id);
-            setNewsDetail(foundNews);
-            setLoading(false);
-            if (!foundNews) {
-                // 필요하다면 "찾을 수 없음" 메시지를 표시하거나 리디렉션할 수 있습니다.
-                console.warn(`ID ${id}를 가진 뉴스를 찾을 수 없습니다.`);
+        // [디버그 로그] useEffect 시작 시점
+        console.log("🌟 useEffect 실행됨. newsIdx:", newsIdx);
+
+        const fetchNewsDetail = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                console.log(`[NewsDetailPage] 뉴스 상세 정보 요청 시작 (newsIdx: ${newsIdx})`);
+                // 백엔드 API 호출 URL
+                const apiUrl = `http://localhost:8084/F5/news/detail/${newsIdx}`;
+                // [디버그 로그] API 요청 URL
+                console.log(`[디버그] API 요청 URL: ${apiUrl}`);
+
+                const response = await axios.get(apiUrl, {
+                    withCredentials: true,
+                });
+                console.log("[NewsDetailPage] API 응답 데이터:", response.data);
+                setNewsDetail(response.data);
+            } catch (err) {
+                console.error(`[NewsDetailPage] 뉴스 상세 정보를 가져오는 데 실패했습니다 (ID: ${newsIdx}):`, err);
+                if (err.response) {
+                    console.error("[NewsDetailPage Error] 응답 상태:", err.response.status);
+                    console.error("[NewsDetailPage Error] 응답 데이터:", err.response.data);
+                    if (err.response.status === 404) {
+                        setError("해당 뉴스를 찾을 수 없습니다.");
+                    } else {
+                        setError(`서버 응답 오류 (${err.response.status}): ${err.response.data.message || '알 수 없는 오류'}`);
+                    }
+                } else if (err.request) {
+                    setError("네트워크 오류: 서버에 연결할 수 없습니다.");
+                } else {
+                    setError("요청 중 오류가 발생했습니다.");
+                }
+            } finally {
+                setLoading(false);
+                console.log("[NewsDetailPage] 뉴스 상세 정보 로딩 종료.");
             }
-        }, 300);
-    }, [id]); // id가 변경될 때마다 useEffect를 다시 실행합니다.
+        };
+
+        // newsIdx가 유효할 때만 데이터 요청
+        // [디버그 로그] newsIdx 조건문 평가 결과
+        console.log(`[디버그] newsIdx 유효성 검사: ${newsIdx ? '유효함' : '유효하지 않음'}`);
+        if (newsIdx) {
+            fetchNewsDetail();
+        } else {
+            setError("뉴스 ID가 제공되지 않았습니다.");
+            setLoading(false);
+        }
+    }, [newsIdx]);
+
+    // [디버그 로그] 렌더링 직전의 상태 값들
+    console.log(`[디버그] 렌더링 전: loading=${loading}, error=${error}, newsDetail=${newsDetail ? '있음' : '없음'}`);
 
     // 관련 종목 클릭 핸들러
     const handleStockClick = (stockCode) => {
-        // 실제 종목 상세 페이지 경로에 맞게 수정하세요.
-        // 예: /stock/005930 또는 /stock-detail?code=005930
+        console.log(`[디버그] 관련 종목 클릭됨: ${stockCode}. 종목 상세 페이지로 이동 예정.`);
         navigate(`/stock-detail/${stockCode}`);
     };
 
     if (loading) {
-        return <p className="loading-message-ndp">뉴스 상세 정보를 불러오는 중입니다...</p>; // NDP: NewsDetailPage
+        // [디버그 로그] 로딩 중 메시지 렌더링
+        console.log("⏳ 로딩 중 메시지 렌더링");
+        return <p className="loading-message-ndp">뉴스 상세 정보를 불러오는 중입니다...</p>;
     }
 
-    if (!newsDetail) {
+    if (error) {
+        // [디버그 로그] 오류 메시지 렌더링
+        console.log(`❌ 오류 메시지 렌더링: ${error}`);
         return (
             <div className="news-detail-page">
-                <p className="no-data-message-ndp">해당 뉴스를 찾을 수 없습니다.</p>
-                <button onClick={() => navigate('/ai-info/news')} className="back-button-ndp">목록으로 돌아가기</button>
+                <p className="error-message-ndp">오류: {error}</p>
+                <button onClick={() => navigate(-1)} className="back-button-ndp">목록으로 돌아가기</button>
             </div>
         );
     }
 
+    if (!newsDetail) {
+        // [디버그 로그] 뉴스 정보 없음 메시지 렌더링
+        console.log("🚫 뉴스 정보 없음 메시지 렌더링");
+        return (
+            <div className="news-detail-page">
+                <p className="no-data-message-ndp">해당 뉴스를 찾을 수 없습니다.</p>
+                <button onClick={() => navigate('/news/list')} className="back-button-ndp">목록으로 돌아가기</button>
+            </div>
+        );
+    }
+
+    // [디버그 로그] 최종 뉴스 상세 페이지 렌더링
+    console.log("✅ 뉴스 상세 페이지 최종 렌더링");
+    console.log("[디버그] newsDetail 객체:", newsDetail);
+
     return (
         <div className="news-detail-page">
-            <h1 className="news-detail-title-ndp">{newsDetail.title}</h1>
+            <h1 className="news-detail-title-ndp">{newsDetail.newsTitle}</h1>
             <p className="news-detail-meta-ndp">
-                <span className="news-detail-author-ndp">{newsDetail.author}</span>
-                <span className="news-detail-date-ndp">{newsDetail.date}</span>
+                <span className="news-detail-author-ndp">{newsDetail.pressName}</span>
+                <span className="news-detail-date-ndp">
+                    {newsDetail.newsDt ? new Date(newsDetail.newsDt).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.').replace(/\.$/, '') : '날짜 정보 없음'}
+                </span>
             </p>
             <div
                 className="news-detail-full-content-ndp"
-                dangerouslySetInnerHTML={{ __html: newsDetail.fullContent }}
+                dangerouslySetInnerHTML={{ __html: newsDetail.newsContent }}
             ></div>
 
-            {/* 관련 종목 섹션 */}
+            {newsDetail.newsUrl && (
+                <div className="news-detail-link-section-ndp">
+                    <a href={newsDetail.newsUrl} target="_blank" rel="noopener noreferrer" className="news-detail-original-link-ndp">
+                        원본 기사 보러가기
+                    </a>
+                </div>
+            )}
+
             {newsDetail.relatedStocks && newsDetail.relatedStocks.length > 0 && (
                 <div className="related-stocks-section-ndp">
                     <h3>관련 종목</h3>
@@ -97,7 +151,7 @@ const NewsDetailPage = () => {
                 </div>
             )}
 
-            <button onClick={() => navigate('/ai-info/news')} className="back-button-ndp">목록으로 돌아가기</button>
+            <button onClick={() => navigate('/news/list')} className="back-button-ndp">목록으로 돌아가기</button>
         </div>
     );
 };

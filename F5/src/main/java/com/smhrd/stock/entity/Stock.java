@@ -27,6 +27,9 @@ public class Stock {
 
     @Column(name = "market_type")
     private String marketType;
+    
+    @Column(name = "stock_category")
+    private String stockCategory;
 
     @Lob
     @Column(name = "company_info")
