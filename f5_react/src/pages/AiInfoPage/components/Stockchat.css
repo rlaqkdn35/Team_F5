@@ -1,14 +1,15 @@
+
 .chat-container {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 1000; /* 다른 요소 위에 표시되도록 z-index 추가 (선택 사항) */
+  z-index: 1000; 
 }
 
 .chat-toggle {
   width: 50px;
   height: 50px;
-  background: #4caf50;
+  background: #8D6E63; /* Muted Brown-Grey */
   color: white;
   border-radius: 50%;
   display: flex;
@@ -22,14 +23,14 @@
 .chat-box {
   width: 300px;
   height: 400px;
-  background: white;
-  border: 1px solid #ccc;
+  background: #F5EEED; /* Very light, almost off-white with a hint of brown/pink */
   border-radius: 12px;
   padding: 10px;
   margin-top: 10px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 강화 (선택 사항) */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+  overflow: hidden; /* 배경 애니메이션이 박스 밖으로 나가지 않도록 */
 }
 
 .chat-messages {
@@ -37,36 +38,131 @@
   overflow-y: auto;
   margin-bottom: 10px;
   font-size: 14px;
-  padding-right: 5px; /* 스크롤바와 텍스트 겹침 방지 */
+  padding-right: 5px; 
+  display: flex;
+  flex-direction: column;
+  
+  /* 가을 분위기 배경과 은은한 움직임 추가 */
+  background-color: #F5EEED; /* chat-box 배경과 유사 */
+  background-image: radial-gradient(circle, rgba(0,0,0,0.02) 1px, transparent 1px), /* 작은 점 패턴 1 */
+                    radial-gradient(circle, rgba(0,0,0,0.03) 1px, transparent 1px); /* 작은 점 패턴 2 */
+  background-size: 40px 40px, 40px 40px; /* 각 패턴의 크기 */
+  background-position: 0 0, 20px 20px; /* 각 패턴의 시작 위치 오프셋 */
+  animation: fallBackground 30s linear infinite; /* 느리게 떨어지는 배경 애니메이션 */
+  
+  /* 스크롤바 스타일 (선택 사항 - 웹킷 브라우저에만 적용) */
+  scrollbar-width: thin;
+  scrollbar-color: #8D6E63 #F5EEED; /* thumb track */
 }
+
+.chat-messages::-webkit-scrollbar {
+  width: 8px;
+}
+.chat-messages::-webkit-scrollbar-track {
+  background: #F5EEED;
+  border-radius: 10px;
+}
+.chat-messages::-webkit-scrollbar-thumb {
+  background-color: #8D6E63;
+  border-radius: 10px;
+  border: 2px solid #F5EEED;
+}
+
+
+/* 배경 애니메이션 키프레임 정의 */
+@keyframes fallBackground {
+  from { background-position: 0 0, 20px 20px; }
+  to { background-position: 0 40px, 20px 60px; } /* 패턴이 아래로 이동하며 떨어지는 느낌 연출 */
+}
+
 
 .message {
   margin: 5px 0;
-  padding: 5px 8px;
-  border-radius: 8px;
-  max-width: 80%; /* 메시지 버블 최대 너비 */
-  word-wrap: break-word; /* 긴 단어 줄바꿈 */
+  padding: 8px 12px; 
+  border-radius: 18px; 
+  max-width: 100%; 
+  word-wrap: break-word; 
+  line-height: 1.4; 
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
 .message.user {
-  text-align: right;
-  background-color: #e0f7fa; /* 사용자 메시지 배경색 */
-  margin-left: auto; /* 오른쪽 정렬 */
+  align-self: flex-start; /* 사용자 메시지: 왼쪽 정렬 */
+  background-color: #D7CCC8; /* Light Grey-Brown */
+  color: #333;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 18px;
 }
 
 .message.bot {
-  text-align: left;
-  background-color: #f1f0f0; /* 봇 메시지 배경색 */
-  margin-right: auto; /* 왼쪽 정렬 */
+  text-align: right; /* 주식전문가 이름은 메시지 오른쪽에 표시 */
+  align-self: flex-end; /* 봇 메시지: 오른쪽 정렬 */
+  background-color: #CFD8DC; /* Light Blue-Grey (차분한 회색) */
+  color: #333;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 18px;
 }
 
-/* <<< 이 부분이 수정되었습니다! */
-.chat-input { /* input[type="text"] 대신 .chat-input 사용 */
+/* 메시지 내 발신자 텍스트 정렬 */
+.message.user strong {
+    text-align: left;
+    display: block;
+    margin-bottom: 3px;
+}
+.message.bot strong {
+    text-align: right;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.chat-input-area {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+}
+
+.chat-input {
+  flex: 1; 
   padding: 8px;
-  width: calc(100% - 16px); /* padding 고려하여 너비 설정 */
-  margin-bottom: 5px;
-  border: 1px solid #ddd;
+  margin-right: 5px; 
+  border: 1px solid #A1887F; /* Medium Brown-Grey */
   border-radius: 4px;
-  box-sizing: border-box; /* padding이 너비에 포함되도록 */
+  box-sizing: border-box; 
 }
 
+.openai-button {
+  padding: 0.5em 0.8em; 
+  text-decoration: none;
+  border: 1px solid #BCAAA4; /* Light Muted Brown-Grey */
+  color: black; /* 글자색을 검정으로 하여 대비 강화 */
+  background-color: #BCAAA4; /* 버튼 배경색을 테두리색과 일치 */
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em; 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center; 
+  white-space: nowrap; 
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.openai-button:hover {
+  background-color: #A1887F; /* Darker on hover */
+  color: white; /* Hover 시 글자색 흰색으로 변경 */
+  transform: translateY(-1px); 
+}
+
+.openai-button:active {
+  transform: translateY(0); 
+  background-color: #A1887F; 
+  color: white;
+}
+
+.chatbot-session{
+  max-width: 600; 
+  margin: auto;
+}
+
+.chatbot-session h2{
+  color: #fff;
+}

@@ -1,0 +1,80 @@
+/* StockchatWidget.css */
+
+/* 위젯 토글 버튼 */
+.stockchat-autumn-toggle-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #8D6E63; /* 가을 테마에 맞춰 색상 변경 */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  display: flex; /* FaComments 아이콘 중앙 정렬을 위해 추가 */
+  justify-content: center; /* FaComments 아이콘 중앙 정렬을 위해 추가 */
+  align-items: center; /* FaComments 아이콘 중앙 정렬을 위해 추가 */
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.stockchat-autumn-toggle-button:hover {
+  background-color: #795548; /* 호버 시 더 진한 갈색 */
+  transform: translateY(-2px);
+}
+
+.stockchat-autumn-toggle-button:active {
+  transform: translateY(0);
+}
+
+/* 챗봇 위젯 창의 전체 컨테이너 */
+.stockchat-autumn-widget-wrapper {
+  position: fixed !important;
+  bottom: 90px;
+  right: 20px;
+  width: 400px; /* 고정 너비 */
+  height: 500px; /* 고정 높이 (챗봇 내용이 꽉 차도록) */
+  background-color: #5C4033; /* 위젯 창의 진한 갈색 배경 */
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  z-index: 1000;
+  padding: 10px; /* 챗봇 내부와의 여백 */
+  overflow: hidden; /* 나뭇잎 애니메이션이 밖으로 나가지 않도록 */
+  position: relative; /* 가상 요소의 absolute 포지셔닝 기준 */
+  display: flex; /* 내부 Stockchat 컴포넌트를 위한 flex */
+  flex-direction: column; /* 세로 정렬 */
+}
+/* StockchatWidget.css */
+
+/* 동적으로 생성될 나뭇잎 요소 스타일 */
+.autumn-leaf {
+    position: absolute;
+    top: -50px; /* 위젯 상단 위에서 시작하도록 */
+    /* left는 JS에서 설정 */
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1; /* 채팅 내용보다 아래에 위치 */
+    white-space: nowrap; /* 이모지가 줄바꿈되지 않도록 */
+}
+
+/* 나뭇잎 애니메이션 키프레임 (JS에서 변수 설정) */
+@keyframes fallAndRotate {
+    0% {
+        transform: translate(0, -50px) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        /* JS에서 설정한 CSS 변수 사용 */
+        transform: translate(var(--end-x-offset), var(--end-y)) rotate(var(--rotation));
+        opacity: 0;
+    }
+}

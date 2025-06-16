@@ -27,25 +27,27 @@ function Stockchat(){
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "auto" }}>
+    <div className='chatbot-session'>
       <h2>💬 GPT 챗봇</h2>
-      <div style={{ border: "1px solid #ccc", padding: 10, height: 300, overflowY: "auto" }}>
+      <div style={{ border: "3px solid #fff", padding: 10, height: 300, overflowY: "auto", marginBottom:"10px" }}>
         {messages.map((msg, idx) => (
-          <div key={idx}>
-            <strong>{msg.sender === "user" ? "👤 나" : "🤖 GPT"}:</strong> {" "}
+          <div key={idx} className={`message ${msg.sender}`}>
+            <strong>{msg.sender === "user" ? "나" : "주식전문가"}:</strong> {" "}
             {typeof msg.text === "string" ? msg.text : msg.text.reply}
           </div>
         ))}
       </div>
-      <input
-        type="text"
-        value={input}
-        onChange={e => setInput(e.target.value)}
-        onKeyDown={e => e.key === "Enter" && sendMessage()}
-        placeholder="메시지를 입력하세요"
-        className="chat-input"
-      />
-      <button onClick={sendMessage} style={{ width: "18%", marginLeft: "2%" }}>전송</button>
+      <div className="chat-input-area"> 
+        <input
+          type="text"
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && sendMessage()}
+          placeholder="메시지를 입력하세요"
+          className="chat-input" 
+        />
+        <button onClick={sendMessage} className="openai-button">전송</button> {/* <<< openai-button 클래스 적용 */}
+      </div>
     </div>
   );
 }

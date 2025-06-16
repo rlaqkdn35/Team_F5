@@ -8,9 +8,6 @@ import ComprehensiveAnalysisTab from './tabs/ComprehensiveAnalysisTab.jsx';
 import PriceChartTab from './tabs/PriceChartTab.jsx';
 import MultiAiAnalysisTab from './tabs/MultiAiAnalysisTab.jsx';
 import StockDiscussionTab from './tabs/StockDiscussionTab.jsx';
-import ReportsTabContent from './tabs/ReportsTabContent.jsx';
-import NewsDisclosureTabContent from './tabs/NewsDisclosureTabContent.jsx';
-import IssuesTabContent from './tabs/IssuesTabContent.jsx';
 import PropTypes from 'prop-types'; // PropTypes 임포트 추가
 
 
@@ -20,7 +17,7 @@ const TABS_STOCK_DETAIL = [
   { id: 'multiAi', name: '다중 AI', icon: <FaBrain />, content: MultiAiAnalysisTab }, 
   { id: 'discussion', name: '종목 토론', icon: <FaComments />, content: StockDiscussionTab }, 
   // { id: 'issues', name: '이슈', icon: <FaBookOpen />, content: IssuesTabContent }, 
-  { id: 'newsDisclosure', name: '뉴스', icon: <FaNewspaper />, content: NewsDisclosureTabContent }, 
+  { id: 'newsDisclosure', name: '뉴스', icon: <FaNewspaper />}, 
   // { id: 'reports', name: '리포트', icon: <FaFileAlt />, content: ReportsTabContent }, 
 ];
 

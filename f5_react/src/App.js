@@ -189,7 +189,7 @@ function App() {
                             </Route>
 
                             {/* 기타 페이지 */}
-                            <Route path="/news/:id" element={<NewsDetailPage />} />
+                            <Route path="/news/:newsIdx" element={<NewsDetailPage />} />
                             <Route path="/stock-detail/:stockCode" element={<StockDetailPage currentUser={currentUser} />} />
                             <Route path="/find-user" element={<FindUserPage />} />
                             <Route path="/edit-profile" element={<UserProfileEditPage 

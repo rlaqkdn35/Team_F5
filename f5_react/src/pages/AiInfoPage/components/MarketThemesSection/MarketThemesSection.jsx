@@ -6,9 +6,6 @@ import './MarketThemesSection.css'; // 이 컴포넌트의 스타일 파일
 // 1단계 탭 정의
 const MAIN_TABS = [
   { id: 'feature', name: '시장특징주' },
-  { id: 'supplyDemand', name: '수급분석' },
-  { id: 'report', name: '리포트분석' },
-  { id: 'disclosure', name: '공시분석' },
 ];
 
 // 2단계 서브필터/카테고리 정의 (예시)
@@ -17,28 +14,8 @@ const SUB_FILTERS = {
     { id: 'high52w', name: '52주 신고가 (52주간 가장 높은것)' },
     { id: 'upperLimit', name: '상한가(30%이상 오른 등락률)' },
     { id: 'topVolumeShare', name: '거래비중상위(거래량이 100%로 이상 증가한것)' },
-  ],
-  supplyDemand: [
-    { id: 'buyVolumeShare', name: '매수비중상위' },
-    { id: 'topNetBuy', name: '순매수상위' },
-    { id: 'topNetBuyNew', name: '순매수상위신규진입' },
-    { id: 'institutionTopNetBuy', name: '주요기관순매수상위' },
-    { id: 'continuousNetBuy', name: '연속순매수' },
-  ],
-  report: [ // <<--- 리포트분석 하위 새로 추가
-    { id: 'newReport', name: '신규리포트' },
-    { id: 'institutionInterestReport', name: '기관관심리포트' },
-    { id: 'foreignerInterestReport', name: '외국인관심리포트' },
-    { id: 'pensionFundInterestReport', name: '연기금관심리포트' },
-    { id: 'brokerInterestReport', name: '증권사관심리포트' },
-    { id: 'highTargetPrice', name: '목표가높음' },
-  ],
-  disclosure: [ // <<--- 공시분석 하위 새로 추가
-    { id: 'orderDisclosure', name: '수주공시' },
-    { id: 'equityDisclosure', name: '지분공시' },
-    { id: 'newInvestmentDisclosure', name: '신규투자공시' },
-    { id: 'cbDisclosure', name: '전환사채공시' },
-  ],
+  ]
+
 };
 
 // 임시 목업 데이터 생성 함수
