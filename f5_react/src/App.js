@@ -48,6 +48,11 @@ import UserProfilePage from './pages/MyPage/components/UserProfilePage.jsx';
 import UserFavorite from './pages/MyPage/components/UserFavorite.jsx';
 import MainPage from './pages/MainPage/MainPage.jsx';
 import UserProfileEditPage from './pages/UserProfileEditPage/UserProfileEditPage.jsx';
+import Stockchat from './pages/AiInfoPage/components/Stockchat.jsx'
+import StockchatWidget from './pages/AiInfoPage/components/Stockchatwidget.jsx';
+
+
+
 
 function ProtectedElement({ currentUser, children }) {
     const location = useLocation();
@@ -111,6 +116,7 @@ function App() {
     return (
         <Router>
             <div className="App">
+                <StockchatWidget/>
                 <LeftSidebar />
                 <div className="app-body-layout-3col">
                     <Header isLoggedIn={!!currentUser} onLogout={handleLogout} />
@@ -126,6 +132,7 @@ function App() {
                                 <Route path="issue-analysis" element={<IssueAnalysisContent />} />
                                 <Route path="theme-sector" element={<ThemeSectorContent />} />
                                 <Route path="news" element={<NewsContent />} />
+                                <Route path="/ai-info/Stockchat" element={<Stockchat />} />
                             </Route>
 
                             {/* AI PICKS */}
