@@ -1,125 +1,305 @@
 // src/pages/StockDetailPage/tabs/StockDiscussionTab.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { FaPaperPlane, FaUsers } from 'react-icons/fa'; // 아이콘 예시
-import './StockDiscussionTab.css'; // 이 탭의 스타일
+import axios from 'axios';
+import { FaPaperPlane } from 'react-icons/fa'; // 필요한 아이콘만 남김
+import './StockDiscussionTab.css'; // 이 탭의 스타일 (기존 StockDiscussionTab.css 사용)
 
-// 임시 목업 데이터
-const mockInitialMessages = [
-  { id: 'msg1', user: '투자왕개미', text: '이 종목 오늘 심상치 않은데요? 다들 어떻게 생각하시나요?', time: '10:30 AM' },
-  { id: 'msg2', user: '성공투자', text: '오전장에 거래량 터지면서 상승세네요. 좋은 소식이라도 있나요?', time: '10:32 AM' },
-  { id: 'msg3', user: '주식초보', text: '저는 아직 잘 모르겠지만, 다들 좋다고 하니 기대됩니다!', time: '10:35 AM' },
-  { id: 'msg4', user: 'AI투자봇', text: '관련 뉴스: [속보] OO기업, XX분야 신기술 개발 성공!', time: '10:36 AM', isSystem: true },
-  { id: 'msg5', user: '투자왕개미', text: '오! AI봇님 정보 감사합니다. 역시 뭔가 있었군요.', time: '10:38 AM' },
-];
-
-const mockUserList = ['투자왕개미', '성공투자', '주식초보', '고수익헌터', '단타여왕', '가치투자자'];
+// 메시지 타입 정의 - 백엔드의 enum과 일치시킴
+const MessageType = {
+  ENTER: 'ENTER',
+  TALK: 'TALK',
+  QUIT: 'QUIT'
+};
 
 // 개별 채팅 메시지 컴포넌트
-const ChatMessage = ({ message, currentUser }) => {
-  const isMyMessage = message.user === currentUser; // 현재 사용자가 보낸 메시지인지 여부 (임시)
-  const messageClass = message.isSystem ? 'system-message' 
-                      : isMyMessage ? 'my-message' 
-                      : 'other-message';
+const ChatMessage = ({ message, currentUserId }) => { // onFileDownload 제거
+  // 백엔드 Chatting 엔티티 필드명 사용: chat_id, chat_content, created_at, chatFile, fileUrl, messageType
+  const isMyMessage = message.chat_id === currentUserId;
+  const isSystemMessage = message.messageType === MessageType.ENTER || message.messageType === MessageType.QUIT;
+
+  const displayTime = message.created_at
+    ? new Date(message.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })
+    : '';
+
+  // 파일 메시지 렌더링 로직 삭제 (파일 탭 삭제로 인해)
+  // 파일 메시지를 채팅창에 직접 표시해야 한다면 이 부분은 유지해야 합니다.
+  // 현재는 파일 탭 삭제 요청에 따라 파일 메시지 렌더링 로직도 함께 제거합니다.
+  // 만약 채팅창에 파일명과 다운로드 버튼을 계속 표시하고 싶다면, ChatMessage 컴포넌트를 다시 수정해야 합니다.
+
   return (
-    <div className={`chat-message-sdt ${messageClass}`}> {/* SDT: StockDiscussionTab */}
-      {!isMyMessage && !message.isSystem && <div className="message-sender-sdt">{message.user}</div>}
+    <div className={`chat-message-sdt ${isSystemMessage ? 'system-message-sdt' : isMyMessage ? 'my-message-sdt' : 'other-message-sdt'}`}>
+      {!isSystemMessage && (
+        <div className="message-header-sdt">
+          {/* 아바타/프로필 사진 자리 (필요시 추가) */}
+          {!isMyMessage && <span className="message-sender-sdt">{message.chat_id}</span>}
+          <span className="message-time-sdt">{displayTime}</span>
+        </div>
+      )}
+
       <div className="message-content-sdt">
-        <p className="message-text-sdt">{message.text}</p>
-        <span className="message-time-sdt">{message.time}</span>
+        {/* 파일 메시지 로직 제거, 일반 텍스트 메시지만 처리 */}
+        <p className="message-text-sdt">{message.chat_content}</p>
       </div>
     </div>
   );
 };
 
+ChatMessage.propTypes = {
+  message: PropTypes.object.isRequired,
+  currentUserId: PropTypes.string.isRequired,
+  // onFileDownload: PropTypes.func.isRequired, // onFileDownload prop 제거
+};
 
-const StockDiscussionTab = ({ stockCode, currentUser }) => { // currentUser는 로그인 정보 prop으로 가정
+
+const StockDiscussionTab = ({ stockCode, currentUser }) => {
+
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [userList, setUserList] = useState([]);
-  const [showUserList, setShowUserList] = useState(false); // 참여자 목록 표시 여부
+  // const [userList, setUserList] = useState([]); // 참여자 목록 상태 제거
   const messagesEndRef = useRef(null); // 새 메시지 추가 시 자동 스크롤을 위한 ref
+  const socketRef = useRef(null); // WebSocket 객체를 직접 저장
+  const currentUserId = currentUser?.nickname || currentUser?.userId || "게스트";
+  const croomIdx = stockCode; // 종목 코드를 채팅방 ID (croom_idx)로 사용
+  // const [fileList, setFileList] = useState([]); // 파일 목록 상태 제거
 
-  useEffect(() => {
-    // 컴포넌트 마운트 시 또는 stockCode 변경 시 채팅 내용 및 참여자 목록 로드 (시뮬레이션)
-    console.log(`Workspaceing discussion for stock: ${stockCode}`);
-    // 실제로는 웹소켓 연결 및 이전 메시지 로드
-    setMessages(mockInitialMessages);
-    setUserList(mockUserList);
-  }, [stockCode]);
+  // --- Utility Functions ---
+  const handleScrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, []);
 
-  useEffect(() => {
-    // 새 메시지가 추가될 때마다 맨 아래로 스크롤
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    if (newMessage.trim() === '') return;
-
-    const msg = {
-      id: `msg${messages.length + 1}`,
-      user: currentUser?.name || '익명사용자', // 실제로는 로그인된 사용자 닉네임
-      text: newMessage,
-      time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
-    };
-    // 실제로는 웹소켓으로 메시지 전송
-    setMessages(prevMessages => [...prevMessages, msg]);
-    setNewMessage('');
+  const getFormattedDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
   };
 
-  return (
-    <div className="stock-discussion-tab">
-      {/* <h2>{stockCode} 종목 토론방</h2> */} {/* 페이지 제목은 이미 StockDetailPage에 있음 */}
-      
-      <div className="chat-layout-sdt">
-        <div className="chat-messages-area-sdt">
-          {messages.map(msg => (
-            <ChatMessage key={msg.id} message={msg} currentUser={currentUser?.name} />
-          ))}
-          <div ref={messagesEndRef} /> {/* 자동 스크롤 타겟 */}
-        </div>
+  // 파일 다운로드 로직 및 파일 업로드 로직 제거 (사용되지 않으므로)
+  // const handleFileDownload = useCallback((file_url, fileName) => { ... });
+  // const handleFileUpload = useCallback(async (event) => { ... });
 
-        <aside className={`chat-user-list-area-sdt ${showUserList ? 'visible' : ''}`}>
-          <div className="user-list-header-sdt">
-            <h4>참여자 ({userList.length}명)</h4>
-            <button onClick={() => setShowUserList(false)} className="close-user-list-sdt">&times;</button>
+
+  // --- 메시지 전송 로직 ---
+  const handleSendMessage = useCallback(async (e) => {
+    e.preventDefault();
+    if (!currentUser) { // 로그인 여부 확인 추가
+      alert('로그인 후 메시지를 전송할 수 있습니다.');
+      return;
+    }
+    if (newMessage.trim() === '') return;
+
+    const messageToSend = {
+      messageType: MessageType.TALK,
+      chat_content: newMessage,
+      chat_id: currentUserId,
+      croomIdx: croomIdx, // stockCode를 croom_idx로 사용
+      createdAt: new Date().toISOString()
+    };
+
+    // UI에 즉시 낙관적 업데이트
+    const uiMessage = {
+      chat_idx: `temp_${Date.now()}`, // 임시 ID
+      ...messageToSend
+    };
+    setMessages(prevMessages => [...prevMessages, uiMessage]);
+    setNewMessage('');
+
+    try {
+      // 서버에 메시지 저장 요청 (REST API)
+      const response = await axios.post('http://localhost:8084/F5/chat/message', messageToSend);
+
+      if (response.data === "success") {
+        if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+          socketRef.current.send(JSON.stringify(messageToSend));
+        } else {
+          console.warn('웹소켓 연결이 없거나 닫혀 있습니다. 메시지가 다른 사용자에게 전달되지 않을 수 있습니다.');
+        }
+      } else {
+        console.error('메시지 저장 실패 (서버 응답):', response.data);
+        alert('메시지 저장에 실패했습니다.');
+        setMessages(prevMessages => prevMessages.filter(msg => msg.chat_idx !== uiMessage.chat_idx)); // 롤백
+      }
+    } catch (error) {
+      console.error('메시지 저장 중 오류 발생:', error);
+      alert('메시지 저장 중 오류가 발생했습니다.');
+      setMessages(prevMessages => prevMessages.filter(msg => msg.chat_idx !== uiMessage.chat_idx)); // 롤백
+    }
+  }, [newMessage, currentUserId, croomIdx, currentUser]); // currentUser 의존성 추가
+
+  // --- 초기 채팅 내역 로드 ---
+  useEffect(() => {
+    if (croomIdx) { // currentUserId 조건 제거 (로그인 없이도 내역 로드)
+      axios.get(`http://localhost:8084/F5/chat/history/${croomIdx}`)
+        .then(response => {
+          if (Array.isArray(response.data.messages)) {
+            setMessages(response.data.messages);
+          } else {
+            console.warn("예상치 못한 채팅 내역 데이터 형식:", response.data);
+          }
+        })
+        .catch(error => {
+          console.error('채팅 내역을 불러오는 중 오류 발생:', error);
+          setMessages([]);
+        });
+
+    }
+  }, [croomIdx]); // currentUserId 의존성 제거
+
+  // --- WebSocket 연결 로직 ---
+  useEffect(() => {
+    // currentUserId가 "게스트"가 아닐 때만 웹소켓 연결 시도 (로그인 사용자만 웹소켓 연결)
+    if (croomIdx && currentUser && !socketRef.current) { // currentUser 조건 추가
+      const websocketUrl = `ws://192.168.219.244:8084/F5/ws/chat?stockCode=${croomIdx}`;
+      const ws = new WebSocket(websocketUrl);
+      socketRef.current = ws;
+
+      ws.onopen = () => {
+        console.log('WebSocket 연결 성공:', croomIdx, '사용자:', currentUserId);
+        const enterMessage = {
+          messageType: MessageType.ENTER,
+          chat_content: `${currentUserId}님이 입장하셨습니다.`,
+          chat_id: currentUserId,
+          croomIdx: croomIdx,
+          createdAt: new Date().toISOString()
+        };
+        ws.send(JSON.stringify(enterMessage));
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const chatMessage = JSON.parse(event.data);
+          // console.log('수신된 메시지:', chatMessage);
+
+          // 본인이 보낸 TALK 메시지는 낙관적 업데이트되었으므로 무시 (서버가 브로드캐스트하는 경우)
+          if (chatMessage.messageType === MessageType.TALK && chatMessage.chat_id === currentUserId) {
+            // 선택적: 낙관적 업데이트된 임시 메시지를 서버에서 받은 실제 메시지로 교체하는 로직
+            // setMessages(prevMessages => prevMessages.map(msg => msg.chat_idx === `temp_${chatMessage.timestamp}` ? chatMessage : msg));
+            return;
+          }
+
+          setMessages(prevMessages => [...prevMessages, chatMessage]);
+
+          // 파일 목록 실시간 업데이트 로직 제거
+          // if (chatMessage.chatFile && chatMessage.fileUrl) { ... }
+
+        } catch (error) {
+          console.error('메시지 파싱 오류:', error, event.data);
+        }
+      };
+
+      ws.onclose = (event) => {
+        console.log('WebSocket 연결 종료:', croomIdx, 'Code:', event.code, 'Reason:', event.reason);
+      };
+
+      ws.onerror = (error) => {
+        console.error('WebSocket 오류:', error);
+      };
+
+      // 컴포넌트 언마운트 시 정리
+      return () => {
+        if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+          const quitMessage = {
+            messageType: MessageType.QUIT,
+            chat_content: `${currentUserId}님이 퇴장하셨습니다.`,
+            chat_id: currentUserId,
+            croomIdx: croomIdx,
+            created_at: new Date().toISOString()
+          };
+          socketRef.current.send(JSON.stringify(quitMessage));
+          socketRef.current.close();
+          socketRef.current = null;
+        }
+      };
+    }
+    // currentUser가 없거나 "게스트"이면 웹소켓 연결 시도 안 함
+    else if (!currentUser && socketRef.current) {
+        // 로그인 상태가 아닐 때 웹소켓이 열려있다면 닫기 (새로고침 등에 대비)
+        console.log('로그인 상태가 아니므로 웹소켓 연결을 닫습니다.');
+        socketRef.current.close();
+        socketRef.current = null;
+    }
+
+  }, [croomIdx, currentUserId, currentUser]); // currentUser 의존성 추가
+
+  // 메시지 상태가 업데이트될 때마다 스크롤을 하단으로
+  useEffect(() => {
+    handleScrollToBottom();
+  }, [messages, handleScrollToBottom]);
+
+  // --- UI TABS (채팅 탭만 남김) ---
+  // const [activeTab, setActiveTab] = useState('chat'); // 더 이상 필요 없음
+  // const tabData = [ ... ]; // 더 이상 필요 없음
+
+  return (
+    <div className="stock-discussion-tab-container">
+      {/* 탭 메뉴 제거 */}
+      {/* <div className="tab-menu-sdt"> ... </div> */}
+
+      {/* 탭 내용 (채팅 탭만 남김) */}
+      <div className="tab-content-area-sdt">
+        <>
+          <div className="chat-messages-area-sdt" ref={messagesEndRef}>
+            {messages.length === 0 ? (
+              <div className="no-message-sdt">메시지가 없습니다.</div>
+            ) : (
+              messages.map((msg, index) => {
+                const currentMsgDate = msg.created_at ? new Date(msg.created_at).toLocaleDateString('ko-KR') : '';
+                const prevMsgDate = index > 0 && messages[index - 1].created_at
+                  ? new Date(messages[index - 1].created_at).toLocaleDateString('ko-KR')
+                  : null;
+                const showDateDivider = currentMsgDate !== prevMsgDate;
+
+                return (
+                  <React.Fragment key={msg.chat_idx || `msg-${index}`}>
+                    {showDateDivider && msg.created_at && (
+                      <div className="date-divider-sdt">
+                        <span>{getFormattedDate(msg.created_at)}</span>
+                      </div>
+                    )}
+                    <ChatMessage
+                      message={msg}
+                      currentUserId={currentUserId}
+                      // onFileDownload prop 제거
+                    />
+                  </React.Fragment>
+                );
+              })
+            )}
           </div>
-          <ul>
-            {userList.map((user, index) => (
-              <li key={index}>{user}</li>
-            ))}
-          </ul>
-        </aside>
+
+          {/* 메시지 입력 영역 */}
+          <form className="message-input-form-sdt" onSubmit={handleSendMessage}>
+            {/* 파일 업로드 관련 input 및 label 제거 */}
+            <textarea
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              placeholder={currentUser ? "메시지를 입력하세요..." : "로그인 후 채팅을 입력할 수 있습니다."}
+              className="message-input-sdt"
+              rows={1}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSendMessage(e);
+                }
+              }}
+              disabled={!currentUser} // 로그인 여부에 따라 disabled 속성 변경
+            />
+            <button type="submit" className="send-button-sdt" disabled={!currentUser || newMessage.trim() === ''}>
+              <FaPaperPlane /> 전송
+            </button>
+          </form>
+        </>
       </div>
 
-      <form className="message-input-form-sdt" onSubmit={handleSendMessage}>
-        <input
-          type="text"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="메시지를 입력하세요..."
-          className="message-input-sdt"
-          // disabled={!currentUser} // 로그인 안하면 입력 비활성화
-        />
-        <button type="submit" className="send-button-sdt" /*disabled={!currentUser}*/>
-          <FaPaperPlane /> 전송
-        </button>
-      </form>
-      
-      {/* 참여자 목록 보기 버튼 (채팅방 오른쪽 위에 위치하도록 CSS 조정 필요) */}
-      {!showUserList && (
-        <button className="toggle-user-list-button-sdt" onClick={() => setShowUserList(true)} title="참여자 보기">
-          <FaUsers /> <span>{userList.length}</span>
-        </button>
-      )}
+      {/* 참여자 목록 보기 버튼 제거 */}
+      {/* {!showUserList && (activeTab === 'chat' || activeTab === 'file') && ( ... )} */}
     </div>
   );
 };
 
 StockDiscussionTab.propTypes = {
   stockCode: PropTypes.string.isRequired,
-  currentUser: PropTypes.shape({ name: PropTypes.string }), // 로그인한 사용자 정보
+  currentUser: PropTypes.shape({ name: PropTypes.string }),
 };
 
 export default StockDiscussionTab;

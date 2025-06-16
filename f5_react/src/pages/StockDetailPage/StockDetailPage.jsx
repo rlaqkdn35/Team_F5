@@ -11,7 +11,7 @@ import StockDiscussionTab from './tabs/StockDiscussionTab.jsx';
 import ReportsTabContent from './tabs/ReportsTabContent.jsx';
 import NewsDisclosureTabContent from './tabs/NewsDisclosureTabContent.jsx';
 import IssuesTabContent from './tabs/IssuesTabContent.jsx';
-
+import PropTypes from 'prop-types'; // PropTypes 임포트 추가
 
 
 const TABS_STOCK_DETAIL = [
@@ -24,7 +24,8 @@ const TABS_STOCK_DETAIL = [
   // { id: 'reports', name: '리포트', icon: <FaFileAlt />, content: ReportsTabContent }, 
 ];
 
-const StockDetailPage = () => {
+const StockDetailPage = ({ currentUser }) => {
+
   const { stockCode } = useParams();
   const [stockData, setStockData] = useState(null); // 이 stockData는 각 탭에 공통적으로 필요한 기본 정보 또는 탭별 상세 데이터 포함 가능
   const [loading, setLoading] = useState(true);
@@ -101,13 +102,17 @@ const StockDetailPage = () => {
       <div className="stock-detail-tab-content-sdtp">
         {/* ActiveTabContent에 stockData와 stockCode를 prop으로 전달 */}
         {ActiveTabContent ? (
-          <ActiveTabContent stockData={stockData} stockCode={stockCode} />
+          <ActiveTabContent stockData={stockData} stockCode={stockCode} currentUser={currentUser} />
         ) : (
           <p>선택된 탭의 콘텐츠를 불러올 수 없습니다.</p>
         )}
       </div>
     </div>
   );
+  
 };
-
+StockDetailPage.propTypes = {
+  currentUser: PropTypes.shape({ nickname: PropTypes.string, userId: PropTypes.string }) // PropType 정의 추가
+  // ... (다른 propTypes)
+};
 export default StockDetailPage;
