@@ -128,11 +128,11 @@ const NewsDetailPage = () => {
             {newsDetail.newsUrl && (
                 <div className="news-detail-link-section-ndp">
                     <a href={newsDetail.newsUrl} target="_blank" rel="noopener noreferrer" className="news-detail-original-link-ndp">
-                        원본 기사 보러가기
+                        <i className="fas fa-external-link-alt"></i> 원본 기사 보러가기
                     </a>
                 </div>
             )}
-
+            
             {newsDetail.relatedStocks && newsDetail.relatedStocks.length > 0 && (
                 <div className="related-stocks-section-ndp">
                     <h3>관련 종목</h3>

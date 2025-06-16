@@ -18,6 +18,6 @@ public class StockPriceService {
     }
 
     public List<StockPriceWithNameDto> getDailyStockData(LocalDate date) {
-        return stockPriceRepository.findAllByPriceDateWithStockName(date);
+        return stockPriceRepository.findLatestPerStockCodeByDate(date);
     }
 }

@@ -12,12 +12,27 @@ import com.smhrd.stock.entity.StockPrice;
 
 public interface StockPriceRepository extends Repository<StockPrice, Long> {
 
-	@Query("SELECT new com.smhrd.stock.dto.StockPriceWithNameDto(" + "sp.priceId, " + "sp.stock.stockCode, "
-			+ "s.stockName, " + "sp.priceDate, " + "sp.openPrice, " + "sp.highPrice, " + "sp.lowPrice, "
-			+ "sp.closePrice, " + "sp.stockFluctuation, " + "sp.stockVolume) " + // DTO 생성자 괄호 뒤에 충분한 공백을 추가했습니다.
-			"FROM StockPrice sp " + "JOIN Stock s ON sp.stock.stockCode = s.stockCode "
-			+ "WHERE FUNCTION('DATE', sp.priceDate) = :targetDate")
-	List<StockPriceWithNameDto> findAllByPriceDateWithStockName(@Param("targetDate") LocalDate targetDate);
+	@Query("SELECT new com.smhrd.stock.dto.StockPriceWithNameDto(" +
+	           "sp.priceId, " +
+	           "sp.stock.stockCode, " +
+	           "s.stockName, " +
+	           "sp.priceDate, " +
+	           "sp.openPrice, " +
+	           "sp.highPrice, " +
+	           "sp.lowPrice, " +
+	           "sp.closePrice, " +
+	           "sp.stockFluctuation, " +
+	           "sp.stockVolume) " +
+	           "FROM StockPrice sp " +
+	           "JOIN Stock s ON sp.stock.stockCode = s.stockCode " +
+	           "WHERE FUNCTION('DATE', sp.priceDate) = :targetDate AND " +
+	           "sp.priceId IN (" +
+	               "SELECT MAX(sp2.priceId) " + // 각 종목의 가장 큰 priceId (가장 최신 레코드)
+	               "FROM StockPrice sp2 " +
+	               "WHERE FUNCTION('DATE', sp2.priceDate) = :targetDate " +
+	               "GROUP BY sp2.stock.stockCode" +
+	           ")")
+	    List<StockPriceWithNameDto> findLatestPerStockCodeByDate(@Param("targetDate") LocalDate targetDate);
 
 	@Query(value = "SELECT sp FROM StockPrice sp JOIN FETCH sp.stock s "
 			+ "WHERE (sp.stock.stockCode, sp.priceDate) IN "

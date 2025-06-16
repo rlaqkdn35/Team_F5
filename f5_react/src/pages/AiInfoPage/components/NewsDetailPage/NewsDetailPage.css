@@ -22,7 +22,7 @@
     margin-bottom: 30px;
     border-bottom: 1px solid #f0f0f0; /* 더 부드러운 경계선 */
     padding-bottom: 15px;
-    text-align: center; /* 메타 정보 중앙 정렬 */
+    text-align: right; /* 메타 정보 중앙 정렬 */
 }
 
 .news-detail-author-ndp {
@@ -32,6 +32,7 @@
 }
 
 .news-detail-date-ndp {
+    text-align: left; /* 왼쪽 정렬 추가 */
     font-style: normal; /* 이탤릭체 제거 */
     color: #999; /* 밝은 회색 */
 }
@@ -151,4 +152,27 @@
     color: #999; /* 더 부드러운 회색 */
     margin-top: 60px; /* 여백 늘림 */
     font-weight: 400;
+}
+
+
+.news-detail-original-link-ndp {
+    display: inline-flex; /* 아이콘과 텍스트를 한 줄에 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    gap: 8px; /* 아이콘과 텍스트 사이 간격 */
+    
+    background-color: var(--color-button); /* 파란색 배경 */
+    color: white; /* 흰색 텍스트 */
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none; /* 밑줄 제거 */
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* 호버 효과 */
+}
+
+.news-detail-original-link-ndp:hover {
+    transform: translateY(-2px); /* 살짝 위로 뜨는 효과 */
+}
+
+.news-detail-original-link-ndp i {
+    font-size: 1.1em; /* 아이콘 크기 조정 */
 }

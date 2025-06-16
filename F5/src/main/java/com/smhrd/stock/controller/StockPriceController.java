@@ -24,7 +24,7 @@ public class StockPriceController {
     @GetMapping("/daily")
     public List<StockPriceWithNameDto> getDailyStocks() {
         // 실제 운영에서는 LocalDate.now() 사용
-        LocalDate targetDate = LocalDate.of(2025, 5, 20); // 확인용 하드코딩
+        LocalDate targetDate = LocalDate.now(); // 확인용 하드코딩
         return stockPriceService.getDailyStockData(targetDate);
     }
 }
