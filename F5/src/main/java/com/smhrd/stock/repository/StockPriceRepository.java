@@ -1,5 +1,6 @@
 package com.smhrd.stock.repository;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -38,6 +39,10 @@ public interface StockPriceRepository extends Repository<StockPrice, Long> {
 			+ "WHERE (sp.stock.stockCode, sp.priceDate) IN "
 			+ "(SELECT sub.stock.stockCode, MAX(sub.priceDate) FROM StockPrice sub GROUP BY sub.stock.stockCode)")
 	List<StockPrice> findAllLatestStockPricesWithStockInfo();
+	
+	List<StockPrice> findByStock_StockCodeOrderByPriceDateAsc(String stockCode);
+    List<StockPrice> findByStock_StockCodeAndPriceDateBetweenOrderByPriceDateAsc(String stockCode, Timestamp startDate, Timestamp endDate);
+    List<StockPrice> findTopByStock_StockCodeOrderByPriceDateDesc(String stockCode);
 
 	
 	

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaStar, FaRegStar, FaChartLine, FaNewspaper, FaComments, FaBookOpen, FaBrain, FaFileAlt, FaInfoCircle } from 'react-icons/fa';
+import axios from 'axios';
 import './StockDetailPage.css';
 
 // --- 실제 탭 콘텐츠 컴포넌트들을 임포트 ---
@@ -8,55 +9,129 @@ import ComprehensiveAnalysisTab from './tabs/ComprehensiveAnalysisTab.jsx';
 import PriceChartTab from './tabs/PriceChartTab.jsx';
 import MultiAiAnalysisTab from './tabs/MultiAiAnalysisTab.jsx';
 import StockDiscussionTab from './tabs/StockDiscussionTab.jsx';
-import PropTypes from 'prop-types'; // PropTypes 임포트 추가
-
+import PropTypes from 'prop-types';
 
 const TABS_STOCK_DETAIL = [
   { id: 'comprehensive', name: '종합 분석', icon: <FaInfoCircle />, content: ComprehensiveAnalysisTab },
   { id: 'priceChart', name: '시세 차트', icon: <FaChartLine />, content: PriceChartTab },
-  { id: 'multiAi', name: '다중 AI', icon: <FaBrain />, content: MultiAiAnalysisTab }, 
-  { id: 'discussion', name: '종목 토론', icon: <FaComments />, content: StockDiscussionTab }, 
-  // { id: 'issues', name: '이슈', icon: <FaBookOpen />, content: IssuesTabContent }, 
-  { id: 'newsDisclosure', name: '뉴스', icon: <FaNewspaper />}, 
-  // { id: 'reports', name: '리포트', icon: <FaFileAlt />, content: ReportsTabContent }, 
+  { id: 'multiAi', name: '다중 AI', icon: <FaBrain />, content: MultiAiAnalysisTab },
+  { id: 'discussion', name: '종목 토론', icon: <FaComments />, content: StockDiscussionTab },
+  { id: 'newsDisclosure', name: '뉴스', icon: <FaNewspaper />},
 ];
 
 const StockDetailPage = ({ currentUser }) => {
-
   const { stockCode } = useParams();
-  const [stockData, setStockData] = useState(null); // 이 stockData는 각 탭에 공통적으로 필요한 기본 정보 또는 탭별 상세 데이터 포함 가능
+  const [stockData, setStockData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [activeTab, setActiveTab] = useState(TABS_STOCK_DETAIL[0].id);
 
-  useEffect(() => {
-    setLoading(true);
-    console.log(`StockDetailPage: Fetching data for stock: ${stockCode}`);
-    // 이 API 호출은 페이지 상단 정보 바에 필요한 최소한의 데이터를 가져오거나,
-    // 또는 모든 탭에서 공유할 수 있는 기본 데이터를 가져옵니다.
-    // 각 탭 컴포넌트는 필요에 따라 자체적으로 추가 데이터를 로드할 수 있습니다.
-    setTimeout(() => {
-      setStockData({
-        name: `종목 ${stockCode}`, // 예시 이름
-        price: `${(Math.random() * 100000 + 50000).toLocaleString()}`,
-        changeRate: `${(Math.random() * 10 - 5).toFixed(2)}%`,
-        changeType: Math.random() > 0.5 ? 'positive' : 'negative',
-        updateTime: new Date().toLocaleTimeString('ko-KR'),
-        // 여기에 기업 개요, 초기 차트 데이터 등 공통적으로 쓰일 수 있는 데이터를 미리 포함시킬 수 있습니다.
-        // 예: companyOverview: "이 회사는...", historicalPriceDataFor1M: [...] 
-      });
-      setIsFavorite(Math.random() > 0.5);
-      setLoading(false);
-    }, 500);
-  }, [stockCode]);
+  // 백엔드 API 기본 URL 설정 (개발 환경에 맞게 변경)
+  const API_BASE_URL = 'http://localhost:8084/F5';
 
-  const toggleFavorite = () => {
-    console.log(`${stockCode} 관심종목 ${isFavorite ? '삭제' : '추가'}`);
-    setIsFavorite(!isFavorite);
+  // 종목 상세 정보와 관심 종목 상태를 가져오는 useEffect
+  useEffect(() => {
+    const fetchStockDetailAndFavoriteStatus = async () => {
+      setLoading(true);
+      setError(null);
+      console.log(`StockDetailPage: Fetching data for stock: ${stockCode}`);
+
+      try {
+        // 1. 종목 기본 정보 가져오기
+        const stockResponse = await axios.get(`${API_BASE_URL}/stocks/stockinfo/${stockCode}`); // 경로 변경 (stockinfo 제거)
+        const stockInfo = stockResponse.data;
+
+        setStockData({
+          name: stockInfo.stockName,
+          // Stock 엔티티에 currentPrice, changeRate 필드가 없으므로, 필요하다면 StockPrice에서 최신 값을 가져와야 합니다.
+          // 여기서는 예시를 위해 임의의 값이나 StockPrice에서 가져오는 로직을 추가해야 합니다.
+          price: 'N/A', // 예시: StockPrice에서 가져와야 함
+          changeRate: 'N/A', // 예시: StockPrice에서 가져와야 함
+          changeType: 'neutral', // 예시: StockPrice에서 가져와야 함
+          updateTime: new Date().toLocaleTimeString('ko-KR'),
+          companyOverview: stockInfo.companyInfo || '기업 개요 정보가 없습니다.', // company_info 필드 사용
+        });
+
+        // 2. 관심 종목 여부 확인 (사용자가 로그인 되어 있을 때만)
+        if (currentUser && currentUser.userId) {
+          const favoriteCheckResponse = await axios.get(`${API_BASE_URL}/userfav/${currentUser.userId}/favorites/check/${stockCode}`);
+          setIsFavorite(favoriteCheckResponse.data.isFavorite);
+        } else {
+          setIsFavorite(false); // 로그인되지 않았으면 관심 종목 아님
+        }
+
+      } catch (err) {
+        console.error("Failed to fetch data:", err);
+        if (axios.isAxiosError(err)) { // Axios 에러인지 확인
+            if (err.response) {
+                setError(`데이터를 가져오는 데 실패했습니다: ${err.response.status} - ${err.response.data.message || err.message || '알 수 없는 오류'}`);
+            } else if (err.request) {
+                setError("네트워크 오류: 서버에 연결할 수 없습니다.");
+            } else {
+                setError(`요청 오류: ${err.message}`);
+            }
+        } else {
+            setError(`알 수 없는 오류: ${err.message}`);
+        }
+        setStockData(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStockDetailAndFavoriteStatus();
+  }, [stockCode, currentUser]);
+
+  // 관심 종목 설정/해제 토글 함수
+  const toggleFavorite = async () => {
+    if (!currentUser || !currentUser.userId) {
+      alert("로그인 후 관심 종목을 설정할 수 있습니다.");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      if (isFavorite) {
+        // 관심 종목 해제 (DELETE 요청)
+        await axios.delete(`${API_BASE_URL}/userfav/${currentUser.userId}/favorites/${stockCode}`);
+        setIsFavorite(false); // 상태 업데이트
+        console.log(`${stockCode} 관심종목에서 삭제되었습니다.`);
+      } else {
+        // 관심 종목 설정 (POST 요청)
+        await axios.post(`${API_BASE_URL}/userfav/${currentUser.userId}/favorites/${stockCode}`);
+        setIsFavorite(true); // 상태 업데이트
+        console.log(`${stockCode} 관심종목에 추가되었습니다.`);
+      }
+    } catch (err) {
+      console.error("관심 종목 업데이트 실패:", err);
+      if (axios.isAxiosError(err)) {
+          if (err.response) {
+              if (err.response.status === 409) { // 409 Conflict는 이미 등록됨
+                  setError("이미 관심 종목으로 등록되어 있습니다.");
+              } else {
+                  setError(`관심 종목 업데이트 실패: ${err.response.status} - ${err.response.data.message || err.message || '알 수 없는 오류'}`);
+              }
+          } else if (err.request) {
+              setError("네트워크 오류: 관심 종목 업데이트 서버에 연결할 수 없습니다.");
+          } else {
+              setError(`요청 오류: ${err.message}`);
+          }
+      } else {
+          setError(`알 수 없는 오류: ${err.message}`);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loading) {
     return <p className="loading-message-sdtp">종목 상세 정보를 불러오는 중입니다...</p>;
+  }
+  if (error) {
+    return <p className="error-message-sdtp">{error}</p>;
   }
   if (!stockData) {
     return <p className="no-data-message-sdtp">해당 종목 정보를 찾을 수 없습니다.</p>;
@@ -67,7 +142,6 @@ const StockDetailPage = ({ currentUser }) => {
   return (
     <div className="stock-detail-page">
       <div className="stock-summary-header-sdtp">
-        {/* ... (상단 정보 바 JSX는 이전과 동일) ... */}
         <div className="stock-title-price">
           <h1 className="stock-name-sdtp">{stockData.name} <span className="stock-code-sdtp">({stockCode})</span></h1>
           <div className="price-info-sdtp">
@@ -76,14 +150,13 @@ const StockDetailPage = ({ currentUser }) => {
             <span className="update-time-sdtp">(기준: {stockData.updateTime})</span>
           </div>
         </div>
-        <button onClick={toggleFavorite} className="favorite-button-sdtp" aria-label="관심종목 추가/삭제">
+        <button onClick={toggleFavorite} className="favorite-button-sdtp" aria-label="관심종목 추가/삭제" disabled={loading}>
           {isFavorite ? <FaStar style={{ color: '#ffc107' }} /> : <FaRegStar />}
           <span style={{ marginLeft: '5px' }}>관심 {isFavorite ? '해제' : '설정'}</span>
         </button>
       </div>
 
       <nav className="stock-detail-tabs-sdtp">
-        {/* ... (탭 버튼 렌더링 JSX는 이전과 동일) ... */}
         {TABS_STOCK_DETAIL.map(tab => (
           <button
             key={tab.id}
@@ -97,7 +170,6 @@ const StockDetailPage = ({ currentUser }) => {
       </nav>
 
       <div className="stock-detail-tab-content-sdtp">
-        {/* ActiveTabContent에 stockData와 stockCode를 prop으로 전달 */}
         {ActiveTabContent ? (
           <ActiveTabContent stockData={stockData} stockCode={stockCode} currentUser={currentUser} />
         ) : (
@@ -106,10 +178,10 @@ const StockDetailPage = ({ currentUser }) => {
       </div>
     </div>
   );
-  
 };
+
 StockDetailPage.propTypes = {
-  currentUser: PropTypes.shape({ nickname: PropTypes.string, userId: PropTypes.string }) // PropType 정의 추가
-  // ... (다른 propTypes)
+  currentUser: PropTypes.shape({ userId: PropTypes.string, nickname: PropTypes.string })
 };
+
 export default StockDetailPage;

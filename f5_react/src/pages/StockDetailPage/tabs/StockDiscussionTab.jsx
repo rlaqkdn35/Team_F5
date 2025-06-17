@@ -180,7 +180,7 @@ const handleSendMessage = useCallback(async (e) => {
   useEffect(() => {
     // currentUserId가 "게스트"가 아닐 때만 웹소켓 연결 시도 (로그인 사용자만 웹소켓 연결)
     if (croomIdx && currentUser && !socketRef.current) { // currentUser 조건 추가
-      const websocketUrl = `ws://192.168.219.151:8084/F5/ws/chat?stockCode=${croomIdx}`;
+      const websocketUrl = `ws://192.168.219.244:8084/F5/ws/chat?stockCode=${croomIdx}`;
       const ws = new WebSocket(websocketUrl);
       socketRef.current = ws;
 
