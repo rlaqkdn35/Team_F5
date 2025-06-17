@@ -21,7 +21,7 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
   useEffect(() => {
     const fetchAllStocks = async () => {
       try {
-        const response = await axios.get('http://localhost:8084/F5/stocks');
+        const response = await axios.get('http://localhost:8084/F5/stocks/stocklist');
         setAllStocks(response.data.slice(0, 150)); // 최대 150개 제한
       } catch (error) {
         console.error('전체 종목 불러오기 실패:', error);

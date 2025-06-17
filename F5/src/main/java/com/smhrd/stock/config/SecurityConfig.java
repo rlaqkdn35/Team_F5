@@ -100,7 +100,13 @@ public class SecurityConfig {
                     // 웹소켓 자체의 인증/인가 처리는 별도로 WebSocketHandler 등에서 구현해야 합니다.
                     // 하지만 웹소켓 핸드셰이크 요청이 HTTP이므로, `/ws/chat` 경로도 permitAll이 필요할 수 있습니다.
                     "/ws/chat", // 웹소켓 핸드셰이크 요청
-                    "/ws/chat/**" // 웹소켓 핸드셰이크 요청
+                    "/ws/chat/**", // 웹소켓 핸드셰이크 요청
+                    "/stocks/stocklist",
+                    "/stocks/stockinfo/**",
+                    "/userfav/",
+                    "/userfav/**",
+                    "/stockprice/",
+                    "/stockprice/**"
                 ).permitAll() // 위에 명시된 경로들은 인증 없이 접근 허용   
                 .anyRequest().authenticated() // 그 외 모든 요청은 반드시 인증 필요
             )

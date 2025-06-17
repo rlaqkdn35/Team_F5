@@ -16,6 +16,7 @@ public class WebSoketConfig implements WebSocketConfigurer {
 
 	private final WebSoketChatHandler webSocketChatHandler;
 
+	
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         // "/ws/chat" 엔드포인트로 클라이언트가 연결됩니다.

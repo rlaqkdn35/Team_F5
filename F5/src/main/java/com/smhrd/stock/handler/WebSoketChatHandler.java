@@ -51,14 +51,14 @@ public class WebSoketChatHandler extends TextWebSocketHandler {
         for (Map.Entry<Integer, Set<WebSocketSession>> entry : chatRoomSessions.entrySet()) {
             Set<WebSocketSession> sessions = entry.getValue();
             if (sessions.remove(session)) {
-                System.out.println("채팅방 " + entry.getKey() + "에서 세션 제거: " + session.getId());
+//                System.out.println("채팅방 " + entry.getKey() + "에서 세션 제거: " + session.getId());
                 // 해당 채팅방에 더 이상 세션이 없으면 맵에서 제거 (옵션)
                 if (sessions.isEmpty()) {
                     chatRoomSessions.remove(entry.getKey());
                 }
             }
         }
-        System.out.println("웹소켓 해제: " + session.getId() + ", 상태: " + status);
+//        System.out.println("웹소켓 해제: " + session.getId() + ", 상태: " + status);
     }
     
     /**
@@ -68,11 +68,11 @@ public class WebSoketChatHandler extends TextWebSocketHandler {
      */
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-    	System.out.println("handleTextMessage 호출됨: " + message.getPayload());
+//    	System.out.println("handleTextMessage 호출됨: " + message.getPayload());
         String payload = message.getPayload(); // 메시지 페이로드 (JSON 문자열)
         // JSON 문자열을 Chatting 객체로 역직렬화
         Chatting chatMessage = objectMapper.readValue(payload, Chatting.class);
-        System.out.println("수신 메시지: " + chatMessage);
+//        System.out.println("수신 메시지: " + chatMessage);
         
         int roomId = chatMessage.getCroomIdx(); // 메시지에서 채팅방 ID 추출
         
@@ -84,7 +84,7 @@ public class WebSoketChatHandler extends TextWebSocketHandler {
         if (chatMessage.getMessageType().equals(Chatting.MessageType.ENTER)) { // 입장 메시지
             // 인원 제한 없이 바로 세션 추가
             sessions.add(session);
-            System.out.println("세션 " + session.getId() + "이 채팅방 " + roomId + "에 입장했습니다.");
+//            System.out.println("세션 " + session.getId() + "이 채팅방 " + roomId + "에 입장했습니다.");
             
             // 입장 메시지 DB 저장 (서버에서 시간 설정)
             chatMessage.setCreatedAt(new Timestamp(System.currentTimeMillis()));
@@ -92,7 +92,7 @@ public class WebSoketChatHandler extends TextWebSocketHandler {
 
         } else if (chatMessage.getMessageType().equals(Chatting.MessageType.QUIT)) { // 퇴장 메시지
             sessions.remove(session); // 세션 제거
-            System.out.println("세션 " + session.getId() + "이 채팅방 " + roomId + "에서 퇴장했습니다.");
+//            System.out.println("세션 " + session.getId() + "이 채팅방 " + roomId + "에서 퇴장했습니다.");
 
             // 퇴장 메시지 DB 저장 (서버에서 시간 설정)
             chatMessage.setCreatedAt(new Timestamp(System.currentTimeMillis()));

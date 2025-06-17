@@ -57,16 +57,16 @@ public class ChattingController {
             if (croomIdx != null) {
                 response.put("success", true);
                 response.put("croomIdx", croomIdx);
-                logger.info("종목 코드 '{}'에 대한 채팅방 ID '{}' 조회/생성 성공", stockCode, croomIdx);
+//                logger.info("종목 코드 '{}'에 대한 채팅방 ID '{}' 조회/생성 성공", stockCode, croomIdx);
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
                 response.put("success", false);
                 response.put("message", "해당 종목 코드에 매핑된 채팅방 ID를 찾거나 생성할 수 없습니다.");
-                logger.warn("종목 코드 '{}'에 대한 채팅방 ID를 찾거나 생성할 수 없습니다.", stockCode);
+//                logger.warn("종목 코드 '{}'에 대한 채팅방 ID를 찾거나 생성할 수 없습니다.", stockCode);
                 return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR); // 이 경우는 서비스 로직에서 null 반환 안되게 방어
             }
         } catch (Exception e) {
-            logger.error("종목 코드 '{}'로 채팅방 ID 조회/생성 중 오류 발생: {}", stockCode, e.getMessage(), e);
+//            logger.error("종목 코드 '{}'로 채팅방 ID 조회/생성 중 오류 발생: {}", stockCode, e.getMessage(), e);
             response.put("success", false);
             response.put("message", "채팅방 ID 조회/생성 중 서버 오류 발생: " + e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -89,7 +89,7 @@ public class ChattingController {
             response.put("messages", chatList);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("채팅 목록 조회 실패: {}", e.getMessage(), e); // 에러 로그에 스택 트레이스 포함
+//            logger.error("채팅 목록 조회 실패: {}", e.getMessage(), e); // 에러 로그에 스택 트레이스 포함
             Map<String, Object> error = new HashMap<>();
             error.put("success", false);
             error.put("message", "채팅 목록 조회 실패: " + e.getMessage());
@@ -110,7 +110,7 @@ public class ChattingController {
             List<Chatting> files = chattingService.getChatFiles(croomIdx);
             return new ResponseEntity<>(files, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("채팅 파일 목록 조회 실패: {}", e.getMessage(), e);
+//            logger.error("채팅 파일 목록 조회 실패: {}", e.getMessage(), e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -132,7 +132,7 @@ public class ChattingController {
         File file = fullPath.toFile(); // Path 객체를 File 객체로 변환
 
         if (!file.exists() || !file.canRead()) {
-            logger.warn("파일을 찾을 수 없거나 읽을 수 없습니다: {}", fullPath);
+//            logger.warn("파일을 찾을 수 없거나 읽을 수 없습니다: {}", fullPath);
             return ResponseEntity.notFound().build(); // 404 Not Found 응답
         }
 
@@ -159,12 +159,12 @@ public class ChattingController {
     @PostMapping("/message")
     public ResponseEntity<String> messageSave(@RequestBody Chatting chatMessage) {
         try {
-            logger.info("메시지 저장 요청: {}", chatMessage);
+//            logger.info("메시지 저장 요청: {}", chatMessage);
             chattingService.saveChatMessage(chatMessage); // Service를 통해 메시지 저장
-            logger.info("메시지 저장 성공: {}", chatMessage);
+//            logger.info("메시지 저장 성공: {}", chatMessage);
             return new ResponseEntity<>("success", HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("메시지 저장 실패: {}", e.getMessage(), e);
+//            logger.error("메시지 저장 실패: {}", e.getMessage(), e);
             return new ResponseEntity<>("error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -186,15 +186,15 @@ public class ChattingController {
         try {
             // 파일이 저장될 물리적 경로 (운영 환경에 따라 변경 필요)
             String uploadDir = Paths.get("C:", "Users", "smhrd", "git", "mz_company_test", "MZ", "src", "main", "webapp", "resources", "workFile").toString();
-            logger.info("파일 저장 시도 경로: {}", uploadDir);
+//            logger.info("파일 저장 시도 경로: {}", uploadDir);
 
             File dir = new File(uploadDir);
             if (!dir.exists()) { // 디렉토리가 없으면 생성
                 boolean result = dir.mkdirs();
                 if (result) {
-                    logger.info("업로드 디렉토리 생성 성공: {}", uploadDir);
+//                    logger.info("업로드 디렉토리 생성 성공: {}", uploadDir);
                 } else {
-                    logger.error("업로드 디렉토리 생성 실패: {}", uploadDir);
+//                    logger.error("업로드 디렉토리 생성 실패: {}", uploadDir);
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 디렉토리 생성 실패");
                 }
             }
@@ -225,11 +225,11 @@ public class ChattingController {
             // ChattingService를 통해 파일 정보 DB 저장
             chattingService.saveChatMessage(chat);
 
-            logger.info("파일 저장 및 DB 기록 성공. 최종 파일 경로: {}, DB 저장 URL: {}", filePath, file_url);
+//            logger.info("파일 저장 및 DB 기록 성공. 최종 파일 경로: {}, DB 저장 URL: {}", filePath, file_url);
             return ResponseEntity.ok(file_url); // 프론트엔드에 저장된 파일 URL 반환
 
         } catch (Exception e) {
-            logger.error("파일 업로드 실패: {}", e.getMessage(), e);
+//            logger.error("파일 업로드 실패: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 실패: " + e.getMessage());
         }
     }
