@@ -39,13 +39,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+<<<<<<< Updated upstream
 <<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
             .cors() // CORS 설정 적용
             .and()
             .csrf().disable() // CSRF 비활성화 (API용이면 보통 비활성화)
             .authorizeRequests()
                 .anyRequest().permitAll(); // 모든 요청 인증 없이 허용
         
+<<<<<<< Updated upstream
 =======
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable()) // API 통신 시 일반적으로 비활성화
@@ -139,6 +143,8 @@ public class SecurityConfig {
             );
             
 >>>>>>> 10aa704be9be8087d2fb9404127f51f8bcfbe9d7
+=======
+>>>>>>> Stashed changes
         return http.build();
     }
 }
