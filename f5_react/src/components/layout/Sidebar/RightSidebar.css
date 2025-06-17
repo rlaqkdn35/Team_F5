@@ -1,137 +1,272 @@
-/* app-right-sidebar에 대한 기본 스타일 */
+/* RightSidebar.css */
+
+/* 사이드바 전체 컨테이너 */
 .app-right-sidebar {
-    width: 200px; /* 너비 살짝 줄임 */
+    width: 280px; /* 기본 너비 */
     padding: 20px;
+    background-color: #f9f9f9; /* 연한 배경색 */
+    border-left: 1px solid #eee; /* 왼쪽 경계선 */
     display: flex;
-    flex-direction: column;
-    gap: 20px; /* 섹션 간의 간격 */
-    position: fixed; /* 스크롤 시 따라오도록 고정 위치 */
-    top: 30%; /* 수직 중앙 정렬 시작점 */
-    right: 0; /* 오른쪽에 붙임 */
-    transform: translateY(-50%); /* 정확히 수직 중앙으로 이동 */
-    max-height: 90vh; /* 뷰포트 높이의 90%를 최대 높이로 설정 */
-    overflow-y: auto; /* 내용이 넘칠 경우 스크롤바 생성 */
-    z-index: 800; /* 다른 요소 위에 오도록 z-index 설정 */
-    box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
+    flex-direction: column; /* 자식 요소들을 세로로 정렬 */
+    gap: 25px; /* 섹션 간 간격 */
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.05); /* 은은한 그림자 */
+    height: 100vh; /* 뷰포트 높이에 맞춤 */
+    position: sticky; /* 스크롤 시 고정 */
+    top: 0; /* 상단에 고정 */
+    overflow-y: auto; /* 내용이 많아지면 스크롤 */
+    box-sizing: border-box; /* 패딩, 보더 포함하여 너비 계산 */
 }
 
-/* 사용자 정보 섹션 스타일 */
+/* 사용자 정보 섹션 (닉네임, 관심 종목 포함) */
 .user-info-section {
     background-color: #ffffff;
-    padding: 15px;
     border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: 18px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    text-align: center; /* 닉네임 정렬 */
+    margin-right: 60px;
 }
 
+/* 닉네임 표시 스타일 */
 .nickname-display {
-    font-size: 16px;
+    font-size: 1.15em;
     font-weight: bold;
     color: #333;
-    margin-bottom: 10px;
-    display: flex; /* 아이콘과 닉네임 정렬을 위해 flex 사용 */
-    align-items: center; /* 세로 중앙 정렬 */
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 중앙 정렬 */
+    gap: 8px; /* 닉네임과 아이콘 사이 간격 */
 }
 
-/* 새 알림 아이콘 스타일 */
+/* 새 활동 알림 아이콘 */
 .new-activity-icon {
-    font-size: 14px; /* 화살표 크기 */
-    color: #ff4500; /* 주황색 또는 강조 색상 */
-    margin-left: 8px; /* 닉네임과의 간격 */
-    animation: blink 1s infinite alternate; /* 깜빡이는 애니메이션 */
-    transform: translateY(1px); /* 살짝 위로 올려 텍스트와 정렬 */
+    color: #007bff; /* 파란색 강조 */
+    font-size: 0.9em;
+    animation: bounce 1s infinite; /* 통통 튀는 애니메이션 */
+    display: inline-block; /* 애니메이션 적용을 위해 */
 }
 
-@keyframes blink {
-    from { opacity: 1; }
-    to { opacity: 0.3; }
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-3px);
+    }
 }
 
+/* 관심 종목 컨테이너 */
+.interest-items-container {
+    margin-top: 15px;
+    border-top: 1px dashed #e0e0e0; /* 점선 구분선 */
+    padding-top: 15px;
+}
+
+/* 관심 종목 타이틀 */
 .interest-title {
-    font-size: 13px;
-    color: #666;
-    margin-bottom: 5px;
-    font-weight: 600;
+    font-size: 1em;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 10px;
+    text-align: left; /* 왼쪽 정렬 */
 }
 
+/* 관심 종목 리스트 */
 .interest-list {
-    list-style: none; /* 기본 리스트 스타일 제거 */
+    list-style: none;
     padding: 0;
     margin: 0;
+    text-align: left; /* 왼쪽 정렬 */
 }
 
+/* 각 관심 종목 아이템 */
 .interest-item {
-    font-size: 14px;
-    color: #555;
-    
-    border-radius: 15px;
-    background-color: var(--color-white-hover);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
-    padding: 5px 10px;
+    background-color: #f0f8ff; /* 연한 파란색 배경 */
+    border: 1px solid #cfe2ff; /* 연한 파란색 테두리 */
+    padding: 10px 12px;
+    margin-bottom: 8px;
     border-radius: 5px;
-    margin-bottom: 5px;
-    transition: background-color 0.2s ease;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95em;
 }
 
-
-
-.interest-item:last-child {
-    margin-bottom: 0; /* 마지막 아이템 하단 마진 제거 */
+.interest-item:hover {
+    background-color: #e0f0ff;
+    transform: translateY(-2px); /* 살짝 위로 올라가는 효과 */
 }
 
+/* 관심 종목 이름만 */
+.interest-stock-name-only {
+    flex-grow: 1; /* 남은 공간 모두 차지 */
+    color: #333;
+    font-weight: 500;
+}
+
+/* 로딩 메시지 */
+.loading-message-sidebar,
+.error-message-sidebar,
+.no-interest-items {
+    text-align: center;
+    color: #666;
+    font-size: 0.9em;
+    padding: 10px 0;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.error-message-sidebar {
+    color: #d9534f; /* 붉은색으로 에러 강조 */
+    font-weight: bold;
+}
 
 
 /* 알림창 스타일 */
 .notification-bar {
-    background-color: #e0f2f7; /* 라이트 블루 배경 */
-    color: var(--color-text-dark); /* 텍스트 색상 */
-    padding: 15px 20px;
-
-    border-radius: 15px;
-    background-color: var(--color-white-hover);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
-    position: relative;
-    font-size: 14px;
+    background-color: #d4edda; /* 밝은 녹색 배경 (성공/정보) */
+    color: #155724; /* 진한 녹색 글씨 */
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    transition: background-color 0.2s ease;
+    font-size: 0.95em;
+    font-weight: 500;
     line-height: 1.4;
-    animation: fadeIn 0.5s ease-out; /* 부드러운 등장 애니메이션 */
-    width: 100%; /* 사이드바 너비에 맞춰 */
-    box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
+    margin-right: 50px;
+}
+
+.notification-bar:hover {
+    background-color: #c3e6cb;
 }
 
 .notification-bar p {
     margin: 0;
-    padding-right: 25px; /* 닫기 버튼 공간 확보 */
-    font-weight: 500;
+    flex-grow: 1; /* 텍스트가 공간을 채우도록 */
+    padding-right: 10px; /* 닫기 버튼과의 간격 */
 }
 
-/* 닫기 버튼 스타일 */
+/* 알림창 닫기 버튼 */
 .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
     background: none;
     border: none;
-    font-size: 20px;
+    color: #155724;
+    font-size: 1.5em;
     cursor: pointer;
-    color: #0056b3;
-    opacity: 0.7;
-    transition: opacity 0.2s ease-in-out;
-    padding: 0;
+    padding: 0 5px;
     line-height: 1;
+    transition: color 0.2s ease;
 }
 
 .close-btn:hover {
-    opacity: 1;
+    color: #0c3619;
 }
 
-/* 알림 등장 애니메이션 */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
+/* --- 반응형 디자인 --- */
+@media (max-width: 1200px) {
+    .app-right-sidebar {
+        width: 250px; /* 약간 줄임 */
+        padding: 15px;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+    .user-info-section {
+        padding: 15px;
+    }
+
+    .nickname-display {
+        font-size: 1.1em;
+    }
+
+    .interest-item {
+        padding: 8px 10px;
+        font-size: 0.9em;
+    }
+
+    .notification-bar {
+        padding: 12px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 992px) {
+    .app-right-sidebar {
+        width: 100%; /* 작은 화면에서는 전체 너비 */
+        height: auto; /* 높이 자동 조절 */
+        position: static; /* 고정 해제 */
+        border-left: none;
+        border-top: 1px solid #eee; /* 상단에 경계선 추가 */
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05); /* 하단 그림자 */
+        padding: 15px 20px;
+        flex-direction: row; /* 가로로 정렬 */
+        justify-content: space-around; /* 요소들을 균등하게 배치 */
+        align-items: flex-start; /* 상단 정렬 */
+        flex-wrap: wrap; /* 공간 부족 시 다음 줄로 */
+        gap: 20px; /* 가로, 세로 간격 */
+    }
+
+    .user-info-section,
+    .notification-bar {
+        flex: 1 1 auto; /* 유연하게 공간 차지 */
+        min-width: 280px; /* 최소 너비 지정 */
+        margin: 0; /* 기존 마진 제거 */
+    }
+
+    .nickname-display {
+        margin-bottom: 10px;
+    }
+
+    .interest-items-container {
+        margin-top: 10px;
+        padding-top: 10px;
+    }
+
+    .notification-bar p {
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-right-sidebar {
+        flex-direction: column; /* 다시 세로로 정렬 */
+        align-items: stretch; /* 전체 너비 사용 */
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .user-info-section,
+    .notification-bar {
+        min-width: unset; /* 최소 너비 해제 */
+        width: 100%; /* 전체 너비 사용 */
+    }
+}
+
+@media (max-width: 480px) {
+    .user-info-section {
+        padding: 12px;
+    }
+
+    .nickname-display {
+        font-size: 1em;
+    }
+
+    .interest-item {
+        font-size: 0.85em;
+        padding: 7px 10px;
+    }
+
+    .notification-bar {
+        padding: 10px;
+        font-size: 0.85em;
+    }
+
+    .close-btn {
+        font-size: 1.3em;
     }
 }
