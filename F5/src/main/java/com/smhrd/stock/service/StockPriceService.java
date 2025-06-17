@@ -24,6 +24,7 @@ public class StockPriceService {
         return stockPriceRepository.findLatestPerStockCodeByDate(date);
     }
     
+<<<<<<< HEAD
     /**
      * 특정 주식 코드의 가장 최신 시세 데이터를 조회합니다.
      * @param stockCode 조회할 주식 코드
@@ -36,6 +37,20 @@ public class StockPriceService {
     }
     
     
+=======
+<<<<<<< HEAD
+    public List<StockPriceWithNameDto> getStockHistoryByCode(String stockCode) {
+        return stockPriceRepository.findStockHistoryDtoByStockCodeOrderByPriceDateAsc(stockCode);
+    }
+=======
+//    public List<StockPrice> getAllStockPrices() {
+//        return stockPriceRepository.findAll();
+//    }
+//
+//    public StockPrice getStockPriceById(Long priceId) {
+//        return stockPriceRepository.findById(priceId).orElse(null);
+//    }
+>>>>>>> 5cb4f7e32cbde64329d8f7c072bb5b799980787a
 
     public List<StockPrice> getStockPricesByStockCode(String stockCode) {
         return stockPriceRepository.findByStock_StockCodeOrderByPriceDateAsc(stockCode);
@@ -46,4 +61,5 @@ public class StockPriceService {
     }
 
     
+>>>>>>> 10aa704be9be8087d2fb9404127f51f8bcfbe9d7
 }

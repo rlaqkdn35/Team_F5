@@ -32,6 +32,7 @@ public class StockPriceController {
         return stockPriceService.getDailyStockData(targetDate);
     }
     
+<<<<<<< HEAD
  // 특정 주식 코드의 가장 최신 시세 데이터 조회 (GET /stockprices/latest/{stockCode})
     @GetMapping("/latest/{stockCode}")
     public ResponseEntity<StockPrice> getLatestStockPrice(@PathVariable String stockCode) {
@@ -42,4 +43,11 @@ public class StockPriceController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404 Not Found
         }
     }
+=======
+    @GetMapping("/{stockCode}/history")
+    public List<StockPriceWithNameDto> getStockHistoryByCode(@PathVariable String stockCode) { // DTO 타입 변경
+        return stockPriceService.getStockHistoryByCode(stockCode);
+    }
+    
+>>>>>>> 5cb4f7e32cbde64329d8f7c072bb5b799980787a
 }

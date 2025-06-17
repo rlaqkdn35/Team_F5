@@ -45,4 +45,16 @@ public interface StockPriceRepository extends Repository<StockPrice, Long> {
     List<StockPrice> findByStock_StockCodeAndPriceDateBetweenOrderByPriceDateAsc(String stockCode, Timestamp startDate, Timestamp endDate);
     Optional<StockPrice> findTopByStock_StockCodeOrderByPriceDateDesc(String stockCode);
 
+	
+	
+	@Query("SELECT new com.smhrd.stock.dto.StockPriceWithNameDto(" +
+	           "sp.priceId, sp.stock.stockCode, sp.stock.stockName, " + 
+	           "sp.priceDate, sp.openPrice, sp.highPrice, sp.lowPrice, " +
+	           "sp.closePrice, sp.stockFluctuation, sp.stockVolume) " +
+	           "FROM StockPrice sp " +
+	           "WHERE sp.stock.stockCode = :stockCode " + 
+	           "ORDER BY sp.priceDate ASC")
+	    List<StockPriceWithNameDto> findStockHistoryDtoByStockCodeOrderByPriceDateAsc(@Param("stockCode") String stockCode);
+
+
 }
