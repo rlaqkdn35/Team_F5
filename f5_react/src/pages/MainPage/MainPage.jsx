@@ -157,7 +157,7 @@ const AccuracyBarFill = ({ percentage }) => {
 };
 
 // --- SectionWrapper 컴포넌트 (MainPage 외부로 이동) ---
-const SectionWrapper = ({ children, sectionIndex, className = "", onSectionRef }) => {
+const SectionWrapper = ({ children, sectionIndex, className = "", onSectionRef, style = {} }) => {
   const { ref: inViewRef, inView } = useInView({ // Renamed to avoid potential naming conflicts
     threshold: 0.3,
     triggerOnce: true,
@@ -183,6 +183,7 @@ const SectionWrapper = ({ children, sectionIndex, className = "", onSectionRef }
         hidden: { opacity: 0.8, y: 50 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
       }}
+      style={style} // style prop을 받아서 적용
     >
       {children}
     </motion.section>
@@ -244,8 +245,7 @@ export default function MainPage() {
       });
       setActiveSection(index);
     }
-  }, [setActiveSection]); // Include setActiveSection if its stability isn't guaranteed by useState dispatch nature
-                           // Though React's setState dispatchers are stable.
+  }, []); 
 
   const goToHome = () => {
     navigate('/ai-info')
@@ -297,23 +297,42 @@ export default function MainPage() {
             animate="visible"
           />
         )}
-        {showChartText && !showSplash && (
-          <motion.div
-            className="chart-recommend-text"
-            variants={topRightTextVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <p>AI 주식 차트를 추천합니다 📈</p>
-            <motion.span
-              className="sub-text"
-              initial={{opacity:0}}
-              animate={{opacity:1, transition:{delay:1.2, duration:0.8}}}
-            >
-              데이터 기반의 스마트한 투자, ASTOCK과 함께 시작하세요.
-            </motion.span>
-          </motion.div>
-        )}
+        <div className="content-container"> 
+            {showChartText && !showSplash && (
+              <motion.div
+                  className="chart-recommend-text"
+                  variants={topRightTextVariants}
+                  initial="hidden"
+                  animate="visible"
+                  >
+                  <p>
+                    또 물렸다고? 그게 다 당신이 '흑우'라서 그래요! 🤬<br/>
+                    남들 돈 버는 동안, 오늘도 개미지옥에서 허우적대는 당신. <br/>
+                    이제 그만 당하고 싶다면, 제대로 된 AI 주식 차트를 만나야 할 때! 📈
+                  </p>
+                  <motion.span
+                  className="sub-text"
+                  initial={{opacity:0}}
+                  animate={{opacity:1, transition:{delay:1.2, duration:0.8}}}
+                    >
+                    데이터 기반의 스마트한 투자, ASTOCK과 함께 시작하세요.
+                    </motion.span>
+              </motion.div>
+            )}
+
+            {!showSplash && (
+                <motion.button
+                    className="astock-button"
+                    initial={{opacity:0, y: 20}}
+                    animate={{opacity:1, y: 0, transition:{delay:1.5, duration:0.8}}}
+                    whileHover={{scale: 1.05}}
+                    whileTap={{scale: 0.95}}
+                    onClick={() => window.location.href = '/ai-info'}
+                >
+                    ASTOCK 바로가기
+                </motion.button>
+            )}
+        </div> {/* .content-container 닫힘 */}
         {!showSplash && (
           <motion.div
             className="scroll-prompt"
@@ -328,39 +347,54 @@ export default function MainPage() {
       </SectionWrapper>
 
       <SectionWrapper sectionIndex={1} className="section2" onSectionRef={assignSectionRef}>
-        <motion.div className="section-content" variants={staggerContainerVariants}>
-          {!showSplash && (
-            <motion.div
-              className="background-chart2-image"
-              variants={backgroundVariants}
-              initial="hidden"
-              animate="visible"
-            />
-          )}
-          <motion.h2 variants={sectionTitleVariants}>
-            <strong>3가지 AI 모델</strong>로<br />최적의 주식을 추천받으세요 📊
-          </motion.h2>
-          <motion.div className="ai-model-cards-grid">
-            {[
-              { icon: "🧠", title: "퀀텀 알파 AI", desc: "시장 미시 구조와 고빈도 데이터를 분석하여 단기적 변동성을 예측하고 최적의 매매 타이밍을 포착합니다.", color: "#4A90E2" },
-              { icon: "💡", title: "밸류 베타 AI", desc: "기업 펀더멘탈, 재무제표, 산업 동향을 심층 분석하여 장기적으로 안정적인 성장이 기대되는 가치주를 발굴합니다.", color: "#50E3C2" },
-              { icon: "📡", title: "센티멘트 감마 AI", desc: "실시간 뉴스, 소셜 미디어, 경제 지표 등 비정형 데이터를 분석하여 시장 심리와 트렌드를 파악, 모멘텀 투자를 지원합니다.", color: "#F5A623" },
-            ].map((model, index) => (
-              <motion.div
-                key={index}
-                className="ai-model-card"
-                variants={{...itemVariants, ...cardHoverVariants}}
-                whileHover="hover"
-              >
-                <AiIcon char={model.icon} color={model.color}/>
-                <h3>{model.title}</h3>
-                <p>{model.desc}</p>
-                <motion.div className="card-decoration" variants={itemVariants}></motion.div>
-              </motion.div>
-            ))}
-          </motion.div>
+    <motion.div className="section-content" variants={staggerContainerVariants}>
+      {!showSplash && (
+       <motion.div
+         className="background-chart2-image"
+         variants={backgroundVariants}
+         initial="hidden"
+         animate="visible"
+       />
+       )}
+       <motion.h2 variants={sectionTitleVariants}>
+       <strong>3가지 AI 모델</strong>로<br />최적의 주식을 추천받으세요 📊
+       </motion.h2>
+       <motion.div className="ai-model-cards-grid">
+       {[
+        { 
+                    icon: "📈", 
+                    title: "주식 패턴 모델", 
+                    desc: "주식 차트의 과거 패턴과 기술적 지표를 분석하여 미래 가격 움직임을 예측하고, 최적의 매수/매도 시점을 포착합니다.", 
+                    color: "#4A90E2" 
+                },
+        { 
+                    icon: "📰", 
+                    title: "뉴스 분석 모델", 
+                    desc: "실시간 뉴스 기사, SNS 트렌드, 경제 지표 등 비정형 데이터를 분석하여 시장의 심리와 특정 종목에 대한 대중의 인식을 파악합니다.", 
+                    color: "#50E3C2" 
+                },
+        { 
+                    icon: "✨", 
+                    title: "스마트 포트폴리오 AI", 
+                    desc: "사용자의 투자 성향과 목표에 맞춰 다양한 재무 데이터와 복합 알고리즘을 통해 최적의 포트폴리오를 구성하고 지속적으로 관리합니다.", 
+                    color: "#F5A623" 
+                },
+       ].map((model, index) => (
+        <motion.div
+        key={index}
+        className="ai-model-card"
+        variants={{...itemVariants, ...cardHoverVariants}}
+        whileHover="hover"
+        >
+         <AiIcon char={model.icon} color={model.color}/>
+         <h3>{model.title}</h3>
+         <p>{model.desc}</p>
+         <motion.div className="card-decoration" variants={itemVariants}></motion.div>
         </motion.div>
-      </SectionWrapper>
+       ))}
+       </motion.div>
+     </motion.div>
+    </SectionWrapper>
 
       <SectionWrapper sectionIndex={2} className="section3" onSectionRef={assignSectionRef}>
         <motion.div className="section-content" variants={staggerContainerVariants}>
@@ -385,7 +419,44 @@ export default function MainPage() {
         </motion.div>
       </SectionWrapper>
 
-      <SectionWrapper sectionIndex={3} className="section4" onSectionRef={assignSectionRef}>
+      {/* SectionWrapper sectionIndex={3} (클래스 이름 "section4") 수정 시작 */}
+      <SectionWrapper
+        sectionIndex={3}
+        className="section4"
+        onSectionRef={assignSectionRef}
+        // 배경색을 돈에 어울리게 변경 (인라인 스타일)
+      >
+        {/* 돈 떨어지는 이모지 애니메이션 추가 */}
+        {/* useEffect 안에서 DOM을 직접 조작하므로 JSX 안에 별도의 Money 이모지 컴포넌트가 보이지는 않습니다. */}
+        {/* 이펙트가 적용될 부모 요소의 ref를 사용합니다. */}
+        {useEffect(() => {
+          const container = sectionsRef.current[3]; // sectionIndex가 3인 SectionWrapper의 ref를 가져옵니다.
+          if (!container) return;
+
+          const createMoneyEmoji = () => {
+            const money = document.createElement('span');
+            money.textContent = '💰'; // 돈 이모지
+            money.style.position = 'absolute';
+            money.style.fontSize = `${Math.random() * (24 - 16) + 16}px`; // 16px ~ 24px
+            money.style.left = `${Math.random() * 100}%`;
+            money.style.top = `${Math.random() * -100 - 50}px`; // -50px ~ -150px
+            money.style.opacity = `${Math.random() * (1 - 0.6) + 0.6}`; // 0.6 ~ 1
+            money.style.zIndex = '0'; // 컨텐츠 뒤로 가게
+
+            // 애니메이션을 위한 keyframes (CSS에서 정의해야 함)
+            money.style.transition = 'none'; // 초기 위치 설정 시 트랜지션 없애기
+            money.style.animation = `fall ${Math.random() * (12 - 5) + 5}s linear infinite`;
+
+            container.appendChild(money);
+          };
+
+          // 돈 이모지 생성 간격 (조절 가능)
+          const interval = setInterval(createMoneyEmoji, 300); // 0.3초마다 돈 이모지 생성 (개수 조절)
+
+          // 컴포넌트 언마운트 시 인터벌 클리어
+          return () => clearInterval(interval);
+        }, [sectionsRef])} {/* sectionsRef가 변경될 때 다시 실행되도록 의존성 추가 */}
+
         <motion.div className="section-content" variants={staggerContainerVariants}>
           <motion.h2 variants={sectionTitleVariants}>
             ASTOCK AI가 만들어낸<br /><strong>놀라운 누적 수익률</strong> 💰
@@ -402,19 +473,18 @@ export default function MainPage() {
           <motion.button
             className="cta-button-primary"
             variants={{...itemVariants, ...buttonHoverVariants}}
-            whileHover={{backgroundColor:"#C7A980"}}
+            whileHover={{backgroundColor:"#d0d0d0"}}
             whileTap="tap"
-            onClick={() => alert('프리미엄 서비스 체험 페이지로 이동합니다!')}
+            onClick={() => window.location.href = '/login'}
           >
             지금 바로 ASTOCK 시작하기 ✨
           </motion.button>
-          <motion.p className="cta-subtext" variants={itemVariants} style={{marginTop: '15px', fontSize: '0.9em', opacity: 0.8}}>
-            첫 달 무료 체험 혜택을 놓치지 마세요!
-          </motion.p>
+
         </motion.div>
       </SectionWrapper>
+      {/* SectionWrapper sectionIndex={3} (클래스 이름 "section4") 수정 끝 */}
 
-      <SectionWrapper sectionIndex={4} className="section5" onSectionRef={assignSectionRef}>
+      {/* <SectionWrapper sectionIndex={4} className="section5" onSectionRef={assignSectionRef}>
         <motion.div className="section-content feature-section-layout" variants={staggerContainerVariants}>
           <motion.div className="feature-text-content" variants={itemVariants}>
             <motion.h2 variants={sectionTitleVariants}>실시간 뉴스 분석 📰<br/>시장의 맥을 짚다</motion.h2>
@@ -476,7 +546,7 @@ export default function MainPage() {
             <motion.span className="icon-emphasis large-icon" style={{fontSize: '4em', animationDelay: '0.4s'}} whileHover={{color: '#64ffda'}}>📈</motion.span>
           </motion.div>
         </motion.div>
-      </SectionWrapper>
+      </SectionWrapper> */}
 
       <motion.footer
         className="mainpage-footer"

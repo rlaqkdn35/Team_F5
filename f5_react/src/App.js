@@ -53,7 +53,6 @@ import StockchatWidget from './pages/AiInfoPage/components/Stockchatwidget.jsx';
 
 
 
-
 function ProtectedElement({ currentUser, children }) {
     const location = useLocation();
     if (!currentUser) {
@@ -122,10 +121,10 @@ function App() {
                     <Header isLoggedIn={!!currentUser} onLogout={handleLogout} />
                     <main className="app-main-content-centered">
                         <Routes>
-                            <Route path="/Main" element={<MainPage />} />
+                            <Route path="/" element={<MainPage />} />
 
                             {/* AI INFO */}
-                            <Route path="/" element={<Navigate to="/ai-info" replace />} />
+                            {/* <Route path="/" element={<Navigate to="/ai-info" replace />} /> */}
                             <Route path="/ai-info" element={<AiInfoPageLayout />}>
                                 <Route index element={<AiInfoHomeContentPage />} />
                                 <Route path="price-analysis" element={<PriceAnalysisContent />} />

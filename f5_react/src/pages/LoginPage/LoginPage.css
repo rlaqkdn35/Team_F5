@@ -3,7 +3,7 @@
 .login-page-container {
   display: flex;
   min-height: 100vh; /* 최소 화면 높이만큼 채우도록 설정 */
-  background: linear-gradient(135deg, var(--color-background-menubar) 0%, #914a07 100%);
+  background: linear-gradient(135deg, #ddd 0%, #777777 100%);
   overflow: hidden; /* 스크롤바 방지 */
   border-radius: 8px;
 }

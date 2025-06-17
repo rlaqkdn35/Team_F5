@@ -15,6 +15,7 @@ body {
   color: var(--color-text-dark); /* 변경: #4A3B31 -> var(--color-text-dark) */
   line-height: 1.6;
   overflow-x: hidden;
+
 }
 
 .mainpage-container {
@@ -64,6 +65,7 @@ body {
   text-align: center;
   z-index: 2;
   position: relative;
+
 }
 
 .section h2 {
@@ -71,7 +73,7 @@ body {
   font-weight: 700;
   margin-bottom: 1.5rem;
   line-height: 1.3;
-  color: var(--color-background-menubar); /* 변경: #8C5A3A -> var(--color-background-menubar) */
+  color: var(--color-text-white); /* 변경: #8C5A3A -> var(--color-background-menubar) */
 }
 .section h2 strong {
   color: var(--color-button-yellow); /* 변경: #D48C51 -> var(--color-button-yellow) */
@@ -80,7 +82,21 @@ body {
 /* --- Section 1: Main Banner --- */
 .section1 {
   background-color: var(--color-background-menubar); /* 변경: #3d2e25 -> var(--color-background-menubar) */
+  position: relative;
 }
+.content-container {
+    position: absolute; /* 이 컨테이너를 .section1 내에서 자유롭게 배치 */
+    top: 10%; /* 원하는 상단 위치 */
+    right: 10%; /* 원하는 오른쪽 위치 */
+    /* 또는 left, bottom 속성을 사용하여 조절 */
+
+    display: flex; /* 자식 요소들을 세로로 정렬 */
+    flex-direction: column; /* 세로 정렬 */
+    align-items: flex-end; /* 오른쪽 정렬 (텍스트와 버튼이 오른쪽으로 정렬됩니다) */
+    /* 또는 align-items: center; 로 중앙 정렬 */
+    z-index: 10; /* 배경 이미지 위에 오도록 z-index 설정 */
+}
+
 
 .background-chart-image {
   position: absolute;
@@ -88,38 +104,37 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZmluYW5jZSUyMGRhdGExfGVufDB8fDB8fHww%3D&auto=format&fit=crop&w=1920&q=80');
+  background-image: url('./흑우.png'); /* 올바른 사용법 */
   background-size: cover;
   background-position: center;
-  filter: brightness(0.5) contrast(1.1) sepia(0.2);
+  background-repeat: no-repeat; /* ⭐ 가장 중요: 이미지가 반복되지 않도록 설정 */
   z-index: 0;
 }
 
 .chart-recommend-text {
-  position: absolute;
-  top: clamp(20px, 10vh, 80px);
-  right: clamp(20px, 7vw, 70px);
-  background: rgba(73, 75, 86, 0.8); /* 변경: rgba(74, 59, 49, 0.8) -> rgba(var(--color-background-menubar-rgb), 0.8) */
-  backdrop-filter: blur(5px);
-  color: var(--color-text-white); /* 변경: #F5E9D3 -> var(--color-text-white) */
-  padding: clamp(1rem, 2.5vw, 1.8rem);
-  border-radius: 12px;
-  font-size: clamp(1rem, 2vw, 1.5rem);
-  font-weight: 500;
-  text-align: right;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--color-button-yellow); /* 변경: rgba(212, 140, 81, 0.3) -> var(--color-button-yellow) (opacity removed for clarity) */
-  z-index: 3;
+  background-color: var(--color-background-menubar);
+  padding: 10px 20px;
+  border-radius: 8px;
+    text-align: right; /* 텍스트 오른쪽 정렬 */
+    margin-bottom: 20px; /* 텍스트와 버튼 사이 간격 */
+    /* 다른 폰트, 색상, 그림자 등의 스타일 */
+    padding-top: 30px;
+    padding-bottom: 20px;
 }
+
 .chart-recommend-text p {
   margin-bottom: 0.5rem;
   color: var(--color-text-white); /* 변경: #FFFBF0 -> var(--color-text-white) */
   font-weight: 600;
+  font-size: clamp(1.2rem, 3vw, 1.2rem); /* 글자 크기 키움: 기본값 1.2rem, 뷰포트 너비에 따라 3vw까지 커지고 최대 2rem */
+  padding: 0px 0px;
 }
 .chart-recommend-text .sub-text {
+  color: var(--color-text-white);
   font-size: clamp(0.75rem, 1.5vw, 1rem);
   opacity: 0.85;
   display: block;
+  font-weight: bold;
 }
 
 .scroll-prompt {
@@ -140,156 +155,222 @@ body {
 .scroll-prompt:hover {
   color: var(--color-button-yellow); /* 변경: #D48C51 -> var(--color-button-yellow) */
 }
-
-/* --- Section 2: AI Model Recommends --- */
-.section2 {
-  background-color: var(--color-background-white-red); /* 변경: #F5E9D3 -> var(--color-background-white-red) */
+/* ASTOCK 바로가기 버튼 스타일 */
+.astock-button {
+    background-color: var(--color-background-menubar); /* 버튼 배경색 */
+    color: white; /* 버튼 글자색 */
+    padding: 15px 30px; /* 버튼 패딩 */
+    border: none; /* 테두리 없애기 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    font-size: 1.2em; /* 폰트 크기 */
+    cursor: pointer; /* 마우스 오버 시 포인터 변경 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+    transition: background-color 0.3s ease; /* 호버 시 부드러운 전환 효과 */
+    /* 필요한 경우 margin-top 등을 이용해 위 요소와의 간격 조정 */
 }
 
+.astock-button:hover {
+    background-color: var(--color-background-body); /* 호버 시 배경색 변경 */
+    color: var(--color-text-dark);
+}
+
+/* 추가적으로, .sub-text도 오른쪽 정렬을 위해 필요하다면 여기에 추가 스타일링 */
+.chart-recommend-text .sub-text {
+    display: block; /* span이 한 줄을 차지하도록 */
+    /* text-align: right; 이미 부모에서 정렬했으므로 필요 없을 수도 있습니다. */
+}
+/* --- Section 2: AI Model Recommends --- */
+.section2 {
+    background-color: var(--color-background-black); /* 배경색을 검정 계열 변수로 변경 */
+    color: var(--color-text-white); /* 기본 글자색을 흰색으로 변경 */
+}
+
+/* AI 모델 카드 그리드 (기존 유지, 필요시 gap 등 조절) */
 .ai-model-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: clamp(1.5rem, 3vw, 2.5rem);
-  margin-top: 2rem;
-  width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    margin-top: 2rem;
+    width: 100%;
 }
 
 .ai-model-card {
-  background-color: var(--color-background-body); /* 변경: #FFFBF0 -> var(--color-background-body) */
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* 그림자 색상 일반화 */
-  text-align: left;
-  border: 1px solid var(--color-background-white-red); /* 변경: #E0D5C1 -> var(--color-background-white-red) */
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    background-color: var(--color-background-dark-card); /* 카드 배경색을 어두운 계열로 변경 */
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4); /* 그림자를 더 진하게 변경 */
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
+
 .ai-model-card:hover {
-  border-color: var(--color-button-yellow); /* 변경: #D48C51 -> var(--color-button-yellow) */
+    transform: translateY(-8px); /* 호버 시 살짝 위로 뜨는 애니메이션 */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6); /* 호버 시 그림자 더 진하게 */
+    border-color: var(--color-button-yellow); /* 강조색 유지 */
 }
 
 .ai-icon-wrapper {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 2rem;
-  color: var(--color-text-white); /* 변경: #fff -> var(--color-text-white) */
-  margin-bottom: 1rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* 그림자 색상 일반화 */
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    color: var(--color-button-yellow); /* 아이콘 색상을 강조색으로 변경 (또는 white) */
+    margin-bottom: 1rem;
+    background-color: rgba(var(--color-button-yellow-rgb), 0.2); /* 아이콘 배경색 추가 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* 아이콘 그림자 더 진하게 */
 }
 
 .ai-model-card h3 {
-  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
-  margin-bottom: 0.75rem;
-  color: var(--color-background-menubar); /* 변경: #6B4F40 -> var(--color-background-menubar) */
-  font-weight: 600;
+    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+    margin-bottom: 0.75rem;
+    color: var(--color-text-white); /* 제목 글자색을 흰색으로 변경 */
+    font-weight: 600;
 }
 
 .ai-model-card p {
-  font-size: clamp(0.85rem, 1.8vw, 0.95rem);
-  color: var(--color-text-dark); /* 변경: #7F6A5C -> var(--color-text-dark) */
-  line-height: 1.7;
+    font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+    color: var(--color-text-light-grey); /* 본문 글자색을 밝은 회색으로 변경 */
+    line-height: 1.7;
 }
 
 .card-decoration {
-  position: absolute;
-  bottom: -20px;
-  right: -20px;
-  width: 80px;
-  height: 80px;
-  background-color: rgba(var(--color-button-yellow-rgb), 0.1); /* 변경: rgba(212, 140, 81, 0.1) -> var(--color-button-yellow)의 rgba 값 */
-  border-radius: 50%;
-  transform: rotate(45deg);
-  opacity: 0.7;
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    background-color: rgba(var(--color-button-yellow-rgb), 0.1);
+    border-radius: 50%;
+    transform: rotate(45deg);
+    opacity: 0.7;
 }
-
 /* --- Section 3: User Stats & Accuracy --- */
+/* --- Section 3: ASTOCK 신뢰도 --- */
 .section3 {
-  background-color: var(--color-background-white-red); /* 변경: #E0D5C1 -> var(--color-background-white-red) */
-}
-.section3 h2 {
-  color: var(--color-button-yellow); /* 변경: #B87333 -> var(--color-button-yellow) */
+    background: linear-gradient(
+      -45deg,
+      #FFFDD0, /* 크림색/밝은 노란색 (시작) */
+      #FFFACD, /* 레몬 쉬폰 */
+      #FFEBCD, /* 블란치드 아몬드 (따뜻한 베이지) */
+      #F5DEB3, /* 밀짚색 */
+      #FFD700  /* 골드 (끝) */
+    );
+    background-size: 400% 400%; /* 그라데이션 크기를 키워서 움직일 공간 확보 */
+    animation: gradientShift 15s ease infinite; /* 애니메이션 적용 */
+    color: var(--color-text-white); /* 섹션 전체 기본 글자색 (흰색 계열) */
+    display: flex; /* 섹션 내용 중앙 정렬을 위해 추가 */
+    flex-direction: column; /* 내용 세로 정렬 */
+    justify-content: center; /* 세로 중앙 정렬 */
+    align-items: center; /* 가로 중앙 정렬 */
+    padding: 4rem 2rem; /* 패딩 추가 (기존 설정에 따라 조절) */
 }
 
-.stats-flex-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: clamp(1.5rem, 3vw, 2.5rem);
-  justify-content: center;
-  align-items: stretch;
-  margin-top: 2rem;
+/* 그라데이션 움직임 키프레임 애니메이션 */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
+
+.section3 h2 {
+    color: var(--color-button-yellow); /* 제목색 유지 */
+    /* 필요 시 텍스트 그림자 추가: text-shadow: 0 0 10px rgba(var(--color-button-yellow-rgb), 0.5); */
+}
+
+/* 기존 카드 및 텍스트 스타일은 유지하되, 색상만 어두운 배경에 맞게 조정 */
 
 .stat-item-card {
-  background-color: var(--color-background-body); /* 변경: #FFFBF0 -> var(--color-background-body) */
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* 그림자 색상 일반화 */
-  flex: 1 1 300px;
-  max-width: 450px;
-  text-align: center;
+    background-color: #f5e23c; /* 어두운 카드 배경색 */
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    border-radius: 12px;
+    flex: 1 1 300px;
+    max-width: 450px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 호버 애니메이션 추가 고려 */
+}
+
+.stat-item-card:hover {
+    transform: translateY(-5px); /* 호버 시 살짝 뜨는 효과 */
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6); /* 호버 시 그림자 더 진하게 */
 }
 
 .stat-item-card h3 {
-  font-size: clamp(1.1rem, 2vw, 1.3rem);
-  color: var(--color-background-menubar); /* 변경: #6B4F40 -> var(--color-background-menubar) */
-  margin-bottom: 1rem;
-  font-weight: 500;
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    color: var(--color-text-white); /* 제목 글자색 흰색 */
+    margin-bottom: 1rem;
+    font-weight: 500;
 }
 
 .stat-number-large {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 700;
-  color: var(--color-button-yellow); /* 변경: #B87333 -> var(--color-button-yellow) */
-  margin-bottom: 0.5rem;
-  line-height: 1.1;
-}
-.stat-number-large span {
-  display: inline-block;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    color: var(--color-button-yellow); /* 큰 숫자 강조색 유지 */
+    margin-bottom: 0.5rem;
+    line-height: 1.1;
 }
 
 .stat-description {
-  font-size: clamp(0.8rem, 1.5vw, 0.9rem);
-  color: var(--color-text-dark); /* 변경: #7F6A5C -> var(--color-text-dark) */
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    color: var(--color-text-light-grey); /* 설명 글자색 밝은 회색 */
 }
 
 .accuracy-bar-wrapper {
-  width: 90%;
-  max-width: 300px;
-  height: 20px;
-  background-color: var(--color-background-white-red); /* 변경: #D4C8BC -> var(--color-background-white-red) */
-  border-radius: 10px;
-  margin: 1rem auto 0.5rem;
-  overflow: hidden;
+    background-color: var(--color-border-dark-card); /* 바 배경색도 어둡게 */
+    margin: 1rem auto 0.5rem;
 }
 
 .accuracy-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--color-stock-positive), var(--color-stock-nagative)); /* 변경: #8FBC8F, #778D6A -> var(--color-stock-positive), var(--color-stock-nagative) */
-  border-radius: 10px;
-  box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+    /* 기존 그라데이션 색상을 사용하되, 어두운 배경에 더 잘 보이도록 조정 */
+    background: linear-gradient(90deg, var(--color-stock-positive), var(--color-stock-negative));
+    /* 만약 --color-stock-nagative가 너무 어두우면, 더 밝은 색으로 변경 고려 */
+    box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.2); /* 그림자도 어둡게 */
+}
+.stats-flex-container {
+  display: flex;
+  justify-content: center; /* 가로 방향으로 가운데 정렬 */
+  align-items: center;   /* 세로 방향으로 가운데 정렬 (아이템 높이가 다를 경우 유용) */
+  gap: 40px;             /* 항목들 사이에 고정된 간격 추가 (선택 사항, 아래 설명 참조) */
+  /* 또는 justify-content: space-around; / justify-content: space-between; */
+}
+/* --- Section 4: Profitability & CTA --- */
+/* MainPage.css 또는 해당 컴포넌트의 CSS 파일에 추가 */
+@keyframes fall {
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg); /* 화면 끝까지 떨어지도록 */
+    opacity: 0.7;
+  }
 }
 
-/* --- Section 4: Profitability & CTA --- */
+/* 추가적으로, 이모지가 섹션 밖으로 넘어가지 않도록 */
 .section4 {
-  background: linear-gradient(135deg, var(--color-button-yellow) 0%, var(--color-background-menubar) 100%); /* 변경: #D48C51 -> var(--color-button-yellow), #A0522D -> var(--color-background-menubar) */
-  color: var(--color-text-white); /* 변경: #FFFBF0 -> var(--color-text-white) */
+  background-color: #F0E68C;
+   position: relative; /* 이미 인라인 스타일에 추가했지만, 클래스에도 명시 권장 */
+  overflow: hidden; /* 이모지가 이 섹션 안에서만 보이도록 */
 }
 .section4 h2 {
   color: var(--color-text-white); /* 변경: #FFFBF0 -> var(--color-text-white) */
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
-.section4 h2 strong {
-  color: var(--color-background-white-red); /* 변경: #F5E9D3 -> var(--color-background-white-red) */
-}
+
 
 .profit-highlight-area {
   margin-bottom: 2.5rem;
-  background: rgba(var(--color-text-white-rgb), 0.12); /* 변경: rgba(255,251,240,0.12) -> var(--color-text-white)의 rgba 값 */
+  background-color:#ffee5a; /* 변경: rgba(255,251,240,0.12) -> var(--color-text-white)의 rgba 값 */
   padding: clamp(1.5rem, 3vw, 2.5rem);
   border-radius: 15px;
   display: inline-block;
@@ -313,6 +394,7 @@ body {
 }
 
 .cta-button-primary {
+  margin-left: 20px;
   background-color: var(--color-button); /* 변경: #C07848 -> var(--color-button) */
   color: var(--color-text-white); /* 변경: #FFFBF0 -> var(--color-text-white) */
   padding: clamp(0.9rem, 1.8vw, 1.2rem) clamp(1.8rem, 3.6vw, 2.5rem);
@@ -325,7 +407,6 @@ body {
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 .cta-button-primary:hover {
-  background-color: var(--color-background-submenubar); /* 변경: #A0522D -> var(--color-background-submenubar) (메뉴바 서브 색상으로 대체) */
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* 그림자 색상 일반화 */
 }
 

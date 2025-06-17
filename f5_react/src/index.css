@@ -18,7 +18,10 @@
     font-style: normal;
 }
 :root {
-
+ --color-background-black: #1A1A1A; /* 거의 검은색 */
+  --color-background-dark-card: #2B2B2B; /* 카드 배경색 */
+  --color-border-dark-card: #444444; /* 카드 테두리색 */
+  
   --color-background-menubar: #494B56;
   --color-background-submenubar: #707073;
   --color-background-body: #ffffff;
@@ -69,7 +72,8 @@ code {
 body.main-page-active .app-left-sidebar,
 body.main-page-active .app-body-layout-3col nav,
 body.main-page-active .app-right-sidebar,
-body.main-page-active .app-footer {
+body.main-page-active .app-footer,
+body .fullscreen-overlay {
  display: none !important;
 }
 
