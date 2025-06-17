@@ -42,17 +42,21 @@ const StockDetailPage = ({ currentUser }) => {
         const stockResponse = await axios.get(`${API_BASE_URL}/stocks/stockinfo/${stockCode}`); // 경로 변경 (stockinfo 제거)
         const stockInfo = stockResponse.data;
 
+        // 2. 최신 시세 정보 가져오기 (StockPrice 엔티티에서 정보)
+        const priceResponse = await axios.get(`${API_BASE_URL}/stock/latest/${stockCode}`);
+        const latestPriceData = priceResponse.data; // 최신 시세 데이터
+
+        // 모든 데이터 통합하여 상태 업데이트
         setStockData({
           name: stockInfo.stockName,
-          // Stock 엔티티에 currentPrice, changeRate 필드가 없으므로, 필요하다면 StockPrice에서 최신 값을 가져와야 합니다.
-          // 여기서는 예시를 위해 임의의 값이나 StockPrice에서 가져오는 로직을 추가해야 합니다.
-          price: 'N/A', // 예시: StockPrice에서 가져와야 함
-          changeRate: 'N/A', // 예시: StockPrice에서 가져와야 함
-          changeType: 'neutral', // 예시: StockPrice에서 가져와야 함
+          // StockPrice에서 가져온 값 사용
+          price: latestPriceData.closePrice ? latestPriceData.closePrice.toLocaleString() : 'N/A', // 종가 사용
+          changeRate: latestPriceData.stockFluctuation ? `${latestPriceData.stockFluctuation.toFixed(2)}%` : 'N/A', // 변동률 사용
+          changeType: latestPriceData.stockFluctuation > 0 ? 'positive' : (latestPriceData.stockFluctuation < 0 ? 'negative' : 'neutral'),
           updateTime: new Date().toLocaleTimeString('ko-KR'),
-          companyOverview: stockInfo.companyInfo || '기업 개요 정보가 없습니다.', // company_info 필드 사용
+          companyOverview: stockInfo.companyInfo || '기업 개요 정보가 없습니다.',
         });
-
+        
         // 2. 관심 종목 여부 확인 (사용자가 로그인 되어 있을 때만)
         if (currentUser && currentUser.userId) {
           const favoriteCheckResponse = await axios.get(`${API_BASE_URL}/userfav/${currentUser.userId}/favorites/check/${stockCode}`);
@@ -98,12 +102,12 @@ const StockDetailPage = ({ currentUser }) => {
         // 관심 종목 해제 (DELETE 요청)
         await axios.delete(`${API_BASE_URL}/userfav/${currentUser.userId}/favorites/${stockCode}`);
         setIsFavorite(false); // 상태 업데이트
-        console.log(`${stockCode} 관심종목에서 삭제되었습니다.`);
+        // console.log(`${stockCode} 관심종목에서 삭제되었습니다.`);
       } else {
         // 관심 종목 설정 (POST 요청)
         await axios.post(`${API_BASE_URL}/userfav/${currentUser.userId}/favorites/${stockCode}`);
         setIsFavorite(true); // 상태 업데이트
-        console.log(`${stockCode} 관심종목에 추가되었습니다.`);
+        // console.log(`${stockCode} 관심종목에 추가되었습니다.`);
       }
     } catch (err) {
       console.error("관심 종목 업데이트 실패:", err);

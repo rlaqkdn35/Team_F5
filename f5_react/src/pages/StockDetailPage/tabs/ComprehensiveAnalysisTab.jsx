@@ -50,6 +50,8 @@ const ComprehensiveAnalysisTab = ({ stockData, stockCode }) => {
     return <p className="loading-message-cat">종목 정보를 불러오는 중입니다...</p>; // CAT: ComprehensiveAnalysisTab
   }
 
+  const companyOverviewText = stockData.companyOverview || '기업 개요 정보가 없습니다.';
+
   return (
     <div className="comprehensive-analysis-tab">
       <section className="company-overview-section-cat">
@@ -57,7 +59,7 @@ const ComprehensiveAnalysisTab = ({ stockData, stockCode }) => {
         {loadingChart ? (
           <p>기업 개요 로딩 중...</p>
         ) : (
-          <p className="overview-text-cat">{companyOverview}</p>
+          <p className="overview-text-cat">{companyOverviewText}</p>
         )}
       </section>
 

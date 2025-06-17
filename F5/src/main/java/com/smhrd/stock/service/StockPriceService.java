@@ -10,7 +10,6 @@ import com.smhrd.stock.dto.StockPriceWithNameDto;
 import com.smhrd.stock.entity.StockPrice;
 import com.smhrd.stock.repository.StockPriceRepository;
 
-import jakarta.transaction.Transactional;
 
 @Service
 public class StockPriceService {
@@ -25,13 +24,18 @@ public class StockPriceService {
         return stockPriceRepository.findLatestPerStockCodeByDate(date);
     }
     
-//    public List<StockPrice> getAllStockPrices() {
-//        return stockPriceRepository.findAll();
-//    }
-//
-//    public StockPrice getStockPriceById(Long priceId) {
-//        return stockPriceRepository.findById(priceId).orElse(null);
-//    }
+    /**
+     * 특정 주식 코드의 가장 최신 시세 데이터를 조회합니다.
+     * @param stockCode 조회할 주식 코드
+     * @return 가장 최신 StockPrice 객체 (없으면 null)
+     */
+    public StockPrice getStockPriceByStockCodeLatest(String stockCode) {
+        // findTopByStock_StockCodeOrderByPriceDateDesc 메서드는 Optional<StockPrice>를 반환합니다.
+        // 따라서 .orElse(null)을 사용하여 Optional이 비어있을 경우 null을 반환하도록 합니다.
+        return stockPriceRepository.findTopByStock_StockCodeOrderByPriceDateDesc(stockCode).orElse(null);
+    }
+    
+    
 
     public List<StockPrice> getStockPricesByStockCode(String stockCode) {
         return stockPriceRepository.findByStock_StockCodeOrderByPriceDateAsc(stockCode);
