@@ -87,7 +87,20 @@ public class SecurityConfig {
                     "/static/**", "/favicon.ico", "/js/**", "/css/**", "/images/**",
                     // 공개 API
                     "/keyword/keywordData",
-                    "/public-api/**"
+                    "/public-api/**",
+                 // 채팅 메시지 저장 API 경로 추가
+                    "/chat/message", // 메시지 저장 API
+                    "/chat/message/**", // 혹시 하위 경로가 생길 경우 대비
+
+                    // 채팅 이력 조회 API 경로 추가 (필요하다면)
+                    "/chat/history/**", // 채팅 이력 조회
+                    "/chat/room-id/**", // croom_idx 조회 API (만약 추가했다면)
+
+                    // 웹소켓 연결 경로는 일반적으로 Spring Security의 HTTP 요청 필터 체인을 거치지 않습니다.
+                    // 웹소켓 자체의 인증/인가 처리는 별도로 WebSocketHandler 등에서 구현해야 합니다.
+                    // 하지만 웹소켓 핸드셰이크 요청이 HTTP이므로, `/ws/chat` 경로도 permitAll이 필요할 수 있습니다.
+                    "/ws/chat", // 웹소켓 핸드셰이크 요청
+                    "/ws/chat/**" // 웹소켓 핸드셰이크 요청
                 ).permitAll() // 위에 명시된 경로들은 인증 없이 접근 허용   
                 .anyRequest().authenticated() // 그 외 모든 요청은 반드시 인증 필요
             )

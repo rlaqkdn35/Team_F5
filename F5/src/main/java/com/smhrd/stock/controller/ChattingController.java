@@ -2,6 +2,7 @@ package com.smhrd.stock.controller;
 
 import com.smhrd.stock.entity.Chatting;
 import com.smhrd.stock.service.ChattingService;
+import com.smhrd.stock.service.CroomService;
 
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -32,9 +33,44 @@ public class ChattingController {
 
     private final ChattingService chattingService; // ChattingService 주입 (생성자 주입 방식 권장)
 
+	private final CroomService croomService;
+
     // 생성자 주입 (Lombok의 @RequiredArgsConstructor를 사용하면 이 생성자 코드는 자동으로 생성됨)
-    public ChattingController(ChattingService chattingService) {
+    public ChattingController(ChattingService chattingService, CroomService croomService) {
         this.chattingService = chattingService;
+        this.croomService = croomService;
+    }
+    
+    /**
+     * 종목 코드(stockCode)를 통해 해당 종목에 연결된 채팅방의 croom_idx를 조회하거나 생성합니다.
+     * GET /F5/chat/room-id/{stockCode}
+     * @param stockCode 조회할 종목 코드
+     * @return Map containing "croomIdx" if found/created, or error message
+     */
+    @GetMapping("/room-id/{stockCode}")
+    public ResponseEntity<Map<String, Object>> getCroomIdxByStockCode(@PathVariable("stockCode") String stockCode) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // ChattingService를 통해 croomIdx를 조회하거나 새로 생성
+        	Integer croomIdx = croomService.getOrCreateCroomIdxByStockCode(stockCode);
+
+            if (croomIdx != null) {
+                response.put("success", true);
+                response.put("croomIdx", croomIdx);
+                logger.info("종목 코드 '{}'에 대한 채팅방 ID '{}' 조회/생성 성공", stockCode, croomIdx);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.put("success", false);
+                response.put("message", "해당 종목 코드에 매핑된 채팅방 ID를 찾거나 생성할 수 없습니다.");
+                logger.warn("종목 코드 '{}'에 대한 채팅방 ID를 찾거나 생성할 수 없습니다.", stockCode);
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR); // 이 경우는 서비스 로직에서 null 반환 안되게 방어
+            }
+        } catch (Exception e) {
+            logger.error("종목 코드 '{}'로 채팅방 ID 조회/생성 중 오류 발생: {}", stockCode, e.getMessage(), e);
+            response.put("success", false);
+            response.put("message", "채팅방 ID 조회/생성 중 서버 오류 발생: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -43,11 +79,11 @@ public class ChattingController {
      * @param prj_idx 프로젝트 인덱스 (채팅방 인덱스에 매핑)
      * @return 채팅 메시지 목록과 성공 여부를 포함하는 응답
      */
-    @GetMapping("/history/{prj_idx}")
-    public ResponseEntity<Map<String, Object>> chatList(@PathVariable("prj_idx") int prj_idx) {
+    @GetMapping("/history/{croomIdx}")
+    public ResponseEntity<Map<String, Object>> chatList(@PathVariable("croomIdx") int croomIdx) {
         try {
             // ChattingService를 통해 채팅 이력 조회
-            List<Chatting> chatList = chattingService.getChatHistory(prj_idx);
+            List<Chatting> chatList = chattingService.getChatHistory(croomIdx);
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("messages", chatList);

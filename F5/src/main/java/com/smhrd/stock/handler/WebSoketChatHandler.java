@@ -68,6 +68,7 @@ public class WebSoketChatHandler extends TextWebSocketHandler {
      */
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+    	System.out.println("handleTextMessage 호출됨: " + message.getPayload());
         String payload = message.getPayload(); // 메시지 페이로드 (JSON 문자열)
         // JSON 문자열을 Chatting 객체로 역직렬화
         Chatting chatMessage = objectMapper.readValue(payload, Chatting.class);

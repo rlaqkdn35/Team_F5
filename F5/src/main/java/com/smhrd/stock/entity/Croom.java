@@ -25,11 +25,12 @@ public class Croom {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "croom_idx", nullable = false)
-	private int croomIdx;
+	private Integer croomIdx; // PK
 	
-	@ManyToOne
+	@ManyToOne // 단일 Croom은 하나의 Stock에 매핑
 	@JoinColumn(name = "stock_code", referencedColumnName = "stock_code")
-	private Stock stock_code;
+	private Stock stock; // Stock 엔티티와의 연관 관계
+	
 	private String croom_title;
 	
 	@Lob

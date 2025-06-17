@@ -1,5 +1,7 @@
 package com.smhrd.stock.entity;
 
+
+
 import java.sql.Timestamp;
 
 import jakarta.persistence.Column;
@@ -9,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -45,7 +48,8 @@ public class Chatting {
 	private Timestamp createdAt;
 	
 	 // --- MessageType 필드 추가 (이전 답변에서 누락된 부분) ---
-    @Column(name = "message_type", nullable = false)
+    // @Column(name = "message_type", nullable = false)
+	@Transient
     private String messageType; // 메시지 타입 (ENTER, QUIT, TALK)
 
     // MessageType 상수는 Chatting 클래스 내부에 두는 것이 맞습니다.

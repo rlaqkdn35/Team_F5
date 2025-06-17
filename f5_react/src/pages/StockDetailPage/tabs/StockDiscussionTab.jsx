@@ -56,12 +56,12 @@ const StockDiscussionTab = ({ stockCode, currentUser }) => {
 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  // const [userList, setUserList] = useState([]); // 참여자 목록 상태 제거
+  const [croomIdx, setCroomIdx] = useState(null); // croomIdx 상태 추가
+  const [loadingChat, setLoadingChat] = useState(true); // 채팅 로딩 상태 추
   const messagesEndRef = useRef(null); // 새 메시지 추가 시 자동 스크롤을 위한 ref
   const socketRef = useRef(null); // WebSocket 객체를 직접 저장
   const currentUserId = currentUser?.nickname || currentUser?.userId || "게스트";
-  const croomIdx = stockCode; // 종목 코드를 채팅방 ID (croom_idx)로 사용
-  // const [fileList, setFileList] = useState([]); // 파일 목록 상태 제거
+
 
   // --- Utility Functions ---
   const handleScrollToBottom = useCallback(() => {
@@ -80,51 +80,82 @@ const StockDiscussionTab = ({ stockCode, currentUser }) => {
 
 
   // --- 메시지 전송 로직 ---
-  const handleSendMessage = useCallback(async (e) => {
+const handleSendMessage = useCallback(async (e) => {
     e.preventDefault();
     if (!currentUser) { // 로그인 여부 확인 추가
-      alert('로그인 후 메시지를 전송할 수 있습니다.');
-      return;
+        alert('로그인 후 메시지를 전송할 수 있습니다.');
+        return;
     }
     if (newMessage.trim() === '') return;
 
     const messageToSend = {
-      messageType: MessageType.TALK,
-      chat_content: newMessage,
-      chat_id: currentUserId,
-      croomIdx: croomIdx, // stockCode를 croom_idx로 사용
-      createdAt: new Date().toISOString()
+        messageType: MessageType.TALK,
+        chat_content: newMessage,
+        chat_id: currentUserId,
+        croomIdx: croomIdx, // stockCode를 croom_idx로 사용
+        createdAt: new Date().toISOString()
     };
 
-    // UI에 즉시 낙관적 업데이트
+    // UI에 즉시 낙관적 업데이트 (서버 응답 전에 미리 보여줌)
     const uiMessage = {
-      chat_idx: `temp_${Date.now()}`, // 임시 ID
-      ...messageToSend
+        chat_idx: `temp_${Date.now()}`, // 임시 ID
+        ...messageToSend
     };
     setMessages(prevMessages => [...prevMessages, uiMessage]);
     setNewMessage('');
 
     try {
-      // 서버에 메시지 저장 요청 (REST API)
-      const response = await axios.post('http://localhost:8084/F5/chat/message', messageToSend);
-
-      if (response.data === "success") {
+        // --- 여기를 수정합니다! ---
+        // 서버에 메시지 저장 요청 (REST API) 부분을 제거하고,
+        // 웹소켓을 통해서만 메시지를 전송하도록 합니다.
         if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-          socketRef.current.send(JSON.stringify(messageToSend));
+            socketRef.current.send(JSON.stringify(messageToSend));
+            // 메시지가 웹소켓을 통해 서버에 도달하면, 서버가 DB에 저장하고
+            // 다시 모든 클라이언트에게 브로드캐스트할 것입니다.
+            // 따라서 여기서 별도의 성공/실패 처리는 웹소켓의 onmessage에서 담당합니다.
         } else {
-          console.warn('웹소켓 연결이 없거나 닫혀 있습니다. 메시지가 다른 사용자에게 전달되지 않을 수 있습니다.');
+            console.warn('웹소켓 연결이 없거나 닫혀 있습니다. 메시지가 다른 사용자에게 전달되지 않을 수 있습니다.');
+            alert('채팅 서버 연결에 문제가 있어 메시지 전송에 실패했습니다.');
+            setMessages(prevMessages => prevMessages.filter(msg => msg.chat_idx !== uiMessage.chat_idx)); // 롤백
         }
-      } else {
-        console.error('메시지 저장 실패 (서버 응답):', response.data);
-        alert('메시지 저장에 실패했습니다.');
-        setMessages(prevMessages => prevMessages.filter(msg => msg.chat_idx !== uiMessage.chat_idx)); // 롤백
-      }
+        // --- 수정 끝 ---
+
     } catch (error) {
-      console.error('메시지 저장 중 오류 발생:', error);
-      alert('메시지 저장 중 오류가 발생했습니다.');
-      setMessages(prevMessages => prevMessages.filter(msg => msg.chat_idx !== uiMessage.chat_idx)); // 롤백
+        // 웹소켓 send 자체에서 발생하는 동기적 오류 처리
+        console.error('메시지 전송 중 오류 발생:', error);
+        alert('메시지 전송 중 오류가 발생했습니다.');
+        setMessages(prevMessages => prevMessages.filter(msg => msg.chat_idx !== uiMessage.chat_idx)); // 롤백
     }
-  }, [newMessage, currentUserId, croomIdx, currentUser]); // currentUser 의존성 추가
+}, [newMessage, currentUserId, croomIdx, currentUser]); // currentUser 의존성 추가
+
+  // --- 1. stockCode로 croomIdx 조회 ---
+  useEffect(() => {
+    const fetchCroomIdx = async () => {
+      setLoadingChat(true); // 로딩 시작
+      try {
+        // stockCode를 사용하여 백엔드로부터 croomIdx를 조회
+        const response = await axios.get(`http://localhost:8084/F5/chat/room-id/${stockCode}`);
+        if (response.data.success) {
+          setCroomIdx(response.data.croomIdx);
+          console.log(`종목 코드 ${stockCode}에 대한 croomIdx: ${response.data.croomIdx} 로드 성공.`);
+        } else {
+          console.error('croomIdx 조회 실패:', response.data.message);
+          //alert('채팅방 정보를 불러올 수 없습니다: ' + response.data.message);
+          setCroomIdx(null); // 실패 시 null로 설정
+        }
+      } catch (error) {
+        console.error('croomIdx 조회 중 오류 발생:', error);
+        //alert('채팅방 정보를 불러오는 중 오류가 발생했습니다.');
+        setCroomIdx(null); // 오류 시 null로 설정
+      } finally {
+        setLoadingChat(false); // 로딩 종료
+      }
+    };
+
+    if (stockCode) {
+      fetchCroomIdx();
+    }
+  }, [stockCode]); // stockCode가 변경될 때마다 croomIdx를 다시 조회
 
   // --- 초기 채팅 내역 로드 ---
   useEffect(() => {

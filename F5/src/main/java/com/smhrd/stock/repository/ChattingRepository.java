@@ -12,6 +12,8 @@ public interface ChattingRepository extends JpaRepository<Chatting, Integer> {
 
     List<Chatting> findByCroomIdxOrderByCreatedAtAsc(int croomIdx);
 
-    List<Chatting> findByCroomIdxAndChatFileIsNotNullOrderByCreatedAtDesc(int croomIdx); 
+    List<Chatting> findByCroomIdxAndChatFileIsNotNullOrderByCreatedAtDesc(int croomIdx);
+
+
 
 }
