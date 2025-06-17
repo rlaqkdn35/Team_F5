@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.smhrd.stock.dto.UserFavStockDetailDto;
 import com.smhrd.stock.entity.UserFav;
 import com.smhrd.stock.service.UserFavService;
 
@@ -71,5 +73,20 @@ public class UserFavController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("isFavorite", isFavorite);
         return ResponseEntity.ok(response); // 200 OK
+    }
+    
+    
+    @GetMapping("/list") // <-- React 요청에 맞춤: /list
+    public ResponseEntity<List<UserFavStockDetailDto>> getUserFavoriteStocks(
+            @RequestParam("userId") String userId) { 
+        if (userId == null || userId.trim().isEmpty()) {
+            System.out.println("경고: 관심 종목 조회 요청에 userId가 누락되었거나 유효하지 않습니다.");
+            return ResponseEntity.badRequest().build();
+        }
+        System.out.println("사용자 '" + userId + "'의 관심 종목 상세 목록 조회 요청 수신.");
+
+        List<UserFavStockDetailDto> favStocks = userFavService.getUserFavoriteStocksWithDetails(userId);
+
+        return ResponseEntity.ok(favStocks);
     }
 }

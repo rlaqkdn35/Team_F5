@@ -2,22 +2,34 @@ package com.smhrd.stock.service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.smhrd.stock.dto.UserFavStockDetailDto;
+import com.smhrd.stock.entity.Stock;
+import com.smhrd.stock.entity.StockPrice;
 import com.smhrd.stock.entity.UserFav;
+import com.smhrd.stock.repository.StockPriceRepository;
+import com.smhrd.stock.repository.StockRepository;
 import com.smhrd.stock.repository.UserFavRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 public class UserFavService {
-	private final UserFavRepository userFavRepository;
 
-    public UserFavService(UserFavRepository userFavRepository) {
+
+	private final UserFavRepository userFavRepository;
+    private final StockRepository stockRepository;
+    private final StockPriceRepository stockPriceRepository;
+
+    public UserFavService(UserFavRepository userFavRepository, StockRepository stockRepository, StockPriceRepository stockPriceRepository) {
         this.userFavRepository = userFavRepository;
+        this.stockRepository = stockRepository;
+        this.stockPriceRepository = stockPriceRepository;
     }
 
     /**
@@ -75,4 +87,44 @@ public class UserFavService {
     public boolean isFavorite(String userId, String stockCode) {
         return userFavRepository.findByUserIdAndStockCode(userId, stockCode).isPresent();
     }
+    
+    @Transactional
+    public List<UserFavStockDetailDto> getUserFavoriteStocksWithDetails(String userId) {
+        List<UserFav> favList = userFavRepository.findByUserId(userId);
+        // log.info 대신 System.out.println 사용
+        System.out.println("사용자 '" + userId + "'의 조회된 관심 종목 수: " + favList.size());
+
+        List<UserFavStockDetailDto> resultList = new ArrayList<>();
+
+        for (UserFav fav : favList) {
+            String stockCode = fav.getStockCode();
+
+            Optional<Stock> stockOpt = stockRepository.findByStockCode(stockCode);
+            Optional<StockPrice> latestPriceOpt = stockPriceRepository.findTopByStock_StockCodeOrderByPriceDateDesc(stockCode);
+
+            if (stockOpt.isPresent() && latestPriceOpt.isPresent()) {
+                Stock stock = stockOpt.get();
+                StockPrice latestPrice = latestPriceOpt.get();
+
+                UserFavStockDetailDto dto = new UserFavStockDetailDto(
+                    stock.getStockCode(),
+                    stock.getStockName(),
+                    latestPrice.getClosePrice(), // DTO 필드 이름이 closePrice로 변경됨
+                    latestPrice.getStockFluctuation(),
+                    latestPrice.getStockVolume()
+                );
+                resultList.add(dto);
+                // log.debug 대신 System.out.println 사용 (디버그 메시지이므로 if로 감싸지 않았습니다)
+                System.out.println("종목 코드 '" + stockCode + "': '" + stock.getStockName() + "' (최신 종가: " + latestPrice.getClosePrice() + ") 상세 정보 추가");
+            } else {
+                // log.warn 대신 System.out.println 사용
+                System.out.println("경고: 종목 코드 '" + stockCode + "'에 대한 정보가 불완전합니다. (Stock 존재: " + stockOpt.isPresent() + ", StockPrice 존재: " + latestPriceOpt.isPresent() + ")");
+            }
+        }
+        // log.info 대신 System.out.println 사용
+        System.out.println("최종 반환될 관심 종목 상세 정보 수: " + resultList.size());
+        return resultList;
+    }
+    
+    
 }

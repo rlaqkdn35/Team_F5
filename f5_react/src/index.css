@@ -73,7 +73,7 @@ body.main-page-active .app-left-sidebar,
 body.main-page-active .app-body-layout-3col nav,
 body.main-page-active .app-right-sidebar,
 body.main-page-active .app-footer,
-body .fullscreen-overlay {
+body.main-page-active .fullscreen-overlay {
  display: none !important;
 }
 

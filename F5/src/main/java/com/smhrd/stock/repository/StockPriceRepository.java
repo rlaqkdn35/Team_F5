@@ -5,14 +5,15 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
 import com.smhrd.stock.dto.StockPriceWithNameDto;
+import com.smhrd.stock.dto.TopStockResponseDto;
 import com.smhrd.stock.entity.StockPrice;
 
-public interface StockPriceRepository extends Repository<StockPrice, Long> {
+public interface StockPriceRepository extends JpaRepository<StockPrice, Long> {
 
 	@Query("SELECT new com.smhrd.stock.dto.StockPriceWithNameDto(" +
 	           "sp.priceId, " +
@@ -56,5 +57,23 @@ public interface StockPriceRepository extends Repository<StockPrice, Long> {
 	           "ORDER BY sp.priceDate ASC")
 	    List<StockPriceWithNameDto> findStockHistoryDtoByStockCodeOrderByPriceDateAsc(@Param("stockCode") String stockCode);
 
+	
+	Optional<StockPrice> findByStock_StockCodeAndPriceDate(String stockCode, Timestamp priceDate); // ✅ 수정본
+    List<StockPrice> findByPriceDate(Timestamp priceDate);
 
+    @Query("SELECT new com.smhrd.stock.dto.TopStockResponseDto(" +
+    	       "  NULL, " + // rank는 프론트에서 채울 예정
+    	       "  sp.stock.stockCode, " +
+    	       "  sp.stock.stockName, " +
+    	       "  sp.closePrice, " +
+    	       "  sp.stockFluctuation, " +
+    	       "  sp.stockVolume " +
+    	       ") " +
+    	       "FROM StockPrice sp " +
+    	       "WHERE sp.priceDate = :currentDate")
+    	List<TopStockResponseDto> findDailyTopStocksWithDetails(
+    	    @Param("currentDate") Timestamp currentDate
+    	);
+
+	
 }
