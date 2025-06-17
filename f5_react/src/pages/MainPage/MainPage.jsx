@@ -210,7 +210,7 @@ export default function MainPage() {
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
 
   useEffect(() => {
-    const splashTimer = setTimeout(() => setShowSplash(false), 1500);
+    const splashTimer = setTimeout(() => setShowSplash(false), 1000);
     const chartTextTimer = setTimeout(() => setShowChartText(true), 3300);
 
     const handleMouseMoveForHeader = (event) => {
