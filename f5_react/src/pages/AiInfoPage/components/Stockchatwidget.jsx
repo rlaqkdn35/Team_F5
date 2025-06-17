@@ -20,7 +20,6 @@ function StockchatWidget() {
     const createLeaf = () => {
       const leaf = document.createElement('div');
       leaf.classList.add('autumn-leaf'); // CSS에서 정의할 클래스
-      leaf.textContent = Math.random() > 0.5 ? '🍂' : '🍁'; // 무작위 나뭇잎 이모지
 
       // 무작위 초기 위치 및 애니메이션 속성 설정
       const startX = Math.random() * wrapper.clientWidth; // 위젯 너비 내에서 무작위 시작 X

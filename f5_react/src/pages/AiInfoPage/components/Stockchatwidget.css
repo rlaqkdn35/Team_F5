@@ -5,7 +5,7 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #8D6E63; /* 가을 테마에 맞춰 색상 변경 */
+  background-color: #48daff; /* 가을 테마에 맞춰 색상 변경 */
   color: white;
   border: none;
   border-radius: 50%;
@@ -22,7 +22,7 @@
 }
 
 .stockchat-autumn-toggle-button:hover {
-  background-color: #795548; /* 호버 시 더 진한 갈색 */
+  background-color: #48daff; /* 호버 시 더 진한 갈색 */
   transform: translateY(-2px);
 }
 
@@ -32,20 +32,23 @@
 
 /* 챗봇 위젯 창의 전체 컨테이너 */
 .stockchat-autumn-widget-wrapper {
-  position: fixed !important;
-  bottom: 90px;
-  right: 20px;
-  width: 400px; /* 고정 너비 */
-  height: 500px; /* 고정 높이 (챗봇 내용이 꽉 차도록) */
-  background-color: #5C4033; /* 위젯 창의 진한 갈색 배경 */
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-  z-index: 1000;
-  padding: 10px; /* 챗봇 내부와의 여백 */
-  overflow: hidden; /* 나뭇잎 애니메이션이 밖으로 나가지 않도록 */
-  position: relative; /* 가상 요소의 absolute 포지셔닝 기준 */
-  display: flex; /* 내부 Stockchat 컴포넌트를 위한 flex */
-  flex-direction: column; /* 세로 정렬 */
+    position: fixed !important;
+    bottom: 90px;
+    right: 20px;
+    width: 400px;
+    height: 500px;
+    background-color: white;
+    /* background-image: url("\sea.png"); 
+    background-size: cover; 
+    background-repeat: no-repeat;  */
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    z-index: 1000;
+    padding: 10px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 /* StockchatWidget.css */
 
