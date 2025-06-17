@@ -7,7 +7,7 @@ const BubbleChart = ({ data, onBubbleClick, activeBubbleId, width = 600, height 
 
   useEffect(() => {
     if (!data || data.length === 0) {
-      console.warn('No data provided for BubbleChart');
+      // console.warn('No data provided for BubbleChart');
       return; // 데이터가 없으면 렌더링 중단
     }
 

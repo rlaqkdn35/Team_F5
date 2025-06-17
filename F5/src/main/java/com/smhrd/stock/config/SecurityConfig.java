@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 // import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity; // 필요하면 추가
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 public class SecurityConfig {
@@ -39,18 +42,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
-            .cors() // CORS 설정 적용
-            .and()
-            .csrf().disable() // CSRF 비활성화 (API용이면 보통 비활성화)
-            .authorizeRequests()
-                .anyRequest().permitAll(); // 모든 요청 인증 없이 허용
-        
-<<<<<<< Updated upstream
-=======
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable()) // API 통신 시 일반적으로 비활성화
             .authorizeHttpRequests(auth -> auth
@@ -136,16 +127,10 @@ public class SecurityConfig {
                 .invalidateHttpSession(true) // HTTP 세션 무효화
                 .deleteCookies("JSESSIONID") // JSESSIONID 쿠키 삭제
                 .permitAll()
-            )
-            // OAuth2 로그인 설정
-            .oauth2Login(oauth2 -> oauth2
-                .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                .successHandler(customOAuth2SuccessHandler)
             );
             
->>>>>>> 10aa704be9be8087d2fb9404127f51f8bcfbe9d7
-=======
->>>>>>> Stashed changes
+            
+
         return http.build();
     }
 }

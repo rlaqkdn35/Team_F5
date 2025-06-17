@@ -67,20 +67,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-<<<<<<< Updated upstream
-
-
        <dependency>
 	  	  	<groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-websocket</artifactId>
 	   </dependency>
 
-
-		
-
-=======
-		
->>>>>>> Stashed changes
 	</dependencies>
 
 	<build>
