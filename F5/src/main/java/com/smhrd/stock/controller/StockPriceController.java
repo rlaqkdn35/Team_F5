@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,4 +28,10 @@ public class StockPriceController {
         LocalDate targetDate = LocalDate.now(); // 확인용 하드코딩
         return stockPriceService.getDailyStockData(targetDate);
     }
+    
+    @GetMapping("/{stockCode}/history")
+    public List<StockPriceWithNameDto> getStockHistoryByCode(@PathVariable String stockCode) { // DTO 타입 변경
+        return stockPriceService.getStockHistoryByCode(stockCode);
+    }
+    
 }

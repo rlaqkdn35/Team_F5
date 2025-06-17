@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.smhrd.stock.dto.StockPriceWithNameDto;
+import com.smhrd.stock.entity.StockPrice;
 import com.smhrd.stock.repository.StockPriceRepository;
 
 @Service
@@ -19,5 +20,9 @@ public class StockPriceService {
 
     public List<StockPriceWithNameDto> getDailyStockData(LocalDate date) {
         return stockPriceRepository.findLatestPerStockCodeByDate(date);
+    }
+    
+    public List<StockPriceWithNameDto> getStockHistoryByCode(String stockCode) {
+        return stockPriceRepository.findStockHistoryDtoByStockCodeOrderByPriceDateAsc(stockCode);
     }
 }

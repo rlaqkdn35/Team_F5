@@ -39,4 +39,16 @@ public interface StockPriceRepository extends Repository<StockPrice, Long> {
 			+ "(SELECT sub.stock.stockCode, MAX(sub.priceDate) FROM StockPrice sub GROUP BY sub.stock.stockCode)")
 	List<StockPrice> findAllLatestStockPricesWithStockInfo();
 
+	
+	
+	@Query("SELECT new com.smhrd.stock.dto.StockPriceWithNameDto(" +
+	           "sp.priceId, sp.stock.stockCode, sp.stock.stockName, " + 
+	           "sp.priceDate, sp.openPrice, sp.highPrice, sp.lowPrice, " +
+	           "sp.closePrice, sp.stockFluctuation, sp.stockVolume) " +
+	           "FROM StockPrice sp " +
+	           "WHERE sp.stock.stockCode = :stockCode " + 
+	           "ORDER BY sp.priceDate ASC")
+	    List<StockPriceWithNameDto> findStockHistoryDtoByStockCodeOrderByPriceDateAsc(@Param("stockCode") String stockCode);
+
+
 }
