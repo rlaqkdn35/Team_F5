@@ -12,18 +12,21 @@ const PostEditPage = () => {
     const [file, setFile] = useState(null);
     const [originalFileName, setOriginalFileName] = useState('');
     const [stockCode, setStockCode] = useState('');
-    const currentUserId = '12341234'; // 임시 사용자 ID
+    const currentUserId = localStorage.getItem('userId') || '';  // 수정된 부분
 
     useEffect(() => {
         console.log('[useEffect] postId:', postId);
 
         const fetchPostDetail = async () => {
             try {
-                console.log(`[GET] 게시글 상세 정보 요청: /F5/forum/detail/${postId}`);
+                const storedUserId = localStorage.getItem('userId') || '';
+                console.log(`[GET] 게시글 상세 정보 요청: /F5/forum/detail/${postId} with userId:`, storedUserId);
                 const response = await axios.get(`http://localhost:8084/F5/forum/detail/${postId}`, {
-                    withCredentials: true,
                     headers: {
                         'Accept': 'application/json'
+                    },
+                    params: {
+                        userId: storedUserId
                     }
                 });
                 console.log('[GET] 게시글 상세 응답:', response);
@@ -41,13 +44,13 @@ const PostEditPage = () => {
                 setTitle(forum.forum_title ?? '');
                 setContent(forum.forum_content ?? '');
                 setOriginalFileName(forum.forum_file ?? '');
-                setStockCode(forum.stockCode ?? '');
+                setStockCode(forum.stock_code ?? '');
 
                 console.log('[State] 상태 초기화 완료:', {
                     forum_title: forum.forum_title,
                     forum_content: forum.forum_content,
                     forum_file: forum.forum_file,
-                    stockCode: forum.stockCode
+                    stockCode: forum.stock_code
                 });
 
             } catch (err) {

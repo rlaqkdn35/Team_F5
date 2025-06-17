@@ -49,7 +49,6 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
       return;
     }
 
-    // 소문자 변환 후 종목코드 또는 종목명에 포함 여부 검사
     const term = searchTerm.toLowerCase();
     const filtered = allStocks.filter(
       (stock) =>
@@ -160,6 +159,7 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
     setCurrentOverlayTitle(newTitle);
     setShowOverlay(matched);
   }, [location.pathname]);
+
   const titleToImageMap = {
     'AI정보분석': 'analysis',
     'AI정보분석 홈': 'analysis',
@@ -176,8 +176,8 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
     'My 페이지': 'mypage',
     '관심 종목': 'mypage',
     '계정 정보': 'mypage',
-    // 필요한 항목들 추가
   };
+
   return (
     <>
       <nav className="app-main-menu-bar">
@@ -230,11 +230,7 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
           </form>
 
           {isDropdownOpen && filteredStocks.length > 0 && (
-            <ul
-              id="autocomplete-list"
-              role="listbox"
-
-            >
+            <ul id="autocomplete-list" role="listbox">
               {filteredStocks.map((stock) => (
                 <li
                   key={stock.stockCode}
@@ -253,7 +249,15 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
         {/* 로그인/회원가입 영역 */}
         <div className="auth-area">
           {isLoggedIn ? (
-            <button onClick={onLogout} className="auth-button">
+            <button
+              onClick={() => {
+                // ✅ 로컬 스토리지 삭제 추가
+                localStorage.removeItem('userId');
+                localStorage.removeItem('token');
+                onLogout();
+              }}
+              className="auth-button"
+            >
               로그아웃
             </button>
           ) : (

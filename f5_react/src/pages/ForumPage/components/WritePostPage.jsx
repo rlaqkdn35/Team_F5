@@ -10,7 +10,7 @@ const WritePostPage = () => {
     const [content, setContent] = useState('');
     const [attachedFile, setAttachedFile] = useState(null);
     const [selectedStockCode, setSelectedStockCode] = useState('');
-    const [userId, setUserId] = useState('12341234');
+    const [userId, setUserId] = useState('');
     const [stockOptions, setStockOptions] = useState([]);
     const [filteredStocks, setFilteredStocks] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
@@ -28,9 +28,18 @@ const WritePostPage = () => {
         fetchStocks();
     }, []);
 
+    // 로컬 스토리지에서 userId 불러오기
+    useEffect(() => {
+        const storedUserId = localStorage.getItem('userId');
+        if (storedUserId) {
+            setUserId(storedUserId);
+        }
+    }, []);
+
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         setAttachedFile(file);
+        console.log("파일 선택됨:", file);
     };
 
     const handleStockCodeChange = (e) => {
@@ -47,7 +56,7 @@ const WritePostPage = () => {
             `${stock.stockCode} ${stock.stockName}`.toLowerCase().includes(inputValue.toLowerCase())
         );
 
-        setFilteredStocks(filtered.slice(0, 10)); // 최대 10개만 표시
+        setFilteredStocks(filtered.slice(0, 10));
         setShowDropdown(true);
     };
 
@@ -56,10 +65,16 @@ const WritePostPage = () => {
         setSelectedStockCode(value);
         setFilteredStocks([]);
         setShowDropdown(false);
+        console.log("종목 선택됨:", value);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        console.log("폼 제출됨");
+        console.log("제목:", title);
+        console.log("내용 길이:", content.length);
+        console.log("내용:", content);
 
         if (!title.trim() || !content.trim()) {
             alert("제목과 내용을 모두 입력해주세요.");
@@ -67,8 +82,10 @@ const WritePostPage = () => {
         }
 
         const stockCode = selectedStockCode.split(' ')[0];
+        console.log("선택된 종목 코드:", stockCode);
 
         const isValidStockCode = stockOptions.some(stock => stock.stockCode === stockCode);
+        console.log("유효한 종목 코드 여부:", isValidStockCode);
 
         if (selectedStockCode.trim() && !isValidStockCode) {
             alert("유효한 종목을 선택해주세요.");
@@ -84,18 +101,25 @@ const WritePostPage = () => {
             formData.append('forum_file', attachedFile);
         }
 
+        for (let pair of formData.entries()) {
+            console.log(`${pair[0]}:`, pair[1]);
+        }
+
         try {
-            await axios.post('http://localhost:8084/F5/forum/insert', formData, {
+            const response = await axios.post('http://localhost:8084/F5/forum/insert', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                },
-                withCredentials: true
+                }
             });
-            console.log(formData);
+            console.log("서버 응답:", response);
             alert("게시글이 성공적으로 작성되었습니다!");
             navigate('/forum');
         } catch (error) {
             console.error("게시글 작성 중 오류 발생:", error);
+            if (error.response) {
+                console.error("서버 응답 코드:", error.response.status);
+                console.error("서버 응답 데이터:", error.response.data);
+            }
             alert("게시글 작성에 실패했습니다.");
         }
     };

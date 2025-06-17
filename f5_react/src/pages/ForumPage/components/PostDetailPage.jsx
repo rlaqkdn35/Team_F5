@@ -18,8 +18,8 @@ const PostDetailPage = () => {
 
     const [hasRecommended, setHasRecommended] = useState(false);
 
-    // 임시 현재 로그인한 유저 ID (실제 앱에선 로그인 정보로 대체)
-    const currentUserId = "12341234";
+    // 로컬스토리지에서 userId 가져오기 (없으면 빈 문자열)
+    const currentUserId = localStorage.getItem('userId') || '';
 
     // 게시글 + 댓글 + 추천 여부 불러오기
     const fetchPost = () => {
