@@ -102,7 +102,8 @@ public class SecurityConfig {
                     "/userfav/**",
                     "/stock",
                     "/stock/**",
-                    "/stock/latest/**"
+                    "/stock/latest/**",
+                    "/index/**","/index/daily/**","/index/daily/recent"
                 ).permitAll() // 위에 명시된 경로들은 인증 없이 접근 허용   
                 .anyRequest().authenticated() // 그 외 모든 요청은 반드시 인증 필요
             )

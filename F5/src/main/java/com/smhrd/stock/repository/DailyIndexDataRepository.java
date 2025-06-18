@@ -12,5 +12,5 @@ public interface DailyIndexDataRepository extends JpaRepository<DailyIndexData, 
 
     Optional<DailyIndexData> findByMarketTypeAndDate(String marketType, LocalDate date);
 
-    List<DailyIndexData> findTop7ByMarketTypeOrderByDateDesc(String marketType);
+    List<DailyIndexData> findByMarketTypeOrderByDateDesc(String marketType);
 }

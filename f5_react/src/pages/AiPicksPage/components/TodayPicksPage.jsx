@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import './TodayPicksPage.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const TodayPicksPage = () => {
     const [marketStatus, setMarketStatus] = useState({ isOpen: false, lastUpdated: '' });
@@ -90,6 +91,15 @@ const TodayPicksPage = () => {
 
     const totalPages = Math.ceil(fullStockList.length / itemsPerPage);
 
+
+    const navigate = useNavigate();
+    const handleStockRowClick = (stockCode) => {
+        // 실제 상세 페이지의 경로에 맞게 수정해주세요.
+        // 예: /stock/005930 또는 /details?code=005930
+        navigate(`/stock-detail/${stockCode}`);
+    };
+
+
     return (
         <div className="today-picks-page">
             <div className="market-status-section">
@@ -125,11 +135,15 @@ const TodayPicksPage = () => {
                     </tr>
                 </thead>
                 <tbody>
+                   
                     {displayedStocks.map((stock, index) => {
-                        const formatted = formatStockData(stock);
-                        return (
-                            <React.Fragment key={formatted.stockCode}>
-                                <tr className="stock-item" onClick={() => toggleDetails(formatted.stockCode)}>
+                            const formatted = formatStockData(stock);
+                            return (
+                                <tr
+                                    key={formatted.stockCode} // key는 가장 바깥 요소에 부여하는 것이 좋습니다.
+                                    className="stock-item"
+                                    onClick={() => handleStockRowClick(formatted.stockCode)} // 클릭 시 페이지 이동 함수 호출
+                                >
                                     <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
                                     <td>{String(formatted.stockCode).padStart(6, '0')}</td>
                                     <td>{formatted.stockName}</td>
@@ -137,33 +151,19 @@ const TodayPicksPage = () => {
                                     <td className={
                                         formatted.stockFluctuation > 1 ? 'positive' :
                                         formatted.stockFluctuation < -1 ? 'negative' :
-                                        'neutral' // 새로운 클래스 추가
+                                        'neutral'
                                     }>
                                         {formatted.formattedChangeRate}
                                     </td>
-                                    {/* <td className={formatted.priceChange > 0 ? 'positive' : 'negative'}>
-                                        {formatted.formattedPriceChange}
-                                    </td> */}
                                     <td>{formatted.formattedVolume}</td>
                                 </tr>
-                                {selectedStock === formatted.stockCode && (
-                                    <tr>
-                                        <td colSpan="7" className="stock-details">
-                                            <p>시가: {Number(formatted.openPrice).toLocaleString()}</p>
-                                            <p>고가: {Number(formatted.highPrice).toLocaleString()}</p>
-                                            <p>저가: {Number(formatted.lowPrice).toLocaleString()}</p>
-                                            <p>날짜: {formatted.priceDate}</p>
-                                        </td>
-                                    </tr>
-                                )}
-                            </React.Fragment>
-                        );
-                    })}
-                </tbody>
-            </table>
-        </>
-    )}
-</div>
+                            );
+                        })}
+                            </tbody>
+                        </table>
+                    </>
+                )}
+            </div>
 
             {fullStockList.length > 0 && totalPages > 1 && (
                 <div className="pagination-controls">

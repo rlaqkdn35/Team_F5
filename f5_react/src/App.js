@@ -206,7 +206,7 @@ function App() {
                                     !currentUser ? (
                                         <LoginPage onLoginSuccess={handleLoginSuccess} />
                                     ) : (
-                                        <Navigate to="/" replace />
+                                        <Navigate to="/ai-info" replace />
                                     )
                                 }
                             />

@@ -50,8 +50,8 @@ public class DailyIndexService {
     public Map<String, List<DailyIndexData>> getRecentIndexData() {
         Map<String, List<DailyIndexData>> result = new HashMap<>();
 
-        List<DailyIndexData> kospiList = dailyIndexDataRepository.findTop7ByMarketTypeOrderByDateDesc("KOSPI");
-        List<DailyIndexData> kosdaqList = dailyIndexDataRepository.findTop7ByMarketTypeOrderByDateDesc("KOSDAQ");
+        List<DailyIndexData> kospiList = dailyIndexDataRepository.findByMarketTypeOrderByDateDesc("KOSPI");
+        List<DailyIndexData> kosdaqList = dailyIndexDataRepository.findByMarketTypeOrderByDateDesc("KOSDAQ");
 
         result.put("KOSPI", kospiList);
         result.put("KOSDAQ", kosdaqList);
