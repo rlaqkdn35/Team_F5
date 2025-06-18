@@ -211,7 +211,7 @@ export default function MainPage() {
 
   useEffect(() => {
     const splashTimer = setTimeout(() => setShowSplash(false), 1000);
-    const chartTextTimer = setTimeout(() => setShowChartText(true), 3300);
+    const chartTextTimer = setTimeout(() => setShowChartText(true), 1100);
 
     const handleMouseMoveForHeader = (event) => {
       const y = event.clientY;
@@ -313,7 +313,7 @@ export default function MainPage() {
                   <motion.span
                   className="sub-text"
                   initial={{opacity:0}}
-                  animate={{opacity:1, transition:{delay:1.2, duration:0.8}}}
+                  animate={{opacity:1, transition:{delay:0.1, duration:0.8}}}
                     >
                     데이터 기반의 스마트한 투자, ASTOCK과 함께 시작하세요.
                     </motion.span>
@@ -324,7 +324,7 @@ export default function MainPage() {
                 <motion.button
                     className="astock-button"
                     initial={{opacity:0, y: 20}}
-                    animate={{opacity:1, y: 0, transition:{delay:1.5, duration:0.8}}}
+                    animate={{opacity:1, y: 0, transition:{delay:2.0, duration:0.8}}}
                     whileHover={{scale: 1.05}}
                     whileTap={{scale: 0.95}}
                     onClick={() => window.location.href = '/ai-info'}

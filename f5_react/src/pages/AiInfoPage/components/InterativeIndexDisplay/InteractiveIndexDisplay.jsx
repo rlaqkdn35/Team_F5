@@ -15,7 +15,7 @@ const PERIODS = [
 ];
 
 const InteractiveIndexDisplay = ({ indexBasicInfo: initialIndexBasicInfo }) => {
-    const [selectedPeriod, setSelectedPeriod] = useState(PERIODS[0].id); // 기본 '1일'
+    const [selectedPeriod, setSelectedPeriod] = useState(PERIODS[2].id); // 기본 '1일'
     const [dynamicChartData, setDynamicChartData] = useState([]);
     const [marketDataLoading, setMarketDataLoading] = useState(true);
     const [marketDataError, setMarketDataError] = useState(null);
@@ -201,9 +201,7 @@ const InteractiveIndexDisplay = ({ indexBasicInfo: initialIndexBasicInfo }) => {
                         key={period.id}
                         className={`period-button-iid ${selectedPeriod === period.id ? 'active' : ''}`}
                         onClick={() => setSelectedPeriod(period.id)}
-                    >
-                        {period.name}
-                    </button>
+                    >{period.name}</button>
                 ))}
             </div>
         </div>

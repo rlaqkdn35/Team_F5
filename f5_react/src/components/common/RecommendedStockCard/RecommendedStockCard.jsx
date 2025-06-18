@@ -13,7 +13,7 @@ const RecommendedStockCard = ({ stock }) => {
       </div>
       <div className="stock-chart-area">
         {/* 실제 차트 컴포넌트를 여기에 렌더링 */}
-        <div className="mini-stock-chart-placeholder">
+        {/* <div className="mini-stock-chart-placeholder">
           <p>1번 모델 차트 {stock.name}</p>
         </div>
         <div className="mini-stock-chart-placeholder">
@@ -21,8 +21,7 @@ const RecommendedStockCard = ({ stock }) => {
         </div>
         <div className="mini-stock-chart-placeholder">
           <p>3번 모델 차트 {stock.name}</p>
-        </div>
-        
+        </div> */}   
       </div>
       <div className="recommendation-reason-box">
         <strong>★☆AI 추천 이유☆★</strong>

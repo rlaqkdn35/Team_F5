@@ -136,7 +136,6 @@ const StockChart = ({ data, chartOptions = {} }) => {
             return formattedString;
         };
     };
-    
     return (
         <div className="stock-chart-render-area" style={{ height: height || 400 }}>
             <ResponsiveContainer width="100%" height="100%">
