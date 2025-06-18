@@ -68,11 +68,7 @@ const MyPage = ({ currentUser, onLogout }) => {
       </section>
       */}
 
-      <section className="account-management-section">
-        <h2 className="section-title-mypage">계정 관리</h2>
-        <button onClick={onLogout} className="action-button-mypage logout">로그아웃</button>
-        <button onClick={handleDeleteAccount} className="action-button-mypage delete-account">회원 탈퇴</button>
-      </section>
+
     </div>
   );
 };

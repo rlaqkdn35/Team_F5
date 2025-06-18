@@ -65,6 +65,7 @@ public class UserService {
     @Transactional
     public User update(User newUser, HttpSession session) {
         User currentUser = (User) session.getAttribute("loginUser");
+        log.info("{}",currentUser);
         if (currentUser != null) {
             // 비밀번호가 변경되었을 경우에만 암호화하여 저장
             if (newUser.getPw() != null && !newUser.getPw().isEmpty()) {

@@ -33,44 +33,6 @@ const tempMarketData = {
     }
 };
 
-// --- 각 정보 섹션을 위한 작은 컴포넌트들 (이 부분은 변경하지 않습니다.) ---
-const OrderBookDisplay = ({ data }) => {
-    if (!data || !data.asks || !data.bids) {
-        return <div className="order-book-pct"><h4>실시간 호가</h4><p className="no-data-message-pct">호가 데이터가 없습니다.</p></div>;
-    }
-    return (
-        <div className="order-book-pct">
-            <h4>실시간 호가</h4>
-            <div className="order-book-layout">
-                <div className="asks">
-                    <h5>매도 잔량</h5>
-                    {data.asks.slice(0, 5).reverse().map(ask => <div key={ask.price} className="order-row ask-row"><span>{ask.price}</span><span>{ask.quantity}</span></div>)}
-                </div>
-                <div className="bids">
-                    <h5>매수 잔량</h5>
-                    {data.bids.slice(0, 5).map(bid => <div key={bid.price} className="order-row bid-row"><span>{bid.price}</span><span>{bid.quantity}</span></div>)}
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const BrokerActivityDisplay = ({ data }) => {
-    if (!data || !data.topSellers || !data.topBuyers || !data.foreignNet) {
-        return <div className="broker-activity-pct"><h4>거래원 정보</h4><p className="no-data-message-pct">거래원 데이터가 없습니다.</p></div>;
-    }
-    return (
-        <div className="broker-activity-pct">
-            <h4>거래원 정보 ({data.foreignNet.time} 기준)</h4>
-            <div className="broker-lists">
-                <div><h5>주요 매도창구</h5><ul>{data.topSellers.slice(0, 5).map(s => <li key={s.broker}>{s.broker}: {s.volume}</li>)}</ul></div>
-                <div><h5>주요 매수창구</h5><ul>{data.topBuyers.slice(0, 5).map(s => <li key={s.broker}>{s.broker}: {s.volume}</li>)}</ul></div>
-            </div>
-            <p>외국인 순매매: {data.foreignNet.netVol} (매수:{data.foreignNet.buyVol} / 매도:{data.foreignNet.sellVol})</p>
-        </div>
-    );
-};
-// --- 작은 컴포넌트들 끝 ---
 
 const PriceChartTab = ({ stockData, stockCode }) => {
     const [allHistoricalData, setAllHistoricalData] = useState([]);
@@ -278,29 +240,38 @@ const PriceChartTab = ({ stockData, stockCode }) => {
 
     return (
         <div className="price-chart-tab-content">
+           
+            {latestStockData && (
+            <div className="stock-name-display"> {/* 새 div로 감싸고 클래스 추가 */}
+                <div className="stock-title">
+                    {latestStockData.stockName} {/* 종목명만 여기에 */}
+                </div>
+            </div>
+            )
+            
+            }
             <div className="stock-info-summary-pct">
-                {latestStockData && (
-                    <>
-                        <div>종목명: {latestStockData.stockName}</div>
-                        <div>현재가: <span className={`current-price ${getPriceClass(latestStockData.stockFluctuation)}`}>
-                            {parseFloat(latestStockData.closePrice).toLocaleString()}
-                        </span>
-                        </div>
-                        <div>등락률: <span className={`change-info ${getPriceClass(latestStockData.stockFluctuation)}`}>
-                            {calculateChangeRate(latestStockData.closePrice, latestStockData.stockFluctuation)}
-                        </span>
-                        </div>
-                        <div>거래량: {parseFloat(latestStockData.stockVolume).toLocaleString()}주</div>
-                        <div>시가: {parseFloat(latestStockData.openPrice).toLocaleString()}</div>
-                        <div>고가: {parseFloat(latestStockData.highPrice).toLocaleString()}</div>
-                        <div>저가: {parseFloat(latestStockData.lowPrice).toLocaleString()}</div>
-                        <div>날짜: {latestStockData.priceDate ? new Date(latestStockData.priceDate).toLocaleDateString('ko-KR') : 'N/A'}</div>
-                        <div>전일 대비 등락폭: <span className={`change-info ${getPriceClass(latestStockData.stockFluctuation)}`}>
-                            {getChangeArrow(latestStockData.stockFluctuation)} {parseFloat(latestStockData.stockFluctuation).toLocaleString()}
-                        </span>
-                        </div>
-                    </>
-                )}
+            {latestStockData && (
+                <>
+                    {/* 기존 종목명 div와 <br> 태그 제거 */}
+                    <div>
+                        현재가: {parseFloat(latestStockData.closePrice).toLocaleString()}
+                    </div>
+                    <div>등락률: <span className={`change-info ${getPriceClass(latestStockData.stockFluctuation)}`}>
+                        {calculateChangeRate(latestStockData.closePrice, latestStockData.stockFluctuation)}
+                    </span>
+                    </div>
+                    <div>거래량: {parseFloat(latestStockData.stockVolume).toLocaleString()}주</div>
+                    <div>시가: {parseFloat(latestStockData.openPrice).toLocaleString()}</div>
+                    <div>고가: {parseFloat(latestStockData.highPrice).toLocaleString()}</div>
+                    <div>저가: {parseFloat(latestStockData.lowPrice).toLocaleString()}</div>
+                    <div>날짜: {latestStockData.priceDate ? new Date(latestStockData.priceDate).toLocaleDateString('ko-KR') : 'N/A'}</div>
+                    <div>전일 대비 등락폭: <span className={`change-info ${getPriceClass(latestStockData.stockFluctuation)}`}>
+                        {getChangeArrow(latestStockData.stockFluctuation)} {parseFloat(latestStockData.stockFluctuation).toLocaleString()}
+                    </span>
+                    </div>
+                </>
+                    )}
             </div>
 
             <div className="main-chart-area-pct">
@@ -323,10 +294,6 @@ const PriceChartTab = ({ stockData, stockCode }) => {
                 )}
             </div>
 
-            <div className="additional-market-info-pct">
-                <OrderBookDisplay data={tempMarketData.orderBook} />
-                <BrokerActivityDisplay data={tempMarketData.brokerActivity} />
-            </div>
         </div>
     );
 };

@@ -53,10 +53,6 @@ const StockChart = ({ data, chartOptions = {} }) => {
                 case 'daily': // 일별 (예: 05.20)
                     return date.toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' });
                 case 'weekly': // 주별 (예: 05월 3주차 또는 05.20)
-                    // Recharts에서 주차를 정확히 계산하기는 복잡하므로,
-                    // 해당 주 중 임의의 날짜(예: 월요일)를 표시하거나,
-                    // 아니면 월/일만 표시하여 간략하게 나타냅니다.
-                    // 현재는 월/일만 표시하도록 유지하며, 필요 시 주차 계산 로직 추가
                     return date.toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' });
                 case 'monthly': // 월별 (예: 05월)
                     return date.toLocaleDateString('ko-KR', { month: '2-digit' });
@@ -82,60 +78,6 @@ const StockChart = ({ data, chartOptions = {} }) => {
         return [`${parseFloat(value).toLocaleString()}원`, `${formattedDate} ${formattedTime}`];
     };
 
-    const getDynamicTickFormatter = (unit) => {
-        let lastYear = null;
-        let lastMonth = null;
-
-        return (timeStr, index, ticks) => { // ticks 배열도 인자로 받을 수 있습니다 (Recharts 2.x 기준)
-            const date = new Date(timeStr);
-            if (isNaN(date.getTime())) {
-                console.warn("Invalid date string for tickFormatter:", timeStr);
-                return timeStr;
-            }
-
-            const currentYear = date.getFullYear();
-            const currentMonth = date.getMonth(); // 0부터 시작
-
-            let formattedString = '';
-
-            switch (unit) {
-                case 'hourly':
-                    formattedString = date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false });
-                    break;
-                case 'daily':
-                case 'weekly': // daily와 동일하게 월/일 표시
-                    // 연도가 바뀌는 시점에만 연도를 표시
-                    if (currentYear !== lastYear) {
-                        formattedString = `${currentYear}년 ${date.toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' })}`;
-                        lastYear = currentYear;
-                    } else {
-                        formattedString = date.toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' });
-                    }
-                    break;
-                case 'monthly':
-                    // 연도가 바뀌는 시점에만 연도를 표시, 아니면 월만 표시
-                    if (currentYear !== lastYear) {
-                        formattedString = `${currentYear}년 ${date.toLocaleDateString('ko-KR', { month: '2-digit' })}`;
-                        lastYear = currentYear;
-                    } else {
-                        formattedString = date.toLocaleDateString('ko-KR', { month: '2-digit' });
-                    }
-                    break;
-                case 'yearly': // 연도별 (예: 2025년)
-                    formattedString = date.toLocaleDateString('ko-KR', { year: 'numeric' });
-                    break;
-                default:
-                    if (currentYear !== lastYear) {
-                        formattedString = `${currentYear}년 ${date.toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' })}`;
-                        lastYear = currentYear;
-                    } else {
-                        formattedString = date.toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' });
-                    }
-                    break;
-            }
-            return formattedString;
-        };
-    };
     return (
         <div className="stock-chart-render-area" style={{ height: height || 400 }}>
             <ResponsiveContainer width="100%" height="100%">

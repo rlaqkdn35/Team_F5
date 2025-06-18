@@ -40,8 +40,8 @@
   font-weight: bold;
   margin-right: 10px;
 }
-.price-info-sdtp .current-price-sdtp.positive { color: #d9534f; }
-.price-info-sdtp .current-price-sdtp.negative { color: #28a745; }
+.price-info-sdtp .current-price-sdtp.positive { color: var(--color-stock-positive); }
+.price-info-sdtp .current-price-sdtp.negative { color: var(--color-stock-nagative); }
 .price-info-sdtp .current-price-sdtp.neutral { color: #343a40; }
 
 .price-info-sdtp .change-rate-sdtp {
@@ -49,9 +49,9 @@
   font-weight: 500;
   margin-right: 10px;
 }
-.price-info-sdtp .change-rate-sdtp.positive { color: #d9534f; }
-.price-info-sdtp .change-rate-sdtp.negative { color: #28a745; }
-.price-info-sdtp .change-rate-sdtp.neutral { color: #777; }
+.price-info-sdtp .change-rate-sdtp.positive { color: var(--color-stock-positive); }
+.price-info-sdtp .change-rate-sdtp.negative { color: var(--color-stock-nagative); }
+
 
 .update-time-sdtp {
   font-size: 0.8em;
@@ -100,12 +100,12 @@
   white-space: nowrap;
 }
 .tab-button-sdtp:hover {
-  color: #0056b3;
+  color: var(--color-purple-light);
 }
 .tab-button-sdtp.active {
-  color: #007bff;
+  color: var(--color-purple-light);
   font-weight: bold;
-  border-bottom-color: #007bff;
+  border-bottom-color: var(--color-purple-light);
 }
 .tab-icon-sdtp {
   margin-right: 6px;

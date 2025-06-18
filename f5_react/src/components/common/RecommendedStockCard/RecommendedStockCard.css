@@ -31,11 +31,11 @@
     margin: 0;
 }
 
-.current-price.positive {
+.stock-header.current-price.positive {
     color: var(--color-stock-positive); /* ❗ 변경: 빨간색 (상승) - 기존 메인 빨강 */
 }
 
-.current-price.negative {
+.stock-header.current-price.negative {
     color: var(--color-stock-nagative); /* ❗ 변경: 어두운 청회색 (하락) - 빨간색과 대비되면서도 너무 튀지 않게 */
     /* 또는: #2c3e50; (아주 어두운 회색으로 하락 표시도 가능) */
 }
