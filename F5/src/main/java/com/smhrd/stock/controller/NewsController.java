@@ -1,5 +1,6 @@
 package com.smhrd.stock.controller;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.smhrd.stock.dto.NewsDetailDto;
 import com.smhrd.stock.dto.NewsSummaryDto;
+import com.smhrd.stock.dto.RecentNewsDto;
 import com.smhrd.stock.service.NewsService;
 
 import lombok.RequiredArgsConstructor;
@@ -43,4 +45,12 @@ public class NewsController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    @GetMapping("/recent-24-hours")
+    public ResponseEntity<List<RecentNewsDto>> getRecentNews() {
+        List<RecentNewsDto> recentNews = newsService.getRecentNewsInLast24Hours();
+        return ResponseEntity.ok(recentNews);
+    }
+    
+    
 }

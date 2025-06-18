@@ -1,5 +1,7 @@
 package com.smhrd.stock.repository;
 
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -24,4 +26,9 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     @Query("SELECT new com.smhrd.stock.dto.NewsDetailDto(n.newsIdx, n.newsTitle, n.newsContent, n.newsUrl, n.pressName, n.newsDt) " +
             "FROM News n WHERE n.newsIdx = :newsIdx")
      Optional<NewsDetailDto> findNewsDetailById(@Param("newsIdx") Long newsIdx);
+
+    // newsDt(뉴스 발행 일시)를 기준으로 특정 시간 이후의 뉴스 목록을 조회
+    List<News> findByNewsDtAfterOrderByNewsDtDesc(Timestamp newsDt);
+
+
 }

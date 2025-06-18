@@ -36,4 +36,8 @@ public class News {
 
 	    @Column(name = "created_at") // 레코드 생성 시간
 	    private Timestamp createdAt;
+
+	    @Column(name = "news_summary") 
+	    private String newsSummary;
+	    
 }

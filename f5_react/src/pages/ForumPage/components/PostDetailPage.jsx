@@ -18,8 +18,8 @@ const PostDetailPage = () => {
 
     const [hasRecommended, setHasRecommended] = useState(false);
 
-    // 로컬스토리지에서 userId 가져오기 (없으면 빈 문자열)
-    const currentUserId = localStorage.getItem('userId') || '';
+    // 로컬스토리지에서 userId 가져오기 (없으면 null 또는 undefined)
+    const currentUserId = localStorage.getItem('userId'); // 빈 문자열 기본값 제거
 
     // 게시글 + 댓글 + 추천 여부 불러오기
     const fetchPost = () => {
@@ -28,7 +28,7 @@ const PostDetailPage = () => {
 
         axios.get(`http://localhost:8084/F5/forum/detail/${postId}`, {
             params: {
-                userId: currentUserId  // 서버에서 추천 여부 판단용
+                userId: currentUserId || '' // 서버에서 userId가 null/undefined일 경우 빈 문자열로 처리
             }
         })
         .then(response => {
@@ -47,7 +47,8 @@ const PostDetailPage = () => {
             };
 
             setPost(postData);
-            setHasRecommended(data.userRecommended || false);  // 서버에서 받은 추천 여부 설정
+            // 로그인 상태일 때만 추천 여부 설정
+            setHasRecommended(currentUserId ? data.userRecommended || false : false);
             setLoading(false);
         })
         .catch(err => {
@@ -75,7 +76,7 @@ const PostDetailPage = () => {
         } else {
             fetchPost();
         }
-    }, [postId]);
+    }, [postId, currentUserId]); // currentUserId가 변경될 때도 fetchPost를 다시 호출하도록 추가 (선택적)
 
     const handleDelete = () => {
         if (window.confirm('정말 삭제하시겠습니까?')) {
@@ -96,6 +97,10 @@ const PostDetailPage = () => {
     };
 
     const handleCommentSubmit = async () => {
+        if (!currentUserId) { // 로그인 여부 확인 추가
+            alert('로그인 후 댓글을 작성할 수 있습니다.');
+            return;
+        }
         if (!newComment.trim()) {
             alert('댓글을 입력하세요.');
             return;
@@ -105,7 +110,7 @@ const PostDetailPage = () => {
 
         try {
             await axios.post(`http://localhost:8084/F5/forum/${postId}/comments`, {
-                user_id: currentUserId,
+                user_id: currentUserId, // 이미 String 타입의 userId를 보냄
                 content: newComment
             });
 
@@ -119,8 +124,13 @@ const PostDetailPage = () => {
         }
     };
 
-    // 추천 토글 함수 (POST 하나만 사용)
+    // 추천 토글 함수
     const handleRecommendToggle = async () => {
+        if (!currentUserId) { // 로그인 여부 확인 추가
+            alert('로그인 후 추천할 수 있습니다.');
+            return;
+        }
+
         try {
             const response = await axios.post(`http://localhost:8084/F5/forum-recos/toggle-recommend`, null, {
                 params: {
@@ -157,16 +167,16 @@ const PostDetailPage = () => {
                         <span>작성자: <strong>{post.user_nickname}</strong></span>
                         <span>날짜: {post.date}</span>
                         <span>조회수: {post.views}</span>
-                        <button onClick={handleRecommendToggle}>
+                        {/* 로그인한 사용자에게만 추천 버튼 표시 또는 비활성화 */}
+                        <button onClick={handleRecommendToggle} disabled={!currentUserId}>
                             {hasRecommended ? (
-                            <>
-                                {/* 추천 취소 상태: 깨진 하트 아이콘 */}
-                                <FaHeartCrack /> 추천 취소
-                            </>
+                                <>
+                                    <FaHeartCrack /> 추천 취소
+                                </>
                             ) : (
-                            <>
-                                <FaHeart /> 추천하기 {/* 또는 <FaThumbsUp /> 추천하기 */}
-                            </>
+                                <>
+                                    <FaHeart /> 추천하기
+                                </>
                             )}
                         </button>
                     </div>
@@ -194,6 +204,7 @@ const PostDetailPage = () => {
                         목록으로
                     </button>
 
+                    {/* 로그인한 사용자가 게시글 작성자인 경우에만 수정/삭제 버튼 표시 */}
                     {post.author === currentUserId && (
                         <>
                             <button onClick={handleEdit} className="edit-button">
@@ -231,10 +242,12 @@ const PostDetailPage = () => {
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         rows={3}
+                        // 로그인하지 않았으면 댓글 입력창 비활성화
+                        disabled={!currentUserId || isSubmitting}
                     />
                     <button
                         onClick={handleCommentSubmit}
-                        disabled={isSubmitting}
+                        disabled={!currentUserId || isSubmitting} // 로그인하지 않았으면 버튼 비활성화
                     >
                         {isSubmitting ? '등록 중...' : '댓글 등록'}
                     </button>

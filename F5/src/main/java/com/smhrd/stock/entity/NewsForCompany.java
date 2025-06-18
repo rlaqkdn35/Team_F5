@@ -15,11 +15,18 @@ import lombok.Data;
 public class NewsForCompany {
 
 	@Id
-	private int related_idx;
-	private String stock_code;
-	private int news_idx;
+	@Column(name="related_idx") 
+	private int relatedIdx;
+
+	@Column(name="stock_code") 
+	private String stockCode;
+
+	@Column(name="news_idx") 
+	private int newsIdx;
 	
-	@Column(precision = 5, scale = 2) 
-	private BigDecimal relevance_score;
-	private Timestamp created_at;
+	@Column(name="relevance_score", precision = 5, scale = 2)
+	private BigDecimal relevanceScore;
+
+	@Column(name="created_at") 
+	private Timestamp createdAt;
 }
