@@ -103,17 +103,17 @@ public class ChattingController {
      * @param croom_idx 채팅방 인덱스
      * @return 파일 정보가 포함된 채팅 메시지 목록
      */
-    @GetMapping("/files")
-    public ResponseEntity<List<Chatting>> getChatFiles(@RequestParam("croomIdx") Integer croomIdx) {
-        try {
-            // ChattingService를 통해 파일 목록 조회
-            List<Chatting> files = chattingService.getChatFiles(croomIdx);
-            return new ResponseEntity<>(files, HttpStatus.OK);
-        } catch (Exception e) {
-//            logger.error("채팅 파일 목록 조회 실패: {}", e.getMessage(), e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @GetMapping("/files")
+//    public ResponseEntity<List<Chatting>> getChatFiles(@RequestParam("croomIdx") Integer croomIdx) {
+//        try {
+//            // ChattingService를 통해 파일 목록 조회
+//            List<Chatting> files = chattingService.getChatFiles(croomIdx);
+//            return new ResponseEntity<>(files, HttpStatus.OK);
+//        } catch (Exception e) {
+////            logger.error("채팅 파일 목록 조회 실패: {}", e.getMessage(), e);
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     /**
      * 업로드된 파일을 다운로드합니다.
@@ -122,33 +122,33 @@ public class ChattingController {
      * @return 파일 리소스
      * @throws IOException 파일 처리 중 발생할 수 있는 예외
      */
-    @GetMapping("/fileDownload")
-    public ResponseEntity<Resource> downloadFile(@RequestParam("file_url") String file_url) throws IOException {
-        // 파일이 저장된 실제 경로 (운영 환경에 따라 변경 필요)
-        String basePath = "C:/Users/smhrd/git/mz_company_test/MZ/src/main/webapp/";
-        String relativePath = "resources/workFile/";
-        Path fullPath = Paths.get(basePath, relativePath, file_url); // Path 객체로 경로 조립
-
-        File file = fullPath.toFile(); // Path 객체를 File 객체로 변환
-
-        if (!file.exists() || !file.canRead()) {
-//            logger.warn("파일을 찾을 수 없거나 읽을 수 없습니다: {}", fullPath);
-            return ResponseEntity.notFound().build(); // 404 Not Found 응답
-        }
-
-        Resource resource = new FileSystemResource(file); // 파일을 Resource로 래핑
-
-        HttpHeaders headers = new HttpHeaders();
-        // 파일 이름을 UTF-8로 인코딩하고, 공백을 %20으로 변환하여 RFC 6266 규격에 맞춤
-        String encodedFileName = URLEncoder.encode(file.getName(), "UTF-8").replaceAll("\\+", "%20");
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"");
-        headers.add(HttpHeaders.CONTENT_TYPE, Files.probeContentType(file.toPath())); // 파일의 MIME 타입 자동 감지
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .contentLength(file.length()) // 파일 길이 설정
-                .body(resource); // 파일 리소스 반환
-    }
+//    @GetMapping("/fileDownload")
+//    public ResponseEntity<Resource> downloadFile(@RequestParam("file_url") String file_url) throws IOException {
+//        // 파일이 저장된 실제 경로 (운영 환경에 따라 변경 필요)
+//        String basePath = "C:/Users/smhrd/git/mz_company_test/MZ/src/main/webapp/";
+//        String relativePath = "resources/workFile/";
+//        Path fullPath = Paths.get(basePath, relativePath, file_url); // Path 객체로 경로 조립
+//
+//        File file = fullPath.toFile(); // Path 객체를 File 객체로 변환
+//
+//        if (!file.exists() || !file.canRead()) {
+////            logger.warn("파일을 찾을 수 없거나 읽을 수 없습니다: {}", fullPath);
+//            return ResponseEntity.notFound().build(); // 404 Not Found 응답
+//        }
+//
+//        Resource resource = new FileSystemResource(file); // 파일을 Resource로 래핑
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        // 파일 이름을 UTF-8로 인코딩하고, 공백을 %20으로 변환하여 RFC 6266 규격에 맞춤
+//        String encodedFileName = URLEncoder.encode(file.getName(), "UTF-8").replaceAll("\\+", "%20");
+//        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"");
+//        headers.add(HttpHeaders.CONTENT_TYPE, Files.probeContentType(file.toPath())); // 파일의 MIME 타입 자동 감지
+//
+//        return ResponseEntity.ok()
+//                .headers(headers)
+//                .contentLength(file.length()) // 파일 길이 설정
+//                .body(resource); // 파일 리소스 반환
+//    }
 
     /**
      * 채팅 메시지를 저장합니다. (웹소켓을 통한 실시간 메시지와는 별개로, HTTP 요청으로도 저장 가능)
@@ -177,60 +177,60 @@ public class ChattingController {
      * @param chatter 파일 업로더의 ID 또는 닉네임
      * @return 업로드된 파일의 URL 또는 에러 메시지
      */
-    @PostMapping("/fileUpload")
-    public ResponseEntity<?> uploadChatFile(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("croomIdx") Integer croomIdx,
-            @RequestParam("chatter") String chatter
-    ) {
-        try {
-            // 파일이 저장될 물리적 경로 (운영 환경에 따라 변경 필요)
-            String uploadDir = Paths.get("C:", "Users", "smhrd", "git", "mz_company_test", "MZ", "src", "main", "webapp", "resources", "workFile").toString();
-//            logger.info("파일 저장 시도 경로: {}", uploadDir);
+//    @PostMapping("/fileUpload")
+//    public ResponseEntity<?> uploadChatFile(
+//            @RequestParam("file") MultipartFile file,
+//            @RequestParam("croomIdx") Integer croomIdx,
+//            @RequestParam("chatter") String chatter
+//    ) {
+//        try {
+//            // 파일이 저장될 물리적 경로 (운영 환경에 따라 변경 필요)
+//            String uploadDir = Paths.get("C:", "Users", "smhrd", "git", "mz_company_test", "MZ", "src", "main", "webapp", "resources", "workFile").toString();
+////            logger.info("파일 저장 시도 경로: {}", uploadDir);
+//
+//            File dir = new File(uploadDir);
+//            if (!dir.exists()) { // 디렉토리가 없으면 생성
+//                boolean result = dir.mkdirs();
+//                if (result) {
+////                    logger.info("업로드 디렉토리 생성 성공: {}", uploadDir);
+//                } else {
+////                    logger.error("업로드 디렉토리 생성 실패: {}", uploadDir);
+//                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 디렉토리 생성 실패");
+//                }
+//            }
+//
+//            // 파일 이름 안전하게 처리: 특수문자 제거 및 중복 방지를 위한 로직 추가 필요 (예: UUID)
+//            String originalFilename = file.getOriginalFilename();
+//            // 파일명에 포함될 수 있는 Windows에서 허용되지 않는 문자를 '_'로 대체
+//            String safeFilename = originalFilename.replaceAll("[<>:\"/\\\\|?*]", "_");
+//
+//            Path filePath = Paths.get(uploadDir, safeFilename);
+//
+//            // 실제 파일 저장
+//            file.transferTo(filePath.toFile());
+//
+//            // DB에는 웹에서 접근 가능한 상대 경로로 저장
+//            String file_url = "/resources/workFile/" + safeFilename;
+//
+//            // Chatting 엔티티 생성 (Lombok @Builder 사용)
+//            Chatting chat = Chatting.builder()
+//                                    .croomIdx(croomIdx)
+//                                    .chat_id(chatter) // 파일 업로드자의 ID/닉네임
+//                                    .chatFile(safeFilename) // 파일명 (DB에 저장)
+//                                    .fileUrl(file_url) // 파일 URL (DB에 저장)
+//                                    .messageType(Chatting.MessageType.TALK) // 파일 업로드도 TALK 메시지 타입으로 처리
+//                                    .createdAt(new Timestamp(System.currentTimeMillis())) // 서버 시간으로 생성 시간 설정
+//                                    .build();
 
-            File dir = new File(uploadDir);
-            if (!dir.exists()) { // 디렉토리가 없으면 생성
-                boolean result = dir.mkdirs();
-                if (result) {
-//                    logger.info("업로드 디렉토리 생성 성공: {}", uploadDir);
-                } else {
-//                    logger.error("업로드 디렉토리 생성 실패: {}", uploadDir);
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 디렉토리 생성 실패");
-                }
-            }
-
-            // 파일 이름 안전하게 처리: 특수문자 제거 및 중복 방지를 위한 로직 추가 필요 (예: UUID)
-            String originalFilename = file.getOriginalFilename();
-            // 파일명에 포함될 수 있는 Windows에서 허용되지 않는 문자를 '_'로 대체
-            String safeFilename = originalFilename.replaceAll("[<>:\"/\\\\|?*]", "_");
-
-            Path filePath = Paths.get(uploadDir, safeFilename);
-
-            // 실제 파일 저장
-            file.transferTo(filePath.toFile());
-
-            // DB에는 웹에서 접근 가능한 상대 경로로 저장
-            String file_url = "/resources/workFile/" + safeFilename;
-
-            // Chatting 엔티티 생성 (Lombok @Builder 사용)
-            Chatting chat = Chatting.builder()
-                                    .croomIdx(croomIdx)
-                                    .chat_id(chatter) // 파일 업로드자의 ID/닉네임
-                                    .chatFile(safeFilename) // 파일명 (DB에 저장)
-                                    .fileUrl(file_url) // 파일 URL (DB에 저장)
-                                    .messageType(Chatting.MessageType.TALK) // 파일 업로드도 TALK 메시지 타입으로 처리
-                                    .createdAt(new Timestamp(System.currentTimeMillis())) // 서버 시간으로 생성 시간 설정
-                                    .build();
-
-            // ChattingService를 통해 파일 정보 DB 저장
-            chattingService.saveChatMessage(chat);
-
-//            logger.info("파일 저장 및 DB 기록 성공. 최종 파일 경로: {}, DB 저장 URL: {}", filePath, file_url);
-            return ResponseEntity.ok(file_url); // 프론트엔드에 저장된 파일 URL 반환
-
-        } catch (Exception e) {
-//            logger.error("파일 업로드 실패: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 실패: " + e.getMessage());
-        }
-    }
+//            // ChattingService를 통해 파일 정보 DB 저장
+//            chattingService.saveChatMessage(chat);
+//
+////            logger.info("파일 저장 및 DB 기록 성공. 최종 파일 경로: {}, DB 저장 URL: {}", filePath, file_url);
+//            return ResponseEntity.ok(file_url); // 프론트엔드에 저장된 파일 URL 반환
+//
+//        } catch (Exception e) {
+////            logger.error("파일 업로드 실패: {}", e.getMessage(), e);
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 실패: " + e.getMessage());
+//        }
+//    }
 }

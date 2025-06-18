@@ -30,7 +30,7 @@ public class Chatting {
 	private int chat_idx;
 	
 	@Column(name = "croom_idx", nullable = false)
-    private int croomIdx;
+    private Integer croomIdx;
 	
 	@Column(name = "chat_id", nullable = false)
 	private String chat_id;

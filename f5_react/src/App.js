@@ -74,9 +74,9 @@ function App() {
                     withCredentials: true,
                 });
                 setCurrentUser(response.data); // 세션이 유효하면 사용자 정보 설정
-                console.log('세션 확인 성공:', response.data);
+                // console.log('세션 확인 성공:', response.data);
             } catch (error) {
-                console.error('세션 확인 중 오류 (로그인되지 않음 또는 세션 만료):', error.response ? error.response.status : error.message);
+                // console.error('세션 확인 중 오류 (로그인되지 않음 또는 세션 만료):', error.response ? error.response.status : error.message);
                 setCurrentUser(null); // 세션 만료 또는 없음
             } finally {
                 setLoading(false); // 로딩 완료
