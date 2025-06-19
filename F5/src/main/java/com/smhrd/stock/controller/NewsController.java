@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.smhrd.stock.dto.NewsDetailDto;
 import com.smhrd.stock.dto.NewsSummaryDto;
 import com.smhrd.stock.dto.RecentNewsDto;
+import com.smhrd.stock.entity.News;
 import com.smhrd.stock.service.NewsService;
 
 import lombok.RequiredArgsConstructor;
@@ -52,5 +53,10 @@ public class NewsController {
         return ResponseEntity.ok(recentNews);
     }
     
+    @GetMapping("/{stockCode}")
+    public ResponseEntity<List<News>> getNewsByStockCode(@PathVariable String stockCode) {
+        List<News> newsList = newsService.getNewsByStockCode(stockCode);
+        return ResponseEntity.ok(newsList);
+    }
     
 }

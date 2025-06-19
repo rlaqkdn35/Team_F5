@@ -92,17 +92,13 @@ const IssueAnalysisContent = () => {
           // API에서 빈 배열을 반환할 수도 있으므로, 데이터가 있는지 확인합니다.
           if (response.data && response.data.length > 0) {
             const formattedIssues = response.data.map((issue, index) => {
-              const dateObj = new Date(issue.newsTime);
-              const hours = dateObj.getHours().toString().padStart(2, '0');
-              const minutes = dateObj.getMinutes().toString().padStart(2, '0');
-              const formattedTime = `${hours}:${minutes}`;
-
+              // '목차'를 위해 시간 관련 코드는 제거하고, 다른 필드만 유지합니다.
               return {
                 id: issue.newsIdx || `issue_${index}`,
                 title: issue.newsTitle,
                 relatedStocksText: issue.relatedStocks ? issue.relatedStocks.join(', ') : '',
                 summary: issue.newsSummary,
-                date: formattedTime,
+                // date: formattedTime, // '시간' 필드는 더 이상 필요 없습니다.
                 url: issue.newsUrl || '#'
               };
             });
@@ -190,36 +186,36 @@ const IssueAnalysisContent = () => {
     } else if (activeTab === 'recentIssues') { // 최신 이슈 피드 탭 (API 연동 로직 적용)
       // 데이터를 받아오지 못했거나 빈 배열인 경우 "최신 이슈 피드가 없습니다." 메시지 출력
       if (!recentIssues || recentIssues.length === 0) return <p className="no-data-message-iac">최신 이슈 피드가 없습니다.</p>;
-      
+
       return (
         <div className="recent-issues-table-container">
-            <table className="recent-issues-table-unified">
-                <thead>
-                    <tr className="table-header-row">
-                        <th className="col-time">시간</th>
-                        <th className="col-title">제목</th>
-                        <th className="col-related-stocks">연관종목</th>
-                        <th className="col-summary">이슈내용(1줄)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {recentIssues.map(issue => (
-                        <tr key={issue.id} className="table-row">
-                            <td className="col-time">{issue.date}</td>
-                            <td className="col-title">
-                                {/* 내부 라우트와 외부 URL을 구분하여 Link 또는 a 태그 사용 */}
-                                {issue.url && issue.url.startsWith('/') ? (
-                                    <Link to={issue.url} className="issue-title-link">{issue.title}</Link>
-                                ) : (
-                                    <a href={issue.url || '#'} target="_blank" rel="noopener noreferrer" className="issue-title-link">{issue.title}</a>
-                                )}
-                            </td>
-                            <td className="col-related-stocks">{issue.relatedStocksText}</td>
-                            <td className="col-summary" title={issue.summary}>{issue.summary}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+          <table className="recent-issues-table-unified">
+            <thead>
+              <tr className="table-header-row">
+                <th className="col-index">목차</th> {/* '시간'을 '목차'로 변경 */}
+                <th className="col-title">제목</th>
+                <th className="col-related-stocks">연관종목</th>
+                <th className="col-summary">이슈내용(1줄)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentIssues.map((issue, index) => ( // map 함수에 index 추가
+                <tr key={issue.id} className="table-row">
+                  <td className="col-index">{index + 1}</td> {/* 목차 번호 (1부터 시작) */}
+                  <td className="col-title">
+                    {/* 내부 라우트와 외부 URL을 구분하여 Link 또는 a 태그 사용 */}
+                    {issue.url && issue.url.startsWith('/') ? (
+                        <Link to={issue.url} className="issue-title-link">{issue.title}</Link>
+                    ) : (
+                        <a href={issue.url || '#'} target="_blank" rel="noopener noreferrer" className="issue-title-link">{issue.title}</a>
+                    )}
+                  </td>
+                  <td className="col-related-stocks">{issue.relatedStocksText}</td>
+                  <td className="col-summary" title={issue.summary}>{issue.summary}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       );
     }

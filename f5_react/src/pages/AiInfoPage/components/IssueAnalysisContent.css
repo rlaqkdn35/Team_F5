@@ -300,7 +300,7 @@
 .recent-issues-table-unified td {
     padding: 10px 15px;
     border: 1px solid var(--color-line); /* Cell borders */
-    text-align: left;
+    text-align: center;
     color: var(--color-text-dark);
 }
 

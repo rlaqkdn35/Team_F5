@@ -102,7 +102,7 @@ const NewsDetailPage = () => {
         return (
             <div className="news-detail-page">
                 <p className="no-data-message-ndp">해당 뉴스를 찾을 수 없습니다.</p>
-                <button onClick={() => navigate('/news/list')} className="back-button-ndp">목록으로 돌아가기</button>
+                <button onClick={() => navigate(-1)} className="back-button-ndp">목록으로 돌아가기</button>
             </div>
         );
     }
@@ -150,7 +150,7 @@ const NewsDetailPage = () => {
                         <i className="fas fa-external-link-alt"></i> 원본 기사 보러가기
                     </button>
                 )}
-                <button onClick={() => navigate('/news/list')} className="back-button-ndp">
+                <button onClick={() => navigate(-1)} className="back-button-ndp">
                     목록으로 돌아가기
                 </button>
             </div>

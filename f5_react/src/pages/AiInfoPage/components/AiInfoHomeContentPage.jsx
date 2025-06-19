@@ -419,7 +419,7 @@ const AiInfoHomeContentPage = () => {
                             <div className="detail-item"><strong>언급 빈도수:</strong> {selectedKeyword.value}</div>
                             <div className="detail-item"><strong>언급된 기사 수 :</strong> {detailData.articleFrequency}</div>
                             <div className="detail-item news-tabs-container"> {/* 새 컨테이너 div 추가 */}
-                                <strong>최신 뉴스:</strong>
+                                <strong>관련 뉴스:</strong>
                                 <div className="news-tabs-header"> {/* 탭 버튼들을 담을 헤더 */}
                                     {detailData.news.map(newsItem => (
                                         <button

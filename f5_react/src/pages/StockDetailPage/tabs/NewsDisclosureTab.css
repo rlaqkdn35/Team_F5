@@ -1,0 +1,134 @@
+/* NewsDisclosureTab.css */
+
+.news-disclosure-container {
+  padding: 25px; /* 패딩을 약간 늘려 여유 공간 확보 */
+  background-color: #FFFFFF; /* 배경을 순백색으로 설정 */
+  border-radius: 12px; /* 모서리를 더 둥글게 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* 그림자를 더 부드럽고 깊게 */
+  margin-top: 25px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 가독성 좋은 폰트 */
+}
+
+.news-disclosure-title {
+  font-size: 2em; /* 제목 크기 키우기 */
+  color: #5d3f6a; /* 진한 연보라색 계열로 제목 색상 변경 */
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 700; /* 제목 굵기 강조 */
+  letter-spacing: -0.5px; /* 글자 간격 살짝 줄이기 */
+}
+
+.news-disclosure-loading,
+.news-disclosure-error,
+.news-disclosure-no-data {
+  text-align: center;
+  padding: 30px;
+  font-size: 1.2em;
+  color: #7a7a7a; /* 조금 더 부드러운 회색 */
+  background-color: #f8f8f8; /* 메시지 영역 배경색 */
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.news-disclosure-error {
+  color: #e74c3c; /* 에러 색상 유지 (경고 느낌) */
+  font-weight: bold;
+}
+
+/* 테이블 스타일 */
+.news-table {
+  width: 100%;
+  border-collapse: separate; /* 셀 경계를 분리하여 둥근 모서리 적용 */
+  border-spacing: 0; /* 셀 간격 제거 */
+  margin-top: 20px;
+  overflow: hidden; /* 둥근 모서리 적용을 위해 */
+  border-radius: 10px; /* 테이블 전체 둥근 모서리 */
+}
+
+.news-table th,
+.news-table td {
+  padding: 15px 20px; /* 패딩 증가 */
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid #eee; /* 하단 경계선만 남기기 */
+}
+
+.news-table th {
+  background-color: #e0e0f0; /* 연보라색 계열 헤더 배경 */
+  color: #4a2f55; /* 헤더 글자색 */
+  font-weight: 600; /* 굵기 조정 */
+  position: sticky; /* 헤더 스크롤 시 고정 (필요시) */
+  top: 0;
+  z-index: 1;
+}
+
+/* 테이블 첫/마지막 헤더 둥근 모서리 */
+.news-table thead th:first-child {
+  border-top-left-radius: 10px;
+}
+.news-table thead th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.news-table tbody tr:last-child td {
+  border-bottom: none; /* 마지막 행 하단 경계선 제거 */
+}
+
+.news-table tbody tr:nth-child(even) {
+  background-color: #fdfdff; /* 짝수 행은 거의 흰색에 가까운 연보라색 */
+}
+
+.news-table tbody tr:hover {
+  background-color: #f0e6fa; /* 호버 시 더 밝은 연보라색 */
+  cursor: pointer;
+}
+
+/* 컬럼 너비 조정 */
+.source-col {
+  width: 15%;
+  min-width: 90px; /* 최소 너비 지정 */
+  font-weight: 500;
+  color: #6a6a6a;
+}
+
+.title-col {
+  width: 65%;
+}
+
+.date-col {
+  width: 20%;
+  min-width: 100px; /* 최소 너비 지정 */
+  text-align: right; /* 날짜 오른쪽 정렬 */
+  color: #777;
+  font-size: 0.95em;
+}
+
+/* 뉴스 제목 링크 스타일 */
+.news-title-link {
+  color: #7b4f9c; /* 링크 색상을 연보라색 계열로 */
+  text-decoration: none;
+  font-weight: 600; /* 제목 굵기 강조 */
+  display: block;
+  transition: color 0.2s ease-in-out; /* 부드러운 색상 전환 효과 */
+}
+
+.news-title-link:hover {
+  color: #9c6fc4; /* 호버 시 더 밝은 연보라색 */
+  text-decoration: underline; /* 호버 시 밑줄 추가 */
+}
+
+/* 뉴스 요약 (테이블 내에서) */
+.news-summary-inline {
+  font-size: 0.88em;
+  color: #888; /* 요약 글자색을 더 연하게 */
+  margin-top: 8px; /* 제목과의 간격 */
+  line-height: 1.5;
+  word-break: break-word;
+  white-space: normal; /* 긴 텍스트 줄바꿈 */
+  max-height: 3.5em; /* 2~3줄 정도로 제한 */
+  overflow: hidden; /* 넘치는 부분 숨기기 */
+  text-overflow: ellipsis; /* ...으로 표시 */
+  display: -webkit-box; /* 웹킷 브라우저에서 여러 줄 자르기 */
+  -webkit-line-clamp: 2; /* 두 줄까지 표시 */
+  -webkit-box-orient: vertical;
+}

@@ -75,4 +75,13 @@ public class NewsService {
 
         return result;
     }
+    
+    public List<News> getNewsByStockCode(String stockCode) {
+        List<NewsForCompany> mappings = newsForCompanyRepository.findByStockCode(stockCode);
+        List<Long> newsIds = mappings.stream()
+                                     .map(NewsForCompany::getNewsIdx)
+                                     .toList();
+
+        return newsRepository.findByNewsIdxIn(newsIds);
+    }
 }

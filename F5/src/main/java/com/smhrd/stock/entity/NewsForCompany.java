@@ -22,7 +22,7 @@ public class NewsForCompany {
 	private String stockCode;
 
 	@Column(name="news_idx") 
-	private int newsIdx;
+	private Long newsIdx;
 	
 	@Column(name="relevance_score", precision = 5, scale = 2)
 	private BigDecimal relevanceScore;

@@ -11,4 +11,5 @@ public interface NewsForCompanyRepository extends JpaRepository<NewsForCompany, 
 
     // newsIdx를 기준으로 연관된 회사-뉴스 정보 목록을 조회
     List<NewsForCompany> findByNewsIdx(int newsIdx);
+    List<NewsForCompany> findByStockCode(String stockCode);
 }
