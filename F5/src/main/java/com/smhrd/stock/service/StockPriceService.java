@@ -109,7 +109,7 @@ public class StockPriceService {
                 sp.setLowPrice(new BigDecimal(data.get("stck_lwpr")));
                 sp.setClosePrice(new BigDecimal(data.get("stck_prpr")));
                 sp.setStockVolume(new BigDecimal(data.get("acml_vol")));
-                sp.setStockFluctuation(new BigDecimal(data.get("prdy_vrss")));
+                sp.setStockFluctuation(new BigDecimal(data.get("prdy_ctrt")));
 
                 stockPriceRepository.save(sp);
 

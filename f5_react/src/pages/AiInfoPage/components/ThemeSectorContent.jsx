@@ -348,8 +348,7 @@ const ThemeSectorContent = () => {
             ) : (
                 sectorTrends.map(sector => (
                   <li key={sector.id} className="table-row-tsc">
-                    <span className="col-sector-name-tsc">
-                      <Link to={`/theme-sector-detail/${sector.id}`}>{sector.name}</Link>
+                    <span className="col-sector-name-tsc">{sector.name}
                     </span>
                     <span className="col-sector-index-tsc">{sector.indexValue}</span>
                     <span className={`col-sector-change-abs-tsc ${sector.parsedChangeRate > 0 ? 'positive' : sector.parsedChangeRate < 0 ? 'negative' : 'neutral'}`}>

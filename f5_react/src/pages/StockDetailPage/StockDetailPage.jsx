@@ -10,13 +10,14 @@ import PriceChartTab from './tabs/PriceChartTab.jsx';
 import MultiAiAnalysisTab from './tabs/MultiAiAnalysisTab.jsx';
 import StockDiscussionTab from './tabs/StockDiscussionTab.jsx';
 import PropTypes from 'prop-types';
+import NewsDisclosureTab from './tabs/NewsDisclosureTab.jsx';
 
 const TABS_STOCK_DETAIL = [
   { id: 'comprehensive', name: '종합 분석', icon: <FaInfoCircle />, content: ComprehensiveAnalysisTab },
   { id: 'priceChart', name: '시세 차트', icon: <FaChartLine />, content: PriceChartTab },
   { id: 'multiAi', name: '다중 AI', icon: <FaBrain />, content: MultiAiAnalysisTab },
   { id: 'discussion', name: '종목 토론', icon: <FaComments />, content: StockDiscussionTab },
-  { id: 'newsDisclosure', name: '뉴스', icon: <FaNewspaper />},
+  { id: 'newsDisclosure', name: '뉴스', icon: <FaNewspaper />, content: NewsDisclosureTab},
 ];
 
 const StockDetailPage = ({ currentUser }) => {
@@ -51,7 +52,7 @@ const StockDetailPage = ({ currentUser }) => {
           name: stockInfo.stockName,
           // StockPrice에서 가져온 값 사용
           price: latestPriceData.closePrice ? latestPriceData.closePrice.toLocaleString() : 'N/A', // 종가 사용
-          changeRate: latestPriceData.stockFluctuation ? `${(latestPriceData.stockFluctuation/100).toFixed(2)}%` : 'N/A', // 변동률 사용
+          changeRate: latestPriceData.stockFluctuation ? `${(latestPriceData.stockFluctuation).toFixed(2)}%` : 'N/A', // 변동률 사용
           changeType: latestPriceData.stockFluctuation > 0 ? 'positive' : (latestPriceData.stockFluctuation < 0 ? 'negative' : 'neutral'),
           updateTime: new Date().toLocaleTimeString('ko-KR'),
           companyOverview: stockInfo.companyInfo || '기업 개요 정보가 없습니다.',

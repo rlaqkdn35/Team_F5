@@ -158,7 +158,7 @@ const AiPicksHomeContent = () => {
                                     <span className="stock-rank-aphc">{stock.rank}.</span> {/* rank 사용 */}
                                     <span className="stock-name-aphc">{stock.stockName} ({stock.stockCode})</span> {/* stockName, stockCode 사용 */}
                                     <span className={`stock-change-rate-aphc ${stock.stockFluctuation > 0 ? 'positive' : stock.stockFluctuation < 0 ? 'negative' : ''}`}>
-                                        {stock.stockFluctuation > 0 ? '+' : ''}{(stock.stockFluctuation/100).toFixed(2)}%
+                                        {stock.stockFluctuation > 0 ? '+' : ''}{(stock.stockFluctuation).toFixed(2)}%
                                     </span>
                                 </div>
                             </Link>

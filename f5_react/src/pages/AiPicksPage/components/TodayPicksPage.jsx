@@ -70,7 +70,7 @@ const TodayPicksPage = () => {
         const priceChange = parseFloat(stock.priceChange ?? 0);
         const volume = parseFloat(stock.stockVolume ?? 0);
 
-        const formattedChangeRate = `${fluctuation > 0 ? '+' : ''}${(fluctuation / 100).toFixed(2)}%`;
+        const formattedChangeRate = `${fluctuation > 0 ? '+' : ''}${(fluctuation).toFixed(2)}%`;
         const formattedPriceChange = `${priceChange > 0 ? '+' : ''}${priceChange.toFixed(2)}`;
         const formattedVolume = Number(volume).toLocaleString(undefined, { maximumFractionDigits: 0 });
 
