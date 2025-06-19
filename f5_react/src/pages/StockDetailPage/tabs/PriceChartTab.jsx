@@ -103,7 +103,7 @@ const PriceChartTab = ({ stockData, stockCode }) => {
 
         // Map의 값들을 배열로 변환하고 priceDate 기준 오름차순 정렬
         const aggregatedDailyData = Array.from(dailyDataMap.values())
-                                    .sort((a, b) => new Date(a.priceDate).getTime() - new Date(b.priceDate).getTime());
+                                         .sort((a, b) => new Date(a.priceDate).getTime() - new Date(b.priceDate).getTime());
 
 
         switch (selectedPeriod) {
@@ -187,11 +187,11 @@ const PriceChartTab = ({ stockData, stockCode }) => {
     // StockChart에 전달할 timeUnit 결정 로직 (X축 레이블 형식 변경용)
     const getStockChartTimeUnit = useCallback(() => {
         switch (selectedPeriod) {
-            case '1D': return 'hourly';   // 1일은 시간 단위
-            case '1W': return 'daily';    // 1주일은 일별 레이블 (YYYY-MM-DD)
-            case '1M': return 'daily';    // 1개월은 일별 레이블 (YYYY-MM-DD)
-            case '1Y': return 'monthly';  // 1년은 월별 레이블 (YYYY-MM-DD 기반)
-            case 'ALL': return 'yearly';  // 전체는 연도별 레이블 (YYYY-MM-DD 기반)
+            case '1D': return 'hourly';    // 1일은 시간 단위
+            case '1W': return 'daily';     // 1주일은 일별 레이블 (YYYY-MM-DD)
+            case '1M': return 'daily';     // 1개월은 일별 레이블 (YYYY-MM-DD)
+            case '1Y': return 'monthly';   // 1년은 월별 레이블 (YYYY-MM-DD 기반)
+            case 'ALL': return 'yearly';   // 전체는 연도별 레이블 (YYYY-MM-DD 기반)
             default: return 'daily';
         }
     }, [selectedPeriod]);
@@ -199,20 +199,15 @@ const PriceChartTab = ({ stockData, stockCode }) => {
     // selectedPeriod 변경 시 차트 데이터 다시 계산
     const chartData = getFilteredChartData();
 
+    // 등락률 포맷팅 함수 (stock_fluctuation이 이미 퍼센트 값이라고 가정)
+    // 예: 2.17 -> +2.17%
+    const formatFluctuationPercentage = useCallback((fluctuationValue) => {
+        const num = parseFloat(fluctuationValue);
+        if (isNaN(num)) return 'N/A';
+        const sign = num > 0 ? '+' : '';
+        return `${sign}${num.toFixed(2)}%`;
+    }, []);
 
-    // 등락률 계산 및 포맷팅 (latestStockData 사용)
-    const calculateChangeRate = (current, fluctuation) => {
-        const currentNum = parseFloat(current);
-        const fluctuationNum = parseFloat(fluctuation);
-        if (isNaN(currentNum) || isNaN(fluctuationNum) || currentNum === 0) return '0.00%';
-
-        const prevClose = currentNum - fluctuationNum;
-        if (prevClose === 0 || isNaN(prevClose)) return '0.00%';
-
-        const rate = (fluctuationNum / prevClose) * 100;
-        const sign = rate > 0 ? '+' : '';
-        return `${sign}${rate.toFixed(2)}%`;
-    };
 
     // 등락폭 부호 및 색상 결정을 위한 유틸리티 함수 (변경 없음)
     const getChangeArrow = (fluctuation) => {
@@ -240,16 +235,15 @@ const PriceChartTab = ({ stockData, stockCode }) => {
 
     return (
         <div className="price-chart-tab-content">
-           
+            
             {latestStockData && (
             <div className="stock-name-display"> {/* 새 div로 감싸고 클래스 추가 */}
                 <div className="stock-title">
                     {latestStockData.stockName} {/* 종목명만 여기에 */}
                 </div>
             </div>
-            )
+            )}
             
-            }
             <div className="stock-info-summary-pct">
             {latestStockData && (
                 <>
@@ -257,8 +251,9 @@ const PriceChartTab = ({ stockData, stockCode }) => {
                     <div>
                         현재가: {parseFloat(latestStockData.closePrice).toLocaleString()}
                     </div>
+                    {/* 등락률: stockFluctuation 값을 직접 포맷하여 표시 */}
                     <div>등락률: <span className={`change-info ${getPriceClass(latestStockData.stockFluctuation)}`}>
-                        {calculateChangeRate(latestStockData.closePrice, latestStockData.stockFluctuation)}
+                        {formatFluctuationPercentage(latestStockData.stockFluctuation)}
                     </span>
                     </div>
                     <div>거래량: {parseFloat(latestStockData.stockVolume).toLocaleString()}주</div>
@@ -266,10 +261,7 @@ const PriceChartTab = ({ stockData, stockCode }) => {
                     <div>고가: {parseFloat(latestStockData.highPrice).toLocaleString()}</div>
                     <div>저가: {parseFloat(latestStockData.lowPrice).toLocaleString()}</div>
                     <div>날짜: {latestStockData.priceDate ? new Date(latestStockData.priceDate).toLocaleDateString('ko-KR') : 'N/A'}</div>
-                    <div>전일 대비 등락폭: <span className={`change-info ${getPriceClass(latestStockData.stockFluctuation)}`}>
-                        {getChangeArrow(latestStockData.stockFluctuation)} {parseFloat(latestStockData.stockFluctuation).toLocaleString()}
-                    </span>
-                    </div>
+                    {/* 전일 대비 등락폭 UI 요소 삭제됨 */}
                 </>
                     )}
             </div>
