@@ -2,14 +2,11 @@
 
 /* 사이드바 전체 컨테이너 */
 .app-right-sidebar {
-    width: 280px; /* 기본 너비 */
+    width: auto; /* 기본 너비 */
     padding: 20px;
-    background-color: #f9f9f9; /* 연한 배경색 */
-    border-left: 1px solid #eee; /* 왼쪽 경계선 */
     display: flex;
     flex-direction: column; /* 자식 요소들을 세로로 정렬 */
     gap: 25px; /* 섹션 간 간격 */
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.05); /* 은은한 그림자 */
     height: 100vh; /* 뷰포트 높이에 맞춤 */
     position: sticky; /* 스크롤 시 고정 */
     top: 0; /* 상단에 고정 */

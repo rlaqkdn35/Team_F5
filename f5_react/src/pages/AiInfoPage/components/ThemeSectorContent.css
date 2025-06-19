@@ -51,9 +51,10 @@
 }
 /* 업종 동향 테이블 스타일 (접미사 -tsc 사용) */
 .sector-trends-table { 
-  width: 100%;
+  width: auto;
   font-family: var(--font-table);
   background-color: var(--color-background-body);
+  margin: 20px;
 }
 .table-header-tsc, .table-row-tsc {
   display: flex;
