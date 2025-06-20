@@ -22,7 +22,8 @@
     font-size: 2em; /* 폰트 크기 증가 */
     font-weight: 700; /* 더 굵게 */
     letter-spacing: -0.5px; /* 자간 조절 */
-    background: linear-gradient(90deg, #6dd5ed, #2193b0); /* 그라데이션 추가 */
+    background: var(--color-text-dark);
+    /* background: linear-gradient(90deg, #6dd5ed, #2193b0); 그라데이션 추가 */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -46,7 +47,6 @@
 .chatbot-message-item {
     padding: 8px 12px;
     border-radius: 20px; /* 더 둥글게 */
-    max-width: 85%; /* 너비 약간 증가 */
     word-wrap: break-word;
     line-height: 1.6;
     font-size: 1em;
