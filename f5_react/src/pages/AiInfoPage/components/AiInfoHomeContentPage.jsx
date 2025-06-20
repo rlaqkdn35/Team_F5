@@ -218,7 +218,7 @@ const AiInfoHomeContentPage = () => {
             try {
                 // 백엔드 API의 새로운 엔드포인트와 파라미터 사용
                 // minMentionedCount는 3, limitNewsPerKeyword는 5로 고정
-                const response = await axios.get(`http://localhost:8084/F5/keyword/top-with-news?minMentionedCount=3&limitNewsPerKeyword=5`);
+                const response = await axios.get(`http://localhost:8084/F5/keyword/top-with-news?minMentionedCount=2&limitNewsPerKeyword=5`);
                 console.log("버블 데이터 (KeywordDTO):", response.data);
 
                 // API 응답 (List<KeywordDTO>)를 BubbleChart가 기대하는 형식으로 변환
