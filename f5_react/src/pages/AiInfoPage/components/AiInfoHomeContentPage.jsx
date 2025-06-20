@@ -11,44 +11,7 @@ import StockChart from '../../../components/charts/StockChart/StockChart.jsx';
 
 const initialMarketData = { name: '', value: '0.00', change: '0.00 (0.00%)', changeType: 'positive', chartData: [] };
 
-// 임시 데이터 (이 부분은 기존과 동일하므로 생략)
-const popularSearchesData = [
-    { rank: 1, name: '삼성전자', code: '005930', price: '75,200', changeValue: '+200', changeRate: '+0.27%' },
-    { rank: 2, name: '에코프로비엠', code: '247540', price: '230,000', changeValue: '-3,500', changeRate: '-1.50%' },
-    { rank: 3, name: 'SK하이닉스', code: '000660', price: '185,000', changeValue: '+1,000', changeRate: '+0.54%' },
-    { rank: 4, name: '카카오', code: '035720', price: '47,800', changeValue: '-150', changeRate: '-0.31%' },
-    { rank: 5, name: 'POSCO홀딩스', code: '005490', price: '382,000', changeValue: '+500', changeRate: '+0.13%' },
-    { rank: 6, name: '삼성전자', code: '005930', price: '75,200', changeValue: '+200', changeRate: '+0.27%' },
-    { rank: 7, name: '에코프로비엠', code: '247540', price: '230,000', changeValue: '-3,500', changeRate: '-1.50%' },
-    { rank: 8, name: 'SK하이닉스', code: '000660', price: '185,000', changeValue: '+1,000', changeRate: '+0.54%' },
-    { rank: 9, name: '카카오', code: '035720', price: '47,800', changeValue: '-150', changeRate: '-0.31%' },
-    { rank: 10, name: 'POSCO홀딩스', code: '005490', price: '382,000', changeValue: '+500', changeRate: '+0.13%' },
-];
-const topHitRatesData = [
-    { rank: 1, name: '현대로템', code: '064350', price: '35,200', changeValue: '+700', changeRate: '+2.03%' },
-    { rank: 2, name: '한화에어로스페이스', code: '012450', price: '211,000', changeValue: '-500', changeRate: '-0.24%' },
-    { rank: 3, name: '두산에너빌리티', code: '034020', price: '17,500', changeValue: '+120', changeRate: '+0.69%' },
-    { rank: 4, name: 'LG이노텍', code: '011070', price: '240,000', changeValue: '+2,500', changeRate: '+1.05%' },
-    { rank: 5, name: '기아', code: '000270', price: '115,000', changeValue: '-1,000', changeRate: '-0.86%' },
-    { rank: 6, name: '현대로템', code: '064350', price: '35,200', changeValue: '+700', changeRate: '+2.03%' },
-    { rank: 7, name: '한화에어로스페이스', code: '012450', price: '211,000', changeValue: '-500', changeRate: '-0.24%' },
-    { rank: 8, name: '두산에너빌리티', code: '034020', price: '17,500', changeValue: '+120', changeRate: '+0.69%' },
-    { rank: 9, name: 'LG이노텍', code: '011070', price: '240,000', changeValue: '+2,500', changeRate: '+1.05%' },
-    { rank: 10, name: '기아', code: '000270', price: '115,000', changeValue: '-1,000', changeRate: '-0.86%' },
-];
-const topProfitRatesData = [
-    { rank: 1, name: 'HLB', code: '028300', price: '95,800', changeValue: '+3,200', changeRate: '+3.45%' },
-    { rank: 2, name: '알테오젠', code: '196170', price: '171,000', changeValue: '-1,500', changeRate: '-0.87%' },
-    { rank: 3, name: '엔켐', code: '348370', price: '250,000', changeValue: '+5,000', changeRate: '+2.04%' },
-    { rank: 4, name: 'LS머트리얼즈', code: '417200', price: '30,000', changeValue: '+300', changeRate: '+1.01%' },
-    { rank: 5, name: '한미반도체', code: '042700', price: '140,000', changeValue: '-1,200', changeRate: '-0.85%' },
-    { rank: 6, name: 'HLB', code: '028300', price: '95,800', changeValue: '+3,200', changeRate: '+3.45%' },
-    { rank: 7, name: '알테오젠', code: '196170', price: '171,000', changeValue: '-1,500', changeRate: '-0.87%' },
-    { rank: 8, name: '엔켐', code: '348370', price: '250,000', changeValue: '+5,000', changeRate: '+2.04%' },
-    { rank: 9, name: 'LS머트리얼즈', code: '417200', price: '30,000', changeValue: '+300', changeRate: '+1.01%' },
-    { rank: 10, name: '기아', code: '000270', price: '115,000', changeValue: '-1,000', changeRate: '-0.86%' },
-];
-
+// AI 추천 종목 데이터는 임시 데이터가 아니라 실제 프론트엔드에 필요한 데이터이므로 유지합니다.
 const aiRecommendedStocks = [
     {
         name: '엔비디아',
@@ -114,6 +77,8 @@ const AiInfoHomeContentPage = () => {
     const [marketDataLoading, setMarketDataLoading] = useState(true);
     const [marketDataError, setMarketDataError] = useState(null);
 
+
+
     // 시장 지수 데이터 가져오기
     useEffect(() => {
         const fetchMarketData = async () => {
@@ -164,8 +129,8 @@ const AiInfoHomeContentPage = () => {
                     
                     const todayRawDataPoints = rawData.filter(item => item.date === todayStr);
                     const latestTodayRawItem = todayRawDataPoints.length > 0 
-                                                     ? todayRawDataPoints[todayRawDataPoints.length - 1]
-                                                     : null;
+                                                    ? todayRawDataPoints[todayRawDataPoints.length - 1]
+                                                    : null;
                     latestValue = latestTodayRawItem ? latestTodayRawItem.averagePrice : 0;
 
                     const prevDayLatestAggregatedItem = aggregatedData.find(item => item.date === yesterdayStr);
@@ -300,14 +265,10 @@ const AiInfoHomeContentPage = () => {
         setActiveNewsTab(null); // 새로운 버블 선택 시 활성 뉴스 탭 초기화
     };
 
-    // handleNewsClick 함수 수정: 클릭 시 해당 뉴스 URL로 이동
+    // handleNewsClick 함수 수정
     const handleNewsClick = (newsItem) => {
-        setActiveNewsTab(newsItem.newsIdx); // 클릭한 뉴스의 newsIdx를 활성 탭으로 설정
-        setSelectedNewsUrl(newsItem.newsUrl); // 선택된 뉴스의 URL 설정
-        setSelectedNewsTitle(newsItem.newsTitle); // 선택된 뉴스의 제목 설정
-
-        // 새 탭에서 뉴스 URL 열기
-        window.open(newsItem.newsUrl, '_blank');
+        // 새 탭 대신 /news/{newsIdx} 경로로 이동
+        navigate(`/news/${newsItem.newsIdx}`); // ⭐ 수정
     };
 
     // 페이지 이동 핸들러
@@ -318,10 +279,10 @@ const AiInfoHomeContentPage = () => {
         navigate('/ai-picks');
     };
 
-    // 랭킹 데이터 (임시 데이터)
-    const [popularItems, setPopularItems] = useState(popularSearchesData);
-    const [hitRateItems, setHitRateItems] = useState(topHitRatesData);
-    const [profitRateItems, setProfitRateItems] = useState(topProfitRatesData);
+    // 랭킹 데이터 (임시 데이터) - 사용하지 않으므로 삭제합니다.
+    // const [popularItems, setPopularItems] = useState(popularSearchesData);
+    // const [hitRateItems, setHitRateItems] = useState(topHitRatesData);
+    // const [profitRateItems, setProfitRateItems] = useState(topProfitRatesData);
 
 
     return (
@@ -361,7 +322,10 @@ const AiInfoHomeContentPage = () => {
                     </div>
                 </section>
 
-                {/* 주요 종목 랭킹 섹션 (주석 처리된 부분 유지) */}
+                {/* 주요 종목 랭킹 섹션 (주석 처리된 부분 유지)
+                    주석 처리된 <StockRankings /> 컴포넌트가 임시 데이터를 사용하고 있으므로,
+                    이 섹션을 활성화하려면 해당 데이터를 API로 대체하거나 필요한 임시 데이터를 다시 추가해야 합니다.
+                */}
                 {/* <section className="stock-rankings-container">
                     <StockRankings
                         sectionTitle="주요 종목 랭킹"
@@ -423,32 +387,28 @@ const AiInfoHomeContentPage = () => {
                             <h3><span className="keyword-highlight">{detailData.keyword_Name}</span> </h3>
                             <div className="detail-item"><strong>언급 빈도수:</strong> {detailData.total_count}</div>
                             <div className="detail-item"><strong>언급된 기사 수 :</strong> {detailData.numArticlesMentionedIn}</div>
-                            <div className="detail-item news-tabs-container">
+                            
+                            <div className="detail-item news-list-container">
                                 <strong>관련 뉴스:</strong>
-                                <div className="news-tabs-header">
-                                    {/* 관련 뉴스 목록을 버튼으로 표시하고 클릭 시 새 탭에서 뉴스 URL 열기 */}
-                                    {detailData.relatedNews.length > 0 ? (
-                                        detailData.relatedNews.map((newsItem) => (
-                                            <button
+                                {detailData.relatedNews.length > 0 ? (
+                                    <div className="news-cards-wrapper"> {/* 새로운 래퍼 클래스 */}
+                                        {detailData.relatedNews.map((newsItem) => (
+                                            <div
                                                 key={newsItem.newsIdx}
-                                                className={`news-tab-button ${activeNewsTab === newsItem.newsIdx ? 'active' : ''}`}
+                                                className="news-card-item" // 각 뉴스 항목의 새로운 클래스
                                                 onClick={() => handleNewsClick(newsItem)}
                                                 title={newsItem.newsTitle} // 마우스 오버 시 전체 제목 표시
                                             >
-                                                {newsItem.newsTitle.substring(0, 15)}{newsItem.newsTitle.length > 15 ? '...' : ''} {/* 긴 제목은 자르기 */}
-                                            </button>
-                                        ))
-                                    ) : (
-                                        <p>관련 뉴스가 없습니다.</p>
-                                    )}
-                                </div>
-                                {/* 선택된 뉴스 내용은 직접 표시하지 않고, 새 탭에서 열리도록 변경했으므로 이 부분은 삭제 또는 주석 처리 */}
-                                {/* {selectedNewsContent && (
-                                    <div className="news-content-display">
-                                        <h4>뉴스 내용:</h4>
-                                        <p>{selectedNewsContent}</p>
+                                                <div className="news-content-area">
+                                                    <p className="news-card-title">{newsItem.newsTitle}</p> {/* 뉴스 제목 */}
+                                                    <span className="news-card-press">{newsItem.pressName}</span> {/* 신문사 이름 */}
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                )} */}
+                                ) : (
+                                    <p className="no-news-message">관련 뉴스가 없습니다.</p>
+                                )}
                             </div>
                         </aside>
                     ) : (

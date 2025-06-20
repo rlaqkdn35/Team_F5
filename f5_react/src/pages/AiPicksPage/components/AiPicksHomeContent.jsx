@@ -141,7 +141,7 @@ const AiPicksHomeContent = () => {
                     <h2 className="section-title-aphc">실시간 시장 현황</h2>
                     <div className="market-info-aphc">
                         <p className="market-status-text">
-                            나스닥 장 상태: {' '}
+                            코스닥 장 상태: {' '}
                             <span className={marketStatus.isOpen ? 'status-open' : 'status-closed'}>
                                 <span className={`status-indicator ${marketStatus.isOpen ? 'open' : 'closed'}`}></span>
                                 {marketStatus.isOpen ? '개장 중' : '폐장'}

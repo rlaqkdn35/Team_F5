@@ -125,70 +125,60 @@
     transform: scale(1.05);
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
-
+/* details-pane: 상세 정보 패널 전체 */
 .details-pane {
-    height: 700px;
+    background-color: #ffffff;
+    border-radius: 12px; /* 부드러운 모서리 */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* 은은한 그림자 */
+    padding: 25px;
+    margin-left: 20px;
+    width: auto; /* 고정 너비 */
+    flex-shrink: 0;
+    transition: all 0.3s ease-in-out; /* 등장/사라짐 애니메이션 */
+    opacity: 0;
+    transform: translateX(20px);
+    pointer-events: none; /* 기본적으로 비활성화 */
+    display: flex; /* 내부 요소 정렬 */
+    flex-direction: column;
     flex: 1;
-    min-width: 280px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 20px;
-    box-sizing: border-box;
-    font-size: 2em;
+
+    /* ⭐ 새로운 스크롤 관련 속성 추가 ⭐ */
+    max-height: calc(100vh - 100px); /* 뷰포트 높이에서 상하 여백 100px 제외 */
+    overflow-y: auto; /* 내용이 넘칠 때 세로 스크롤바 생성 */
+    padding-right: 5px; /* 스크롤바가 생겼을 때 내용과 스크롤바 사이의 간격 */
+}
+
+.details-pane.visible {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto; /* 활성화 시 클릭 가능 */
 }
 
 .details-pane h3 {
-    font-size: 1.3em;
+    font-size: 1.6em;
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.keyword-highlight {
+    color: #6C5CE7; /* 강조 색상 (보라색 계열) */
+    font-weight: 700;
+}
+
+.detail-item {
     margin-bottom: 15px;
+    font-size: 1.05em;
+    color: #555;
+    line-height: 1.5;
 }
 
-.details-pane .keyword-highlight {
-    font-weight: bold;
+.detail-item strong {
+    color: #333;
+    font-weight: 600;
+    margin-right: 5px;
 }
-
-.details-pane .detail-item {
-    margin-bottom: 10px;
-    font-size: 0.95em;
-}
-
-.details-pane .detail-item strong {
-    color: var(--color-text-dark);
-}
-
-.details-pane ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.details-pane ul li {
-    margin-bottom: 5px;
-    padding-left: 15px;
-    position: relative;
-}
-
-.details-pane ul li::before {
-    content: '•';
-    position: absolute;
-    left: 0;
-}
-
-.details-pane .mini-chart-placeholder {
-    height: 120px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.85em;
-    margin-top: 5px;
-    border: 1px dashed #ddd;
-}
-
-.details-pane-placeholder {
-    text-align: center;
-    padding: 50px 0;
-}
-
 .actions-footer {
     text-align: center;
     margin-top: 20px;
@@ -246,7 +236,72 @@
 .recommended-stock-card-container {
     padding: 10px;
 }
+/* 뉴스 카드 래퍼 (Flexbox를 사용하여 카드들을 세로로 정렬) */
+.news-cards-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* 카드 사이의 간격 */
+    max-height: calc(100vh - 450px); /* 뷰포트 높이에 따라 스크롤 가능하도록 (조절 필요) */
+    overflow-y: auto; /* 내용이 넘치면 스크롤바 생성 */
+    padding-right: 5px; /* 스크롤바와 내용 간격 */
+}
 
+/* 각 뉴스 카드 아이템 */
+.news-card-item {
+    background-color: #f8faff; /* 살짝 밝은 배경색 */
+    border: 1px solid #e0e7f7; /* 은은한 테두리 */
+    border-radius: 8px; /* 둥근 모서리 */
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.25s ease; /* 호버 효과 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* 카드에 그림자 추가 */
+}
+
+.news-card-item:hover {
+    transform: translateY(-3px); /* 살짝 위로 뜨는 효과 */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* 그림자 진하게 */
+    background-color: #eef4ff; /* 호버 시 더 밝은 배경색 */
+}
+
+.news-content-area {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* 제목과 신문사 사이 간격 */
+}
+
+.news-card-title {
+    font-size: 1.05em;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    line-height: 1.4;
+    max-height: 2.8em; /* 2줄 정도만 보이도록 제한 */
+    overflow: hidden;
+    text-overflow: ellipsis; /* 넘치는 부분 ... 처리 */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 텍스트를 2줄로 제한 */
+    -webkit-box-orient: vertical;
+}
+
+.news-card-press {
+    font-size: 0.85em;
+    color: #777;
+    font-weight: 400;
+}
+
+/* 스크롤바 디자인 (선택 사항, 웹킷 브라우저에 적용) */
+.news-cards-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.news-cards-wrapper::-webkit-scrollbar-thumb {
+    background-color: #d8d8d8; /* 스크롤바 색상 */
+    border-radius: 4px;
+}
+
+.news-cards-wrapper::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* 스크롤바 트랙 색상 */
+}
 /* -------------------------------------------------- */
 /* 반응형 디자인을 위한 미디어 쿼리 */
 @media (max-width: 960px) {

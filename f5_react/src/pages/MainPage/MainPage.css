@@ -86,8 +86,8 @@ body {
 }
 .content-container {
     position: absolute; /* 이 컨테이너를 .section1 내에서 자유롭게 배치 */
-    top: 10%; /* 원하는 상단 위치 */
-    right: 10%; /* 원하는 오른쪽 위치 */
+    top: 24%; /* 원하는 상단 위치 */
+    left: 4%; /* 원하는 오른쪽 위치 */
     /* 또는 left, bottom 속성을 사용하여 조절 */
 
     display: flex; /* 자식 요소들을 세로로 정렬 */
@@ -97,6 +97,28 @@ body {
     z-index: 10; /* 배경 이미지 위에 오도록 z-index 설정 */
 }
 
+.content-left-container {
+    position: absolute; /* 이 컨테이너를 .section1 내에서 자유롭게 배치 */
+    top: 1%; /* 원하는 상단 위치 */
+    left: 9%; /* 원하는 오른쪽 위치 */
+    /* 또는 left, bottom 속성을 사용하여 조절 */
+
+    display: flex; /* 자식 요소들을 세로로 정렬 */
+    flex-direction: column; /* 세로 정렬 */
+    align-items: flex-end; /* 오른쪽 정렬 (텍스트와 버튼이 오른쪽으로 정렬됩니다) */
+    /* 또는 align-items: center; 로 중앙 정렬 */
+    z-index: 10; /* 배경 이미지 위에 오도록 z-index 설정 */
+}
+
+/* 아래는 기존 style 속성에서 옮겨온 내용입니다 */
+.huge-astock-text {
+    font-size: 15vw; /* 매우 큰 글씨 크기 */
+    font-weight: bold;
+    color: white; /* 강조색 */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 그림자 효과 */
+    text-align: left;
+    line-height: 0.8;
+}
 
 .background-chart-image {
   position: absolute;
@@ -104,7 +126,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('./흑우.png'); /* 올바른 사용법 */
+  background-image: url('./stock-trading-6525081_1920.jpg'); /* 올바른 사용법 */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat; /* ⭐ 가장 중요: 이미지가 반복되지 않도록 설정 */
@@ -112,7 +134,6 @@ body {
 }
 
 .chart-recommend-text {
-  background-color: var(--color-background-menubar);
   padding: 10px 20px;
   border-radius: 8px;
     text-align: right; /* 텍스트 오른쪽 정렬 */
@@ -159,7 +180,8 @@ body {
 }
 /* ASTOCK 바로가기 버튼 스타일 */
 .astock-button {
-    background-color: var(--color-background-menubar); /* 버튼 배경색 */
+
+  background-color: var(--color-background-menubar); /* 버튼 배경색 */
     color: white; /* 버튼 글자색 */
     padding: 15px 30px; /* 버튼 패딩 */
     border: none; /* 테두리 없애기 */

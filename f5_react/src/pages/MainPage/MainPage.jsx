@@ -306,9 +306,9 @@ export default function MainPage() {
                   animate="visible"
                   >
                   <p>
-                    또 물렸다고? 그게 다 당신이 '흑우'라서 그래요! 🤬<br/>
-                    남들 돈 버는 동안, 오늘도 개미지옥에서 허우적대는 당신. <br/>
-                    이제 그만 당하고 싶다면, 제대로 된 AI 주식 차트를 만나야 할 때! 📈
+                    혹시 아직도 과거의 실수에 갇혀 있나요?<br/>
+                    남들이 오르내리는 차트 속에서 길을 헤맬 때, 당신에게 필요한 건 명확한 나침반입니다.<br/>
+                    더 이상 불안한 투자는 그만! 이제는 스마트한 AI 예측으로 당신의 투자를 밝힐 시간! 💡
                   </p>
                   <motion.span
                   className="sub-text"
@@ -319,6 +319,7 @@ export default function MainPage() {
                     </motion.span>
               </motion.div>
             )}
+            
 
             {!showSplash && (
                 <motion.button
@@ -333,6 +334,26 @@ export default function MainPage() {
                 </motion.button>
             )}
         </div> {/* .content-container 닫힘 */}
+
+        <div className='content-left-container'>
+          {showChartText && !showSplash && (
+              <motion.div
+                 className="huge-astock-text"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ 
+                      opacity: 1, 
+                      x: [-400],
+                      transition: { 
+                          duration: 2, 
+                          ease: "easeInOut", 
+                          repeatType: "loop" // 애니메이션이 끝난 후 다시 시작
+                      } 
+                  }}      
+                  >
+                    ASTOCK
+              </motion.div>
+            )}
+        </div>
         {!showSplash && (
           <motion.div
             className="scroll-prompt"

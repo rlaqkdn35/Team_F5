@@ -104,7 +104,7 @@ const TodayPicksPage = () => {
         <div className="today-picks-page">
             <div className="market-status-section">
     <p>
-        나스닥 장 상태:{' '}
+        코스닥 장 상태:{' '}
         <span className={marketStatus.isOpen ? 'status-open' : 'status-closed'}>
             <span className={`status-indicator ${marketStatus.isOpen ? 'open' : 'closed'}`}></span>
             {marketStatus.isOpen ? '개장' : '폐장'}

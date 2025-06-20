@@ -7,25 +7,30 @@ const BubbleChart = ({ data, onBubbleClick, activeBubbleId, width = 600, height 
 
   useEffect(() => {
     if (!data || data.length === 0) {
-      // console.warn('No data provided for BubbleChart');
+      console.warn('No data provided for BubbleChart');
       return; // 데이터가 없으면 렌더링 중단
     }
 
     // 데이터 변환: { keywordName, totalCount, numArticlesMentionedIn } -> { text, value, id }
-    const formattedData = data.map(item => ({
-      text: item.keywordName || 'Unknown', // keywordName을 text로 사용
-      value: Number(item.totalCount) || 0, // totalCount를 value로 매핑, 숫자로 변환
-      id: (item.keywordName || 'unknown').toLowerCase().replace(/\s+/g, '_'), // id 생성
-      numArticlesMentionedIn: Number(item.numArticlesMentionedIn) || 0, // 추가 정보 유지
-    }));
+    // const formattedData = data.map(item => ({
+    //   text: item.keyword_Name || 'Unknown', // keyword_Name 사용
+    //   value: Number(item.total_count) || 0, // total_count 사용
+    //   id: (item.keyword_Name || 'unknown').toLowerCase().replace(/\s+/g, '_'),
+    //   numArticlesMentionedIn: Number(item.numArticlesMentionedIn) || 0,
+    //   news: item.relatedNews || [], // 연관 뉴스 정보도 그대로 전달
+    // }));
 
     // 유효한 데이터 필터링
-    const validData = formattedData.filter(d => d.value >= 0);
+    // const validData = formattedData.filter(d => d.value >= 0);
+    // if (validData.length === 0) {
+    //   console.warn('No valid data for BubbleChart after filtering');
+    //   return;
+    // }
+    const validData = data.filter(d => d.value > 0); // data prop에 value 필드가 있다고 가정
     if (validData.length === 0) {
-      console.warn('No valid data for BubbleChart after filtering');
+      console.warn('No valid data for BubbleChart after filtering by value > 0.');
       return;
     }
-
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove(); // 기존 SVG 내용 제거
 

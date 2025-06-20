@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="app-footer">
       <div className="footer-content">
-        <p>&copy; {new Date().getFullYear()} Atock. 모든 권리 보유.</p>
+        <p>&copy; {new Date().getFullYear()} Astock. 모든 권리 보유.</p>
         <nav className="footer-links">
           <a href="/terms">이용약관</a>
           <a href="/privacy">개인정보처리방침</a>
