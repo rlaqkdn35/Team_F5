@@ -104,7 +104,7 @@ const aiRecommendedStocks = [
 const AiInfoHomeContentPage = () => {
     const [bubbleData, setBubbleData] = useState([]);
     const [selectedKeyword, setSelectedKeyword] = useState(null);
-    const [detailData, setDetailData] = useState(null);
+    const [detailData, setDetailData] = useState(null); // 이제 KeywordDTO 전체를 detailData로 사용
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -114,6 +114,7 @@ const AiInfoHomeContentPage = () => {
     const [marketDataLoading, setMarketDataLoading] = useState(true);
     const [marketDataError, setMarketDataError] = useState(null);
 
+    // 시장 지수 데이터 가져오기
     useEffect(() => {
         const fetchMarketData = async () => {
             setMarketDataLoading(true);
@@ -123,20 +124,18 @@ const AiInfoHomeContentPage = () => {
 
                 const { KOSPI, KOSDAQ } = response.data;
 
-                // --- 각 날짜별로 '딱 하나의' 데이터 (가장 최신 시간 데이터)만 선택하는 공통 로직 ---
                 const aggregateDailyData = (dataArray) => {
                     if (!dataArray || dataArray.length === 0) return [];
                     
-                    // 데이터 정렬: 오래된 날짜, 같은 날짜면 오래된 시간 순으로
                     dataArray.sort((a, b) => {
                         const dateA = new Date(a.date + 'T' + a.createdAt.split('T')[1].split('+')[0]);
                         const dateB = new Date(b.date + 'T' + b.createdAt.split('T')[1].split('+')[0]);
                         return dateA.getTime() - dateB.getTime();
                     });
 
-                    const dailyLatestDataMap = new Map(); // "YYYY-MM-DD" -> 해당 날짜의 가장 최신 시간 데이터 포인트
+                    const dailyLatestDataMap = new Map();
                     dataArray.forEach(item => {
-                        const dateKey = item.date; // "YYYY-MM-DD" 형식
+                        const dateKey = item.date;
                         const currentTime = new Date(item.createdAt).getTime();
                         const existingItem = dailyLatestDataMap.get(dateKey);
 
@@ -144,7 +143,6 @@ const AiInfoHomeContentPage = () => {
                             dailyLatestDataMap.set(dateKey, item);
                         }
                     });
-                    // Map의 값들을 배열로 변환하고 date 기준 오름차순 정렬 (차트 표시 순서)
                     return Array.from(dailyLatestDataMap.values())
                                 .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
                 };
@@ -152,31 +150,24 @@ const AiInfoHomeContentPage = () => {
                 const aggregatedKospiData = aggregateDailyData(KOSPI);
                 const aggregatedKosdaqData = aggregateDailyData(KOSDAQ);
 
-                console.log("코스피 일별 집계 데이터:", aggregatedKospiData);
-                console.log("코스닥 일별 집계 데이터:", aggregatedKosdaqData);
-
-                // --- MarketInfoCard의 현재 값 및 변화율 계산 ---
-                // 오늘 날짜의 가장 최신 시간 데이터 (MarketInfoCard용)
-                const now = new Date();
-                const todayStr = now.toISOString().slice(0, 10);
-                const yesterday = new Date(now);
-                yesterday.setDate(now.getDate() - 1);
-                const yesterdayStr = yesterday.toISOString().slice(0, 10);
-                
                 const getLatestValueAndChange = (aggregatedData, rawData) => {
                     let latestValue = 0;
                     let changeValue = 0;
                     let changeRate = 0;
                     let changeType = 'neutral';
 
-                    // 오늘 날짜의 가장 최신 시간 데이터 (allIndexData에서 찾아야 가장 정확)
+                    const now = new Date();
+                    const todayStr = now.toISOString().slice(0, 10);
+                    const yesterday = new Date(now);
+                    yesterday.setDate(now.getDate() - 1);
+                    const yesterdayStr = yesterday.toISOString().slice(0, 10);
+                    
                     const todayRawDataPoints = rawData.filter(item => item.date === todayStr);
                     const latestTodayRawItem = todayRawDataPoints.length > 0 
-                                              ? todayRawDataPoints[todayRawDataPoints.length - 1] // 이미 rawData 정렬되어있다고 가정
-                                              : null;
+                                                     ? todayRawDataPoints[todayRawDataPoints.length - 1]
+                                                     : null;
                     latestValue = latestTodayRawItem ? latestTodayRawItem.averagePrice : 0;
 
-                    // 어제 날짜의 가장 최신 데이터 (aggregatedData에서 찾아야 함)
                     const prevDayLatestAggregatedItem = aggregatedData.find(item => item.date === yesterdayStr);
                     const prevDayLastValue = prevDayLatestAggregatedItem ? prevDayLatestAggregatedItem.averagePrice : null;
 
@@ -185,7 +176,6 @@ const AiInfoHomeContentPage = () => {
                         changeRate = (changeValue / prevDayLastValue) * 100;
                         changeType = changeValue >= 0 ? 'positive' : 'negative';
                     } else if (latestValue && todayRawDataPoints.length > 1) { 
-                        // 오늘 데이터만 있고 어제 데이터가 없는 경우, 오늘 첫 데이터와 비교
                         const firstTodayRawValue = todayRawDataPoints[0].averagePrice;
                         changeValue = latestValue - firstTodayRawValue;
                         changeRate = (changeValue / firstTodayRawValue) * 100;
@@ -195,7 +185,6 @@ const AiInfoHomeContentPage = () => {
                     return { latestValue, changeValue, changeRate, changeType };
                 };
 
-                // 코스피 현재 값 및 변화율 설정
                 const { 
                     latestValue: kospiLatestValue, 
                     changeValue: kospiChangeValue, 
@@ -208,20 +197,18 @@ const AiInfoHomeContentPage = () => {
                     value: kospiLatestValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
                     change: `${kospiChangeValue >= 0 ? '+' : ''}${kospiChangeValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${kospiChangeRate.toFixed(2)}%)`,
                     changeType: kospiChangeType,
-                    // 차트 데이터는 필터링된 한 달치 일별 데이터를 사용합니다.
                     chartData: aggregatedKospiData.filter(item => {
                         const itemDate = new Date(item.date);
-                        const oneMonthAgo = new Date(now);
-                        oneMonthAgo.setMonth(now.getMonth() - 1);
-                        oneMonthAgo.setHours(0,0,0,0); // 시간 초기화
+                        const oneMonthAgo = new Date();
+                        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+                        oneMonthAgo.setHours(0,0,0,0);
                         return itemDate.getTime() >= oneMonthAgo.getTime();
                     }).map(item => ({
-                        time: item.date, // StockChart의 timeUnit:'daily'에 맞게 YYYY-MM-DD 전달
+                        time: item.date,
                         value: item.averagePrice
                     })),
                 });
 
-                // 코스닥 현재 값 및 변화율 설정
                 const { 
                     latestValue: kosdaqLatestValue, 
                     changeValue: kosdaqChangeValue, 
@@ -234,15 +221,14 @@ const AiInfoHomeContentPage = () => {
                     value: kosdaqLatestValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
                     change: `${kosdaqChangeValue >= 0 ? '+' : ''}${kosdaqChangeValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${kosdaqChangeRate.toFixed(2)}%)`,
                     changeType: kosdaqChangeType,
-                     // 차트 데이터는 필터링된 한 달치 일별 데이터를 사용합니다.
                     chartData: aggregatedKosdaqData.filter(item => {
                         const itemDate = new Date(item.date);
-                        const oneMonthAgo = new Date(now);
-                        oneMonthAgo.setMonth(now.getMonth() - 1);
-                        oneMonthAgo.setHours(0,0,0,0); // 시간 초기화
+                        const oneMonthAgo = new Date();
+                        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+                        oneMonthAgo.setHours(0,0,0,0);
                         return itemDate.getTime() >= oneMonthAgo.getTime();
                     }).map(item => ({
-                        time: item.date, // StockChart의 timeUnit:'daily'에 맞게 YYYY-MM-DD 전달
+                        time: item.date,
                         value: item.averagePrice
                     })),
                 });
@@ -258,16 +244,29 @@ const AiInfoHomeContentPage = () => {
         };
 
         fetchMarketData();
-    }, []); // 컴포넌트 마운트 시 한 번만 실행
+    }, []);
 
-    // API 호출로 버블 데이터 가져오기 (axios.get 사용)
+    // API 호출로 버블 데이터 가져오기 (변경된 엔드포인트 사용)
     useEffect(() => {
         const fetchBubbleData = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`http://localhost:8084/F5/keyword/keywordData`);
-                console.log(response.data);
-                setBubbleData(response.data); // Axios는 자동으로 JSON 파싱
+                // 백엔드 API의 새로운 엔드포인트와 파라미터 사용
+                // minMentionedCount는 3, limitNewsPerKeyword는 5로 고정
+                const response = await axios.get(`http://localhost:8084/F5/keyword/top-with-news?minMentionedCount=3&limitNewsPerKeyword=5`);
+                console.log("버블 데이터 (KeywordDTO):", response.data);
+
+                // API 응답 (List<KeywordDTO>)를 BubbleChart가 기대하는 형식으로 변환
+                const transformedData = response.data.map((item, index) => ({
+                    // BubbleChart의 data prop 형식에 맞춰 매핑
+                    id: item.keyword_Name + '-' + index, // 고유 ID 생성 (키워드 이름 + 인덱스)
+                    text: item.keyword_Name,
+                    value: item.total_count, // 언급 빈도수 (버블 크기)
+                    numArticlesMentionedIn: item.numArticlesMentionedIn, // 기사 수
+                    news: item.relatedNews || [], // 연관 뉴스 리스트
+                }));
+                
+                setBubbleData(transformedData);
                 setError(null);
             } catch (error) {
                 console.error('버블 데이터를 가져오는 중 오류 발생:', error.message);
@@ -281,29 +280,35 @@ const AiInfoHomeContentPage = () => {
         fetchBubbleData();
     }, []);
 
-    // 뉴스 탭
-    const [activeNewsTab, setActiveNewsTab] = useState(null); // 현재 활성화된 뉴스 탭의 ID
-    const [selectedNewsContent, setSelectedNewsContent] = useState(''); 
+    // 뉴스 탭 (선택된 뉴스 내용) 상태
+    const [activeNewsTab, setActiveNewsTab] = useState(null); // 현재 활성화된 뉴스 탭의 newsIdx
+    const [selectedNewsUrl, setSelectedNewsUrl] = useState(''); // 선택된 뉴스의 URL
+    const [selectedNewsTitle, setSelectedNewsTitle] = useState(''); // 선택된 뉴스의 제목 (선택적으로 사용)
+
     const handleBubbleClick = (bubble) => {
         setSelectedKeyword(bubble);
+        // detailData를 선택된 버블 (이미 relatedNews를 포함하고 있음)로 설정
+        // DTO 구조와 일치하도록 매핑
         setDetailData({
-            keyword: bubble.text,
-            articleFrequency: bubble.numArticlesMentionedIn,
-            relatedItems: ['관련 품목 1', '관련 품목 2'],
-            news: bubble.news || [],
+            keyword_Name: bubble.text,
+            total_count: bubble.value,
+            numArticlesMentionedIn: bubble.numArticlesMentionedIn,
+            relatedNews: bubble.news || [],
         });
-        setSelectedNewsContent(''); // 새로운 버블 선택 시 뉴스 내용 초기화
+        setSelectedNewsUrl(''); // 새로운 버블 선택 시 뉴스 URL 초기화
+        setSelectedNewsTitle(''); // 새로운 버블 선택 시 뉴스 제목 초기화
         setActiveNewsTab(null); // 새로운 버블 선택 시 활성 뉴스 탭 초기화
     };
 
-    // handleNewsClick 함수 수정 (이제 뉴스 탭 활성화 역할도 겸함)
+    // handleNewsClick 함수 수정: 클릭 시 해당 뉴스 URL로 이동
     const handleNewsClick = (newsItem) => {
-        setSelectedNewsContent(newsItem.content || '뉴스 내용을 불러올 수 없습니다.');
-        setActiveNewsTab(newsItem.id); // 클릭한 뉴스의 ID를 활성 탭으로 설정
+        setActiveNewsTab(newsItem.newsIdx); // 클릭한 뉴스의 newsIdx를 활성 탭으로 설정
+        setSelectedNewsUrl(newsItem.newsUrl); // 선택된 뉴스의 URL 설정
+        setSelectedNewsTitle(newsItem.newsTitle); // 선택된 뉴스의 제목 설정
+
+        // 새 탭에서 뉴스 URL 열기
+        window.open(newsItem.newsUrl, '_blank');
     };
-
-
-
 
     // 페이지 이동 핸들러
     const handleNavigateToIssueNews = () => {
@@ -338,8 +343,8 @@ const AiInfoHomeContentPage = () => {
                                     chartNode={<StockChart
                                         data={kospiCurrentData.chartData}
                                         chartOptions={{
-                                            timeUnit: 'daily', // 한 달치 데이터이므로 'daily'가 적합
-                                            height: 200, // MarketInfoCard에 맞춰 차트 높이 조절
+                                            timeUnit: 'daily',
+                                            height: 200,
                                         }}/>}
                                 />
                                 <MarketInfoCard
@@ -347,8 +352,8 @@ const AiInfoHomeContentPage = () => {
                                     chartNode={<StockChart
                                         data={kosdaqCurrentData.chartData}
                                         chartOptions={{
-                                            timeUnit: 'daily', // 한 달치 데이터이므로 'daily'가 적합
-                                            height: 200, // MarketInfoCard에 맞춰 차트 높이 조절
+                                            timeUnit: 'daily',
+                                            height: 200,
                                         }}/>}
                                 />
                             </>
@@ -356,7 +361,7 @@ const AiInfoHomeContentPage = () => {
                     </div>
                 </section>
 
-                {/* 주요 종목 랭킹 섹션 */}
+                {/* 주요 종목 랭킹 섹션 (주석 처리된 부분 유지) */}
                 {/* <section className="stock-rankings-container">
                     <StockRankings
                         sectionTitle="주요 종목 랭킹"
@@ -415,53 +420,36 @@ const AiInfoHomeContentPage = () => {
 
                     {selectedKeyword && detailData ? (
                         <aside className="details-pane visible">
-                            <h3><span className="keyword-highlight">{detailData.keyword}</span> </h3>
-                            <div className="detail-item"><strong>언급 빈도수:</strong> {selectedKeyword.value}</div>
-                            <div className="detail-item"><strong>언급된 기사 수 :</strong> {detailData.articleFrequency}</div>
-                            <div className="detail-item news-tabs-container"> {/* 새 컨테이너 div 추가 */}
+                            <h3><span className="keyword-highlight">{detailData.keyword_Name}</span> </h3>
+                            <div className="detail-item"><strong>언급 빈도수:</strong> {detailData.total_count}</div>
+                            <div className="detail-item"><strong>언급된 기사 수 :</strong> {detailData.numArticlesMentionedIn}</div>
+                            <div className="detail-item news-tabs-container">
                                 <strong>관련 뉴스:</strong>
-                                <div className="news-tabs-header"> {/* 탭 버튼들을 담을 헤더 */}
-                                    {detailData.news.map(newsItem => (
-                                        <button
-                                            key={newsItem.id}
-                                            className={`news-tab-button ${activeNewsTab === newsItem.id ? 'active' : ''}`}
-                                            onClick={() => handleNewsClick(newsItem)}
-                                        >
-                                            뉴스 {newsItem.id} {/* 예: 뉴스 1, 뉴스 2 등으로 표시 */}
-                                        </button>
-                                    ))}
+                                <div className="news-tabs-header">
+                                    {/* 관련 뉴스 목록을 버튼으로 표시하고 클릭 시 새 탭에서 뉴스 URL 열기 */}
+                                    {detailData.relatedNews.length > 0 ? (
+                                        detailData.relatedNews.map((newsItem) => (
+                                            <button
+                                                key={newsItem.newsIdx}
+                                                className={`news-tab-button ${activeNewsTab === newsItem.newsIdx ? 'active' : ''}`}
+                                                onClick={() => handleNewsClick(newsItem)}
+                                                title={newsItem.newsTitle} // 마우스 오버 시 전체 제목 표시
+                                            >
+                                                {newsItem.newsTitle.substring(0, 15)}{newsItem.newsTitle.length > 15 ? '...' : ''} {/* 긴 제목은 자르기 */}
+                                            </button>
+                                        ))
+                                    ) : (
+                                        <p>관련 뉴스가 없습니다.</p>
+                                    )}
                                 </div>
-                                {/* 선택된 뉴스 내용 표시 영역 (기존 코드와 동일) */}
-                                {selectedNewsContent && (
+                                {/* 선택된 뉴스 내용은 직접 표시하지 않고, 새 탭에서 열리도록 변경했으므로 이 부분은 삭제 또는 주석 처리 */}
+                                {/* {selectedNewsContent && (
                                     <div className="news-content-display">
                                         <h4>뉴스 내용:</h4>
                                         <p>{selectedNewsContent}</p>
                                     </div>
-                                )}
+                                )} */}
                             </div>
-                            {/* <div className="detail-item">
-                                <strong>최신 뉴스:</strong>
-                                <ul>
-                                    {detailData.news.map(newsItem => (
-                                        <li key={newsItem.id}>
-
-                                            <a href="#" onClick={(e) => { e.preventDefault(); handleNewsClick(newsItem); }}>
-                                                {newsItem.title}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>    
-                                
-                                
-                                
-                            </div>
-
-                            {selectedNewsContent && (
-                                <div className="news-content-display">
-                                    <h4>뉴스 내용:</h4>
-                                    <p>{selectedNewsContent}</p>
-                                </div>
-                            )} */}
                         </aside>
                     ) : (
                         <aside className="details-pane">
