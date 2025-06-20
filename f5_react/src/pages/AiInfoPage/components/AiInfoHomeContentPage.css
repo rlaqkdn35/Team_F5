@@ -129,8 +129,7 @@
 .details-pane {
     background-color: #ffffff;
     border-radius: 12px; /* 부드러운 모서리 */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* 은은한 그림자 */
-    padding: 25px;
+    padding: 10px;
     margin-left: 20px;
     width: auto; /* 고정 너비 */
     flex-shrink: 0;
@@ -141,6 +140,7 @@
     display: flex; /* 내부 요소 정렬 */
     flex-direction: column;
     flex: 1;
+    border: 1px dashed #e0e0e0;
 
     /* ⭐ 새로운 스크롤 관련 속성 추가 ⭐ */
     max-height: calc(100vh - 100px); /* 뷰포트 높이에서 상하 여백 100px 제외 */

@@ -3,7 +3,6 @@
 /* 전체 컨테이너 스타일 */
 .chatbot-container {
     max-width: 650px; /* 너비 약간 증가 */
-    margin: 30px auto;
     font-family: 'Noto Sans KR', sans-serif; /* 한국어 폰트 추가 */
     background-color: #f0f4f8; /* 더 부드러운 배경색 */
     border-radius: 15px; /* 모서리 더 둥글게 */
@@ -33,7 +32,7 @@
     border: 1px solid #dcdcdc; /* 테두리색 변경 */
     border-radius: 12px; /* 모서리 둥글게 */
     padding: 20px;
-    height: 350px; /* 높이 증가 */
+    height: 600px; /* 높이 증가 */
     overflow-y: auto;
     margin-bottom: 20px;
     background-color: #ffffff;
@@ -45,7 +44,7 @@
 
 /* 개별 메시지 스타일 */
 .chatbot-message-item {
-    padding: 12px 18px;
+    padding: 8px 12px;
     border-radius: 20px; /* 더 둥글게 */
     max-width: 85%; /* 너비 약간 증가 */
     word-wrap: break-word;
@@ -147,12 +146,12 @@
 }
 
 .chatbot-message-input:focus {
-    border-color: #2196F3; /* 포커스 시 파란색 테두리 */
+    border-color: #48daff; /* 포커스 시 파란색 테두리 */
     box-shadow: 0 0 8px rgba(33, 150, 243, 0.2); /* 포커스 시 그림자 */
 }
 
 .chatbot-send-button {
-    background-color: #2196F3; /* 밝은 파란색 */
+    background-color: #48daff; /* 밝은 파란색 */
     color: white;
     border: none;
     padding: 12px 25px;
@@ -165,7 +164,7 @@
 }
 
 .chatbot-send-button:hover {
-    background-color: #1976D2; /* 더 어두운 파란색 */
+    background-color: #48daff; /* 더 어두운 파란색 */
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

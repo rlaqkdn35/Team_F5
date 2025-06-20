@@ -36,7 +36,7 @@
     bottom: 90px;
     right: 20px;
     width: 400px;
-    height: 500px;
+    height: 800px;
     background-color: white;
     /* background-image: url("\sea.png"); 
     background-size: cover; 
@@ -44,7 +44,6 @@
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.3);
     z-index: 1000;
-    padding: 10px;
     overflow: hidden;
     position: relative;
     display: flex;
