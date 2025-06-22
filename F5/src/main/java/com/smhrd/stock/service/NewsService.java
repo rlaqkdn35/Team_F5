@@ -166,6 +166,8 @@ public class NewsService {
                 latestNewsByIndividualStockCode.putIfAbsent(trimmedCode, LatestNewsDto.fromEntity(news, trimmedCode));
             }
         }
+        
+        
 
         // Map의 values() (LatestNewsDto 객체들)을 리스트로 변환하여 반환합니다.
         // 이 리스트의 크기는 latestNewsByIndividualStockCode 맵의 키 개수와 동일합니다.
@@ -173,4 +175,39 @@ public class NewsService {
         return new ArrayList<>(latestNewsByIndividualStockCode.values());
     }
 
+    
+    public List<LatestNewsDto> getTop5LatestNews() {
+        // 1. 데이터베이스에서 모든 뉴스를 newsDt 내림차순(최신순)으로 가져옵니다.
+        // 이때, LIMIT 5를 적용하여 처음부터 5개만 가져오도록 레포지토리에 쿼리 메서드를 정의하는 것이 효율적입니다.
+        // 현재 newsRepository에 해당 메서드가 없다면 아래와 같이 추가해야 합니다.
+        // List<News> top5NewsEntities = newsRepository.findTop5ByOrderByNewsDtDesc();
+
+        // **만약 NewsRepository에 findTop5ByOrderByNewsDtDesc() 같은 메서드가 아직 없다면,**
+        // 일단 findAllByOrderByNewsDtDesc()를 사용하고 Java 코드에서 5개로 제한할 수 있습니다.
+        // 하지만 DB 레벨에서 LIMIT를 거는 것이 훨씬 효율적입니다.
+
+        // 효율적인 방법: NewsRepository에 다음 메서드 추가 권장
+        // public interface NewsRepository extends JpaRepository<News, Long> {
+        //     List<News> findTop5ByOrderByNewsDtDesc(); // 이 메서드를 레포지토리에 추가해야 합니다.
+        // }
+        
+        List<News> allNewsSorted = newsRepository.findAllByOrderByNewsDtDesc(); // 현재 레포지토리 기준
+
+        // 2. Stream API를 사용하여 상위 5개의 뉴스만 선택하고, 각 뉴스를 DTO로 변환합니다.
+        // 여기서는 각 뉴스 엔티티가 포함하는 '모든 종목 코드' 중 첫 번째 코드를 대표 종목 코드로 사용하여 DTO를 생성합니다.
+        // 만약 특정 종목 코드를 기준으로 하고 싶지 않다면 LatestNewsDto.fromEntity(news, null) 또는 빈 문자열을 전달해도 됩니다.
+        List<LatestNewsDto> top5NewsDtos = allNewsSorted.stream()
+                .limit(5) // 상위 5개만 가져옵니다.
+                .map(news -> {
+                    // News 엔티티의 stock_codes는 콤마로 구분된 문자열일 수 있습니다.
+                    // 여기서는 DTO 생성을 위해 첫 번째 종목 코드를 사용하거나, null/빈 문자열을 전달합니다.
+                    String firstStockCode = (news.getStockCodes() != null && !news.getStockCodes().trim().isEmpty())
+                                            ? news.getStockCodes().split(",")[0].trim()
+                                            : null;
+                    return LatestNewsDto.fromEntity(news, firstStockCode);
+                })
+                .collect(Collectors.toList());
+
+        return top5NewsDtos;
+    }
 }

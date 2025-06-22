@@ -32,4 +32,6 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     List<News> findByNewsIdxIn(List<Long> newsIdxList);
     
     List<News> findAllByOrderByNewsDtDesc();
+    
+    List<News> findTop5ByOrderByNewsDtDesc();
 }

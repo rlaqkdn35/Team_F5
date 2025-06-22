@@ -65,4 +65,12 @@ public class NewsController {
         return newsService.getLatestNewsPerIndividualStockCode();
     }
     
+    @GetMapping("/top5-latest")
+    public ResponseEntity<List<LatestNewsDto>> getTop5LatestNews() {
+        List<LatestNewsDto> newsList = newsService.getTop5LatestNews();
+        if (newsList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(newsList);
+    }
 }
