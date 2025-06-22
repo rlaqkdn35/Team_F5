@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.smhrd.stock.dto.LatestNewsDto;
 import com.smhrd.stock.dto.NewsDetailDto;
 import com.smhrd.stock.dto.NewsSummaryDto;
 import com.smhrd.stock.dto.RecentNewsDto;
@@ -138,4 +140,45 @@ public class NewsService {
 
         return newsRepository.findByNewsIdxIn(newsIds);
     }
+    public List<LatestNewsDto> getLatestNewsPerIndividualStockCode() {
+        // 1. 데이터베이스에서 모든 뉴스를 최신순(newsDt 내림차순)으로 가져옵니다.
+        // **주의: 데이터 양이 매우 많다면 이 findAll() 호출이 성능 병목이 될 수 있습니다.**
+        // 실제 운영 환경에서는 findAll() 대신 일정 기간의 뉴스만 가져오거나,
+        // (예: newsRepository.findByNewsDtAfterOrderByNewsDtDesc(somePastTimestamp))
+        // 페이징(Pageable)을 사용하여 데이터를 제한적으로 로드하는 것을 고려해야 합니다.
+        List<News> allNews = newsRepository.findAllByOrderByNewsDtDesc();
+
+        // 2. 각 개별 종목 코드별로 가장 최신 뉴스를 저장할 Map을 생성합니다.
+        // LinkedHashMap을 사용하면 종목 코드가 처음 발견된 순서대로 결과가 유지됩니다.
+        Map<String, News> latestNewsMap = new LinkedHashMap<>();
+
+        // 3. 가져온 뉴스 목록을 순회하며 각 개별 종목 코드별 최신 뉴스를 필터링합니다.
+        // allNews가 이미 newsDt 내림차순으로 정렬되어 있으므로,
+        // Map에 먼저 들어가는 뉴스가 해당 종목 코드의 가장 최신 뉴스가 됩니다.
+        for (News news : allNews) {
+            // stock_codes가 null이거나 비어있으면 건너뜁니다.
+            if (news.getStockCodes() == null || news.getStockCodes().trim().isEmpty()) {
+                continue;
+            }
+
+            // stock_codes 문자열을 콤마(,)로 분리합니다.
+            String[] codes = news.getStockCodes().split(",");
+            for (String code : codes) {
+                String trimmedCode = code.trim(); // 각 종목 코드의 앞뒤 공백을 제거합니다.
+                if (trimmedCode.isEmpty()) {
+                    continue; // 비어있는 문자열은 건너뜁니다.
+                }
+
+                // 해당 trimmedCode가 아직 Map의 키로 존재하지 않으면, 현재 news를 최신 뉴스로 저장합니다.
+                // newsRepository.findAllByOrderByNewsDtDesc() 덕분에 먼저 발견되는 뉴스가 최신입니다.
+                latestNewsMap.putIfAbsent(trimmedCode, news);
+            }
+        }
+
+        // 4. Map에 저장된 (각 종목 코드별 최신) 뉴스 엔티티들을 DTO로 변환하여 반환합니다.
+        return latestNewsMap.values().stream()
+                .map(LatestNewsDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
 }

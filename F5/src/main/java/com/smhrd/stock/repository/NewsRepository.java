@@ -30,5 +30,6 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     // newsDt(뉴스 발행 일시)를 기준으로 특정 시간 이후의 뉴스 목록을 조회
     List<News> findByNewsDtAfterOrderByNewsDtDesc(Timestamp newsDt);
     List<News> findByNewsIdxIn(List<Long> newsIdxList);
-
+    
+    List<News> findAllByOrderByNewsDtDesc();
 }

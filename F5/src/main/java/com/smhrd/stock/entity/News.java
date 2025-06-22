@@ -40,4 +40,12 @@ public class News {
 	    @Column(name = "news_summary") 
 	    private String newsSummary;
 	    
+	    @Column(name = "news_analysis")
+	    private String newsAnalysis;
+
+	    @Column(name = "news_analysis_score")
+	    private Double newsAnalysisScore;
+	    
+	    @Column(name = "stock_codes")
+	    private String stockCodes; 
 }

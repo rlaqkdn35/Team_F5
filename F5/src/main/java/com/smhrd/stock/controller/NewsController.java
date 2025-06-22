@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.smhrd.stock.dto.LatestNewsDto;
 import com.smhrd.stock.dto.NewsDetailDto;
 import com.smhrd.stock.dto.NewsSummaryDto;
 import com.smhrd.stock.dto.RecentNewsDto;
@@ -57,6 +58,11 @@ public class NewsController {
     public ResponseEntity<List<News>> getNewsByStockCode(@PathVariable String stockCode) {
         List<News> newsList = newsService.getNewsByStockCode(stockCode);
         return ResponseEntity.ok(newsList);
+    }
+    
+    @GetMapping("/latest-per-individual-stock")
+    public List<LatestNewsDto> getLatestNewsPerIndividualStockCode() {
+        return newsService.getLatestNewsPerIndividualStockCode();
     }
     
 }
