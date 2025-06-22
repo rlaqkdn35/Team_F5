@@ -1,53 +1,42 @@
+// LatestNewsDto.java
+
 package com.smhrd.stock.dto;
 
-import java.sql.Timestamp; // Timestamp 타입 임포트
+import java.sql.Timestamp;
 
-import com.smhrd.stock.entity.News; // News 엔티티 임포트
+import com.smhrd.stock.entity.News;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class LatestNewsDto {
     private Long newsIdx;
     private String newsTitle;
     private String pressName;
-    private Timestamp newsDt; // 뉴스 발행 일시
+    private Timestamp newsDt;
     private String newsSummary;
-    private String stockCodes; // DTO 필드명도 stock_codes로 변경 (컬럼명과 일치)
+    // private String stockCodes; // 기존의 여러 종목 코드를 담는 필드는 유지하거나 삭제 가능
+    private String stockCode; // <<<--- 이 필드를 추가합니다. 이 DTO가 어떤 '단일' 종목에 대한 뉴스인지 명시합니다.
     private String newsAnalysis;
-    private Double newsAnalysisScore; // decimal(12,5) -> Double
+    private Double newsAnalysisScore;
 
-    // stockName 필드 제거 (요청에 없음)
-
-    @Builder
-    public LatestNewsDto(Long newsIdx, String newsTitle, String pressName, Timestamp newsDt,
-                         String newsSummary, String stockCodes, String newsAnalysis,
-                         Double newsAnalysisScore) { // 생성자 파라미터에서 stockName 제거
-        this.newsIdx = newsIdx;
-        this.newsTitle = newsTitle;
-        this.pressName = pressName;
-        this.newsDt = newsDt;
-        this.newsSummary = newsSummary;
-        this.stockCodes = stockCodes;
-        this.newsAnalysis = newsAnalysis;
-        this.newsAnalysisScore = newsAnalysisScore;
-    }
-
-    /**
-     * News 엔티티를 LatestNewsDto로 변환하는 정적 팩토리 메소드.
-     * stockName 관련 로직을 제거합니다.
-     */
-    public static LatestNewsDto fromEntity(News news) {
+    // News 엔티티를 LatestNewsDto로 변환하는 정적 팩토리 메소드
+    // 여기서는 stockCodes 문자열 전체 대신, 특정 개별 stockCode를 받도록 변경합니다.
+    public static LatestNewsDto fromEntity(News news, String individualStockCode) {
         return LatestNewsDto.builder()
                 .newsIdx(news.getNewsIdx())
                 .newsTitle(news.getNewsTitle())
                 .pressName(news.getPressName())
                 .newsDt(news.getNewsDt())
                 .newsSummary(news.getNewsSummary())
-                .stockCodes(news.getStockCodes()) // News 엔티티의 stockCodes 필드 사용
+                // .stockCodes(news.getStockCodes()) // 필요에 따라 원본 stockCodes도 포함 가능
+                .stockCode(individualStockCode) // <<<--- 개별 종목 코드 설정
                 .newsAnalysis(news.getNewsAnalysis())
                 .newsAnalysisScore(news.getNewsAnalysisScore())
                 .build();

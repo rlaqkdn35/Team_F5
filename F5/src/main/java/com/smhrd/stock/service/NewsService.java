@@ -140,45 +140,37 @@ public class NewsService {
 
         return newsRepository.findByNewsIdxIn(newsIds);
     }
+    
     public List<LatestNewsDto> getLatestNewsPerIndividualStockCode() {
-        // 1. 데이터베이스에서 모든 뉴스를 최신순(newsDt 내림차순)으로 가져옵니다.
-        // **주의: 데이터 양이 매우 많다면 이 findAll() 호출이 성능 병목이 될 수 있습니다.**
-        // 실제 운영 환경에서는 findAll() 대신 일정 기간의 뉴스만 가져오거나,
-        // (예: newsRepository.findByNewsDtAfterOrderByNewsDtDesc(somePastTimestamp))
-        // 페이징(Pageable)을 사용하여 데이터를 제한적으로 로드하는 것을 고려해야 합니다.
         List<News> allNews = newsRepository.findAllByOrderByNewsDtDesc();
 
-        // 2. 각 개별 종목 코드별로 가장 최신 뉴스를 저장할 Map을 생성합니다.
-        // LinkedHashMap을 사용하면 종목 코드가 처음 발견된 순서대로 결과가 유지됩니다.
-        Map<String, News> latestNewsMap = new LinkedHashMap<>();
+        // Map의 키는 개별 종목 코드(String), 값은 해당 종목 코드에 대한 최신 뉴스 DTO
+        // 이렇게 하면 Map에 각 종목 코드별로 하나의 DTO가 매핑됩니다.
+        Map<String, LatestNewsDto> latestNewsByIndividualStockCode = new LinkedHashMap<>();
 
-        // 3. 가져온 뉴스 목록을 순회하며 각 개별 종목 코드별 최신 뉴스를 필터링합니다.
-        // allNews가 이미 newsDt 내림차순으로 정렬되어 있으므로,
-        // Map에 먼저 들어가는 뉴스가 해당 종목 코드의 가장 최신 뉴스가 됩니다.
         for (News news : allNews) {
-            // stock_codes가 null이거나 비어있으면 건너뜁니다.
             if (news.getStockCodes() == null || news.getStockCodes().trim().isEmpty()) {
                 continue;
             }
 
-            // stock_codes 문자열을 콤마(,)로 분리합니다.
             String[] codes = news.getStockCodes().split(",");
             for (String code : codes) {
-                String trimmedCode = code.trim(); // 각 종목 코드의 앞뒤 공백을 제거합니다.
+                String trimmedCode = code.trim();
                 if (trimmedCode.isEmpty()) {
-                    continue; // 비어있는 문자열은 건너뜁니다.
+                    continue;
                 }
 
-                // 해당 trimmedCode가 아직 Map의 키로 존재하지 않으면, 현재 news를 최신 뉴스로 저장합니다.
-                // newsRepository.findAllByOrderByNewsDtDesc() 덕분에 먼저 발견되는 뉴스가 최신입니다.
-                latestNewsMap.putIfAbsent(trimmedCode, news);
+                // 해당 trimmedCode에 대한 최신 뉴스가 아직 맵에 없다면,
+                // 현재 뉴스 엔티티와 해당 개별 종목 코드를 사용하여 새로운 DTO를 생성하고 저장합니다.
+                // 이렇게 함으로써, 하나의 News 엔티티가 여러 개별 종목 코드에 대한 DTO로 변환될 수 있습니다.
+                latestNewsByIndividualStockCode.putIfAbsent(trimmedCode, LatestNewsDto.fromEntity(news, trimmedCode));
             }
         }
 
-        // 4. Map에 저장된 (각 종목 코드별 최신) 뉴스 엔티티들을 DTO로 변환하여 반환합니다.
-        return latestNewsMap.values().stream()
-                .map(LatestNewsDto::fromEntity)
-                .collect(Collectors.toList());
+        // Map의 values() (LatestNewsDto 객체들)을 리스트로 변환하여 반환합니다.
+        // 이 리스트의 크기는 latestNewsByIndividualStockCode 맵의 키 개수와 동일합니다.
+        // 즉, 뉴스 데이터가 있는 모든 개별 종목 코드에 대한 최신 뉴스가 각각 하나씩 포함됩니다.
+        return new ArrayList<>(latestNewsByIndividualStockCode.values());
     }
 
 }
