@@ -8,7 +8,7 @@ const RecommendedStockCard = ({ stock }) => {
         <h4 className="stock-name">{stock.name} ({stock.code})</h4>
         <p className={`current-price ${stock.changeType}`}>
           {stock.currentPrice}
-          <span className="change-info"> {stock.change} ({stock.changeRate})</span>
+          <span className="change-info">({stock.change}%)</span>
         </p>
       </div>
       <div className="stock-chart-area">
@@ -24,7 +24,7 @@ const RecommendedStockCard = ({ stock }) => {
         </div> */}   
       </div>
       <div className="recommendation-reason-box">
-        <strong>★☆AI 추천 이유☆★</strong>
+        <strong>기업개요</strong>
         <p>{stock.reason}</p>
       </div>
     </div>

@@ -20,7 +20,8 @@
 .slider-track {
   display: flex; /* 자식 요소 (slider-item)들을 가로로 나란히 정렬 */
   transition: transform 0.5s ease-in-out; /* 부드러운 슬라이드 전환 효과 */
-  height: 900px;
+  height: auto; /* 혹은 이대로 두어도 flex 컨테이너는 내용물에 맞게 늘어납니다. */
+  align-items: stretch; /* 이 속성을 추가하여 자식들이 부모 높이를 채우도록 함 */
   /* width는 JavaScript에서 동적으로 계산됩니다. (예: 500%, 300% 등) */
   /* transform은 JavaScript에서 currentIndex와 slideWidth에 따라 계산됩니다. */
 }

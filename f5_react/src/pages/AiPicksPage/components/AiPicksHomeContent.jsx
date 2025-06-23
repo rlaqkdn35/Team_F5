@@ -66,8 +66,8 @@ const AiPicksHomeContent = () => {
                             summary: firstNews.newsSummary || '최신 뉴스 데이터를 기반으로 추천합니다.',
                             recommendedStock: {
                                 code: firstNews.stockCode || 'N/A',
-                                name: firstNews.newsTitle || '뉴스 제목 없음',
-                                reason: firstNews.newsSummary || '뉴스 요약 없음'
+                                name: firstNews.newsTitle || '뉴스 제목 없음', // newsTitle을 종목명으로 사용
+                                reason: firstNews.newsSummary || '뉴스 요약 없음' // newsSummary를 이유로 사용
                             }
                         });
                     }
@@ -352,8 +352,20 @@ const AiPicksHomeContent = () => {
                             <p className="recommended-stock-name-aphc">
                                 <span className="stock-code-tag-aphc">{selectedAiModel.recommendedStock.code}</span> {selectedAiModel.recommendedStock.name}
                             </p>
-                            {/* <p className="recommendation-reason-aphc">{selectedAiModel.recommendedStock.reason}</p> */}
-                            {/* <p className="ai-comment-aphc">AI 요약: {selectedAiModel.summary}</p> */}
+                            {/* 모델 A와 B의 이유와 요약 표시 */}
+                            {selectedAiModel.id === 'modelA' && (
+                                <>
+                                    <p className="recommendation-reason-aphc">{selectedAiModel.recommendedStock.reason}</p>
+                                    <p className="ai-comment-aphc">AI 요약: {selectedAiModel.summary}</p>
+                                </>
+                            )}
+                            {selectedAiModel.id === 'modelB' && (
+                                <>
+                                    <p className="recommendation-reason-aphc">{selectedAiModel.recommendedStock.reason}</p>
+                                    {/* 모델 B는 별도의 summary 필드가 없으므로 recommendationReason을 사용 */}
+                                    <p className="ai-comment-aphc">AI 요약: 예측 데이터를 기반으로 한 종목입니다.</p>
+                                </>
+                            )}
                             {/* 모델 B의 차트 렌더링 */}
                             {selectedAiModel.id === 'modelB' && selectedAiModel.recommendedStock.predictionDays ? (
                                 <div className="chart-container-aphc" style={{ maxHeight: '250px' }}>
