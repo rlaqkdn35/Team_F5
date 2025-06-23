@@ -178,12 +178,12 @@ const AiInfoHomeContentPage = () => {
                 setBubbleData(transformedData);
                 setError(null);
 
-                if (transformedData.length > 0) {
-                    const largestBubble = transformedData.reduce((prev, current) => 
-                        (prev.value > current.value) ? prev : current
-                    );
-                    handleBubbleClick(largestBubble);
-                }
+                // if (transformedData.length > 0) {
+                //     const largestBubble = transformedData.reduce((prev, current) => 
+                //         (prev.value > current.value) ? prev : current
+                //     );
+                //     handleBubbleClick(largestBubble);
+                // }
             } catch (error) {
                 console.error('버블 데이터를 가져오는 중 오류 발생:', error.message);
                 setError('데이터를 불러오지 못했습니다. 서버를 확인하세요.');

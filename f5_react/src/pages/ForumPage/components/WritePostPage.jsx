@@ -18,7 +18,7 @@ const WritePostPage = () => {
     useEffect(() => {
         const fetchStocks = async () => {
             try {
-                const response = await axios.get('http://localhost:8084/F5/stocks');
+                const response = await axios.get('http://localhost:8084/F5/stocks/stocklist');
                 setStockOptions(response.data);
             } catch (error) {
                 console.error('종목 정보를 가져오는 중 오류 발생:', error);
