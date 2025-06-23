@@ -95,8 +95,8 @@
 }
 
 .top-stocks-list-aphc {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* 이 섹션 내에서 다시 그리드 */
+    display: flex; /* grid 대신 flex로 변경 */
+    flex-direction: column; /* 자식 요소들을 세로로 쌓이도록 설정 */
     gap: 15px;
 }
 
@@ -188,8 +188,8 @@
 }
 
 .selected-ai-recommendation-box-aphc {
-    background-color: #B785B7;
-    color: var(--color-text-white);
+    background-color: #ffffff;
+    color: var(--color-text-dark);
     border: 1px solid var(--color-background-body);
     border-radius: 10px;
     padding: 20px;

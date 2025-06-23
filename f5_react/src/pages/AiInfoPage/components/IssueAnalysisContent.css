@@ -36,6 +36,7 @@
 }
 
 .issue-tab-content {
+    height: auto ; /* 고정 높이 설정 */
     border-radius: 15px;
     background-color: var(--color-white-hover); /* 아주 연한 회색 배경 */
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
@@ -151,116 +152,108 @@
     font-size: 0.9em;
     color: var(--color-text-secondary);
 }
-
-/* AI Picked Issue - Related Stocks Table (related-stocks-table) Styles */
 .related-stocks-table {
-    width: 95%;
+    width: 900px; /* 이제 이 width가 잘 작동할 겁니다 */
     margin: 20px auto;
     border-collapse: collapse;
-    font-size: 0.95em; /* Original font size */
-    border: 1px solid var(--color-light-gray); /* Table border */
-    background-color: var(--color-background-body); /* White background */
+    font-size: 0.95em;
+    border: 1px solid var(--color-light-gray);
+    background-color: var(--color-background-body);
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Original shadow */
-    overflow: hidden; /* For rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    /* overflow: hidden; */ /* 테이블 자체에 hidden 적용시 스크롤이 안될 수 있으니 주의 */
     font-family: var(--font-table);
 }
 
 .related-stocks-table thead tr {
-    background-color: var(--color-table-header-bg); /* Header background */
+    background-color: var(--color-table-header-bg);
     color: var(--color-text-dark);
-    font-weight: 600; /* Original weight */
+    font-weight: 600;
 }
 
 .related-stocks-table th,
 .related-stocks-table td {
-    padding: 12px 20px; /* Original padding */
-    border: 1px solid var(--color-lighter-gray); /* Cell borders */
+    padding: 12px 20px;
+    border: 1px solid var(--color-lighter-gray);
     text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis; /* 넘치는 내용은 ...으로 표시 */
 }
 
 .related-stocks-table th {
     text-align: center;
 }
 
-.related-stocks-table .col-name { width: 20%; text-align: left; }
-.related-stocks-table .col-price { width: 15%; text-align: right; }
-.related-stocks-table .col-change-rate { width: 15%; text-align: right; }
-.related-stocks-table .col-overview { width: 25%; }
-.related-stocks-table .col-other-issues { width: 25%; }
+/* 각 컬럼의 너비는 th, td에 직접 지정합니다. */
+.related-stocks-table .col-name { width: 15%; text-align: left; }
+.related-stocks-table .col-price { width: 10%; text-align: right; }
+.related-stocks-table .col-change-rate { width: 10%; text-align: right; }
+.related-stocks-table .col-overview { width: 30%; } /* 좀 더 여유있게 */
+.related-stocks-table .col-other-issues { width: 35%; } /* 좀 더 여유있게 */
 
 
-.related-stocks-table-header { /* Re-adding this for clarity, as it was in the original snippet */
-    display: flex;
-    background-color: var(--color-table-header-bg);
-    padding: 12px 20px;
-    border-bottom: 1px solid var(--color-light-gray);
-    font-weight: 600;
-    color: var(--color-text-dark);
-    text-align: center;
-}
+/* 이전 flex 기반의 .related-stocks-table-header, .related-stocks-table-body, .related-stocks-table-row 스타일은 제거하거나 주석 처리 */
+/* .related-stocks-table-header, .related-stocks-table-body, .related-stocks-table-row 등은 이제 필요 없습니다. */
 
-.related-stocks-table-header .col-name { flex: 1.2; text-align: left; }
-.related-stocks-table-header .col-price { flex: 0.8; }
-.related-stocks-table-header .col-change-rate { flex: 0.8; }
-.related-stocks-table-header .col-overview { flex: 1.5; }
-.related-stocks-table-header .col-other-issues { flex: 1.5; }
-
-.related-stocks-table-body {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.related-stocks-table-row {
-    display: flex; /* Kept flex for rows as in original snippet */
-    align-items: center;
-    padding: 12px 20px;
-    border-bottom: 1px solid var(--color-lighter-gray); /* Lighter border */
+/* 새로운 tbody tr 스타일 */
+.related-stocks-table tbody tr {
     transition: background-color 0.2s ease;
-    color: var(--color-text-dark); /* Default text color for rows */
+    color: var(--color-text-dark);
 }
 
-.related-stocks-table-row:nth-child(even) {
-    background-color: var(--color-table-odd-row); /* Using original #fdfdfd for even, which is lighter */
+.related-stocks-table tbody tr:nth-child(even) {
+    background-color: var(--color-table-odd-row);
 }
 
-.related-stocks-table-row:hover {
+.related-stocks-table tbody tr:hover {
     background-color: var(--color-table-hover);
 }
 
-.related-stocks-table-row span {
-    flex: 1; /* Original flex for span inside rows */
+/* .no-related-stock 스타일 조정 (td에 colspan 적용 시) */
+.related-stocks-table .no-related-stock {
     text-align: center;
-    color: var(--color-text-dark); /* Using variable */
-    padding: 0 5px;
+    padding: 20px;
+    font-style: italic;
+    color: var(--color-text-secondary);
 }
 
-.related-stocks-table-row .col-name { flex: 1.2; text-align: left; font-weight: 500; }
-.related-stocks-table-row .col-price { flex: 0.8; font-weight: 600; }
-.related-stocks-table-row .col-change-rate { flex: 0.8; font-weight: bold; }
-
-.related-stocks-table-row .col-overview,
-.related-stocks-table-row .col-other-issues {
-    flex: 1.5;
-    text-align: left;
-    font-size: 0.9em;
-    color: var(--color-text-secondary); /* Using variable for lighter text */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.related-stocks-table-row .col-name a {
+/* col-name 안의 링크 스타일은 그대로 유지 */
+.related-stocks-table .col-name a {
     text-decoration: none;
-    color: var(--color-text-dark); /* Using variable */
+    color: var(--color-text-dark);
     transition: color 0.2s ease;
 }
 
-.related-stocks-table-row .col-name a:hover {
-    color: var(--color-text-hover); /* Using variable */
+.related-stocks-table .col-name a:hover {
+    color: var(--color-text-hover);
 }
 
+/* 등락률 색상도 그대로 유지 */
+.col-change-rate.positive { color: var(--color-stock-positive); }
+.col-change-rate.negative { color: var(--color-stock-negative); }
+.col-change-rate.neutral { color: #7f8c8d; }
+
+/* 미디어 쿼리 내에서도 display: block; overflow-x: auto; 등을 제거합니다. */
+/* <table> 태그를 사용하면 브라우저가 테이블을 반응형으로 처리하는 방식이 달라집니다. */
+/* 만약 모바일에서 스크롤이 필요하다면, .related-stocks-table을 감싸는 div를 만들고 그 div에 overflow-x: auto;를 적용해야 합니다. */
+@media (max-width: 768px) {
+    /* ... 기존 미디어 쿼리 스타일 ... */
+
+    /* related-stocks-table과 recent-issues-table-unified에 대한 display: block 등 제거 */
+    /* 대신 테이블을 감싸는 div에 overflow-x: auto를 적용하는 것이 더 효과적입니다. */
+    .table-responsive-wrapper { /* 새롭게 추가할 div에 대한 스타일 */
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; /* iOS Safari 부드러운 스크롤 */
+    }
+
+    /* 테이블 내부 셀의 white-space: normal은 유지하되, 필요에 따라 조정 */
+    .related-stocks-table th, .related-stocks-table td,
+    .recent-issues-table-unified th, .recent-issues-table-unified td {
+        white-space: normal; /* 모바일에서는 줄 바꿈 허용 */
+        /* overflow: visible; */ /* 모바일에서만 전체 내용 보려면 visible */
+        /* text-overflow: clip; */ /* ellipsis 제거하려면 clip */
+    }
+}
 .col-change-rate.positive {
     color: var(--color-stock-positive); /* Using variable */
 }
@@ -351,7 +344,6 @@
 
         display: block;
         overflow-x: auto;
-        white-space: nowrap;
         border: none; /* Remove outer border to avoid conflict with scrollbar */
     }
 

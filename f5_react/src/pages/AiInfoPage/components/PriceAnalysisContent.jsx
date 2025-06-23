@@ -42,9 +42,9 @@ const PriceAnalysisContent = () => {
 
       {/* 섹션 2: 시장 특징 테마 (내부 탭 및 테이블 포함) */}
       {/* MarketThemesSection 컴포넌트는 자체적으로 "시장특징 테마"라는 제목을 가집니다. */}
-      <div className="market-themes-wrapper-pac">
+      {/* <div className="market-themes-wrapper-pac">
         <MarketThemesSection /> 
-      </div>
+      </div> */}
 
     </div>
   );

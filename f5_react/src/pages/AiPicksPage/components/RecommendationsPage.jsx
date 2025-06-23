@@ -1,331 +1,412 @@
 import React, { useState, useEffect } from 'react';
-import './RecommendationsPage.css'; // CSS 파일을 위한 임포트
+import axios from 'axios';
+import './RecommendationsPage.css';
+import { Line } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+} from 'chart.js';
 
-// Chart.js 관련 임포트 및 모듈 등록이 제거되었습니다.
+// Chart.js에 필요한 컴포넌트들을 등록합니다.
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 const RecommendationsPage = () => {
     const [aiModels, setAiModels] = useState([]);
-    const [recommendedStocks, setRecommendedStocks] = useState([]);
+    const [top5Stocks, setTop5Stocks] = useState([]); // 뉴스에서 추출된 상위 5개 종목 데이터
+    const [recommendedStocks, setRecommendedStocks] = useState([]); // 최종 결합된 종목 데이터
     const [selectedModelId, setSelectedModelId] = useState(null);
+    const [stockPredictions, setStockPredictions] = useState([]);
+
+    // 1. 초기 AI 모델 설정 및 초기 데이터 로드 (첫 렌더링 시 한 번만 실행)
     useEffect(() => {
-        // 섹션 1 더미 데이터: AI 모델 점수 및 추천 정보
-        const dummyAiModels = [
-            { id: 'modelA', name: 'AI 모델 A', score: 92, summary: '시장 데이터를 기반으로 단기 급등 종목을 예측합니다.', recommendedStock: { code: '452101', name: 'NVIDIA Corp.', reason: '최근 기술 혁신 발표와 시장 수요 증가로 긍정적 모멘텀이 예상됩니다.' } },
-            { id: 'modelB', name: 'AI 모델 B', score: 88, summary: '거시 경제 지표와 기업 펀더멘털을 분석하여 장기 투자를 제안합니다.', recommendedStock: { code: '542101', name: 'Microsoft Corp.', reason: '클라우드 컴퓨팅 부문의 꾸준한 성장과 안정적인 수익 구조를 갖추고 있습니다.' } },
-            { id: 'modelC', name: 'AI 모델 C', score: 95, summary: '소셜 미디어 트렌드와 뉴스 심리를 반영하여 시장 변동성을 포착합니다.', recommendedStock: { code: '000100', name: 'Tesla Inc.', reason: '일론 머스크의 최신 트윗과 전기차 시장의 회복 기대감이 반영되었습니다.' } },
+        const initialAiModels = [
+            {
+                id: 'alpha-model',
+                name: '알파 모델',
+                score: 93,
+                summary: '주가 흐름 데이터를 분석하여 단기 변동성을 예측합니다.',
+                recommendedStock: { code: '000250', name: '코스피200 (예시)', reason: '종합 시장 지표 개선 예상으로 긍정적입니다.' }
+            },
+            {
+                id: 'beta-model',
+                name: '베타 모델',
+                score: 89,
+                summary: '기업 재무 상태와 산업 동향을 고려한 중장기 투자를 제안합니다.',
+                recommendedStock: { code: '003380', name: '하림 (예시)', reason: '새로운 사업 확장 소식으로 성장 기대감이 높습니다.' }
+            },
+            {
+                id: 'gamma-model',
+                name: '감마 모델',
+                score: 96,
+                summary: '소셜 트렌드와 뉴스 감성을 파악하여 시장 심리를 반영합니다.',
+                recommendedStock: { code: '000250', name: '코스피200 (예시)', reason: '시장 전반의 긍정적 심리가 반영될 것입니다.' }
+            },
         ];
+        setAiModels(initialAiModels);
 
-        setAiModels(dummyAiModels);
-        if (dummyAiModels.length > 0) {
-            const initialTopAi = dummyAiModels.reduce((prev, current) => (prev.score > current.score) ? prev : current);
-            setSelectedModelId(initialTopAi.id);
+        if (initialAiModels.length > 0) {
+            const topModel = initialAiModels.reduce((prev, current) => (prev.score > current.score ? prev : current));
+            setSelectedModelId(topModel.id);
         }
-        // 섹션 2 더미 데이터: 각 모델의 예측 그래프 및 수익률 (약 20개)
-        const dummyRecommendedStocks = [
-            {
-                code: 'AAPL', name: 'Apple Inc.',
-                modelAPrediction: [170, 172, 175, 173, 176, 178, 180],
-                modelBPrediction: [170, 169, 171, 170, 172, 171, 173],
-                modelCPrediction: [170, 171, 170, 172, 174, 173, 175],
-                returns: { day: 0.5, week: 1.2, month: 3.5, year: 25.0 }
-            },
-            {
-                code: 'MSFT', name: 'Microsoft Corp.',
-                modelAPrediction: [420, 418, 422, 425, 423, 427, 430],
-                modelBPrediction: [420, 421, 420, 423, 425, 424, 426],
-                modelCPrediction: [420, 419, 421, 420, 422, 421, 423],
-                returns: { day: -0.2, week: 0.8, month: 2.1, year: 30.0 }
-            },
-            {
-                code: 'NVDA', name: 'NVIDIA Corp.',
-                modelAPrediction: [950, 960, 975, 980, 990, 1000, 1010],
-                modelBPrediction: [950, 945, 955, 960, 958, 965, 970],
-                modelCPrediction: [950, 970, 980, 995, 1005, 1015, 1025],
-                returns: { day: 1.5, week: 5.0, month: 10.0, year: 80.0 }
-            },
-            {
-                code: 'GOOGL', name: 'Alphabet Inc.',
-                modelAPrediction: [170, 171, 172, 173, 174, 175, 176],
-                modelBPrediction: [170, 169, 170, 171, 170, 172, 171],
-                modelCPrediction: [170, 172, 171, 173, 175, 174, 176],
-                returns: { day: 0.3, week: 0.9, month: 2.8, year: 28.0 }
-            },
-            {
-                code: 'AMZN', name: 'Amazon.com Inc.',
-                modelAPrediction: [185, 184, 186, 185, 187, 186, 188],
-                modelBPrediction: [185, 186, 185, 187, 188, 187, 189],
-                modelCPrediction: [185, 183, 184, 182, 185, 184, 186],
-                returns: { day: -0.8, week: -1.5, month: 0.5, year: 20.0 }
-            },
-            {
-                code: 'TSLA', name: 'Tesla Inc.',
-                modelAPrediction: [178, 176, 175, 173, 172, 170, 168],
-                modelBPrediction: [178, 179, 177, 178, 180, 179, 181],
-                modelCPrediction: [178, 180, 182, 185, 188, 190, 192],
-                returns: { day: 2.1, week: 4.5, month: 8.0, year: -10.0 }
-            },
-            {
-                code: 'META', name: 'Meta Platforms Inc.',
-                modelAPrediction: [490, 492, 495, 498, 500, 502, 505],
-                modelBPrediction: [490, 488, 490, 489, 491, 490, 492],
-                modelCPrediction: [490, 493, 496, 499, 502, 505, 508],
-                returns: { day: 0.7, week: 2.0, month: 5.0, year: 35.0 }
-            },
-            {
-                code: 'NFLX', name: 'Netflix Inc.',
-                modelAPrediction: [620, 618, 622, 620, 625, 623, 627],
-                modelBPrediction: [620, 621, 620, 623, 625, 624, 626],
-                modelCPrediction: [620, 619, 621, 620, 622, 621, 623],
-                returns: { day: -0.1, week: 0.5, month: 1.5, year: 18.0 }
-            },
-            {
-                code: 'AMD', name: 'Advanced Micro Devices',
-                modelAPrediction: [160, 162, 165, 168, 170, 172, 175],
-                modelBPrediction: [160, 159, 161, 160, 162, 161, 163],
-                modelCPrediction: [160, 163, 166, 169, 172, 175, 178],
-                returns: { day: 1.0, week: 3.0, month: 7.0, year: 50.0 }
-            },
-            {
-                code: 'INTC', name: 'Intel Corp.',
-                modelAPrediction: [30, 29, 28, 27, 26, 25, 24],
-                modelBPrediction: [30, 31, 30, 32, 31, 33, 32],
-                modelCPrediction: [30, 28, 27, 26, 25, 24, 23],
-                returns: { day: -1.0, week: -2.5, month: -5.0, year: -15.0 }
-            },
-            {
-                code: 'SBUX', name: 'Starbucks Corp.',
-                modelAPrediction: [90, 91, 92, 93, 94, 95, 96],
-                modelBPrediction: [90, 89, 90, 89, 90, 89, 90],
-                modelCPrediction: [90, 92, 91, 93, 94, 95, 96],
-                returns: { day: 0.4, week: 1.0, month: 2.0, year: 10.0 }
-            },
-            {
-                code: 'COST', name: 'Costco Wholesale Corp.',
-                modelAPrediction: [700, 705, 710, 715, 720, 725, 730],
-                modelBPrediction: [700, 698, 702, 700, 705, 703, 708],
-                modelCPrediction: [700, 703, 706, 709, 712, 715, 718],
-                returns: { day: 0.6, week: 1.8, month: 4.0, year: 22.0 }
-            },
-            {
-                code: 'ADBE', name: 'Adobe Inc.',
-                modelAPrediction: [500, 505, 510, 515, 520, 525, 530],
-                modelBPrediction: [500, 498, 502, 500, 505, 503, 508],
-                modelCPrediction: [500, 503, 506, 509, 512, 515, 518],
-                returns: { day: 0.9, week: 2.5, month: 6.0, year: 40.0 }
-            },
-            {
-                code: 'CRM', name: 'Salesforce Inc.',
-                modelAPrediction: [270, 272, 275, 278, 280, 282, 285],
-                modelBPrediction: [270, 269, 271, 270, 272, 271, 273],
-                modelCPrediction: [270, 273, 276, 279, 282, 285, 288],
-                returns: { day: 0.2, week: 1.1, month: 3.0, year: 27.0 }
-            },
-            {
-                code: 'PYPL', name: 'PayPal Holdings Inc.',
-                modelAPrediction: [60, 59, 58, 57, 56, 55, 54],
-                modelBPrediction: [60, 61, 60, 62, 61, 63, 62],
-                modelCPrediction: [60, 58, 57, 56, 55, 54, 53],
-                returns: { day: -0.5, week: -1.0, month: -2.0, year: -8.0 }
-            },
-            {
-                code: 'CMCSA', name: 'Comcast Corp.',
-                modelAPrediction: [45, 46, 47, 48, 49, 50, 51],
-                modelBPrediction: [45, 44, 45, 44, 45, 44, 45],
-                modelCPrediction: [45, 46, 47, 48, 49, 50, 51],
-                returns: { day: 0.3, week: 0.8, month: 1.5, year: 7.0 }
-            },
-            {
-                code: 'TMUS', name: 'T-Mobile US Inc.',
-                modelAPrediction: [150, 152, 154, 156, 158, 160, 162],
-                modelBPrediction: [150, 149, 151, 150, 152, 151, 153],
-                modelCPrediction: [150, 153, 156, 159, 162, 165, 168],
-                returns: { day: 0.7, week: 2.2, month: 4.5, year: 32.0 }
-            },
-            {
-                code: 'QCOM', name: 'QUALCOMM Inc.',
-                modelAPrediction: [180, 182, 185, 188, 190, 192, 195],
-                modelBPrediction: [180, 179, 181, 180, 182, 181, 183],
-                modelCPrediction: [180, 183, 186, 189, 192, 195, 198],
-                returns: { day: 0.8, week: 2.4, month: 5.5, year: 38.0 }
-            },
-            {
-                code: 'INTU', name: 'Intuit Inc.',
-                modelAPrediction: [650, 655, 660, 665, 670, 675, 680],
-                modelBPrediction: [650, 648, 652, 650, 655, 653, 658],
-                modelCPrediction: [650, 653, 656, 659, 662, 665, 668],
-                returns: { day: 0.5, week: 1.6, month: 3.2, year: 26.0 }
-            },
-            {
-                code: 'CSCO', name: 'Cisco Systems Inc.',
-                modelAPrediction: [50, 49, 48, 47, 46, 45, 44],
-                modelBPrediction: [50, 51, 50, 52, 51, 53, 52],
-                modelCPrediction: [50, 48, 47, 46, 45, 44, 43],
-                returns: { day: -0.2, week: -0.8, month: -1.5, year: -5.0 }
-            },
-        ];
 
-        setRecommendedStocks(dummyRecommendedStocks);
-    }, []);
+        // 초기 데이터 호출
+        fetchTop5NewsDetails();
+        fetchStockPredictions();
+    }, []); // 빈 배열: 컴포넌트 마운트 시 한 번만 실행
 
-    const getPredictionStatus = (predictionValue) => {
-        // 예측 값의 마지막 요소를 기준으로 판단
-        const lastValue = predictionValue[predictionValue.length - 1];
-        const firstValue = predictionValue[0];
+    // 2. 뉴스 데이터 가져오기 및 종목 중심으로 재구성 (새로운 /F5/news/top5-with-details 엔드포인트)
+    const fetchTop5NewsDetails = async () => {
+        try {
+            const response = await axios.get('http://localhost:8084/F5/news/top5-with-details');
+            console.log('Top 5 뉴스 상세 데이터:', response.data);
 
-        if (lastValue > firstValue * 1.02) { // 2% 이상 상승 시
-            return { score: lastValue, state: '강한 상승', class: 'positive' };
-        } else if (lastValue > firstValue * 1.005) { // 0.5% ~ 2% 상승 시
-            return { score: lastValue, state: '상승', class: 'positive' };
-        } else if (lastValue < firstValue * 0.98) { // 2% 이상 하락 시
-            return { score: lastValue, state: '강한 하락', class: 'negative' };
-        } else if (lastValue < firstValue * 0.995) { // 0.5% ~ 2% 하락 시
-            return { score: lastValue, state: '하락', class: 'negative' };
-        } else { // 그 외 (횡보)
-            return { score: lastValue, state: '횡보', class: 'neutral' };
+            const stocksMap = {}; // 종목 코드를 키로 하여 데이터 저장
+
+            response.data.forEach(newsItem => {
+                // 뉴스 자체의 감성 분석 점수 (없으면 neutral, N/A로 처리)
+                // 백엔드에서 newsAnalysis와 newsAnalysisScore가 필수가 아니므로 기본값 처리
+                const newsAnalysis = newsItem.newsAnalysis ?? 'N/A';
+                const newsAnalysisScore = newsItem.newsAnalysisScore ?? null;
+
+                newsItem.relatedStocks.forEach(relatedStock => {
+                    const stockCode = relatedStock.stockCode;
+                    if (!stocksMap[stockCode]) {
+                        stocksMap[stockCode] = {
+                            code: stockCode,
+                            name: relatedStock.stockName,
+                            companyInfo: relatedStock.companyInfo,
+                            // stockPrices 배열이 있다면 가장 최신 (배열의 첫 번째) 가격을 latestPrice로 설정
+                            latestPrice: relatedStock.stockPrices?.length > 0 ? relatedStock.stockPrices[0] : null,
+                            relatedNews: [], // 이 종목과 관련된 뉴스들을 저장할 배열
+                            predictionDays: null, // 초기에는 예측 데이터 없음
+                            modelAPrediction: null, // 초기에는 모델 A 예측 없음
+                        };
+                    }
+                    // 현재 뉴스를 해당 종목의 relatedNews 배열에 추가
+                    stocksMap[stockCode].relatedNews.push({
+                        newsTitle: newsItem.newsTitle,
+                        newsSummary: newsItem.newsSummary,
+                        newsUrl: newsItem.newsUrl,
+                        pressName: newsItem.pressName,
+                        newsDt: newsItem.newsDt,
+                        newsAnalysis: newsAnalysis, // 뉴스 자체의 감성 분석
+                        newsAnalysisScore: newsAnalysisScore, // 뉴스 자체의 감성 분석 점수
+                    });
+                });
+            });
+            setTop5Stocks(Object.values(stocksMap)); // 맵의 값들을 배열로 변환하여 저장
+            console.log('종목 중심으로 재구성된 데이터:', Object.values(stocksMap));
+
+        } catch (error) {
+            console.error('Top 5 뉴스 상세 데이터 불러오기 실패:', error);
+            setTop5Stocks([]); // 에러 발생 시 빈 배열로 초기화
         }
     };
 
-    const selectedAiModel = aiModels.find(model => model.id === selectedModelId);
+    // 3. 주가 예측 데이터 가져오기
+    const fetchStockPredictions = async () => {
+        try {
+            const response = await axios.get('http://localhost:8084/F5/predictions/latest-per-stock');
+            if (response.status === 200) {
+                setStockPredictions(response.data);
+                console.log('새로운 AI 예측 데이터 성공적으로 로드됨:', response.data);
+            } else if (response.status === 204) {
+                console.log('새로운 AI 예측 데이터 없음 (204 No Content).');
+                setStockPredictions([]);
+            }
+        } catch (error) {
+            console.error('새로운 AI 예측 데이터 불러오기 실패:', error);
+            setStockPredictions([]);
+        }
+    };
 
-    // 종합 AI 추천 종목 (항상 동일하게 표시됩니다)
+    // 4. 뉴스 기반 종목 데이터 (top5Stocks)와 예측 데이터 (stockPredictions)를 결합
+    useEffect(() => {
+        const combinedStocksMap = new Map(); // 종목 코드를 키로 Map 사용
+
+        // 1단계: 뉴스에서 가져온 종목 데이터를 기본으로 설정
+        top5Stocks.forEach(stock => {
+            // 깊은 복사를 통해 원본 객체 변경 방지
+            combinedStocksMap.set(stock.code, { ...stock });
+        });
+
+        // 2단계: 예측 데이터를 결합
+        stockPredictions.forEach(prediction => {
+            const stockCode = prediction.stockCode;
+            if (combinedStocksMap.has(stockCode)) {
+                // 이미 뉴스 데이터가 있는 종목이면, 예측 데이터 추가
+                const existingStock = combinedStocksMap.get(stockCode);
+                existingStock.predictionDays = prediction.predictionDays;
+                existingStock.modelAPrediction = prediction.predictionDays?.firstDay;
+            } else {
+                // 뉴스 데이터는 없지만 예측 데이터만 있는 새로운 종목이면, Map에 추가
+                combinedStocksMap.set(stockCode, {
+                    code: stockCode,
+                    name: prediction.stockName || `종목 ${stockCode}`,
+                    modelAPrediction: prediction.predictionDays?.firstDay,
+                    predictionDays: prediction.predictionDays,
+                    relatedNews: [], // 뉴스 정보 없음
+                    companyInfo: '정보 없음', // 기본값
+                    latestPrice: null, // 기본값
+                });
+            }
+        });
+
+        // Map의 값들을 배열로 변환하여 최종 recommendedStocks 상태 업데이트
+        setRecommendedStocks(Array.from(combinedStocksMap.values()));
+        console.log('최종 결합된 recommendedStocks:', Array.from(combinedStocksMap.values()));
+
+    }, [top5Stocks, stockPredictions]); // top5Stocks와 stockPredictions가 변경될 때마다 실행
+
+    const getPredictionStatus = (predictionValues) => {
+        if (!predictionValues || predictionValues.length < 2 || predictionValues.some(val => typeof val !== 'number' || isNaN(val))) {
+            return { score: '예측 불가능', state: '데이터 부족', class: 'neutral' };
+        }
+
+        const first = Number(predictionValues[0]);
+        const last = Number(predictionValues[predictionValues.length - 1]);
+
+        if (isNaN(first) || isNaN(last)) {
+            return { score: '예측 불가능', state: '데이터 오류', class: 'neutral' };
+        }
+
+        const safeFirst = first === 0 ? 1 : first;
+        const changeRatio = (last - first) / safeFirst;
+
+        const scoreToDisplay = last.toFixed(2);
+
+        if (changeRatio > 0.02) return { score: scoreToDisplay, state: '강한 상승', class: 'positive' };
+        else if (changeRatio > 0.005) return { score: scoreToDisplay, state: '상승', class: 'positive' };
+        else if (changeRatio < -0.02) return { score: scoreToDisplay, state: '강한 하락', class: 'negative' };
+        else if (changeRatio < -0.005) return { score: scoreToDisplay, state: '하락', class: 'negative' };
+        else return { score: scoreToDisplay, state: '횡보', class: 'neutral' };
+    };
+
+    const currentSelectedModel = aiModels.find(model => model.id === selectedModelId);
+
     const combinedRecommendation = {
-        stock: { code: 'SPY', name: 'S&P 500 ETF', reason: '세 모델의 종합적인 분석 결과, 시장 전반의 안정적인 상승이 예상됩니다.' },
-        summary: '다양한 AI 모델의 시그널을 통합 분석하여 현재 시장에서 가장 균형 잡힌 투자 기회를 제공합니다.'
+        stock: { code: 'KOSPI', name: '코스피 지수', reason: '다양한 AI 모델의 분석을 종합하여 시장 전반의 안정적인 성장을 예상합니다.' },
+        summary: '전반적인 시장 상황을 고려한 균형 잡힌 투자 기회입니다.'
     };
+    const newsAnalysisTerms = {
+        'positive': '상승',
+        'negative': '하락',
+        'neutral': '중립',
+        'N/A': '분석불가'
+    };
+
+    // --- 차트 데이터 생성 함수 ---
+    const chartLabels = [
+        '1일차', '2일차', '3일차', '4일차', '5일차',
+        '6일차', '7일차', '8일차', '9일차', '10일차'
+    ];
+
+    const getChartData = (stockName, predictionDays) => {
+        if (!predictionDays) {
+            return { labels: [], datasets: [] };
+        }
+
+        const dataValues = [
+            predictionDays.firstDay,
+            predictionDays.secondDay,
+            predictionDays.thirdDay,
+            predictionDays.fourthDay,
+            predictionDays.fifthDay,
+            predictionDays.sixthDay,
+            predictionDays.seventhDay,
+            predictionDays.eighthDay,
+            predictionDays.ninthDay,
+            predictionDays.tenthDay
+        ].filter(val => typeof val === 'number' && !isNaN(val));
+
+        return {
+            labels: chartLabels.slice(0, dataValues.length),
+            datasets: [
+                {
+                    label: `${stockName} 예측 가격`,
+                    data: dataValues,
+                    fill: false,
+                    backgroundColor: 'rgb(75, 192, 192)',
+                    borderColor: 'rgba(75, 192, 192, 0.8)',
+                    tension: 0.1,
+                    pointRadius: 2,
+                    pointBackgroundColor: 'rgb(75, 192, 192)',
+                },
+            ],
+        };
+    };
+
+    const chartOptions = (stockName) => ({
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false,
+            },
+            title: {
+                display: false,
+                text: `${stockName} 예측`,
+            },
+            tooltip: {
+                mode: 'index',
+                intersect: false,
+            }
+        },
+        scales: {
+            x: {
+                display: true,
+                grid: {
+                    display: false
+                },
+                ticks: {
+                    display: false,
+                    autoSkip: true,
+                    maxTicksLimit: 2,
+                    font: {
+                        size: 8
+                    }
+                },
+                title: {
+                    display: false,
+                }
+            },
+            y: {
+                display: true,
+                position: 'right',
+                grid: {
+                    display: false
+                },
+                ticks: {
+                    display: true,
+                    callback: function(value, index, values) {
+                        return value.toFixed(0);
+                    },
+                    maxTicksLimit: 3,
+                    font: {
+                        size: 8
+                    },
+                    padding: 2
+                },
+                title: {
+                    display: false,
+                }
+            }
+        },
+        layout: {
+            padding: {
+                left: 0,
+                right: 5,
+                top: 0,
+                bottom: 0
+            }
+        }
+    });
+    // --- 차트 데이터 생성 함수 끝 ---
 
     return (
         <div className="recommendations-page">
-            {/* --- 섹션 1: AI 모델 요약 및 추천 --- */}
-            <div className="ai-summary-section">
-                {/* AI 모델 점수 요약 바 */}
-                <div className="today-recommendations-grid">
-                    {combinedRecommendation && (
-                        <div className="recommendation-box combined-recommendation">
-                            <h3>종합 AI 추천 종목</h3>
-                            <p className="recommended-stock-name">
-                                <span className="stock-code-tag">{combinedRecommendation.stock.code}</span> {combinedRecommendation.stock.name}
-                            </p>
-                            <p className="recommendation-reason">{combinedRecommendation.stock.reason}</p>
-                            <p className="ai-comment">AI 요약: {combinedRecommendation.summary}</p>
-                        </div>
-                    )}
-                    
-                </div>
-                <div className="ai-score-summary-bar">
-                    <h3>모델별 AI 추천 종목</h3>
-                {aiModels.map(model => (
-                    <div
-                        key={model.id}
-                        className={`model-score-item ${selectedModelId === model.id ? 'selected-model' : ''}`} // className 변경
-                        onClick={() => setSelectedModelId(model.id)} // onClick 이벤트 핸들러 추가
-                    >
-                    <p>이미지 공간</p>
-                    <span className="model-name">{model.name}</span>
-                    <span className="model-score">{model.score}점</span>
-                    </div>
-                ))}
-    
-                {selectedAiModel && ( // 이 조건문이 topAi에서 selectedAiModel로 변경
-                    // <Link to>
-                    <div className="recommendation-box top-ai-recommendation">
-                    <h3><span className="top-ai-indicator">🌟</span> 선택된 AI 추천 종목 ({selectedAiModel.name})</h3> {/* 텍스트 및 변수 변경 */}
-                    <p className="recommended-stock-name">
-                        <span className="stock-code-tag">{selectedAiModel.recommendedStock.code}</span> {selectedAiModel.recommendedStock.name}
-                    </p>
-                    <p className="recommendation-reason">{selectedAiModel.recommendedStock.reason}</p>
-                    <p className="ai-comment">AI 요약: {selectedAiModel.summary}</p>
-                    </div>
-                    // </Link>
-                )}
-                </div>
-            </div>
-
-
-            {/* --- 섹션 2: 각 모델의 주식 예측 및 수익률 (표 형식) --- */}
+            {/* 📊 종목 예측 테이블 섹션 */}
             <div className="stock-prediction-section">
-                <h2>AI별 종목 예측 및 수익률</h2>
-                <div className="stock-table-container">
-                    <table className="stock-prediction-table">
+                <h2 className="section-title">AI 모델별 종목 예측</h2>
+                <div className="table-container">
+                    <table className="stock-data-table">
                         <thead>
-                        <tr>
-                            <th className="th-name-code">종목명 (코드)</th>
-                                <th className="th-prediction">모델 A 예측</th> {/* 변경: th-chart -> th-prediction */}
-                                <th className="th-prediction">모델 B 예측</th> {/* 변경: th-chart -> th-prediction */}
-                                <th className="th-prediction">모델 C 예측</th> {/* 변경: th-chart -> th-prediction */}
-                                <th className="th-returns">수익률 (일)</th> {/* 변경: th-returns를 일/주/월/년으로 분리 */}
-                                <th className="th-returns">수익률 (주)</th>
-                                <th className="th-returns">수익률 (월)</th>
-                                <th className="th-returns">수익률 (년)</th>
+                            <tr>
+                                <th>종목명<br></br>(코드)</th>
+                                <th>주가예측모델 예측 (차트)</th>
+                                <th>관련 뉴스</th>
+                                <th>뉴스별 분류 예측 모델</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {recommendedStocks.map(stock => (
-                                <tr key={stock.code}>
-                                <td className="td-name-code">
-                                    <span className="stock-name">{stock.name}</span>
-                                    <span className="stock-code-small">({stock.code})</span>
-                                </td>
-                                {/* 모델 A 예측 스코어 및 상태 */}
-                                <td className="td-prediction">
-                                    {(() => { // 즉시 실행 함수로 여러 요소 렌더링
-                                        const predictionA = getPredictionStatus(stock.modelAPrediction);
-                                        return (
-                                            <>
-                                                <div className="prediction-score">{predictionA.score.toFixed(2)}</div>
-                                                <div className={`prediction-state ${predictionA.class}`}>
-                                                    {predictionA.state}
+                            {recommendedStocks.length > 0 ? (
+                                recommendedStocks.map(stock => (
+                                    <tr key={stock.code}>
+                                        <td>
+                                            {stock.name} <br />({stock.code})
+                                            {/* 최신 주가 정보 표시 */}
+                                            {stock.latestPrice && (
+                                                <div className={`stock-price-info ${stock.latestPrice.stockFluctuation > 0 ? 'positive' : stock.latestPrice.stockFluctuation < 0 ? 'negative' : 'neutral'}`}>
+                                                    <br />
+                                                    현재가: {stock.latestPrice.closePrice?.toLocaleString()}원
+                                                    ({stock.latestPrice.stockFluctuation > 0 ? '▲' : stock.latestPrice.stockFluctuation < 0 ? '▼' : ''}
+                                                    {stock.latestPrice.stockFluctuation?.toFixed(2)}%)
                                                 </div>
-                                            </>
-                                        );
-                                    })()}
-                                </td>
-                                {/* 모델 B 예측 스코어 및 상태 */}
-                                <td className="td-prediction">
-                                    {(() => {
-                                        const predictionB = getPredictionStatus(stock.modelBPrediction);
-                                        return (
-                                            <>
-                                                <div className="prediction-score">{predictionB.score.toFixed(2)}</div>
-                                                <div className={`prediction-state ${predictionB.class}`}>
-                                                    {predictionB.state}
+                                            )}
+                                        </td>
+                                        {/* 모델 예측 차트 셀 */}
+                                        <td className="chart-cell">
+                                            {stock.predictionDays ? (
+                                                <div className="small-chart-container">
+                                                    <Line
+                                                        data={getChartData(stock.name, stock.predictionDays)}
+                                                        options={chartOptions(stock.name)}
+                                                    />
                                                 </div>
-                                            </>
-                                        );
-                                    })()}
-                                </td>
-                                {/* 모델 C 예측 스코어 및 상태 */}
-                                <td className="td-prediction">
-                                    {(() => {
-                                        const predictionC = getPredictionStatus(stock.modelCPrediction);
-                                        return (
+                                            ) : (
+                                                <small>예측 데이터 없음</small>
+                                            )}
+                                        </td>
+                                        {/* 관련 뉴스 및 뉴스 분류 예측 */}
+                                        {stock.relatedNews && stock.relatedNews.length > 0 ? (
                                             <>
-                                                <div className="prediction-score">{predictionC.score.toFixed(2)}</div>
-                                                <div className={`prediction-state ${predictionC.class}`}>
-                                                    {predictionC.state}
-                                                </div>
+                                                {/* 관련 뉴스 요약 */}
+                                                <td>
+                                                    <div className="news-list-container">
+                                                        {stock.relatedNews.map((news, newsIdx) => (
+                                                            <div key={newsIdx} className="individual-news-item">
+                                                                <a href={news.newsUrl} target="_blank" rel="noopener noreferrer" className="news-title-link">
+                                                                    {news.newsTitle}
+                                                                </a>
+                                                                <p className="news-summary-table">({news.pressName}) {news.newsSummary}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </td>
+                                                {/* 뉴스별 분류 예측 모델 */}
+                                                <td>
+                                                    <div className="news-analysis-list">
+                                                        {stock.relatedNews.map((news, newsIdx) => (
+                                                            <p key={newsIdx} className={`news-analysis-table ${news.newsAnalysis ?? 'neutral'}`}>
+                                                                {newsAnalysisTerms[news.newsAnalysis] ?? newsAnalysisTerms['N/A']}
+                                                                {news.newsAnalysisScore !== undefined && news.newsAnalysisScore !== null
+                                                                    ? <><br />점수: {(news.newsAnalysisScore * 100).toFixed(2)}%</> 
+                                                                    : ''
+                                                                }
+                                                            </p>
+                                                        ))}
+                                                    </div>
+                                                </td>
                                             </>
-                                        );
-                                    })()}
-                                </td>
-                                {/* 수익률 (일) */}
-                                <td className="td-returns">
-                                    <span className={stock.returns.day >= 0 ? 'positive' : 'negative'}>{stock.returns.day.toFixed(2)}%</span>
-                                </td>
-                                {/* 수익률 (주) */}
-                                <td className="td-returns">
-                                    <span className={stock.returns.week >= 0 ? 'positive' : 'negative'}>{stock.returns.week.toFixed(2)}%</span>
-                                </td>
-                                {/* 수익률 (월) */}
-                                <td className="td-returns">
-                                    <span className={stock.returns.month >= 0 ? 'positive' : 'negative'}>{stock.returns.month.toFixed(2)}%</span>
-                                </td>
-                                {/* 수익률 (년) */}
-                                <td className="td-returns">
-                                    <span className={stock.returns.year >= 0 ? 'positive' : 'negative'}>{stock.returns.year.toFixed(2)}%</span>
-                                </td>
+                                        ) : (
+                                            <td colSpan="2">
+                                                관련된 뉴스가 없습니다.
+                                            </td>
+                                        )}
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="4" className="no-data-message">
+                                        데이터를 불러오는 중이거나, 표시할 데이터가 없습니다.
+                                    </td>
                                 </tr>
-                            ))}
-                            </tbody>
+                            )}
+                        </tbody>
                     </table>
                 </div>
             </div>
