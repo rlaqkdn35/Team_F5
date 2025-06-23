@@ -5,7 +5,7 @@ import './RightSidebar.css';
 const RightSidebar = ({ currentUser }) => {
  // 알림창 표시 여부를 관리하는 상태
  // 알림창 만들때 setShowNotification써야함
- const [showNotification, setShowNotification] = useState(false);
+ const [showNotification, setShowNotification] = useState(true);
 
  
  // 사용자 닉네임 상태

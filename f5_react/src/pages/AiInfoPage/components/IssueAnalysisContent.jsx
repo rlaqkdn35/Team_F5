@@ -98,7 +98,7 @@ const IssueAnalysisContent = () => {
             const formattedAiIssues = response.data.map(issue => ({
               id: issue.newsIdx.toString(),
               title: issue.newsTitle,
-              url: `/news-detail/${issue.newsIdx}`,
+              url: `/news/${issue.newsIdx}`,
               source: issue.pressName,
               date: issue.newsDt ? new Date(issue.newsDt).toLocaleDateString('ko-KR') : '',
               summary: issue.newsSummary,
@@ -187,30 +187,29 @@ const IssueAnalysisContent = () => {
 
                   <h4>연관 종목 분석</h4>
                   <table className="related-stocks-table">
-                    <thead> {/* thead 추가 */}
-                      <tr> {/* ul 대신 tr */}
-                        <th className="col-name">종목명</th> {/* span 대신 th */}
+                    <thead>
+                      <tr>
+                        <th className="col-name">종목명</th>
                         <th className="col-price">현재가</th>
                         <th className="col-change-rate">등락률</th>
                         <th className="col-overview">기업개요</th>
                       </tr>
-                    </thead> {/* /thead 추가 */}
-                    <tbody> {/* tbody 추가 */}
-                      {issue.relatedStocks && issue.relatedStocks.length > 0 ? (
-                        issue.relatedStocks.map(stock => (
-                          <tr key={stock.code} className="related-stocks-table-row"> {/* li 대신 tr */}
-                            <td className="col-name"><Link to={`/stock-detail/${stock.code}`}>{stock.name}</Link></td> {/* span 대신 td */}
-                            <td className="col-price">{stock.price}</td>
-                            <td className={`col-change-rate ${parseFloat(String(stock.changeRate).replace('%','')) > 0 ? 'positive' : parseFloat(String(stock.changeRate).replace('%','')) < 0 ? 'negative' : 'neutral'}`}>
-                              {stock.changeRate}
-                            </td>
-                            <td className="col-overview" title={stock.overview}>{stock.overview}</td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr><td colSpan="5" className="no-related-stock">연관 종목 정보가 없습니다.</td></tr> 
-                      )}
-                    </tbody> {/* /tbody 추가 */}
+                    </thead>
+                    {/* 👇 여기를 수정했습니다: <tbody> 바로 뒤에 JSX 표현식이 오도록 붙여씁니다. */}
+                    <tbody>{issue.relatedStocks && issue.relatedStocks.length > 0 ? (
+                      issue.relatedStocks.map(stock => (
+                        <tr key={stock.code} className="related-stocks-table-row">
+                          <td className="col-name"><Link to={`/stock-detail/${stock.code}`}>{stock.name}</Link></td>
+                          <td className="col-price">{stock.price}</td>
+                          <td className={`col-change-rate ${parseFloat(String(stock.changeRate).replace('%','')) > 0 ? 'positive' : parseFloat(String(stock.changeRate).replace('%','')) < 0 ? 'negative' : 'neutral'}`}>
+                            {stock.changeRate}
+                          </td>
+                          <td className="col-overview" title={stock.overview}>{stock.overview}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr><td colSpan="5" className="no-related-stock">연관 종목 정보가 없습니다.</td></tr>
+                    )}</tbody>
                   </table>
 
                   <div className="comparison-section">
@@ -245,25 +244,24 @@ const IssueAnalysisContent = () => {
                 <th className="col-index">목차</th>
                 <th className="col-title">제목</th>
                 <th className="col-related-stocks">연관종목</th>
-                <th className="col-summary">이슈내용(1줄)</th>
+                <th className="col-summary">AI 요약</th>
               </tr>
             </thead>
-            <tbody>
-              {recentIssues.map((issue, index) => (
-                <tr key={issue.id} className="table-row">
-                  <td className="col-index">{index + 1}</td>
-                  <td className="col-title">
-                    {issue.url && issue.url.startsWith('/') ? (
-                        <Link to={issue.url} className="issue-title-link">{issue.title}</Link>
-                    ) : (
-                        <a href={issue.url || '#'} target="_blank" rel="noopener noreferrer" className="issue-title-link">{issue.title}</a>
-                    )}
-                  </td>
-                  <td className="col-related-stocks">{issue.relatedStocksText}</td>
-                  <td className="col-summary" title={issue.summary}>{issue.summary}</td>
-                </tr>
-              ))}
-            </tbody>
+            {/* 👇 여기를 수정했습니다: <tbody> 바로 뒤에 JSX 표현식이 오도록 붙여씁니다. */}
+            <tbody>{recentIssues.map((issue, index) => (
+              <tr key={issue.id} className="table-row">
+                <td className="col-index">{index + 1}</td>
+                <td className="col-title">
+                  {issue.url && issue.url.startsWith('/') ? (
+                      <Link to={issue.url} className="issue-title-link">{issue.title}</Link>
+                  ) : (
+                      <a href={issue.url || '#'} target="_blank" rel="noopener noreferrer" className="issue-title-link">{issue.title}</a>
+                  )}
+                </td>
+                <td className="col-related-stocks">{issue.relatedStocksText}</td>
+                <td className="col-summary" title={issue.summary}>{issue.summary}</td>
+              </tr>
+            ))}</tbody>
           </table>
         </div>
       );

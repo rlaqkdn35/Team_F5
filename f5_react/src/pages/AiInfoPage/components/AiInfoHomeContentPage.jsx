@@ -380,7 +380,7 @@ const AiInfoHomeContentPage = () => {
                                     <span className="stock-code">{stock.code}</span>
                                 </div>
                                 <div className="stock-price-info">
-                                    <span className="current-price">{stock.currentPrice} KRW</span>
+                                    <span className="current-price">{stock.currentPrice} 원</span>
                                     <span className={`change-value ${stock.changeType}`}>
                                         {stock.change} ({stock.changeRate})
                                     </span>

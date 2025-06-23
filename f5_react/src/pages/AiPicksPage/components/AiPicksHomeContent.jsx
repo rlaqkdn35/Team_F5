@@ -253,9 +253,9 @@ const AiModelRecommendation = ({ aiModels, selectedModelId, setSelectedModelId, 
                     {selectedAiModel ? (
                         <Link to={`/stock-detail/${selectedAiModel.recommendedStock.code}`} className='stock-link'>
                             <div className="selected-ai-recommendation-box-aphc">
-                                <h3><span className="top-ai-indicator-aphc">🌟</span> {selectedAiModel.name} 추천 종목</h3>
+                                <h3><span className="top-ai-indicator-aphc"></span> {selectedAiModel.name} 추천 종목</h3>
                                 <p className="recommended-stock-name-aphc">
-                                    <span className="stock-code-tag-aphc">{selectedAiModel.recommendedStock.code}</span> {selectedAiModel.recommendedStock.name}
+                                    <span className="stock-code-tag-aphc">{selectedAiModel.recommendedStock.code}</span> {selectedAiModel.recommendedStock.code_name}<br></br>{selectedAiModel.recommendedStock.name}
                                 </p>
                                 <p className="recommendation-reason-aphc">{selectedAiModel.recommendedStock.reason}</p>
                                 {/* AI 요약 문구 삭제 */}
@@ -343,6 +343,7 @@ const AiPicksHomeContent = () => {
             try {
                 const newAiModels = [];
                 const newsApiResponse = await axios.get('http://localhost:8084/F5/news/top5-latest');
+                console.log(newsApiResponse);
                 if (newsApiResponse.data && newsApiResponse.data.length > 0) {
                     const firstNews = newsApiResponse.data[0];
                     newAiModels.push({
@@ -352,6 +353,7 @@ const AiPicksHomeContent = () => {
                         summary: firstNews.newsSummary || '최신 뉴스 데이터를 기반으로 시장 흐름을 분석하여 추천합니다.',
                         recommendedStock: {
                             code: firstNews.stockCode || 'N/A',
+                            code_name: firstNews.stockName || 'N/A',
                             name: firstNews.newsTitle || '뉴스 제목 없음',
                             reason: firstNews.newsSummary || '뉴스 요약 없음'
                         }

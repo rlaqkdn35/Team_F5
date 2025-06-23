@@ -134,6 +134,7 @@ body {
 }
 
 .chart-recommend-text {
+  background-color: var(--color-background-menubar);
   padding: 10px 20px;
   border-radius: 8px;
     text-align: right; /* 텍스트 오른쪽 정렬 */

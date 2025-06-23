@@ -5,7 +5,6 @@
     flex-direction: column;
     height: 100%; /* 부모 요소 (StockDetailPage)의 높이에 맞춰짐 */
     min-height: 500px; /* 최소 높이 설정, 필요에 따라 조절 */
-    background-color: #F8F0FF; /* 연보라색 계열 배경 */
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     overflow: hidden; /* 내부 스크롤을 위해 */
@@ -29,7 +28,6 @@
     gap: 10px; /* 메시지 간 간격 */
     background-color: #FDFBFF; /* 메시지 영역 배경색 */
     border-radius: 8px;
-    border: 1px solid #E0D1F0; /* 연보라색 경계선 */
     margin-bottom: 15px; /* 입력 폼과의 간격 */
 }
 

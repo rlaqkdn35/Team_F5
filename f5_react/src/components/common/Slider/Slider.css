@@ -52,7 +52,7 @@
 /* --- 화살표 버튼 스타일 --- */
 .slider-button {
   position: absolute; /* .slider-container를 기준으로 위치 설정 */
-  top: 50%; /* 컨테이너의 세로 중앙 */
+  top: 20%; /* 컨테이너의 세로 중앙 */
   transform: translateY(-50%); /* 버튼 자체를 세로 중앙으로 이동 */
   background-color: rgba(0, 0, 0, 0.5); /* 반투명 검정 배경 */
   color: white; /* 글자색 흰색 */
