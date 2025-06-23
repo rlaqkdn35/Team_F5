@@ -1,23 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AiInfoHomeContentPage.css';
 import StockRankings from '../../../components/common/StockRankings/StockRankings.jsx';
 import MarketInfoCard from '../../../components/common/MarketInfoCard/MarketInfoCard.jsx';
 import Slider from '../../../components/common/Slider/Slider.jsx';
-import RecommendedStockCard from '../../../components/common/RecommendedStockCard/RecommendedStockCard.jsx';
 import BubbleChart from '../../../components/charts/BubbleChart/BubbleChart.jsx';
 import axios from 'axios';
 import StockChart from '../../../components/charts/StockChart/StockChart.jsx';
 
 const initialMarketData = { name: '', value: '0.00', change: '0.00 (0.00%)', changeType: 'positive', chartData: [] };
 
-// AI 추천 종목 데이터는 이제 백엔드에서 가져올 것이므로 임시 데이터는 삭제합니다.
-// const aiRecommendedStocks = [...]
-
 const AiInfoHomeContentPage = () => {
     const [bubbleData, setBubbleData] = useState([]);
     const [selectedKeyword, setSelectedKeyword] = useState(null);
-    const [detailData, setDetailData] = useState(null); // 이제 KeywordDTO 전체를 detailData로 사용
+    const [detailData, setDetailData] = useState(null);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -27,12 +23,11 @@ const AiInfoHomeContentPage = () => {
     const [marketDataLoading, setMarketDataLoading] = useState(true);
     const [marketDataError, setMarketDataError] = useState(null);
 
-    // AI 추천 종목을 위한 새로운 상태
     const [aiRecommendedStocks, setAiRecommendedStocks] = useState([]);
     const [aiStocksLoading, setAiStocksLoading] = useState(true);
     const [aiStocksError, setAiStocksError] = useState(null);
 
-    // 시장 지수 데이터 가져오기
+    // 시장 지수 데이터 가져오기 (기존 로직 유지)
     useEffect(() => {
         const fetchMarketData = async () => {
             setMarketDataLoading(true);
@@ -62,7 +57,7 @@ const AiInfoHomeContentPage = () => {
                         }
                     });
                     return Array.from(dailyLatestDataMap.values())
-                                .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+                                    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
                 };
 
                 const aggregatedKospiData = aggregateDailyData(KOSPI);
@@ -82,8 +77,8 @@ const AiInfoHomeContentPage = () => {
                     
                     const todayRawDataPoints = rawData.filter(item => item.date === todayStr);
                     const latestTodayRawItem = todayRawDataPoints.length > 0 
-                                                     ? todayRawDataPoints[todayRawDataPoints.length - 1]
-                                                     : null;
+                                                                    ? todayRawDataPoints[todayRawDataPoints.length - 1]
+                                                                    : null;
                     latestValue = latestTodayRawItem ? latestTodayRawItem.averagePrice : 0;
 
                     const prevDayLatestAggregatedItem = aggregatedData.find(item => item.date === yesterdayStr);
@@ -164,35 +159,30 @@ const AiInfoHomeContentPage = () => {
         fetchMarketData();
     }, []);
 
-    // API 호출로 버블 데이터 가져오기 (변경된 엔드포인트 사용)
+    // API 호출로 버블 데이터 가져오기 (기존 로직 유지)
     useEffect(() => {
         const fetchBubbleData = async () => {
             setLoading(true);
             try {
-                // 백엔드 API의 새로운 엔드포인트와 파라미터 사용
-                // minMentionedCount는 3, limitNewsPerKeyword는 5로 고정
                 const response = await axios.get(`http://localhost:8084/F5/keyword/top-with-news?minMentionedCount=2&limitNewsPerKeyword=5`);
                 console.log("버블 데이터 (KeywordDTO):", response.data);
 
-                // API 응답 (List<KeywordDTO>)를 BubbleChart가 기대하는 형식으로 변환
                 const transformedData = response.data.map((item, index) => ({
-                    // BubbleChart의 data prop 형식에 맞춰 매핑
-                    id: item.keyword_Name + '-' + index, // 고유 ID 생성 (키워드 이름 + 인덱스)
+                    id: item.keyword_Name + '-' + index,
                     text: item.keyword_Name,
-                    value: item.total_count, // 언급 빈도수 (버블 크기)
-                    numArticlesMentionedIn: item.numArticlesMentionedIn, // 기사 수
-                    news: item.relatedNews || [], // 연관 뉴스 리스트
+                    value: item.total_count,
+                    numArticlesMentionedIn: item.numArticlesMentionedIn,
+                    news: item.relatedNews || [],
                 }));
                 
                 setBubbleData(transformedData);
                 setError(null);
 
-                                // ⭐ 추가: 버블 데이터 로드 후 가장 큰 버블을 자동으로 선택
                 if (transformedData.length > 0) {
                     const largestBubble = transformedData.reduce((prev, current) => 
                         (prev.value > current.value) ? prev : current
                     );
-                    handleBubbleClick(largestBubble); // 가장 큰 버블 선택
+                    handleBubbleClick(largestBubble);
                 }
             } catch (error) {
                 console.error('버블 데이터를 가져오는 중 오류 발생:', error.message);
@@ -206,141 +196,130 @@ const AiInfoHomeContentPage = () => {
         fetchBubbleData();
     }, []);
 
-    // AI 추천 종목 데이터 가져오기 (새로운 useEffect)
+    // AI 추천 종목 데이터 가져오기 및 가공 로직 (RecommendedStockCard 없이 직접 렌더링)
     useEffect(() => {
         const fetchAiRecommendedStocks = async () => {
             setAiStocksLoading(true);
             try {
-                const response = await axios.get(`http://localhost:8084/F5/news/top5-with-details`);
-                console.log("AI 추천 종목 API 응답 (원본):", response.data);
+                const response = await axios.get(`http://localhost:8084/F5/predictions/latest-per-stock`);
+                console.log("AI 추천 종목 API 응답 (PredictionDto 리스트):", response.data);
 
-                const uniqueStocks = new Map();
+                const transformedStocks = response.data.map(prediction => {
+                    const predictionDays = prediction.predictionDays;
 
-                response.data.forEach(newsItem => {
-                    newsItem.relatedStocks.forEach(stock => {
-                        // 중복 종목을 피하고 최신 정보만 사용 (혹은 첫 번째 등장 종목)
-                        if (!uniqueStocks.has(stock.stockCode)) {
-                            let currentPrice = 'N/A';
-                            let change = 'N/A';
-                            let changeRate = 'N/A';
-                            let changeType = 'neutral';
-                            let chartData = [];
+                    if (!predictionDays || predictionDays.firstDay === undefined || predictionDays.tenthDay === undefined) {
+                        console.warn(`종목 ${prediction.stockName} (${prediction.stockCode})에 1일차 또는 10일차 예측 데이터가 없습니다. 이 종목은 제외됩니다.`);
+                        return null;
+                    }
 
-                            if (stock.stockPrices && stock.stockPrices.length > 0) {
-                                // 가장 최근 데이터 (배열의 첫 번째)
-                                const latestPriceData = stock.stockPrices[0]; 
-                                currentPrice = latestPriceData.closePrice;
-                                const fluctuation = latestPriceData.stockFluctuation; // 등락 값
+                    const firstDayPrice = predictionDays.firstDay;
+                    const tenthDayPrice = predictionDays.tenthDay; 
+                    
+                    const currentPrice = firstDayPrice; 
+                    const changeValue = tenthDayPrice - firstDayPrice;
+                    
+                    let changeRate = 0;
+                    if (firstDayPrice !== 0) { 
+                        changeRate = (changeValue / firstDayPrice) * 100;
+                    }
+                    
+                    const changeType = changeValue >= 0 ? 'positive' : 'negative';
 
-                                change = fluctuation;
-                                changeType = fluctuation >= 0 ? 'positive' : 'negative';
+                    // prediction.createdAt을 기준으로 날짜 계산
+                    const predictionBaseDate = new Date(prediction.createdAt);
+                    const chartData = [
+                        { day: 1, value: predictionDays.firstDay },
+                        { day: 2, value: predictionDays.secondDay },
+                        { day: 3, value: predictionDays.thirdDay },
+                        { day: 4, value: predictionDays.fourthDay },
+                        { day: 5, value: predictionDays.fifthDay },
+                        { day: 6, value: predictionDays.sixthDay },
+                        { day: 7, value: predictionDays.seventhDay },
+                        { day: 8, value: predictionDays.eighthDay },
+                        { day: 9, value: predictionDays.ninthDay },
+                        { day: 10, value: predictionDays.tenthDay },
+                    ].filter(item => item.value !== undefined) // undefined 값 필터링
+                    .map(item => {
+                        const date = new Date(predictionBaseDate);
+                        date.setDate(predictionBaseDate.getDate() + item.day); // 예측 생성일 + 예측 일수
+                        
+                        // YYYY-MM-DD 형식으로 포맷
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const formattedDate = `${year}-${month}-${day}`;
 
-                                // 등락률 계산: 이전 종가가 필요
-                                let previousClosePrice = null;
-                                if (stock.stockPrices.length > 1) {
-                                    // 두 번째 데이터 포인트가 이전 가격이라고 가정 (가장 최근 이전)
-                                    // 하지만 `stockFluctuation`이 이미 최신 가격 대비 변화량을 나타낼 가능성이 높으므로
-                                    // `currentPrice - fluctuation`을 이전 가격으로 간주하여 비율 계산
-                                    previousClosePrice = currentPrice - fluctuation;
-                                }
-
-                                if (previousClosePrice !== null && previousClosePrice !== 0) {
-                                    changeRate = (fluctuation / previousClosePrice) * 100;
-                                } else if (fluctuation !== 0 && currentPrice !== 0) {
-                                    // 이전 가격 정보가 없지만 현재 가격과 변동폭이 있다면 임시로 계산
-                                    // (이전 종가 정보가 가장 정확합니다)
-                                    changeRate = (fluctuation / currentPrice) * 100;
-                                } else {
-                                    changeRate = 0; // 변화가 없거나 계산 불가
-                                }
-                                
-                                // 표시 형식 맞추기
-                                currentPrice = currentPrice.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }); // 소수점 없음
-                                change = `${change >= 0 ? '+' : ''}${change.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; // 소수점 2자리
-                                changeRate = `${changeRate >= 0 ? '+' : ''}${changeRate.toFixed(2)}%`; // 소수점 2자리, %
-                                
-                                // 차트 데이터 변환
-                                chartData = stock.stockPrices.map(price => ({
-                                    time: price.priceDate.split('T')[0], // 'YYYY-MM-DD' 형식으로
-                                    value: price.closePrice
-                                })).sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
-                            }
-
-                            uniqueStocks.set(stock.stockCode, {
-                                name: stock.stockName,
-                                code: stock.stockCode,
-                                currentPrice: currentPrice, // KRW이므로 '$' 제거
-                                change: change,
-                                changeRate: changeRate,
-                                changeType: changeType,
-                                reason: stock.companyInfo, // companyInfo를 추천 사유로 사용
-                                chartData: chartData,
-                            });
-                        }
+                        return {
+                            time: formattedDate,
+                            value: item.value
+                        };
                     });
-                });
-                
-                // 최대 5개의 종목만 표시
-                const transformedStocks = Array.from(uniqueStocks.values()).slice(0, 5); 
-                setAiRecommendedStocks(transformedStocks);
+
+                    return {
+                        name: prediction.stockName,
+                        code: prediction.stockCode,
+                        currentPrice: currentPrice.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
+                        change: `${changeValue >= 0 ? '+' : ''}${changeValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+                        changeRate: `${changeRate >= 0 ? '+' : ''}${changeRate.toFixed(2)}%`,
+                        changeType: changeType,
+                        reason: prediction.reason || 'AI 예측 기반 추천 종목입니다.',
+                        chartData: chartData,
+                        rawChangeRate: changeRate
+                    };
+                })
+                .filter(stock => stock !== null)
+                .sort((a, b) => b.rawChangeRate - a.rawChangeRate);
+
+                setAiRecommendedStocks(transformedStocks.slice(0, 5));
                 setAiStocksError(null);
+
             } catch (err) {
                 console.error('AI 추천 종목 데이터를 가져오는 중 오류 발생:', err);
                 setAiStocksError('AI 추천 종목을 불러오지 못했습니다.');
-                setAiRecommendedStocks([]); // 오류 발생 시 빈 배열로 설정
+                setAiRecommendedStocks([]);
             } finally {
                 setAiStocksLoading(false);
             }
         };
 
         fetchAiRecommendedStocks();
-    }, []); // 빈 배열은 컴포넌트 마운트 시 한 번만 실행됨
+    }, []);
 
-    // 뉴스 탭 (선택된 뉴스 내용) 상태
-    const [activeNewsTab, setActiveNewsTab] = useState(null); // 현재 활성화된 뉴스 탭의 newsIdx
-    const [selectedNewsUrl, setSelectedNewsUrl] = useState(''); // 선택된 뉴스의 URL
-    const [selectedNewsTitle, setSelectedNewsTitle] = useState(''); // 선택된 뉴스의 제목 (선택적으로 사용)
+    // 뉴스 탭 (선택된 뉴스 내용) 상태 및 핸들러 (기존 로직 유지)
+    const [activeNewsTab, setActiveNewsTab] = useState(null);
+    const [selectedNewsUrl, setSelectedNewsUrl] = useState('');
+    const [selectedNewsTitle, setSelectedNewsTitle] = useState('');
 
-    const handleBubbleClick = (bubble) => {
+    const handleBubbleClick = useCallback((bubble) => {
         setSelectedKeyword(bubble);
-        // detailData를 선택된 버블 (이미 relatedNews를 포함하고 있음)로 설정
-        // DTO 구조와 일치하도록 매핑
         setDetailData({
             keyword_Name: bubble.text,
             total_count: bubble.value,
             numArticlesMentionedIn: bubble.numArticlesMentionedIn,
             relatedNews: bubble.news || [],
         });
-        setSelectedNewsUrl(''); // 새로운 버블 선택 시 뉴스 URL 초기화
-        setSelectedNewsTitle(''); // 새로운 버블 선택 시 뉴스 제목 초기화
-        setActiveNewsTab(null); // 새로운 버블 선택 시 활성 뉴스 탭 초기화
-    };
+        setSelectedNewsUrl('');
+        setSelectedNewsTitle('');
+        setActiveNewsTab(null);
+    }, []);
 
-    // handleNewsClick 함수 수정
-    const handleNewsClick = (newsItem) => {
-        // 새 탭 대신 /news/{newsIdx} 경로로 이동
-        navigate(`/news/${newsItem.newsIdx}`); // ⭐ 수정
-    };
+    const handleNewsClick = useCallback((newsItem) => {
+        navigate(`/news/${newsItem.newsIdx}`);
+    }, [navigate]);
 
-    // 페이지 이동 핸들러
-    const handleNavigateToIssueNews = () => {
+    const handleNavigateToIssueNews = useCallback(() => {
         navigate('/ai-info/issue-analysis');
-    };
-    const handleNavigateToAirecommend = () => {
-        navigate('/ai-picks');
-    };
+    }, [navigate]);
 
-    // 랭킹 데이터 (임시 데이터) - 사용하지 않으므로 삭제합니다.
-    // const [popularItems, setPopularItems] = useState(popularSearchesData);
-    // const [hitRateItems, setHitRateItems] = useState(topHitRatesData);
-    // const [profitRateItems, setProfitRateItems] = useState(topProfitRatesData);
+    const handleNavigateToAirecommend = useCallback(() => {
+        navigate('/ai-picks');
+    }, [navigate]);
 
 
     return (
         <div className="ai-info-home-dashboard">
-            {/* 새로운 왼쪽 컬럼 컨테이너 */}
+            {/* 왼쪽 컬럼 컨테이너: 국내 주요 지수 섹션 (변경 없음) */}
             <div className="left-column-container">
-                {/* 섹션 1: 국내 주요 지수 */}
                 <section className="market-overview-section">
                     <h2 className="section-title">국내 주요 지수</h2>
                     <div className="market-summary-container">
@@ -372,23 +351,10 @@ const AiInfoHomeContentPage = () => {
                         )}
                     </div>
                 </section>
-
-                {/* 주요 종목 랭킹 섹션 (주석 처리된 부분 유지)
-                    주석 처리된 <StockRankings /> 컴포넌트가 임시 데이터를 사용하고 있으므로,
-                    이 섹션을 활성화하려면 해당 데이터를 API로 대체하거나 필요한 임시 데이터를 다시 추가해야 합니다.
-                */}
-                {/* <section className="stock-rankings-container">
-                    <StockRankings
-                        sectionTitle="주요 종목 랭킹"
-                        popularItems={popularItems}
-                        hitRateItems={hitRateItems}
-                        profitRateItems={profitRateItems}
-                    />
-                </section> */}
-
+                {/* 주요 종목 랭킹 섹션 (주석 처리된 부분 유지) */}
             </div>
 
-            {/* 섹션 2: AI 추천 종목 */}
+            {/* AI 추천 종목 섹션 (RecommendedStockCard 없이 직접 렌더링) */}
             <section className="ai-recommendation-section">
                 <h2 className="section-title">AI 추천 종목</h2>
                 {aiStocksLoading ? (
@@ -404,8 +370,31 @@ const AiInfoHomeContentPage = () => {
                         showDots={true}
                         showArrows={true}
                     >
-                        {aiRecommendedStocks.map((stock, index) => (
-                            <RecommendedStockCard key={index} stock={stock} />
+                        {/* RecommendedStockCard 대신 종목 정보를 직접 렌더링 */}
+                        {aiRecommendedStocks.map((stock) => (
+                            // 이 div는 RecommendedStockCard의 역할을 대신합니다.
+                            // 필요에 따라 'recommended-stock-card-inline' 클래스에 스타일을 추가해주세요.
+                            <div key={stock.code} className="recommended-stock-card-inline">
+                                <div className="stock-header">
+                                    <span className="stock-name">{stock.name}</span>
+                                    <span className="stock-code">{stock.code}</span>
+                                </div>
+                                <div className="stock-price-info">
+                                    <span className="current-price">{stock.currentPrice} KRW</span>
+                                    <span className={`change-value ${stock.changeType}`}>
+                                        {stock.change} ({stock.changeRate})
+                                    </span>
+                                </div>
+                                <div className="stock-chart">
+                                    <StockChart 
+                                        data={stock.chartData} 
+                                        chartOptions={{ 
+                                            timeUnit: 'daily', 
+                                            height: 200 
+                                        }} 
+                                    />
+                                </div>
+                            </div>
                         ))}
                     </Slider>
                 ) : (
@@ -418,7 +407,7 @@ const AiInfoHomeContentPage = () => {
                 </div>
             </section>
 
-            {/* 섹션 3: AI 이슈분석 */}
+            {/* AI 이슈분석 섹션 (변경 없음) */}
             <section className="keyword-analysis-section">
                 <h2 className="section-title">AI 이슈분석</h2>
                 <div className="content-wrapper">
@@ -450,17 +439,17 @@ const AiInfoHomeContentPage = () => {
                             <div className="detail-item news-list-container">
                                 <strong>관련 뉴스:</strong>
                                 {detailData.relatedNews.length > 0 ? (
-                                    <div className="news-cards-wrapper"> {/* 새로운 래퍼 클래스 */}
+                                    <div className="news-cards-wrapper">
                                         {detailData.relatedNews.map((newsItem) => (
                                             <div
                                                 key={newsItem.newsIdx}
-                                                className="news-card-item" // 각 뉴스 항목의 새로운 클래스
+                                                className="news-card-item"
                                                 onClick={() => handleNewsClick(newsItem)}
-                                                title={newsItem.newsTitle} // 마우스 오버 시 전체 제목 표시
+                                                title={newsItem.newsTitle}
                                             >
                                                 <div className="news-content-area">
-                                                    <p className="news-card-title">{newsItem.newsTitle}</p> {/* 뉴스 제목 */}
-                                                    <span className="news-card-press">{newsItem.pressName}</span> {/* 신문사 이름 */}
+                                                    <p className="news-card-title">{newsItem.newsTitle}</p>
+                                                    <span className="news-card-press">{newsItem.pressName}</span>
                                                 </div>
                                             </div>
                                         ))}

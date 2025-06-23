@@ -128,7 +128,9 @@
     font-weight: bold;
     margin-left: 10px;
 }
-
+.chart-container-aphc{
+    max-height: 200px;
+}
 /* --- 2번 코드 - AI 모델 요약 및 추천 섹션 (AI Summary Section) --- */
 .ai-summary-section-aphc {
     max-height: 600px;
@@ -158,7 +160,7 @@
 }
 
 .model-score-item-aphc:hover {
-    background-color: #B785B7;
+    background-color: var(--color-purple-light);
     color: var(--color-text-white);
     transform: translateY(-2px);
 }
@@ -176,7 +178,7 @@
 }
 
 .selected-model-aphc {
-    background-color: #B785B7;
+    background-color: var(--color-purple-light);
     color: white;
     font-weight: bold;
 }
@@ -211,7 +213,8 @@
 }
 
 .stock-code-tag-aphc {
-    background-color: #D4B6D4;
+    background-color: var(--color-purple-light);
+    color: white;
     padding: 4px 8px;
     border-radius: 5px;
     font-size: 14px;

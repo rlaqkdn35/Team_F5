@@ -189,9 +189,7 @@
     text-decoration: none;
     color: inherit; /* 부모 요소의 색상 상속 */
 }
-.stock-link:hover {
-    text-decoration: underline;
-}
+
 /* 페이지네이션 컨트롤 컨테이너 스타일 (기존과 동일) */
 .pagination-controls {
     display: flex;

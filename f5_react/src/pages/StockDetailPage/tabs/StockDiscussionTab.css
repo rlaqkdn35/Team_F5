@@ -1,213 +1,306 @@
 /* StockDiscussionTab.css */
 
-/* 전체 컨테이너 */
 .stock-discussion-tab-container {
     display: flex;
     flex-direction: column;
-    height: 100%; /* 부모에 따라 높이 설정 */
-    max-height: 600px; /* 채팅창 최대 높이 */
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    overflow: hidden; /* 자식 요소 오버플로우 처리 */
-    background-color: #f9f9f9;
+    height: 100%; /* 부모 요소 (StockDetailPage)의 높이에 맞춰짐 */
+    min-height: 500px; /* 최소 높이 설정, 필요에 따라 조절 */
+    background-color: #F8F0FF; /* 연보라색 계열 배경 */
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden; /* 내부 스크롤을 위해 */
+    padding: 20px;
+    box-sizing: border-box; /* 패딩이 너비/높이에 포함되도록 */
 }
 
-/* 탭 내용 영역 (메시지 및 입력창) */
 .tab-content-area-sdt {
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* 남은 공간을 모두 차지 */
+    flex-grow: 1;
     overflow: hidden;
-    overflow-y: auto;
 }
 
-/* 채팅 메시지 표시 영역 */
-.chat-messages-area-sdt {
-    flex-grow: 1; /* 메시지 목록이 최대한 공간 차지 */
-    overflow-y: auto; /* 내용이 넘칠 경우 스크롤바 생성 */
-    padding: 15px;
+.chat-messages-sdt {
+    flex-grow: 1;
+    overflow-y: auto; /* 메시지 많아지면 스크롤 */
+    padding: 10px 15px;
     display: flex;
-    flex-direction: column; /* 메시지들이 세로로 쌓이도록 */
+    flex-direction: column;
+    gap: 10px; /* 메시지 간 간격 */
+    background-color: #FDFBFF; /* 메시지 영역 배경색 */
+    border-radius: 8px;
+    border: 1px solid #E0D1F0; /* 연보라색 경계선 */
+    margin-bottom: 15px; /* 입력 폼과의 간격 */
 }
 
-/* 메시지 없을 때 */
-.no-message-sdt {
-    text-align: center;
-    color: #888;
-    padding: 20px;
+/* 스크롤바 스타일링 (선택 사항) */
+.chat-messages-sdt::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-messages-sdt::-webkit-scrollbar-thumb {
+    background-color: #D3BDEB; /* 연보라색 썸 */
+    border-radius: 10px;
+}
+
+.chat-messages-sdt::-webkit-scrollbar-track {
+    background-color: #F0E6FA; /* 연보라색 트랙 */
 }
 
 /* 날짜 구분선 */
 .date-divider-sdt {
     text-align: center;
-    margin: 20px 0 10px;
-    position: relative;
+    margin: 15px 0;
+    color: #8A2BE2; /* 보라색 강조색 */
+    font-weight: bold;
     font-size: 0.9em;
-    color: #666;
-}
-
-.date-divider-sdt span {
-    background: #f9f9f9;
-    padding: 0 10px;
     position: relative;
-    z-index: 1;
 }
 
-.date-divider-sdt::before {
+.date-divider-sdt::before,
+.date-divider-sdt::after {
     content: '';
     position: absolute;
     top: 50%;
-    left: 0;
-    right: 0;
+    width: 40%;
     height: 1px;
-    background: #e0e0e0;
-    z-index: 0;
+    background-color: #D3BDEB; /* 연보라색 경계선 */
 }
 
-/* --- 개별 채팅 메시지 스타일 --- */
+.date-divider-sdt::before {
+    left: 0;
+}
+
+.date-divider-sdt::after {
+    right: 0;
+}
+
+/* 메시지 기본 스타일 */
 .chat-message-sdt {
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px;
     max-width: 70%; /* 메시지 버블 최대 너비 */
+    padding: 10px 15px;
+    border-radius: 18px;
+    word-break: break-word; /* 긴 단어 줄바꿈 */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .message-header-sdt {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    font-size: 0.8em;
-    color: #555;
-    margin-bottom: 3px;
+    margin-bottom: 5px;
 }
 
 .message-sender-sdt {
     font-weight: bold;
-    margin-right: 8px; /* 닉네임과 시간 사이 간격 */
-    color: #333;
+    font-size: 0.9em;
+    color: #666666; /* 밝은 회색 텍스트 */
+    margin-right: 10px;
 }
 
 .message-time-sdt {
-    color: #999;
+    font-size: 0.75em;
+    color: #999999;
 }
 
-.message-content-sdt {
-    padding: 8px 12px;
-    border-radius: 15px; /* 메시지 버블 모양 */
-    word-wrap: break-word; /* 긴 단어 자동 줄바꿈 */
-    max-width: 100%; /* 부모의 70%에서 다시 100% 채움 */
-}
-
-.message-text-sdt {
+.message-content-sdt .message-text-sdt {
     margin: 0;
+    font-size: 0.95em;
     line-height: 1.4;
 }
 
-/* 내가 보낸 메시지 스타일 */
+/* 내 메시지 스타일 */
 .my-message-sdt {
     align-self: flex-end; /* 오른쪽 정렬 */
+    background-color: #8A2BE2; /* 보라색 강조색 */
+    color: white;
+    border-bottom-right-radius: 5px; /* 말풍선 꼬리 효과 */
 }
 
 .my-message-sdt .message-header-sdt {
-    justify-content: flex-end; /* 시간과 닉네임 오른쪽 정렬 */
+    justify-content: flex-end; /* 시간 오른쪽으로 */
 }
 
-.my-message-sdt .message-content-sdt {
-    background-color: #a8e6cf; /* 내 메시지 배경색 (밝은 녹색 계열) */
-    color: #333;
-    border-bottom-right-radius: 0; /* 말풍선 꼬리 부분 */
+.my-message-sdt .message-time-sdt {
+    color: rgba(255, 255, 255, 0.8);
 }
+
 
 /* 상대방 메시지 스타일 */
 .other-message-sdt {
     align-self: flex-start; /* 왼쪽 정렬 */
+    background-color: #E8E8E8; /* 밝은 회색 배경 */
+    color: #333333; /* 어두운 텍스트 */
+    border-bottom-left-radius: 5px; /* 말풍선 꼬리 효과 */
 }
 
-.other-message-sdt .message-header-sdt {
-    justify-content: flex-start; /* 시간과 닉네임 왼쪽 정렬 */
-}
-
-.other-message-sdt .message-content-sdt {
-    background-color: #dbe4ff; /* 상대방 메시지 배경색 (밝은 파랑 계열) */
-    color: #333;
-    border-bottom-left-radius: 0; /* 말풍선 꼬리 부분 */
-}
-
-/* 시스템 메시지 (입장/퇴장) 스타일 */
+/* 시스템 메시지 스타일 (입장/퇴장) */
 .system-message-sdt {
-    text-align: left; /* 중앙 정렬 */
+    align-self: center; /* 중앙 정렬 */
+    background-color: transparent;
+    color: #666666; /* 밝은 회색 텍스트 */
+    font-size: 0.85em;
     font-style: italic;
-    color: #777;
-    margin: 15px 0;
-    font-size: 0.9em;
+    padding: 5px 15px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 90%;
+    box-shadow: none;
 }
 
-/* --- 메시지 입력 폼 스타일 --- */
-.message-input-form-sdt {
+.no-messages-sdt {
+    text-align: center;
+    color: #999999;
+    padding: 20px;
+    font-style: italic;
+}
+
+/* 채팅 입력 폼 */
+.chat-input-form-sdt {
     display: flex;
-    padding: 10px 15px;
-    border-top: 1px solid #e0e0e0;
-    background-color: #fff;
-    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: #FFFFFF; /* 흰색 배경 */
+    border-radius: 10px;
+    border: 1px solid #D3BDEB; /* 연보라색 경계선 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.message-input-sdt {
-    flex-grow: 1; /* 입력창이 최대한 공간 차지 */
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    padding: 10px 15px;
+.chat-input-sdt {
+    flex-grow: 1;
+    padding: 12px 15px;
+    border: 1px solid #D3BDEB; /* 연보라색 경계선 */
+    border-radius: 25px;
     font-size: 1em;
-    resize: none; /* 사용자 임의 크기 조절 방지 */
-    min-height: 40px; /* 최소 높이 */
-    max-height: 100px; /* 최대 높이 (넘으면 스크롤바 생김) */
-    margin-right: 10px;
-    overflow-y: auto; /* 내용이 많아지면 스크롤바 */
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.message-input-sdt:focus {
-    outline: none;
-    border-color: #6a0dad; /* 포커스 시 보더 색상 변경 */
-    box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.2); /* 포커스 시 그림자 효과 */
+.chat-input-sdt:focus {
+    border-color: #8A2BE2; /* 보라색 강조색 */
+    box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2);
+}
+
+.chat-input-sdt::placeholder {
+    color: #AAAAAA;
+}
+
+.chat-input-sdt:disabled {
+    background-color: #EEEEEE;
+    cursor: not-allowed;
+    color: #999999;
 }
 
 .send-button-sdt {
-    background-color: #6a0dad; /* 전송 버튼 배경색 (보라색 계열) */
+    background-color: #8A2BE2; /* 보라색 강조색 */
     color: white;
     border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 1em;
+    border-radius: 50%; /* 원형 버튼 */
+    width: 45px;
+    height: 45px;
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 5px; /* 아이콘과 텍스트 사이 간격 */
-    transition: background-color 0.2s ease;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: background-color 0.2s, transform 0.2s;
 }
 
 .send-button-sdt:hover:not(:disabled) {
-    background-color: #550a8b; /* 호버 시 색상 변경 */
+    background-color: #7A1BE0; /* 호버 시 더 진한 보라색 */
+    transform: translateY(-2px);
 }
 
 .send-button-sdt:disabled {
-    background-color: #cccccc;
+    background-color: #D3BDEB; /* 비활성화 시 연보라색 */
     cursor: not-allowed;
+    opacity: 0.7;
 }
 
-/* 파일 업로드 아이콘 자리 (기존에 있었으므로 혹시 모를 상황 대비) */
-/* .file-upload-label-sdt {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #f0f0f0;
-    cursor: pointer;
-    margin-right: 10px;
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .stock-discussion-tab-container {
+        padding: 15px;
+        min-height: 400px;
+    }
+
+    .chat-messages-sdt {
+        padding: 8px 10px;
+    }
+
+    .chat-message-sdt {
+        max-width: 85%;
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+
+    .message-header-sdt {
+        margin-bottom: 3px;
+    }
+
+    .message-sender-sdt {
+        font-size: 0.85em;
+    }
+
+    .message-time-sdt {
+        font-size: 0.7em;
+    }
+
+    .system-message-sdt {
+        font-size: 0.8em;
+        padding: 4px 10px;
+    }
+
+    .chat-input-form-sdt {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .chat-input-sdt {
+        padding: 10px 12px;
+        font-size: 0.95em;
+    }
+
+    .send-button-sdt {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1em;
+    }
 }
-.file-upload-label-sdt:hover {
-    background-color: #e0e0e0;
+
+@media (max-width: 480px) {
+    .stock-discussion-tab-container {
+        padding: 10px;
+        min-height: 350px;
+    }
+
+    .chat-messages-sdt {
+        padding: 5px 8px;
+        gap: 8px;
+    }
+
+    .chat-message-sdt {
+        max-width: 90%;
+        padding: 7px 10px;
+        font-size: 0.85em;
+    }
+
+    .chat-input-form-sdt {
+        flex-direction: row; /* 작은 화면에서도 가로 유지 */
+        align-items: center;
+        gap: 5px;
+    }
+
+    .chat-input-sdt {
+        padding: 8px 10px;
+        font-size: 0.9em;
+    }
+
+    .send-button-sdt {
+        width: 35px;
+        height: 35px;
+        font-size: 1em;
+    }
 }
-.file-upload-label-sdt svg {
-    color: #666;
-    font-size: 1.2em;
-} */

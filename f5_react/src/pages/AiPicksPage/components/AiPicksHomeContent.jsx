@@ -1,7 +1,7 @@
 // src/pages/AiPicksPage/AiPicksHomeContent.jsx
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import './AiPicksHomeContent.css'; // 기존 CSS 유지 또는 개선
+import './AiPicksHomeContent.css';
 import { Line } from 'react-chartjs-2';
 import axios from 'axios';
 import {
@@ -15,7 +15,6 @@ import {
     Legend
 } from 'chart.js';
 
-// Chart.js 필수 요소 등록 (ChartJS.register는 한 번만 호출하면 됩니다)
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -26,9 +25,6 @@ ChartJS.register(
     Legend
 );
 
-// --- 서브 컴포넌트 분리 ---
-
-// 1. 시장 현황 및 탑 종목 컴포넌트
 const MarketStatusAndTopStocks = ({ marketStatus, topStocks, isLoading, error }) => (
     <section className="market-status-section-aphc">
         <h2 className="section-title-aphc">실시간 시장 현황</h2>
@@ -71,7 +67,6 @@ const MarketStatusAndTopStocks = ({ marketStatus, topStocks, isLoading, error })
     </section>
 );
 
-// 2. AI 매매 신호 컴포넌트
 const AiTradingSignals = ({ signals, isLoggedIn, isLoading, error }) => {
     const displaySignals = useMemo(() => isLoggedIn
         ? signals
@@ -139,8 +134,6 @@ const AiTradingSignals = ({ signals, isLoggedIn, isLoading, error }) => {
     );
 };
 
-
-// 3. 오늘의 AI 모델 추천 컴포넌트
 const AiModelRecommendation = ({ aiModels, selectedModelId, setSelectedModelId, isLoading, error }) => {
     const selectedAiModel = useMemo(() => aiModels.find(model => model.id === selectedModelId), [aiModels, selectedModelId]);
 
@@ -205,7 +198,7 @@ const AiModelRecommendation = ({ aiModels, selectedModelId, setSelectedModelId, 
                 display: true,
                 grid: { display: false },
                 ticks: {
-                    display: false, // x축 레이블 숨김
+                    display: false,
                     autoSkip: true, maxTicksLimit: 2, font: { size: 8 }
                 },
                 title: { display: false }
@@ -216,7 +209,7 @@ const AiModelRecommendation = ({ aiModels, selectedModelId, setSelectedModelId, 
                 grid: { display: false },
                 ticks: {
                     display: true,
-                    callback: function(value) { return value.toLocaleString('ko-KR'); }, // 한화 포맷
+                    callback: function(value) { return value.toLocaleString('ko-KR'); },
                     maxTicksLimit: 3, font: { size: 8 }, padding: 2
                 },
                 title: { display: false }
@@ -245,7 +238,11 @@ const AiModelRecommendation = ({ aiModels, selectedModelId, setSelectedModelId, 
                                     onClick={() => setSelectedModelId(model.id)}
                                 >
                                     <span className="model-name-aphc">{model.name}</span>
-                                    <span className="model-score-aphc">{model.score}점</span>
+                                    {model.id === 'modelB' ? (
+                                        <span className="model-score-aphc">{model.score > 0 ? '+' : ''}{model.score.toFixed(2)}%</span>
+                                    ) : (
+                                        <span className="model-score-aphc">{model.score}점</span>
+                                    )}
                                 </div>
                             ))
                         ) : (
@@ -261,20 +258,21 @@ const AiModelRecommendation = ({ aiModels, selectedModelId, setSelectedModelId, 
                                     <span className="stock-code-tag-aphc">{selectedAiModel.recommendedStock.code}</span> {selectedAiModel.recommendedStock.name}
                                 </p>
                                 <p className="recommendation-reason-aphc">{selectedAiModel.recommendedStock.reason}</p>
-                                <p className="ai-comment-aphc">AI 요약: {selectedAiModel.summary}</p>
+                                {/* AI 요약 문구 삭제 */}
+                                {/* <p className="ai-comment-aphc">AI 요약: {selectedAiModel.summary}</p> */}
 
                                 {selectedAiModel.id === 'modelB' && selectedAiModel.recommendedStock.predictionDays &&
-                                 getChartData(selectedAiModel.recommendedStock.name, selectedAiModel.recommendedStock.predictionDays).datasets[0].data.length > 0 ? (
-                                    <div className="chart-container-aphc">
-                                        <Line
-                                            data={getChartData(selectedAiModel.recommendedStock.name, selectedAiModel.recommendedStock.predictionDays)}
-                                            options={chartOptions(selectedAiModel.recommendedStock.name)}
-                                        />
-                                        <small className="chart-description">향후 10일간 예측 주가 (원)</small>
-                                    </div>
-                                ) : selectedAiModel.id === 'modelB' ? (
-                                    <p className="no-chart-message">모델 B 예측 차트 데이터를 불러올 수 없습니다.</p>
-                                ) : null}
+                                   getChartData(selectedAiModel.recommendedStock.name, selectedAiModel.recommendedStock.predictionDays).datasets[0].data.length > 0 ? (
+                                        <div className="chart-container-aphc">
+                                            <Line
+                                                data={getChartData(selectedAiModel.recommendedStock.name, selectedAiModel.recommendedStock.predictionDays)}
+                                                options={chartOptions(selectedAiModel.recommendedStock.name)}
+                                            />
+                                            <small className="chart-description">향후 10일간 예측 주가 (원)</small>
+                                        </div>
+                                    ) : selectedAiModel.id === 'modelB' ? (
+                                        <p className="no-chart-message">모델 B 예측 차트 데이터를 불러올 수 없습니다.</p>
+                                    ) : null}
                             </div>
                         </Link>
                     ) : (
@@ -289,9 +287,7 @@ const AiModelRecommendation = ({ aiModels, selectedModelId, setSelectedModelId, 
 };
 
 
-// 메인 컴포넌트
 const AiPicksHomeContent = () => {
-    // 로딩 및 에러 상태를 각 섹션별로 관리
     const [marketDataLoading, setMarketDataLoading] = useState(true);
     const [marketDataError, setMarketDataError] = useState(null);
     const [aiModelLoading, setAiModelLoading] = useState(true);
@@ -303,13 +299,11 @@ const AiPicksHomeContent = () => {
     const [topStocks, setTopStocks] = useState([]);
     const [aiModels, setAiModels] = useState([]);
     const [selectedModelId, setSelectedModelId] = useState(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(true); // 로그인 상태, 실제 앱에서는 Context 등에서 가져옴
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
     const [signals, setSignals] = useState([]);
 
-    // 모든 데이터를 한 번에 가져오는 useEffect
     useEffect(() => {
         const fetchAllData = async () => {
-            // 시장 현황 및 탑 종목 데이터
             setMarketDataLoading(true);
             try {
                 const now = new Date();
@@ -323,17 +317,17 @@ const AiPicksHomeContent = () => {
                 const topStocksData = topStocksResponse.data;
 
                 const sortedTopStocks = topStocksData
-                    .filter(stock => (stock.stockFluctuation ?? 0) > 0) // null 또는 undefined 값 처리
+                    .filter(stock => (stock.stockFluctuation ?? 0) > 0)
                     .sort((a, b) => (b.stockFluctuation ?? 0) - (a.stockFluctuation ?? 0))
                     .slice(0, 5)
                     .map((stock, index) => ({
                         ...stock,
                         rank: index + 1,
-                        priceId: stock.stockCode, // key prop을 위해 stockCode를 사용하거나, 서버에서 고유 ID를 받도록 조정
+                        priceId: stock.stockCode,
                         price: stock.closePrice,
                         changeRate: parseFloat((stock.stockFluctuation ?? 0).toFixed(2)),
-                        changeAmount: null, // API 응답에 없으므로 null
-                        volume: null // API 응답에 없으므로 null
+                        changeAmount: null,
+                        volume: null
                     }));
                 setTopStocks(sortedTopStocks);
                 setMarketDataError(null);
@@ -345,11 +339,9 @@ const AiPicksHomeContent = () => {
                 setMarketDataLoading(false);
             }
 
-            // AI 모델 추천 데이터
             setAiModelLoading(true);
             try {
                 const newAiModels = [];
-                // 모델 A: 뉴스 기반 추천
                 const newsApiResponse = await axios.get('http://localhost:8084/F5/news/top5-latest');
                 if (newsApiResponse.data && newsApiResponse.data.length > 0) {
                     const firstNews = newsApiResponse.data[0];
@@ -366,34 +358,60 @@ const AiPicksHomeContent = () => {
                     });
                 }
 
-                // 모델 B: 가격 예측 기반 추천
                 const predictionResponse = await axios.get('http://localhost:8084/F5/predictions/latest-per-stock');
+                console.log("Prediction API 응답 상태:", predictionResponse.status);
+                console.log("Prediction API 응답 데이터:", predictionResponse.data);
+
                 if (predictionResponse.status === 200 && predictionResponse.data && predictionResponse.data.length > 0) {
-                    const firstPrediction = predictionResponse.data[0];
-                    const predictionDays = firstPrediction.predictionDays;
-                    let predictionReason = '예측 이유 없음';
-                    if (predictionDays && predictionDays.firstDay) {
-                        predictionReason = `1일차 예상 가격 ${predictionDays.firstDay.toLocaleString()}원. 장기적인 우상향 기대.`;
-                    }
-                    newAiModels.push({
-                        id: 'modelB',
-                        name: '예측 AI 모델',
-                        score: 85,
-                        summary: `AI 모델 B는 과거 주가 데이터 패턴을 학습하여 향후 가격 변화를 예측하고 추천합니다.`,
-                        recommendedStock: {
-                            code: firstPrediction.stockCode || 'N/A',
-                            name: firstPrediction.stockName || '종목명 없음',
-                            reason: predictionReason,
-                            predictionDays: predictionDays
+                    let bestPrediction = null;
+                    let maxFluctuation = -Infinity;
+
+                    predictionResponse.data.forEach(prediction => {
+                        const predictionDays = prediction.predictionDays;
+                        // 1일차 대비 10일차 예측 수익률 계산
+                        if (predictionDays && typeof predictionDays.firstDay === 'number' && typeof predictionDays.tenthDay === 'number' && predictionDays.firstDay !== 0) {
+                            const firstDayPrice = predictionDays.firstDay;
+                            const tenthDayPrice = predictionDays.tenthDay;
+                            const currentFluctuation = ((tenthDayPrice - firstDayPrice) / firstDayPrice) * 100;
+
+                            if (currentFluctuation > maxFluctuation) {
+                                maxFluctuation = currentFluctuation;
+                                bestPrediction = prediction;
+                            }
                         }
                     });
+
+                    if (bestPrediction) {
+                        console.log("선택된 최고 예측 종목 (10일 등락율 기준):", bestPrediction);
+
+                        const predictionDays = bestPrediction.predictionDays;
+                        let displayedFluctuationRate = maxFluctuation.toFixed(2);
+                        
+                        // 'reason' 문구에서 불필요한 부분 제거 및 간결화
+                        let predictionReason = `1일차 예상 가격 ${predictionDays.firstDay.toLocaleString()}원. 10일차 예상 가격 ${predictionDays.tenthDay.toLocaleString()}원. 등락율 ${ displayedFluctuationRate}% 예상.`;
+                        
+                        newAiModels.push({
+                            id: 'modelB',
+                            name: '예측 AI 모델',
+                            score: parseFloat(displayedFluctuationRate),
+                            // AI 요약 문구 제거
+                            summary: '', // summary를 빈 문자열로 설정하여 AI 요약 표시 안 함
+                            recommendedStock: {
+                                code: bestPrediction.stockCode || 'N/A',
+                                name: bestPrediction.stockName || '종목명 없음',
+                                reason: predictionReason,
+                                predictionDays: predictionDays
+                            }
+                        });
+                    } else {
+                        console.log("유효한 1일차 및 10일차 예측 가격을 가진 종목이 없어 모델 B 추천을 생성할 수 없습니다.");
+                    }
                 } else if (predictionResponse.status === 204) {
                     console.log('새로운 AI 예측 데이터 없음 (204 No Content).');
                 }
 
                 setAiModels(newAiModels);
                 if (newAiModels.length > 0) {
-                    // 기본 선택 모델을 점수가 가장 높은 모델로 설정
                     const initialSelectedModel = newAiModels.reduce((prev, current) =>
                         (prev.score > current.score) ? prev : current
                     );
@@ -410,7 +428,6 @@ const AiPicksHomeContent = () => {
                 setAiModelLoading(false);
             }
 
-            // AI 매매 신호 데이터 (목업 데이터)
             setSignalLoading(true);
             try {
                 const allSignalsData = [
@@ -432,12 +449,11 @@ const AiPicksHomeContent = () => {
         };
 
         fetchAllData();
-    }, []); // 초기 렌더링 시 한 번만 실행
+    }, []);
 
     return (
         <div className="ai-picks-home-content">
             <div className="top-sections-container">
-                {/* 시장 현황 및 탑 종목 */}
                 <MarketStatusAndTopStocks
                     marketStatus={marketStatus}
                     topStocks={topStocks}
@@ -445,7 +461,6 @@ const AiPicksHomeContent = () => {
                     error={marketDataError}
                 />
 
-                {/* 오늘의 AI 모델 추천 */}
                 <AiModelRecommendation
                     aiModels={aiModels}
                     selectedModelId={selectedModelId}
@@ -455,13 +470,12 @@ const AiPicksHomeContent = () => {
                 />
             </div>
 
-            {/* AI 매매 신호 */}
-            <AiTradingSignals
+            {/* <AiTradingSignals
                 signals={signals}
                 isLoggedIn={isLoggedIn}
                 isLoading={signalLoading}
                 error={signalError}
-            />
+            /> */}
         </div>
     );
 };

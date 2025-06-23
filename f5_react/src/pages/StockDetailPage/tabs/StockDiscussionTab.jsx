@@ -104,7 +104,7 @@ const StockDiscussionTab = ({ stockCode, currentUser }) => {
     const fetchCroomIdx = async () => {
       setLoadingChat(true);
       try {
-        const response = await axios.get(`http://localhost:8084/F5/chat/room-id/${stockCode}`);
+        const response = await axios.get(`http://192.168.219.244:8084/F5/chat/room-id/${stockCode}`);
         if (response.data.success) {
           setCroomIdx(response.data.croomIdx);
           console.log(`종목 코드 ${stockCode}에 대한 croomIdx: ${response.data.croomIdx} 로드 성공.`);
@@ -128,7 +128,7 @@ const StockDiscussionTab = ({ stockCode, currentUser }) => {
   // --- 초기 채팅 내역 로드 ---
   useEffect(() => {
     if (croomIdx) {
-      axios.get(`http://localhost:8084/F5/chat/history/${croomIdx}`)
+      axios.get(`http://192.168.219.244:8084/F5/chat/history/${croomIdx}`)
         .then(response => {
           if (Array.isArray(response.data.messages)) {
             setMessages(response.data.messages);
@@ -151,7 +151,7 @@ const StockDiscussionTab = ({ stockCode, currentUser }) => {
         return;
       }
 
-      const socketUrl = `http://localhost:8084/F5/ws/chat?croomIdx=${croomIdx}`;
+      const socketUrl = `http://192.168.219.244:8084/F5/ws/chat?croomIdx=${croomIdx}`;
       const ws = new SockJS(socketUrl);
       socketRef.current = ws;
 
