@@ -139,7 +139,6 @@ const UserFavorite = ({ currentUser, onLogout }) => {
                             <tr>
                                 <th>종목명</th>
                                 <th>현재가</th>
-                                <th>대비</th>
                                 <th>등락률</th>
                                 <th>거래량</th>
                             </tr>
@@ -170,13 +169,9 @@ const UserFavorite = ({ currentUser, onLogout }) => {
                                                 ? stock.closePrice.toLocaleString() + '원'
                                                 : '-'}
                                         </td>
-                                        {/* 대비 (stockFluctuation) */}
-                                        <td className={`align-right ${fluctuationClass}`}>
-                                            {fluctuationDisplay}
-                                        </td>
                                         {/* 등락률 (계산된 값) */}
-                                        <td className={`align-right ${changeRateClass}`}>
-                                            {changeRateDisplay}
+                                        <td className={`align-right ${fluctuationClass}`}>
+                                            {fluctuationDisplay}%
                                         </td>
                                         {/* 거래량 (stockVolume) */}
                                         <td className="align-right">
