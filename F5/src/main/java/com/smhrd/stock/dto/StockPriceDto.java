@@ -1,4 +1,3 @@
-// src/main/java/com/smhrd/stock/dto/StockPriceDto.java
 package com.smhrd.stock.dto;
 
 import java.math.BigDecimal;

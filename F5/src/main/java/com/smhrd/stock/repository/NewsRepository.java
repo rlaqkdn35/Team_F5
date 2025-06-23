@@ -34,4 +34,20 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     List<News> findAllByOrderByNewsDtDesc();
     
     List<News> findTop5ByOrderByNewsDtDesc();
+    
+    @Query("SELECT n FROM News n WHERE n.newsAnalysis = :analysisType AND n.newsDt BETWEEN :startOfDay AND :endOfDay ORDER BY n.newsAnalysisScore DESC, n.newsDt DESC")
+    List<News> findByNewsAnalysisAndNewsDtBetweenOrderByNewsAnalysisScoreDescNewsDtDesc(
+            @Param("analysisType") String analysisType,
+            @Param("startOfDay") Timestamp startOfDay,
+            @Param("endOfDay") Timestamp endOfDay,
+            Pageable pageable);
+
+    // 편의 메서드: findByNewsAnalysisAndNewsDtBetweenOrderByNewsAnalysisScoreDescNewsDtDesc를 래핑
+    default List<News> findTopNByNewsAnalysisAndNewsDtBetweenOrderByNewsAnalysisScoreDescNewsDtDesc(String analysisType, Timestamp startOfDay, Timestamp endOfDay, int limit) {
+        return findByNewsAnalysisAndNewsDtBetweenOrderByNewsAnalysisScoreDescNewsDtDesc(analysisType, startOfDay, endOfDay, Pageable.ofSize(limit));
+    }
+    
+    @Query("SELECT MAX(n.newsDt) FROM News n")
+    Timestamp findLatestNewsDate();
+    
 }

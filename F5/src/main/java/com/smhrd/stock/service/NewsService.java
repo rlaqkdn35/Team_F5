@@ -1,10 +1,15 @@
 package com.smhrd.stock.service;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -17,6 +22,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.smhrd.stock.dto.CombinedNewsStockDto;
+import com.smhrd.stock.dto.CombinedStockDetailDto;
 import com.smhrd.stock.dto.LatestNewsDto;
 import com.smhrd.stock.dto.NewsCoreIssueDto;
 import com.smhrd.stock.dto.NewsDetailDto;
@@ -262,6 +269,146 @@ public class NewsService {
         return result;
     }
     
-    
+    public List<CombinedNewsStockDto> getDailyAnalyzedNewsWithStockFluctuation() {
+        System.out.println("뉴스 서비스 - getDailyAnalyzedNewsWithStockFluctuation() 시작");
+
+        // 1. 데이터베이스에서 가장 최신 뉴스 날짜를 조회합니다.
+        Timestamp latestOverallNewsDate = newsRepository.findLatestNewsDate();
+
+        if (latestOverallNewsDate == null) {
+            System.out.println("WARN: 데이터베이스에 어떤 뉴스도 존재하지 않습니다. 빈 리스트를 반환합니다.");
+            return new ArrayList<>(); // 뉴스가 아예 없으면 빈 리스트 반환
+        }
+
+        // 가장 최신 뉴스 날짜를 기준으로 조회 범위 설정 (UTC 기준)
+        // DB에 저장된 시간이 KST라면, .atZone(ZoneId.of("Asia/Seoul")) 또는 서버 기본 시간대 등을 고려해야 합니다.
+        // 현재는 UTC로 통일 가정.
+        LocalDate latestNewsLocalDate = latestOverallNewsDate.toInstant().atZone(ZoneOffset.UTC).toLocalDate();
+        Timestamp startOfLatestNewsDay = Timestamp.from(latestNewsLocalDate.atStartOfDay(ZoneOffset.UTC).toInstant());
+        Timestamp endOfLatestNewsDay = Timestamp.from(latestNewsLocalDate.atTime(LocalTime.MAX).atZone(ZoneOffset.UTC).toInstant());
+
+        System.out.println("INFO: 조회 기준 뉴스 날짜 (가장 최신): " + latestNewsLocalDate);
+        System.out.println("INFO: 조회 범위 시작 (UTC): " + startOfLatestNewsDay);
+        System.out.println("INFO: 조회 범위 종료 (UTC): " + endOfLatestNewsDay);
+
+        // 2. 각 뉴스 분석 유형별로 뉴스를 조회하고 합칩니다.
+        Set<News> selectedNewsSet = new LinkedHashSet<>(); // 중복 방지 및 순서 유지
+
+        // 가장 최신 날짜를 기준으로 뉴스 조회
+        List<News> negativeNews = newsRepository.findTopNByNewsAnalysisAndNewsDtBetweenOrderByNewsAnalysisScoreDescNewsDtDesc("negative", startOfLatestNewsDay, endOfLatestNewsDay, 2);
+        selectedNewsSet.addAll(negativeNews);
+        System.out.println("INFO: NEGATIVE 뉴스 조회 결과 (" + negativeNews.size() + "건): " + negativeNews.stream().map(News::getNewsTitle).collect(Collectors.joining(", ")));
+
+        List<News> positiveNews = newsRepository.findTopNByNewsAnalysisAndNewsDtBetweenOrderByNewsAnalysisScoreDescNewsDtDesc("positive", startOfLatestNewsDay, endOfLatestNewsDay, 2);
+        selectedNewsSet.addAll(positiveNews);
+        System.out.println("INFO: POSITIVE 뉴스 조회 결과 (" + positiveNews.size() + "건): " + positiveNews.stream().map(News::getNewsTitle).collect(Collectors.joining(", ")));
+
+        List<News> neutralNews = newsRepository.findTopNByNewsAnalysisAndNewsDtBetweenOrderByNewsAnalysisScoreDescNewsDtDesc("neutral", startOfLatestNewsDay, endOfLatestNewsDay, 2);
+        selectedNewsSet.addAll(neutralNews);
+        System.out.println("INFO: NEUTRAL 뉴스 조회 결과 (" + neutralNews.size() + "건): " + neutralNews.stream().map(News::getNewsTitle).collect(Collectors.joining(", ")));
+
+        System.out.println("INFO: 선택된 총 뉴스 (중복 제거 전): " + selectedNewsSet.size() + "건");
+
+        List<News> finalSelectedNews = selectedNewsSet.stream()
+                                                    .sorted(Comparator.comparing(News::getNewsDt).reversed()) // 최종적으로 최신순 정렬
+                                                    .limit(6) // 총 6개만 가져옵니다.
+                                                    .collect(Collectors.toList());
+        System.out.println("INFO: 최종 선택된 뉴스 (" + finalSelectedNews.size() + "건): " + finalSelectedNews.stream().map(News::getNewsTitle).collect(Collectors.joining(", ")));
+
+        List<CombinedNewsStockDto> combinedResult = new ArrayList<>();
+
+        // 3. 선택된 각 뉴스에 대해 연관된 종목 정보 및 주가 등락률/종가를 조합합니다.
+        for (News news : finalSelectedNews) {
+            System.out.println("DEBUG: 뉴스 처리 중: [" + news.getNewsTitle() + "], 뉴스 날짜: [" + news.getNewsDt() + "]");
+            List<CombinedStockDetailDto> relatedStockDetails = new ArrayList<>();
+
+            if (news.getStockCodes() != null && !news.getStockCodes().trim().isEmpty()) {
+                String[] stockCodesArray = news.getStockCodes().split(",");
+                System.out.println("DEBUG:   관련 종목 코드: " + news.getStockCodes());
+
+                for (String code : stockCodesArray) {
+                    String trimmedCode = code.trim();
+                    if (trimmedCode.isEmpty()) {
+                        System.out.println("WARN:   빈 종목 코드가 발견되어 스킵합니다.");
+                        continue;
+                    }
+                    System.out.println("DEBUG:     처리 중인 종목 코드: " + trimmedCode);
+
+                    Optional<Stock> stockOptional = stockRepository.findByStockCode(trimmedCode);
+
+                    if (stockOptional.isPresent()) {
+                        Stock stock = stockOptional.get();
+                        System.out.println("DEBUG:     종목 발견: " + stock.getStockName());
+
+                        // ⭐⭐ 주가 데이터 조회 로직 변경 시작 ⭐⭐
+                        // 3a. 먼저 뉴스 날짜와 같은 날짜의 주가 데이터를 시도합니다.
+                        Timestamp newsDateStartForPrice = Timestamp.from(news.getNewsDt().toInstant().atZone(ZoneOffset.UTC).toLocalDate().atStartOfDay(ZoneOffset.UTC).toInstant());
+                        Timestamp newsDateEndForPrice = Timestamp.from(news.getNewsDt().toInstant().atZone(ZoneOffset.UTC).toLocalDate().atTime(LocalTime.MAX).atZone(ZoneOffset.UTC).toInstant());
+
+                        List<StockPrice> newsDayStockPrices = stockPriceRepository
+                                .findTop1ByStock_StockCodeAndPriceDateBetweenOrderByPriceDateDesc(
+                                        trimmedCode, newsDateStartForPrice, newsDateEndForPrice
+                                );
+                        System.out.println("DEBUG:     뉴스 날짜 (" + latestNewsLocalDate + ") 기준 StockPrice 조회 결과 (" + newsDayStockPrices.size() + "건) for stockCode " + trimmedCode + ": " + (newsDayStockPrices.isEmpty() ? "없음" : newsDayStockPrices.get(0).getStockFluctuation()));
+
+                        StockPrice finalStockPrice = null;
+
+                        if (!newsDayStockPrices.isEmpty()) {
+                            finalStockPrice = newsDayStockPrices.get(0);
+                            System.out.println("DEBUG:     뉴스 날짜에 맞는 주가 데이터 사용: 날짜: " + finalStockPrice.getPriceDate());
+                        } else {
+                            // 3b. 뉴스 날짜에 주가 데이터가 없으면, 해당 종목의 "가장 최신" 주가 데이터를 가져옵니다.
+                            System.out.println("WARN:     종목 [" + trimmedCode + "]에 대한 뉴스 날짜 [" + news.getNewsDt().toInstant().atZone(ZoneOffset.UTC).toLocalDate() + "]에 주가 데이터가 없습니다. 해당 종목의 가장 최신 주가 데이터를 조회합니다.");
+                            Optional<StockPrice> latestOverallStockPrice = stockPriceRepository.findTop1ByStock_StockCodeOrderByPriceDateDesc(trimmedCode);
+
+                            if (latestOverallStockPrice.isPresent()) {
+                                finalStockPrice = latestOverallStockPrice.get();
+                                System.out.println("DEBUG:     종목 [" + trimmedCode + "]의 가장 최신 주가 데이터 사용 (날짜: " + finalStockPrice.getPriceDate() + "): " + finalStockPrice.getStockFluctuation());
+                            } else {
+                                System.out.println("WARN:     종목 [" + trimmedCode + "]에 대한 어떤 주가 데이터도 찾을 수 없습니다. (fallback 실패)");
+                            }
+                        }
+
+                        // ⭐⭐ 주가 데이터 조회 로직 변경 끝 ⭐⭐
+
+                        // DTO에 값 설정
+                        if (finalStockPrice != null) {
+                            relatedStockDetails.add(CombinedStockDetailDto.builder()
+                                    .stockCode(stock.getStockCode())
+                                    .stockName(stock.getStockName())
+                                    .stockFluctuation(finalStockPrice.getStockFluctuation())
+                                    .closePrice(finalStockPrice.getClosePrice())
+                                    .priceDate(finalStockPrice.getPriceDate())
+                                    .build());
+                        } else {
+                            // 어떤 주가 데이터도 찾지 못한 경우
+                            relatedStockDetails.add(CombinedStockDetailDto.builder()
+                                    .stockCode(stock.getStockCode())
+                                    .stockName(stock.getStockName())
+                                    .stockFluctuation(null)
+                                    .closePrice(null)
+                                    .priceDate(null)
+                                    .build());
+                        }
+
+                    } else {
+                        System.out.println("WARN:   종목 코드 [" + trimmedCode + "]에 해당하는 Stock 엔티티를 찾을 수 없습니다.");
+                    }
+                }
+            } else {
+                System.out.println("INFO:   뉴스 [" + news.getNewsTitle() + "]: 연결된 종목 코드가 없습니다.");
+            }
+            combinedResult.add(CombinedNewsStockDto.builder()
+                    .newsIdx(news.getNewsIdx())
+                    .newsTitle(news.getNewsTitle())
+                    .newsDt(news.getNewsDt())
+                    .newsAnalysis(news.getNewsAnalysis())
+                    .stockCodes(news.getStockCodes())
+                    .relatedStockDetails(relatedStockDetails)
+                    .build());
+        }
+        System.out.println("뉴스 서비스 - getDailyAnalyzedNewsWithStockFluctuation() 종료. 최종 결과 " + combinedResult.size() + "건.");
+        return combinedResult;
+    }
     
 }

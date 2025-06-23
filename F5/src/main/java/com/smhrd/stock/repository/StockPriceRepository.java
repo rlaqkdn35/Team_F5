@@ -130,4 +130,12 @@ public interface StockPriceRepository extends JpaRepository<StockPrice, Long> {
     List<StockPrice> findByStock_StockCodeAndPriceDateBetweenOrderByPriceDateDesc(String stockCode, Timestamp startDate, Timestamp endDate);
     
     List<StockPrice> findTop7ByStock_StockCodeOrderByPriceDateDesc(String stockCode);
+
+    @Query("SELECT sp FROM StockPrice sp WHERE sp.stock.stockCode = :stockCode AND sp.priceDate BETWEEN :newsDateStart AND :newsDateEnd ORDER BY sp.priceDate DESC")
+    List<StockPrice> findTop1ByStock_StockCodeAndPriceDateBetweenOrderByPriceDateDesc(
+            @Param("stockCode") String stockCode, @Param("newsDateStart") Timestamp newsDateStart, @Param("newsDateEnd") Timestamp newsDateEnd);
+
+    Optional<StockPrice> findTop1ByStock_StockCodeOrderByPriceDateDesc(String stockCode);
+
 }
+    

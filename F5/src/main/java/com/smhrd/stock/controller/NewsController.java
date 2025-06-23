@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.smhrd.stock.dto.CombinedNewsStockDto;
 import com.smhrd.stock.dto.LatestNewsDto;
 import com.smhrd.stock.dto.NewsCoreIssueDto;
 import com.smhrd.stock.dto.NewsDetailDto;
@@ -83,4 +84,15 @@ public class NewsController {
         }
         return ResponseEntity.ok(newsList);
     }
+    
+    @GetMapping("/daily-analyzed-fluctuation") // 이 메서드의 구체적인 엔드포인트
+    public ResponseEntity<List<CombinedNewsStockDto>> getDailyAnalyzedNewsWithFluctuation() {
+        // NewsService의 메서드를 호출하여 필요한 데이터를 가져옵니다.
+        List<CombinedNewsStockDto> newsData = newsService.getDailyAnalyzedNewsWithStockFluctuation();
+
+        // 가져온 데이터를 HTTP 200 OK 상태 코드와 함께 응답으로 반환합니다.
+        return ResponseEntity.ok(newsData);
+    }
+    
+    
 }
