@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,14 +18,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.smhrd.stock.dto.LatestNewsDto;
+import com.smhrd.stock.dto.NewsCoreIssueDto;
 import com.smhrd.stock.dto.NewsDetailDto;
 import com.smhrd.stock.dto.NewsSummaryDto;
 import com.smhrd.stock.dto.RecentNewsDto;
+import com.smhrd.stock.dto.RelatedStockInfoDto;
+import com.smhrd.stock.dto.StockPriceDto;
 import com.smhrd.stock.entity.News;
 import com.smhrd.stock.entity.NewsForCompany;
 import com.smhrd.stock.entity.Stock;
+import com.smhrd.stock.entity.StockPrice;
 import com.smhrd.stock.repository.NewsForCompanyRepository;
 import com.smhrd.stock.repository.NewsRepository;
+import com.smhrd.stock.repository.StockPriceRepository;
 import com.smhrd.stock.repository.StockRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -41,6 +47,9 @@ public class NewsService {
     
     @Autowired
     private StockRepository stockRepository;
+    
+    @Autowired
+    private StockPriceRepository stockPriceRepository;
     
     public Page<NewsSummaryDto> getPaginatedNews(Pageable pageable) {
         return newsRepository.findAllNewsSummary(pageable);
@@ -210,4 +219,49 @@ public class NewsService {
 
         return top5NewsDtos;
     }
+    
+    public List<NewsCoreIssueDto> getTop5LatestNewsWithStockDetails() {
+        List<News> top5News = newsRepository.findTop5ByOrderByNewsDtDesc();
+        List<NewsCoreIssueDto> result = new ArrayList<>();
+
+        for (News news : top5News) {
+            List<RelatedStockInfoDto> relatedStocks = new ArrayList<>();
+
+            if (news.getStockCodes() != null && !news.getStockCodes().trim().isEmpty()) {
+                String[] stockCodesArray = news.getStockCodes().split(",");
+
+                for (String code : stockCodesArray) {
+                    String trimmedCode = code.trim();
+                    if (trimmedCode.isEmpty()) continue;
+
+                    Optional<Stock> stockOptional = stockRepository.findByStockCode(trimmedCode);
+
+                    if (stockOptional.isPresent()) {
+                        Stock stock = stockOptional.get();
+
+                        // ⭐ 여기를 변경합니다: 특정 종목의 가장 최신 주가 데이터 7개를 가져옵니다.
+                        // 이 메서드는 날짜 범위 대신 '개수'를 기준으로 합니다.
+                        List<StockPrice> stockPrices = stockPriceRepository
+                                .findTop7ByStock_StockCodeOrderByPriceDateDesc(trimmedCode);
+
+                        List<StockPriceDto> stockPriceDtos = stockPrices.stream()
+                                .map(StockPriceDto::fromEntity)
+                                .collect(Collectors.toList());
+
+                        relatedStocks.add(RelatedStockInfoDto.builder()
+                                .stockCode(stock.getStockCode())
+                                .stockName(stock.getStockName())
+                                .companyInfo(stock.getCompanyInfo())
+                                .stockPrices(stockPriceDtos)
+                                .build());
+                    }
+                }
+            }
+            result.add(NewsCoreIssueDto.fromEntity(news, relatedStocks));
+        }
+        return result;
+    }
+    
+    
+    
 }

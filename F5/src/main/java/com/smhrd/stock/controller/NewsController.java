@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.smhrd.stock.dto.LatestNewsDto;
+import com.smhrd.stock.dto.NewsCoreIssueDto;
 import com.smhrd.stock.dto.NewsDetailDto;
 import com.smhrd.stock.dto.NewsSummaryDto;
 import com.smhrd.stock.dto.RecentNewsDto;
@@ -68,6 +69,15 @@ public class NewsController {
     @GetMapping("/top5-latest")
     public ResponseEntity<List<LatestNewsDto>> getTop5LatestNews() {
         List<LatestNewsDto> newsList = newsService.getTop5LatestNews();
+        if (newsList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(newsList);
+    }
+    
+    @GetMapping("/top5-with-details")
+    public ResponseEntity<List<NewsCoreIssueDto>> getTop5NewsWithStockDetails() {
+        List<NewsCoreIssueDto> newsList = newsService.getTop5LatestNewsWithStockDetails();
         if (newsList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

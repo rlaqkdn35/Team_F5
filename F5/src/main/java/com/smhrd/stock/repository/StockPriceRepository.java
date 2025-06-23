@@ -127,5 +127,7 @@ public interface StockPriceRepository extends JpaRepository<StockPrice, Long> {
             nativeQuery = true)
     List<StockPrice> findTopVolumeShareStocks();
 
+    List<StockPrice> findByStock_StockCodeAndPriceDateBetweenOrderByPriceDateDesc(String stockCode, Timestamp startDate, Timestamp endDate);
     
+    List<StockPrice> findTop7ByStock_StockCodeOrderByPriceDateDesc(String stockCode);
 }
