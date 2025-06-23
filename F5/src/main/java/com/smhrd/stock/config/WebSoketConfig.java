@@ -11,7 +11,8 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.smhrd.stock.handler.WebSoketChatHandler; // WebSoketChatHandler 임포트 확인
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.Map;
 // Objects 임포트가 필요하다면 추가
 // import java.util.Objects; 
@@ -20,6 +21,8 @@ import java.util.Map;
 @EnableWebSocket
 public class WebSoketConfig implements WebSocketConfigurer {
 
+	private static final Logger logger = LoggerFactory.getLogger(WebSoketConfig.class);
+    
     private final WebSocketHandler webSocketHandler;
 
     public WebSoketConfig(WebSoketChatHandler webSocketHandler) {
@@ -29,8 +32,7 @@ public class WebSoketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(webSocketHandler, "/ws/chat")
-                .setAllowedOriginPatterns("*") // 모든 오리진 허용 (개발 단계에서만 사용)
-                // !!! 여기가 중요: addInterceptors()를 withSockJS() 이전에 호출 !!!
+                .setAllowedOriginPatterns("*")
                 .addInterceptors(new HandshakeInterceptor() {
                     @Override
                     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
@@ -42,11 +44,17 @@ public class WebSoketConfig implements WebSocketConfigurer {
                                                              .get("croomIdx");
 
                         if (croomIdx != null && !croomIdx.isEmpty()) {
-                            attributes.put("croomIdx", croomIdx);
-                            System.out.println("Handshake Interceptor: croomIdx [" + croomIdx + "]를 웹소켓 세션 속성으로 추가.");
-                            return true;
+                            try {
+                                Integer croomIdxInt = Integer.parseInt(croomIdx);
+                                attributes.put("croomIdx", croomIdxInt);
+                                logger.info("Handshake Interceptor: croomIdx [{}]를 웹소켓 세션 속성으로 추가.", croomIdxInt);
+                                return true;
+                            } catch (NumberFormatException e) {
+                                logger.error("Handshake Interceptor: croomIdx는 숫자 형식이어야 합니다: {}", croomIdx, e);
+                                return false;
+                            }
                         } else {
-                            System.err.println("Handshake Interceptor: croomIdx 파라미터가 누락되었습니다.");
+                            logger.error("Handshake Interceptor: croomIdx 파라미터가 누락되었습니다.");
                             return false;
                         }
                     }
@@ -57,6 +65,6 @@ public class WebSoketConfig implements WebSocketConfigurer {
                         // 핸드셰이크 후 로직 (옵션)
                     }
                 })
-                .withSockJS(); // 이제 withSockJS()를 마지막에 호출합니다.
+                .withSockJS();
     }
 }

@@ -35,34 +35,25 @@ public class WebSoketChatHandler extends TextWebSocketHandler { // 클래스명 
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        // HandshakeInterceptor에서 String 타입으로 넣어준 croomIdx를 가져옴
-        // croomIdx는 Object로 들어오므로 String으로 캐스팅
-        String croomIdxStr = (String) session.getAttributes().get("croomIdx");
+        // HandshakeInterceptor에서 Integer 타입으로 넣어준 croomIdx를 가져옴
+        Integer croomIdx = (Integer) session.getAttributes().get("croomIdx");
 
-        if (croomIdxStr == null || croomIdxStr.isEmpty()) {
+        if (croomIdx == null) {
             logger.warn("[WebSocket] croomIdx 파라미터가 없거나 유효하지 않아 연결을 닫습니다. 세션 ID: {}", session.getId());
             session.close(CloseStatus.BAD_DATA.withReason("croomIdx parameter is missing or invalid"));
             return;
         }
 
         try {
-            // String으로 받은 croomIdx를 Integer로 변환
-            Integer croomIdx = Integer.parseInt(croomIdxStr);
-            // Integer 타입의 croomIdx를 세션 속성에 저장하여 이후 사용 편의성을 높일 수 있습니다.
-            session.getAttributes().put("croomIdx", croomIdx);
-
             // 해당 croomIdx에 해당하는 Map이 없으면 새로 생성하여 추가
             chatRoomSessions.computeIfAbsent(croomIdx, k -> new ConcurrentHashMap<>())
-                    .put(session.getId(), session);
+                           .put(session.getId(), session);
 
             logger.info("[WebSocket] 연결 성공. 세션 ID: {}, 채팅방 croomIdx: {}", session.getId(), croomIdx);
 
             // 입장 메시지는 클라이언트에서 보낼 것이므로 서버에서 별도로 생성하여 브로드캐스트할 필요는 없습니다.
             // 클라이언트가 보낸 입장 메시지는 handleTextMessage에서 처리됩니다.
 
-        } catch (NumberFormatException e) {
-            logger.error("[WebSocket] croomIdx 값을 정수로 변환할 수 없습니다: '{}'. 세션 ID: {}", croomIdxStr, session.getId(), e);
-            session.close(CloseStatus.BAD_DATA.withReason("croomIdx is not a valid number"));
         } catch (Exception e) {
             logger.error("[WebSocket] 연결 설정 중 알 수 없는 오류 발생. 세션 ID: {}", session.getId(), e);
             session.close(CloseStatus.SERVER_ERROR.withReason("Internal server error during connection setup"));

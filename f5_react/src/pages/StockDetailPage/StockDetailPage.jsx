@@ -16,7 +16,7 @@ const TABS_STOCK_DETAIL = [
   { id: 'comprehensive', name: '종합 분석', icon: <FaInfoCircle />, content: ComprehensiveAnalysisTab },
   { id: 'priceChart', name: '시세 차트', icon: <FaChartLine />, content: PriceChartTab },
   { id: 'multiAi', name: '다중 AI', icon: <FaBrain />, content: MultiAiAnalysisTab },
-  // { id: 'discussion', name: '종목 토론', icon: <FaComments />, content: StockDiscussionTab },
+  { id: 'discussion', name: '종목 토론', icon: <FaComments />, content: StockDiscussionTab },
   { id: 'newsDisclosure', name: '뉴스', icon: <FaNewspaper />, content: NewsDisclosureTab},
 ];
 
