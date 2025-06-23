@@ -65,6 +65,7 @@
     margin: 0 auto; /* 위아래 마진은 0, 좌우 마진은 자동으로 설정하여 중앙 정렬 */
 }
 .ai-picked-issue-slide-item {
+
     width: 100%;
     box-sizing: border-box;
     padding: 10px;
@@ -185,11 +186,9 @@
 }
 
 /* 각 컬럼의 너비는 th, td에 직접 지정합니다. */
-.related-stocks-table .col-name { width: 15%; text-align: left; }
-.related-stocks-table .col-price { width: 10%; text-align: right; }
+.related-stocks-table .col-name { width: 10%; text-align: left; }
+.related-stocks-table .col-price { width: 10%; text-align: center; }
 .related-stocks-table .col-change-rate { width: 10%; text-align: right; }
-.related-stocks-table .col-overview { width: 30%; } /* 좀 더 여유있게 */
-.related-stocks-table .col-other-issues { width: 35%; } /* 좀 더 여유있게 */
 
 
 /* 이전 flex 기반의 .related-stocks-table-header, .related-stocks-table-body, .related-stocks-table-row 스타일은 제거하거나 주석 처리 */
@@ -228,10 +227,7 @@
     color: var(--color-text-hover);
 }
 
-/* 등락률 색상도 그대로 유지 */
-.col-change-rate.positive { color: var(--color-stock-positive); }
-.col-change-rate.negative { color: var(--color-stock-negative); }
-.col-change-rate.neutral { color: #7f8c8d; }
+
 
 /* 미디어 쿼리 내에서도 display: block; overflow-x: auto; 등을 제거합니다. */
 /* <table> 태그를 사용하면 브라우저가 테이블을 반응형으로 처리하는 방식이 달라집니다. */
@@ -254,17 +250,7 @@
         /* text-overflow: clip; */ /* ellipsis 제거하려면 clip */
     }
 }
-.col-change-rate.positive {
-    color: var(--color-stock-positive); /* Using variable */
-}
 
-.col-change-rate.negative {
-    color: var(--color-stock-negative); /* Using variable */
-}
-
-.col-change-rate.neutral {
-    color: #7f8c8d; /* No direct variable provided, keeping original */
-}
 
 /* --- Recent Issues Table (recent-issues-table-unified) Styles --- */
 .recent-issues-table-container {

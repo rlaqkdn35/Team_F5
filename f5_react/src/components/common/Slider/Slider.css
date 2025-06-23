@@ -19,6 +19,7 @@
 /* 슬라이드 아이템들이 가로로 길게 늘어서 있는 '레일' (이 부분이 움직임) */
 .slider-track {
   display: flex; /* 자식 요소 (slider-item)들을 가로로 나란히 정렬 */
+   align-items: flex-start !important; /* 슬라이드 아이템들을 위쪽으로 정렬 */
   transition: transform 0.5s ease-in-out; /* 부드러운 슬라이드 전환 효과 */
   height: auto; /* 혹은 이대로 두어도 flex 컨테이너는 내용물에 맞게 늘어납니다. */
   align-items: stretch; /* 이 속성을 추가하여 자식들이 부모 높이를 채우도록 함 */
