@@ -58,5 +58,6 @@ public class Chatting {
         public static final String ENTER = "ENTER";
         public static final String QUIT = "QUIT";
         public static final String TALK = "TALK";
+        public static final String ALERT = "ALERT";
     }
 }
