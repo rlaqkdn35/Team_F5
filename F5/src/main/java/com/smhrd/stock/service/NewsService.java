@@ -158,6 +158,8 @@ public class NewsService {
     }
     
     public List<LatestNewsDto> getLatestNewsPerIndividualStockCode() {
+        System.out.println("뉴스 서비스 - getLatestNewsPerIndividualStockCode() 시작");
+
         List<News> allNews = newsRepository.findAllByOrderByNewsDtDesc();
 
         // Map의 키는 개별 종목 코드(String), 값은 해당 종목 코드에 대한 최신 뉴스 DTO
@@ -179,52 +181,77 @@ public class NewsService {
                 // 해당 trimmedCode에 대한 최신 뉴스가 아직 맵에 없다면,
                 // 현재 뉴스 엔티티와 해당 개별 종목 코드를 사용하여 새로운 DTO를 생성하고 저장합니다.
                 // 이렇게 함으로써, 하나의 News 엔티티가 여러 개별 종목 코드에 대한 DTO로 변환될 수 있습니다.
-                latestNewsByIndividualStockCode.putIfAbsent(trimmedCode, LatestNewsDto.fromEntity(news, trimmedCode));
+                if (!latestNewsByIndividualStockCode.containsKey(trimmedCode)) { // putIfAbsent 대신 containsKey로 명시적 확인
+                    String stockName = null;
+                    Optional<Stock> stockOptional = stockRepository.findByStockCode(trimmedCode);
+                    if (stockOptional.isPresent()) {
+                        stockName = stockOptional.get().getStockName();
+                        System.out.println("DEBUG: 종목 코드 [" + trimmedCode + "]에 대한 종목명: [" + stockName + "] 발견.");
+                    } else {
+                        System.out.println("WARN: 종목 코드 [" + trimmedCode + "]에 해당하는 Stock 엔티티를 찾을 수 없습니다.");
+                    }
+                    // ⭐ stockName을 LatestNewsDto.fromEntity()에 전달합니다.
+                    latestNewsByIndividualStockCode.put(trimmedCode, LatestNewsDto.fromEntity(news, trimmedCode, stockName));
+                }
             }
         }
-        
-        
 
+        System.out.println("뉴스 서비스 - getLatestNewsPerIndividualStockCode() 종료. 최종 결과 " + latestNewsByIndividualStockCode.size() + "건.");
         // Map의 values() (LatestNewsDto 객체들)을 리스트로 변환하여 반환합니다.
         // 이 리스트의 크기는 latestNewsByIndividualStockCode 맵의 키 개수와 동일합니다.
         // 즉, 뉴스 데이터가 있는 모든 개별 종목 코드에 대한 최신 뉴스가 각각 하나씩 포함됩니다.
         return new ArrayList<>(latestNewsByIndividualStockCode.values());
     }
 
-    
+
     public List<LatestNewsDto> getTop5LatestNews() {
-        // 1. 데이터베이스에서 모든 뉴스를 newsDt 내림차순(최신순)으로 가져옵니다.
-        // 이때, LIMIT 5를 적용하여 처음부터 5개만 가져오도록 레포지토리에 쿼리 메서드를 정의하는 것이 효율적입니다.
-        // 현재 newsRepository에 해당 메서드가 없다면 아래와 같이 추가해야 합니다.
-        // List<News> top5NewsEntities = newsRepository.findTop5ByOrderByNewsDtDesc();
+        System.out.println("뉴스 서비스 - getTop5LatestNews() 시작");
 
-        // **만약 NewsRepository에 findTop5ByOrderByNewsDtDesc() 같은 메서드가 아직 없다면,**
-        // 일단 findAllByOrderByNewsDtDesc()를 사용하고 Java 코드에서 5개로 제한할 수 있습니다.
-        // 하지만 DB 레벨에서 LIMIT를 거는 것이 훨씬 효율적입니다.
+        // 1. 데이터베이스에서 최신 뉴스 5개를 newsDt 기준으로 내림차순 정렬하여 가져옵니다.
+        // NewsRepository에 findTop5ByOrderByNewsDtDesc() 메서드가 정의되어 있어야 합니다.
+        List<News> latestNews = newsRepository.findTop5ByOrderByNewsDtDesc();
 
-        // 효율적인 방법: NewsRepository에 다음 메서드 추가 권장
-        // public interface NewsRepository extends JpaRepository<News, Long> {
-        //     List<News> findTop5ByOrderByNewsDtDesc(); // 이 메서드를 레포지토리에 추가해야 합니다.
-        // }
-        
-        List<News> allNewsSorted = newsRepository.findAllByOrderByNewsDtDesc(); // 현재 레포지토리 기준
+        if (latestNews.isEmpty()) {
+            System.out.println("WARN: 최신 뉴스 5개를 찾을 수 없습니다. 빈 리스트를 반환합니다.");
+            return new ArrayList<>();
+        }
 
-        // 2. Stream API를 사용하여 상위 5개의 뉴스만 선택하고, 각 뉴스를 DTO로 변환합니다.
-        // 여기서는 각 뉴스 엔티티가 포함하는 '모든 종목 코드' 중 첫 번째 코드를 대표 종목 코드로 사용하여 DTO를 생성합니다.
-        // 만약 특정 종목 코드를 기준으로 하고 싶지 않다면 LatestNewsDto.fromEntity(news, null) 또는 빈 문자열을 전달해도 됩니다.
-        List<LatestNewsDto> top5NewsDtos = allNewsSorted.stream()
-                .limit(5) // 상위 5개만 가져옵니다.
-                .map(news -> {
-                    // News 엔티티의 stock_codes는 콤마로 구분된 문자열일 수 있습니다.
-                    // 여기서는 DTO 생성을 위해 첫 번째 종목 코드를 사용하거나, null/빈 문자열을 전달합니다.
-                    String firstStockCode = (news.getStockCodes() != null && !news.getStockCodes().trim().isEmpty())
-                                            ? news.getStockCodes().split(",")[0].trim()
-                                            : null;
-                    return LatestNewsDto.fromEntity(news, firstStockCode);
-                })
-                .collect(Collectors.toList());
+        List<LatestNewsDto> result = new ArrayList<>();
 
-        return top5NewsDtos;
+        // 2. 각 News 엔티티를 LatestNewsDto로 변환하면서 종목명을 추가합니다.
+        for (News news : latestNews) {
+            String primaryStockCode = null;
+            String primaryStockName = null;
+
+            // news.getStockCodes()에서 첫 번째 유효한 종목 코드를 추출합니다.
+            if (news.getStockCodes() != null && !news.getStockCodes().trim().isEmpty()) {
+                String[] stockCodesArray = news.getStockCodes().split(",");
+                if (stockCodesArray.length > 0) {
+                    primaryStockCode = stockCodesArray[0].trim(); // 첫 번째 종목 코드 사용
+
+                    // 추출한 종목 코드로 Stock 엔티티에서 종목명을 조회합니다.
+                    if (!primaryStockCode.isEmpty()) {
+                        Optional<Stock> stockOptional = stockRepository.findByStockCode(primaryStockCode);
+                        if (stockOptional.isPresent()) {
+                            primaryStockName = stockOptional.get().getStockName();
+                            System.out.println("DEBUG: 종목 코드 [" + primaryStockCode + "]에 대한 종목명: [" + primaryStockName + "] 발견.");
+                        } else {
+                            System.out.println("WARN: 종목 코드 [" + primaryStockCode + "]에 해당하는 Stock 엔티티를 찾을 수 없습니다.");
+                        }
+                    }
+                }
+            } else {
+                System.out.println("INFO: 뉴스 [" + news.getNewsTitle() + "]: 연결된 종목 코드가 없습니다.");
+            }
+
+            // ⭐ LatestNewsDto.fromEntity() 팩토리 메서드를 호출할 때
+            // ⭐ `primaryStockName`도 함께 전달하여 DTO의 `stockName` 필드를 채웁니다.
+            LatestNewsDto dto = LatestNewsDto.fromEntity(news, primaryStockCode, primaryStockName);
+            result.add(dto);
+        }
+
+        System.out.println("뉴스 서비스 - getTop5LatestNews() 종료. 최종 결과 " + result.size() + "건.");
+        return result;
     }
     
     public List<NewsCoreIssueDto> getTop5LatestNewsWithStockDetails() {
