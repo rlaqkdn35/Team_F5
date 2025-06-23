@@ -261,6 +261,12 @@ public class NewsService {
         for (News news : top5News) {
             List<RelatedStockInfoDto> relatedStocks = new ArrayList<>();
 
+            LocalDate newsDate = news.getNewsDt().toLocalDateTime().toLocalDate();
+            LocalDate sevenDaysAgo = newsDate.minusDays(7);
+
+            Timestamp endDate = Timestamp.valueOf(newsDate.atTime(23, 59, 59, 999_999_999));
+            Timestamp startDate = Timestamp.valueOf(sevenDaysAgo.atStartOfDay());
+
             if (news.getStockCodes() != null && !news.getStockCodes().trim().isEmpty()) {
                 String[] stockCodesArray = news.getStockCodes().split(",");
 
@@ -273,12 +279,31 @@ public class NewsService {
                     if (stockOptional.isPresent()) {
                         Stock stock = stockOptional.get();
 
-                        // ⭐ 여기를 변경합니다: 특정 종목의 가장 최신 주가 데이터 7개를 가져옵니다.
-                        // 이 메서드는 날짜 범위 대신 '개수'를 기준으로 합니다.
                         List<StockPrice> stockPrices = stockPriceRepository
-                                .findTop7ByStock_StockCodeOrderByPriceDateDesc(trimmedCode);
+                                .findByStock_StockCodeAndPriceDateBetweenOrderByPriceDateDesc(trimmedCode, startDate, endDate);
 
-                        List<StockPriceDto> stockPriceDtos = stockPrices.stream()
+                        // ⭐ 추가된 로직: 같은 날짜의 주가 데이터 중 가장 최신 시간의 데이터만 선택
+                        Map<LocalDate, StockPrice> dailyLatestStockPrices = stockPrices.stream()
+                            .collect(Collectors.groupingBy(
+                                stockPrice -> stockPrice.getPriceDate().toLocalDateTime().toLocalDate(), // 날짜만 기준으로 그룹화
+                                Collectors.reducing(
+                                    (sp1, sp2) -> sp1.getPriceDate().after(sp2.getPriceDate()) ? sp1 : sp2 // 같은 날짜 중 최신 시간 선택
+                                )
+                            ))
+                            .entrySet().stream()
+                            .filter(entry -> entry.getValue().isPresent()) // Optional이 비어있을 경우 (발생할 가능성은 적음) 필터링
+                            .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                entry -> entry.getValue().get()
+                            ));
+
+                        // Map의 값(StockPrice 객체들)을 리스트로 변환하고, 날짜 역순으로 정렬 (최신 날짜가 먼저 오도록)
+                        List<StockPrice> filteredAndSortedStockPrices = dailyLatestStockPrices.values().stream()
+                            .sorted(Comparator.comparing(StockPrice::getPriceDate).reversed())
+                            .collect(Collectors.toList());
+
+
+                        List<StockPriceDto> stockPriceDtos = filteredAndSortedStockPrices.stream()
                                 .map(StockPriceDto::fromEntity)
                                 .collect(Collectors.toList());
 
