@@ -260,7 +260,7 @@ const PriceChartTab = ({ stockData, stockCode }) => {
                     <div>시가: {parseFloat(latestStockData.openPrice).toLocaleString()}</div>
                     <div>고가: {parseFloat(latestStockData.highPrice).toLocaleString()}</div>
                     <div>저가: {parseFloat(latestStockData.lowPrice).toLocaleString()}</div>
-                    <div>날짜: {latestStockData.priceDate ? new Date(latestStockData.priceDate).toLocaleDateString('ko-KR') : 'N/A'}</div>
+                    {/* <div>날짜: {latestStockData.priceDate ? new Date(latestStockData.priceDate).toLocaleDateString('ko-KR') : 'N/A'}</div> */}
                     {/* 전일 대비 등락폭 UI 요소 삭제됨 */}
                 </>
                     )}

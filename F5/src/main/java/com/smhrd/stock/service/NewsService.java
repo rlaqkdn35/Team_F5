@@ -137,7 +137,7 @@ public class NewsService {
             RecentNewsDto dto = new RecentNewsDto(
                 news.getNewsDt(),
                 news.getNewsTitle(),
-                relatedStockNames, // 이제 종목명 리스트(List<String>)가 들어갑니다.
+                news.getStockCodes(), // 이제 종목명 리스트(List<String>)가 들어갑니다.
                 news.getNewsSummary(),
                 news.getNewsUrl()
             );
@@ -148,13 +148,9 @@ public class NewsService {
         return result;
     }
     
-    public List<News> getNewsByStockCode(String stockCode) {
-        List<NewsForCompany> mappings = newsForCompanyRepository.findByStockCode(stockCode);
-        List<Long> newsIds = mappings.stream()
-                                     .map(NewsForCompany::getNewsIdx)
-                                     .toList();
-
-        return newsRepository.findByNewsIdxIn(newsIds);
+    public List<News> getNewsForSingleStockCode(String stockCode) {
+        // NewsRepository의 findByStockCodeContaining 메서드를 호출합니다.
+        return newsRepository.findByStockCodeContaining(stockCode);
     }
     
     public List<LatestNewsDto> getLatestNewsPerIndividualStockCode() {

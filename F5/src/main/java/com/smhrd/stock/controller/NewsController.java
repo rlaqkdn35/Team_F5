@@ -57,8 +57,13 @@ public class NewsController {
     }
     
     @GetMapping("/{stockCode}")
-    public ResponseEntity<List<News>> getNewsByStockCode(@PathVariable String stockCode) {
-        List<News> newsList = newsService.getNewsByStockCode(stockCode);
+    public ResponseEntity<List<News>> getNewsByStockCodePath(@PathVariable String stockCode) {
+        List<News> newsList = newsService.getNewsForSingleStockCode(stockCode);
+        if (newsList.isEmpty()) {
+            // 해당 주식 코드와 관련된 뉴스가 없으면 204 No Content 반환
+            return ResponseEntity.noContent().build();
+        }
+        // 찾은 뉴스 목록을 JSON 형태로 반환 (자동 직렬화)
         return ResponseEntity.ok(newsList);
     }
     

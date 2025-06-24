@@ -137,7 +137,7 @@ const IssueAnalysisContent = () => {
               return {
                 id: issue.newsIdx || `issue_${index}`,
                 title: issue.newsTitle,
-                relatedStocksText: issue.relatedStocks ? issue.relatedStocks.map(s => s.stockName).join(', ') : '',
+                stockCodes: issue.stockCodes,
                 summary: issue.newsSummary,
                 url: issue.newsUrl || '#'
               };
@@ -258,7 +258,7 @@ const IssueAnalysisContent = () => {
                       <a href={issue.url || '#'} target="_blank" rel="noopener noreferrer" className="issue-title-link">{issue.title}</a>
                   )}
                 </td>
-                <td className="col-related-stocks">{issue.relatedStocksText}</td>
+                <td className="col-related-stocks">{issue.stockCodes}</td>
                 <td className="col-summary" title={issue.summary}>{issue.summary}</td>
               </tr>
             ))}</tbody>

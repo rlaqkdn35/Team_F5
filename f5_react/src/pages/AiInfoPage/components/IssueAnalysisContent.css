@@ -288,9 +288,15 @@
 }
 
 /* Column Widths and Alignment */
+.recent-issues-table-unified .col-index { width: 3%; text-align: center; }
 .recent-issues-table-unified .col-time { width: 10%; text-align: center; }
 .recent-issues-table-unified .col-title { width: 35%; }
-.recent-issues-table-unified .col-related-stocks { width: 20%; text-align: center; }
+.recent-issues-table-unified .col-related-stocks {
+    width: 10%; /* 원하는 너비로 조절 */
+    text-align: center;
+    white-space: normal; /* 기본 줄 바꿈 허용 */
+    word-break: break-all; /* 단어 중간에서도 줄 바꿈 */
+}
 .recent-issues-table-unified .col-summary { width: 35%; }
 
 .recent-issues-table-unified tbody tr:nth-child(even) {

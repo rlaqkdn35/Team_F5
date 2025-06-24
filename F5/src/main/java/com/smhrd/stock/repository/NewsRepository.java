@@ -50,4 +50,10 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     @Query("SELECT MAX(n.newsDt) FROM News n")
     Timestamp findLatestNewsDate();
     
+ // 특정 주식 코드가 stock_codes 컬럼 문자열 내에 '포함'된 모든 뉴스 조회
+    // 예: stockCode가 "001122"일 때, "001122", "001122,002233", "002233,001122" 등 모두 검색됨
+    @Query("SELECT n FROM News n WHERE n.stockCodes LIKE %:stockCode%")
+    List<News> findByStockCodeContaining(@Param("stockCode") String stockCode);
+
+    
 }

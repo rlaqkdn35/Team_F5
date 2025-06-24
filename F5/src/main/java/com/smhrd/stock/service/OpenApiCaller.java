@@ -12,7 +12,7 @@ public class OpenApiCaller {
     private static final String API_URL = "https://openapi.koreainvestment.com:9443/uapi/domestic-stock/v1/quotations/inquire-price";
     private static final String APP_KEY = "PSkOApzHmbCNxZMj37cZGnSTEhRs1UqICRJM";
     private static final String APP_SECRET = "bKbbZA5WthMzrJpJ2o67DbGV6xuJ+/oipdevfl6GN/qhNCjh2NjskerSvOo4Nd6HkZndGLt1pq6oku6XOEQwizILc6UgfwagKWWIT3ZRsmME6uTdcUUwLzqyxuSOjIaWQP7mTOSD8Mc0yOBxAd5VzLVFO+biJxuwJT+xjwqj0oWV/RAoBLA=";
-    private static final String ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6IjkxOGY4N2M2LTdiMjgtNGY4YS1iNzRkLTk1ZjE3M2MzMzc1NyIsInByZHRfY2QiOiIiLCJpc3MiOiJ1bm9ndyIsImV4cCI6MTc1MDI5MTI2MiwiaWF0IjoxNzUwMjA0ODYyLCJqdGkiOiJQU2tPQXB6SG1iQ054Wk1qMzdjWkduU1RFaFJzMVVxSUNSSk0ifQ.YEsVD4HmpH6Ihswl4i5B4WNo2zKGhBG0RhfDtxrHZm4MhWO2J33M02AK0Lgt6GwUD11c_1LqhlmxOwfc5d1J-Q";
+    private static final String ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6Ijg3ODE3ZGRhLTQ0YTYtNDEzMy1iZjlhLThhMzI0OWY4ZjJlZCIsInByZHRfY2QiOiIiLCJpc3MiOiJ1bm9ndyIsImV4cCI6MTc1MDgxMTk0MiwiaWF0IjoxNzUwNzI1NTQyLCJqdGkiOiJQU2tPQXB6SG1iQ054Wk1qMzdjWkduU1RFaFJzMVVxSUNSSk0ifQ.pUbvfGLHcT_ZIjiSLAfB347teZ2H50OHjEEWr4OZ-Svg5Os1Gnb5NuwwCPOUtcE2F5bS2oIezvOGYM484j5x-w";
     public Map<String, String> fetchStockData(String stockCode) {
         RestTemplate restTemplate = new RestTemplate();
 

@@ -35,22 +35,7 @@ const formatNumberAndGetClass = (value, isPercentage = false) => {
 };
 
 // --- 헬퍼 함수: 등락률 계산 ---
-const calculateChangeRate = (fluctuation, closePrice) => {
-    if (closePrice === null || closePrice === undefined || parseFloat(closePrice) === 0) {
-        return { displayValue: '-', className: '' };
-    }
-    const fluctuationNum = parseFloat(fluctuation);
-    const closePriceNum = parseFloat(closePrice);
 
-    const previousClosePrice = closePriceNum - fluctuationNum;
-
-    if (previousClosePrice === 0) {
-        return { displayValue: '-', className: '' };
-    }
-
-    const rate = (fluctuationNum / previousClosePrice) * 100;
-    return formatNumberAndGetClass(rate.toFixed(2), true);
-};
 
 // --- 개인 맞춤 추천 목업 데이터 (아직 백엔드 연동이 없으므로 유지) ---
 const mockPersonalizedPicks = [
@@ -59,11 +44,36 @@ const mockPersonalizedPicks = [
     { id: 'pp3', stockCode: 'C13579', stockName: 'AI 추천종목 감마', currentPrice: '5,500', changeRate: '+0.90%', changeType: 'positive', reason: '사용자 투자 성향(안정형) 및 최근 시장 상황 고려', prediction: '안정적 배당 및 점진적 상승 기대' },
 ];
 
+const calculateChangeRate = (stockFluctuation, closePrice) => {
+    let displayValue;
+    let className;
+
+    if (closePrice === 0) {
+        displayValue = '0.00%';
+        className = 'text-gray-500'; // 또는 적절한 기본 클래스
+    } else {
+        const changeRate = (stockFluctuation / closePrice) * 100;
+
+        displayValue = changeRate.toFixed(2) + '%';
+
+        if (changeRate > 0) {
+            className = 'positive'; // 양수일 경우 빨간색 (상승)
+            displayValue = '+' + displayValue; // 양수일 경우 + 부호 추가
+        } else if (changeRate < 0) {
+            className = 'negative'; // 음수일 경우 파란색 (하락)
+        } else {
+            className = 'text-gray-500'; // 0일 경우 회색 (변동 없음)
+        }
+    }
+
+    return { displayValue, className };
+};
+
 // --- 관심 종목 아이템 컴포넌트 ---
 // DTO (UserFavStockDetailDto) 구조에 맞춰 필드명 사용 및 포맷팅
 const WatchlistItem = ({ item }) => {
     // 등락률 계산
-    const { displayValue: changeRateDisplay, className: changeRateClass } =
+   const { displayValue: changeRateDisplay, className: changeRateClass } =
         calculateChangeRate(item.stockFluctuation, item.closePrice);
 
     return (
@@ -78,9 +88,8 @@ const WatchlistItem = ({ item }) => {
                     </span>
                 </div>
                 <div className="item-status-aia">
-                    <span className={`change-rate-aia ${changeRateClass}`}>{changeRateDisplay}</span>
+                    <span className={`change-rate-aia ${changeRateClass}`}>{item.stockFluctuation}%</span>
                     {/* AI 시그널은 DTO에 없으므로 임시로 빈 값 또는 "정보 없음" 처리 */}
-                    <span className="ai-signal-aia">AI 분석 정보 없음</span>
                 </div>
             </Link>
         </li>
